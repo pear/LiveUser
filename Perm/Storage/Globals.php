@@ -16,7 +16,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-$GLOBALS['_LiveUser']['tables'] = array(
+$GLOBALS['_LiveUser']['perm']['tables'] = array(
     'perm_users' => array(
         'fields' => array(
             'perm_user_id' => 'seq',
@@ -211,7 +211,7 @@ $GLOBALS['_LiveUser']['tables'] = array(
     ),
 );
 
-$GLOBALS['_LiveUser']['fields'] = array(
+$GLOBALS['_LiveUser']['perm']['fields'] = array(
     'perm_user_id' => 'integer',
     'auth_user_id' => 'text',
     'auth_container_name' => 'text',
@@ -239,7 +239,7 @@ $GLOBALS['_LiveUser']['fields'] = array(
     'subgroup_id' => 'integer'
 );
 
-$GLOBALS['_LiveUser']['alias'] = array(
+$GLOBALS['_LiveUser']['perm']['alias'] = array(
     'perm_user_id' => 'perm_user_id',
     'auth_user_id' => 'auth_user_id',
     'auth_container_name' => 'auth_container_name',
