@@ -211,6 +211,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
         $index = 0;
 
         foreach ($this->tree->root->children as $user) {
+            $result = array();
             foreach ($user->children as $value) {
                 $result[$value->name] = $value->content;
             }
@@ -225,6 +226,9 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                         $this->encryptPW($passwd) === $result[$this->authTableCols['required']['passwd']['name']]
                     ) {
                         $success = true;
+                        break;
+                    } elseif(!$this->allowDuplicateHandles) {
+                        // dont look for any further matching handles
                         break;
                     }
                 } else {

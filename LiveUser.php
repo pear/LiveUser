@@ -394,6 +394,7 @@ class LiveUser
      *            'expireTime'    => 3600,
      *            'idleTime'      => 1800,
      *            'updateLastLogin' => true,
+     *            'allowDuplicateHandles' => false,
      *            'authTable'     => 'liveuser_users',
      *            'authTableCols' => array(
      *                'required' => array(

@@ -142,6 +142,15 @@ class LiveUser_Auth_Common
     var $idleTime = 0;
 
     /**
+     * Allow multiple users in the database to have the same
+     * login handle. Default: false.
+     *
+     * @access protected
+     * @var    boolean
+     */
+    var $allowDuplicateHandles = false;
+
+    /**
      * Set posible encryption modes.
      *
      * @access protected
