@@ -431,22 +431,14 @@ class LiveUser
     }
 
     /**
-     * PEAR_Error callback.
+     * Wrapper method to get the Error Stack
      *
-     * It will catch all PEAR_Errors and repackage
-     * them as LiveUser errors.
-     *
-     * @access private
-     * @param  PEAR_Error  a reference to a PEAR_Error object
-     * @return void
+     * @access public
+     * @return array  an array of the errors
      */
-    function errorCallback(&$error)
+    function getErrors()
     {
-        $this->_stack->push(
-            LIVEUSER_ERROR, 'error', array('PEAR_Error' => $error),
-            'An error occured in a dependant package',
-            false, $error->getBacktrace()
-        );
+        return $obj->_stack->getErrors();
     }
 
     /**
