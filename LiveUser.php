@@ -957,13 +957,20 @@ class LiveUser
         //loop into auth containers
         while ($backend_cnt > $counter) {
             $auth = &$this->authFactory($this->authContainers[$backends[$counter]], $backends[$counter]);
+            if ($auth === false) {
+                return false;
+            }
             $auth->login($handle, $passwd, true);
             if ($auth->loggedIn) {
                 $this->_auth = $auth;
                 $this->_auth->backendArrayIndex = $backends[$counter];
                 // Create permission object
                 if (is_array($this->permContainer)) {
-                    $this->_perm =& $this->permFactory($this->permContainer);
+                    $perm =& $this->permFactory($this->permContainer);
+                    if ($perm === false) {
+                        return false;
+                    }
+                    $this->_perm =& $perm;
                     $this->_perm->mapUser($this->_auth->authUserId, $this->_auth->backendArrayIndex);
                 }
                 $this->freeze();
@@ -1004,13 +1011,20 @@ class LiveUser
         {
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
+            if ($auth === false) {
+                return false;
+            }
             if ($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
                 $auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
                 $this->_auth = &$auth;
                 if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
                     && $_SESSION[$this->_options['session']['varname']]['perm']
                 ) {
-                    $this->_perm = &$this->permFactory($this->permContainer);
+                    $perm = &$this->permFactory($this->permContainer);
+                    if ($perm === false) {
+                        return $perm:
+                    }
+                    $this->_perm = &$perm;
                     if ($this->_options['cache_perm']) {
                         $this->_perm->unfreeze($this->_options['session']['varname']);
                     } else {
