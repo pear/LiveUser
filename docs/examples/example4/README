@@ -1,0 +1,14 @@
+How to setup the examples
+
+For every example found in this directory you need to create a database
+and run the schema dumps first.
+
+They can be found in
+
+  PEAR_DATA_DIRECTORY/liveuser/misc/schema/
+  
+Import perm_mdb_schema.xml and auth_mdb_schema.xml into the database using the install.php.
+  
+After those two steps you can run the dumps found in every "example" directory.
+
+THOSE DUMPS CONTAIN ONLY DATA AND WILL FAIL IF YOU DO NOT RUN THE SCHEMA DUMPS FIRST
