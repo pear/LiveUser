@@ -14,9 +14,9 @@ function php_error_handler($errno, $errstr, $errfile, $errline)
     $tpl->loadTemplatefile('error-page.tpl.php');
 
     $tpl->setVariable('error_msg', "<b>$errfile ($errline)</b><br />$errstr");
-
     $tpl->show();
-     exit();
+var_dump(debug_backtrace());
+    exit();
 }
 
 set_error_handler('php_error_handler');
@@ -109,6 +109,15 @@ $LUOptions = array(
                                         'is_active'    => array('name' => 'is_active',    'type' => 'boolean')
                                     ),
                                 ),
+                            ),
+                            array(
+                                'type' => 'XML',
+                                'file' => 'Auth_XML.xml',
+                                'loginTimeout' => 0,
+                                'expireTime'   => 3600,
+                                'idleTime'     => 1800,
+                                'allowDuplicateHandles'  => false,
+                                'passwordEncryptionMode' => 'MD5'
                             ),
                         ),
     'permContainer'  => array(

@@ -78,7 +78,7 @@ INSERT INTO liveuser_translations VALUES (3, 5, 1, 'DELETE', 'Delete news');
 # Dumping data for table `liveuser_perm_users`
 #
 
-INSERT INTO liveuser_perm_users VALUES (1, 'c14cbf141ab1b7cd009356f555b607dc', 1, '0');
+INSERT INTO liveuser_perm_users VALUES (1, 'c14cbf141ab1b7cd009356f555b607dc', 1, '1');
 INSERT INTO liveuser_perm_users VALUES (2, '185cd5095e899ab43a225e42d7232807', 1, '0');
 INSERT INTO liveuser_perm_users VALUES (3, '11551a03b7de857163fd2e519c16a960', 1, '0');
 INSERT INTO liveuser_perm_users VALUES (4, '7ddf260b66b9a5c182a91a413f1aa461', 1, '0');
@@ -112,7 +112,6 @@ INSERT INTO liveuser_userrights VALUES (2, 2, 3);
 # Dumping data for table `liveuser_users`
 #
 
-INSERT INTO liveuser_users VALUES ('c14cbf141ab1b7cd009356f555b607dc', 'admin', '098f6bcd4621d373cade4e832627b4f6', '1999-11-30 00:00:00', NULL, NULL, 'Y');
 INSERT INTO liveuser_users VALUES ('185cd5095e899ab43a225e42d7232807', 'userA', '098f6bcd4621d373cade4e832627b4f6', '2003-03-16 22:34:44', NULL, NULL, 'Y');
 INSERT INTO liveuser_users VALUES ('11551a03b7de857163fd2e519c16a960', 'userB', '098f6bcd4621d373cade4e832627b4f6', '2003-03-16 22:16:44', NULL, NULL, 'Y');
 INSERT INTO liveuser_users VALUES ('7ddf260b66b9a5c182a91a413f1aa461', 'userC', '098f6bcd4621d373cade4e832627b4f6', '2003-03-16 22:43:29', NULL, NULL, 'Y');
