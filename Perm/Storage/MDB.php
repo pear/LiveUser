@@ -224,7 +224,7 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      * right => 1
      *
      * @access  public
-     * @param   array $groupIds array with id's for the groups 
+     * @param   array $groupIds array with id's for the groups
      *                          that rights will be read from
      * @return  mixed   array or false on failure
      */

@@ -275,7 +275,7 @@ class LiveUser_Auth_Common
     {
         foreach ($propertyValues as $key => $value) {
             if (is_array($value)) {
-            	$this->propertyValues[$key] = $value;
+                $this->propertyValues[$key] = $value;
             } else {
                 $this->{$key} = $value;
             }
@@ -355,7 +355,7 @@ class LiveUser_Auth_Common
             case 'SHA1':
                 if (!function_exists('sha1')) {
                         $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED,
-                        	'exception', array(), 'SHA1 function doesn\'t exist. Upgrade your PHP version');
+                            'exception', array(), 'SHA1 function doesn\'t exist. Upgrade your PHP version');
                         return false;
                 }
                 $encryptedPW = sha1($plainPW);

@@ -176,8 +176,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * "GroupName" => "RightName" -> "Level"
      *
      * @access private
-     * @param   array $groupIds array with id's for the groups 
-     *                          that rights will be read from 
+     * @param   array $groupIds array with id's for the groups
+     *                          that rights will be read from
      * @see    readRights()
      * @return void
      */
