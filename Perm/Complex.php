@@ -123,10 +123,11 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
     function readUserRights($permUserId)
     {
         $userRights = parent::readUserRights($permUserId);
-
         $result = $this->_readImpliedRights($userRights, 'user');
-        $this->userRights = $result;
-        return $result;
+        if ($result) {
+            $this->userRights = array_merge($this->userRights, $result);
+        }
+        return $this->userRights;
     } // end func readUserRights
 
     /**
@@ -166,7 +167,6 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         if ($result === false) {
             return false;
         }
-
         return $result;
     }
 
@@ -186,8 +186,10 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         $groupRights = parent::readGroupRights($groupIds);
 
         $result = $this->_readImpliedRights($groupRights, 'group');
-        $this->groupRights = $result;
-        return $result;
+        if ($result) {
+            $this->groupRights = $result;
+        }
+        return $this->groupRights;
     } // end func readGroupRights
 
     /**
