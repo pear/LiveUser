@@ -582,6 +582,7 @@ class LiveUser
         }
         return $perm;
     }
+
     /**
      * Returns an instance of a storage Container
      *
@@ -1004,11 +1005,11 @@ class LiveUser
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
             if ($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
+                $auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
+                $this->_auth = &$auth;
                 if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
                     && $_SESSION[$this->_options['session']['varname']]['perm']
                 ) {
-                    $auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
-                    $this->_auth = &$auth;
                     $this->_perm = &$this->permFactory($this->permContainer);
                     if ($this->_options['cache_perm']) {
                         $this->_perm->unfreeze($this->_options['session']['varname']);
