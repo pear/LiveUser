@@ -234,8 +234,10 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         if ($level <= 0) {
             return false;
         }
-        // highest level (that is level 3)
-        if ($level == LIVEUSER_MAX_LEVEL) {
+        // highest level (that is level 3) or no owner id's passed
+        if ($level == LIVEUSER_MAX_LEVEL
+            || (is_null($owner_user_id) && is_null($owner_group_id))
+        ) {
             return $level;
         }
         // level 1 or higher
