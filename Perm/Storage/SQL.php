@@ -163,7 +163,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                     'areas' => 'area_id',
                     'userrights' => 'right_id',
                     'grouprights' => 'right_id',
-                    'rights_implied' => array(
+                    'right_implied' => array(
                         'right_id' => 'right_id',
                         'right_id' => 'implied_right_id',
                     ),
@@ -176,7 +176,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                     'right_id'
                 ),
             ),
-            'rights_implied' => array(
+            'right_implied' => array(
                 'fields' => array(
                     'right_id' => true,
                     'implied_right_id' => true,

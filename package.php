@@ -16,6 +16,7 @@ $notes = <<<EOT
   - reworked RC4 handling into cryptRC4() method
   - perm container now also has a default init() method that is called in the factory
   - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - table rights_implied should have been right_implied
 EOT;
 
 $description = <<<EOT
@@ -97,7 +98,7 @@ $package->addMaintainer('krausbn', 'developer',   'Bjoern Kraus',      'krausbn@
 $package->addMaintainer('dufuz',   'developer',   'Helgi Þormar',      'dufuz@php.net');
 
 $package->addDependency('php',       '4.2.0', 'ge',  'php', false);
-$package->addDependency('PEAR',      '1.3.1',   'ge', 'pkg', false);
+$package->addDependency('PEAR',      '1.3.3',   'ge', 'pkg', false);
 $package->addDependency('Log',       '1.7.0',   'ge',  'pkg', true);
 $package->addDependency('DB',        '1.6.0',   'ge',  'pkg', true);
 $package->addDependency('MDB',       '1.1.4', 'ge',  'pkg', true);
