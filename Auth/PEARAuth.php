@@ -79,6 +79,11 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
                 '',
                 false
             );
+            if (PEAR::isError($this->pearAuth)) {
+                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => 'could not connect: '.$this->pearAuth->getMessage()));
+            } else {
+                $this->init_ok = true;
+            }
         }
     }
 

@@ -141,7 +141,9 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                 } else {
                     $this->dbc =& MDB2::connect($connectOptions['dsn'], $options);
                 }
-                if (!MDB2::isError($this->dbc)) {
+                if (MDB2::isError($this->dbc)) {
+                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                } else {
                     $this->init_ok = true;
                 }
             }
