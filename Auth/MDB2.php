@@ -84,31 +84,6 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      */
     var $authTable = 'liveuser_users';
 
-    /**
-     * Columns of the auth table.
-     * Associative array with the names of the auth table columns.
-     * The 'auth_user_id', 'handle' and 'passwd' fields have to be set.
-     * 'lastlogin' and 'is_active' are optional.
-     * It doesn't make sense to set only one of the time columns without the
-     * other.
-     *
-     * The type attribute is only useful when using MDB or MDB2.
-     *
-     * @access public
-     * @var    array
-     */
-    var $authTableCols = array(
-        'required' => array(
-            'auth_user_id' => array('name' => 'auth_user_id', 'type' => ''),
-            'handle'       => array('name' => 'handle',       'type' => ''),
-            'passwd'       => array('name' => 'passwd',       'type' => ''),
-        ),
-        'optional' => array(
-            'lastlogin'    => array('name' => 'lastlogin',    'type' => ''),
-            'is_active'    => array('name' => 'is_active',    'type' => '')
-        )
-    );
-
     function init(&$connectOptions)
     {
         if (is_array($connectOptions)) {
@@ -151,7 +126,14 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
     function disconnect()
     {
         if ($this->disconnect) {
-            $this->dbc->disconnect();
+            $result = $this->dbc->disconnect();
+            if (PEAR::isError($result)) {
+                $this->_stack->push(
+                    LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                    array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+                );
+                return false;
+            }
             $this->dbc = null;
         }
     }
@@ -227,7 +209,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                    WHERE '  . $this->authTableCols['required']['handle']['name'] . '='
                     . $this->dbc->quote($handle, $this->authTableCols['required']['handle']['type']);
 
-        if ($passwd !== false) {
+        if (isset($this->authTableCols['required']['passwd'])) {
             // If $passwd is set, try to find the first user with the given
             // handle and password.
             $sql .= ' AND ' . $this->authTableCols['required']['passwd']['name'] . '='
@@ -253,8 +235,8 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
 
         $this->handle       = $result['handle'];
         $this->passwd       = $this->decryptPW($result['passwd']);
-        $this->isActive     = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
         $this->authUserId   = $result['auth_user_id'];
+        $this->isActive     = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
         $this->lastLogin    = isset($result['lastlogin'])?
                                 MDB2_Date::mdbstamp2Unix($result['lastlogin']):'';
         $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
