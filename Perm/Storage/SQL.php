@@ -27,6 +27,7 @@
  * Require parent class definition.
  */
 require_once 'LiveUser/Perm/Storage.php';
+require_once 'LiveUser/Perm/Storage/Globals.php';
 
 /**
  * This is a PEAR::MDB2 backend driver for the LiveUser class.
@@ -105,7 +106,6 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     {
         $this->LiveUser_Perm_Storage($confArray, $storageConf);
 
-        require_once 'LiveUser/Perm/Storage/Globals.php';
         if (empty($this->tables)) {
             $this->tables = $GLOBALS['_LiveUser']['perm']['tables'];
         } else {
