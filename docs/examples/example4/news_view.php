@@ -17,7 +17,7 @@ $res = $db->query('SELECT
                    INNER JOIN
                        liveuser_users
                    ON
-                       liveuser_perm_users.auth_user_id = liveuser_users.auth_user_id
+                       liveuser_perm_users.auth_user_id = liveuser_users.authUserId
                    ORDER BY
                      news.created_at DESC');
 

@@ -153,7 +153,7 @@
                          INNER JOIN
                              liveuser_users AS U
                          ON
-                             PU.auth_user_id = U.auth_user_id
+                             PU.auth_user_id = U.authUserId
                          ORDER BY
                              N.created_at DESC');
 
