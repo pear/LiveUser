@@ -170,7 +170,6 @@ class LiveUser
             'regenid'    => false
         ),
         'logout'  => array(
-            'redirect' => '',
             'destroy'  => true
         )
     );
@@ -355,13 +354,10 @@ class LiveUser
      *      'secure'   => 'Cookie send only over secure connections',
      *  ),
      *  'login' => array(
-     *      'function' => '(optional) Function to be called when accessing a page without logging in first',
      *      'force'    => 'Should the user be forced to login'
      *      'regenid'  => 'Should the session be regenerated on login'
      *  ),
      *  'logout' => array(
-     *      'redirect' => 'Page path to be redirected to after logout',
-     *      'function' => '(optional) Function to be called when accessing a page without logging in first',
      *      'destroy'  => 'Whether to destroy the session on logout' false or true
      *  ),
      * // The cookie options are optional. If they are specified, the Remember Me
@@ -411,20 +407,6 @@ class LiveUser
      *      'connection' => 'db connection object, use this or dsn',
      *      'dsn'        => 'database dsn, use this or connection',
      *      'prefix'     => 'liveuser_',
-     *      'groupTableCols' => array(
-     *          'required' => array(
-     *              'group_id' => array('type' => 'integer', 'name' => 'group_id')
-     *              'group_define_name' => array('type' => 'text', 'name' => 'group_define_name')
-     *          ),
-     *          'optional' => array(
-     *              'group_type'    => array('type' => 'integer', 'name' => 'group_type')
-     *              'is_active'    => array('type' => 'boolean', 'name' => 'is_active')
-     *              'owner_user_id'  => array('type' => 'integer', 'name' => 'owner_user_id'),
-     *              'owner_group_id' => array('type' => 'integer', 'name' => 'owner_group_id')
-     *          ),
-     *          'custom'   => array(
-     *              'myaliasforfield1' => array('type' => 'text', 'name' => 'myfield1')
-     *          )
      *  )
      *
      * </code>
@@ -514,7 +496,10 @@ class LiveUser
      */
     function getErrors()
     {
-        return $obj->_stack->getErrors();
+        if (is_object($this->_stack)) {
+            return $this->_stack->getErrors();
+        }
+        return false;
     }
 
     /**
@@ -1384,48 +1369,6 @@ class LiveUser
     }
 
     /**
-     * Add an observer to listen to a certain event
-     *
-     * An observer is any valid callback function. You may attach
-     * multiple observers for each event. If an event is triggered
-     * observers of that event are called in the order they were attached.
-     * LiveUser object and optional settings from the trigger call are set
-     * as first and second parameters for each observer notification.
-     *
-     * @access public
-     * @param  string  event name
-     * @param  mixed   callback function (string) or array($obj, $method)
-     * @return bool    true on success, otherwise false
-     * @see    LiveUser::triggerEvent
-     */
-    function attachObserver($event, &$observer)
-    {
-        if (!in_array($event, $this->events)) {
-            $this->_stack->push(
-                LIVEUSER_ERROR_UNKNOWN_EVENT, 'exception',
-                    array('event' => $event),
-                    'attempt to attach to an unknown event');
-            return false;
-        }
-
-        if (!is_callable($observer)) {
-            $this->_stack->push(
-                LIVEUSER_ERROR_NOT_CALLABLE, 'exception',
-                array('callback' => $observer),
-                'observer is not callable'
-            );
-            return false;
-        }
-
-        if (!isset($this->_observers[$event])) {
-            $this->_observers[$event] = array();
-        }
-
-        $this->_observers[$event][] = &$observer;
-        return true;
-    }
-
-    /**
      * Add an observer object to listen to multiple events
      *
      * In contrast to LiveUser::attachObserver() this can be used to add
@@ -1437,12 +1380,12 @@ class LiveUser
      *
      * @access public
      * @param  object  object with observer methods
-     * @param  array   optional used to change method names this way:
-     *                 array('event' => 'realMethodName', ...)
+     * @param  mixed   optional used to change method names this way:
+     *                 array('event' => 'realMethodName', ...) or string
      * @return bool    true on success, otherwise false
      * @see    LiveUser::triggerEvent
      */
-    function attachObserverObj(&$object, $methods = array())
+    function attachObserver(&$object, $methods = array())
     {
         if (empty($methods)) {
             foreach ($this->events as $event) {
@@ -1450,7 +1393,10 @@ class LiveUser
                     $methods[$event] = $event;
                 }
             }
+        } elseif(is_string($methods)) {
+            $methods = array($methods => $methods);
         }
+
         foreach ($methods as $event => $method) {
             if (!isset($this->_observers[$event])) {
                 $this->_observers[$event] = array();
@@ -1458,6 +1404,7 @@ class LiveUser
 
             $this->_observers[$event][] = array(&$object, $method);
         }
+
         return true;
     }
 
@@ -1478,7 +1425,7 @@ class LiveUser
      */
     function triggerEvent($event, $params = array())
     {
-        if (!isset($this->_observers[$event]) or empty($this->_observers[$event])) {
+        if (!isset($this->_observers[$event]) || empty($this->_observers[$event])) {
             if ($GLOBALS['_LIVEUSER_DEBUG']) {
                 $this->_stack->push(
                     LIVEUSER_ERROR_UNKNOWN_EVENT,
