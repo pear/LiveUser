@@ -67,6 +67,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * RightName -> Value
      *
      * @access private
+     * @param array $rightIds
+     * @param string $table
      * @return array with rightIds as key and level as value
      */
     function _readImpliedRights($rightIds, $table)
@@ -96,8 +98,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
                 // only store the implied right if the right wasn't stored before
                 // or if the level is higher
                 if (!isset($rightIds[$val['right_id']]) ||
-                    $rightIds[$val['right_id']] < $val['right_level']
-                ) {
+                    $rightIds[$val['right_id']] < $val['right_level'])
+                {
                     $rightIds[$val['right_id']] = $val['right_level'];
                     if ($val['has_implied']) {
                         $queue[$val['right_level']][] = $val['right_id'];
@@ -114,6 +116,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * RightName -> Value
      *
      * @access private
+     * @param int $permUserId
      * @see    readRights()
      * @return void
      */
@@ -131,6 +134,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * (all groups that are subgroups of these are also added recursively)
      *
      * @access private
+     * @param int $permUserId
      * @see    readRights()
      * @return void
      */
@@ -148,6 +152,14 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         return $this->groupIds;
     } // end func readGroups
 
+    /**
+     *
+     *
+     * @access public
+     * @param array $groupIds
+     * @param array $newGroupIds
+     * @return mixed array or false on failure
+     */
     function readSubGroups($groupIds, $newGroupIds)
     {
         $result = $this->_storage->readSubGroups($groupIds, $newGroupIds);
@@ -164,6 +176,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * "GroupName" => "RightName" -> "Level"
      *
      * @access private
+     * @param   array $groupIds array with id's for the groups 
+     *                          that rights will be read from 
      * @see    readRights()
      * @return void
      */
@@ -213,8 +227,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         }
         // level 1 or higher
         if ((!is_array($owner_user_id) && $this->permUserId == $owner_user_id) ||
-            is_array($owner_user_id) && in_array($this->permUserId, $owner_user_id)
-        ) {
+            is_array($owner_user_id) && in_array($this->permUserId, $owner_user_id))
+        {
             return $level;
         // level 2 or higher
         }

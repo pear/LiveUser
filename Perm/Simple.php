@@ -150,6 +150,10 @@ class LiveUser_Perm_Simple
      * area names as the key of the 1st dimension.
      * Group rights and invididual rights are being merged
      * in the process.
+     *
+     *
+     * @access public
+     * @return mixed array or false on failure
      */
     function readRights()
     {
@@ -164,6 +168,13 @@ class LiveUser_Perm_Simple
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array or false on failure
+     */
     function readUserRights($permUserId)
     {
         $this->userRights = array();

@@ -30,17 +30,11 @@ require_once 'LiveUser/Perm/Storage.php';
 require_once 'XML/Tree.php';
 
 /**
- * This is a PEAR::MDB2 backend driver for the LiveUser class.
- * A PEAR::MDB2 connection object can be passed to the constructor to reuse an
- * existing connection. Alternatively, a DSN can be passed to open a new one.
+ * This is a XML backend driver for the LiveUser class.
  *
  * Requirements:
  * - File "Liveuser.php" (contains the parent class "LiveUser")
- * - Array of connection options or a PEAR::MDB2 connection object must be
- *   passed to the constructor.
- *   Example: array('dsn' => 'mysql://user:pass@host/db_name')
- *              OR
- *            &$conn (PEAR::MDB2 connection object)
+ * - XML_Parser
  *
  * @author  Lukas Smith <smith@backendmedia.com>
  * @author  Bjoern Kraus <krausbn@php.net>
@@ -133,6 +127,14 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
         $this->tree = $tree;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $uid
+     * @param string $containerName
+     * @return mixed array or false on failure
+     */
     function mapUser($uid, $containerName)
     {
         $nodeIndex = 0;
@@ -169,6 +171,10 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      * area names as the key of the 1st dimension.
      * Group rights and invididual rights are being merged
      * in the process.
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array of false on failure
      */
     function readUserRights($permUserId)
     {

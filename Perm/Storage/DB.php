@@ -61,8 +61,8 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     {
         $this->LiveUser_Perm_Storage_SQL($confArray, $storageConf);
         if (isset($storageConf['connection']) &&
-                DB::isConnection($storageConf['connection'])
-        ) {
+                DB::isConnection($storageConf['connection']))
+        {
             $this->dbc = &$storageConf['connection'];
         } elseif (isset($storageConf['dsn'])) {
             $this->dsn = $storageConf['dsn'];
@@ -86,6 +86,14 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         }
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $uid
+     * @param string $containerName
+     * @return mixed array or false on failure
+     */
     function mapUser($uid, $containerName)
     {
         $query = '
@@ -95,9 +103,9 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             FROM
                 '.$this->prefix.'perm_users LU
             WHERE
-                auth_user_id='.$this->dbc->quoteSmart($uid).'
+                auth_user_id = '.$this->dbc->quoteSmart($uid).'
             AND
-                auth_container_name='.$this->dbc->quoteSmart($containerName);
+                auth_container_name = '.$this->dbc->quoteSmart($containerName);
 
         $result = $this->dbc->getRow($query, null, DB_FETCHMODE_ASSOC);
 
@@ -114,6 +122,10 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * area names as the key of the 1st dimension.
      * Group rights and invididual rights are being merged
      * in the process.
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array or false on failure
      */
     function readUserRights($permUserId)
     {
@@ -125,9 +137,9 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'userrights U
             WHERE
-                R.right_id=U.right_id
+                R.right_id = U.right_id
             AND
-                U.perm_user_id='.$permUserId;
+                U.perm_user_id = '.$permUserId;
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
@@ -138,6 +150,13 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array or false on failure
+     */
     function readAreaAdminAreas($permUserId)
     {
         // get all areas in which the user is area admin
@@ -149,9 +168,9 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'area_admin_areas AAA,
                 '.$this->prefix.'rights R
             WHERE
-                AAA.area_id=R.area_id
+                AAA.area_id = R.area_id
             AND
-                AAA.perm_user_id='.$permUserId;
+                AAA.perm_user_id = '.$permUserId;
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
@@ -167,8 +186,9 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * (all groups that are subgroups of these are also added recursively)
      *
      * @access private
+     * @param int $permUserId
      * @see    readRights()
-     * @return void
+     * @return mixed array or false on failure
      */
     function readGroups($permUserId)
     {
@@ -179,11 +199,11 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'groupusers GU,
                 '.$this->prefix.'groups G
             WHERE
-                GU.group_id=G.group_id
+                GU.group_id = G.group_id
             AND
-                G.is_active='.$this->dbc->quoteSmart('Y').'
+                G.is_active = '.$this->dbc->quoteSmart('Y').'
             AND
-                perm_user_id='.$permUserId;
+                perm_user_id = '.$permUserId;
 
         $result = $this->dbc->getCol($query);
 
@@ -201,6 +221,9 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * right => 1
      *
      * @access  public
+     * @param   array $groupIds array with id's for the groups 
+     *                          that rights will be read from
+     * @see    readRights()
      * @return  mixed   DB_Error on failure or nothing
      */
     function readGroupRights($groupIds)
@@ -225,6 +248,14 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         return $result;
     } // end func readGroupRights
 
+    /**
+     *
+     *
+     * @access public
+     * @param array $groupIds
+     * @param array $newGroupIds
+     * @return mixed array or false on failure
+     */
     function readSubGroups($groupIds, $newGroupIds)
     {
         $query = '
@@ -255,6 +286,14 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param array $rightIds
+     * @param string $table
+     * @return mixed array or false on failure
+     */
     function readImplyingRights($rightIds, $table)
     {
         $query = '
@@ -266,11 +305,11 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'rights R,
                 '.$this->prefix.$table.'rights TR
             WHERE
-                TR.right_id=R.right_id
+                TR.right_id = R.right_id
             AND
                 R.right_id IN ('.implode(', ', array_keys($rightIds)).')
             AND
-                R.has_implied='.$this->dbc->quoteSmart('Y');
+                R.has_implied = '.$this->dbc->quoteSmart('Y');
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED, true);
 
@@ -281,6 +320,14 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param array $currentRights
+     * @param string $currentLevel
+     * @return mixed array of false on failure
+     */
     function readImpliedRights($currentRights, $currentLevel)
     {
         $query = '
@@ -292,7 +339,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'right_implied RI
             WHERE
-                RI.implied_right_id=R.right_id
+                RI.implied_right_id = R.right_id
             AND
                 RI.right_id IN ('.implode(', ', $currentRights).')';
 
@@ -306,7 +353,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             return null;
         }
 
-        for ($i=0, $j=count($result); $i<$j; ++$i) {
+        for ($i = 0, $j = count($result); $i < $j; ++$i) {
             $result[$i]['has_implied'] = (bool)($result[$i]['has_implied'] == 'Y');
         }
 

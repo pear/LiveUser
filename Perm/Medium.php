@@ -154,6 +154,13 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         return $this->rights;
     } // end func readRights
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array or false on failure
+     */
     function readAreaAdminAreas($permUserId)
     {
         $this->userRights = array();
@@ -167,6 +174,13 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array or false on failure
+     */
     function readGroups($permUserId)
     {
         $this->groupIds = array();
@@ -180,6 +194,13 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param array $groupIds
+     * @return mixed array or false on failure
+     */
     function readGroupRights($groupIds)
     {
         $this->groupRights = array();

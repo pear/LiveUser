@@ -86,6 +86,14 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         }
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $uid
+     * @param string $containerName
+     * @return mixed array or false on failure
+     */
     function mapUser($uid, $containerName)
     {
         $query = '
@@ -95,9 +103,9 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             FROM
                 '.$this->prefix.'perm_users LU
             WHERE
-                auth_user_id='.$this->dbc->quote($uid, 'text').'
+                auth_user_id = '.$this->dbc->quote($uid, 'text').'
             AND
-                auth_container_name='.$this->dbc->quote($containerName, 'text');
+                auth_container_name = '.$this->dbc->quote($containerName, 'text');
 
         $result = $this->dbc->queryRow($query, array('integer', 'integer'), MDB2_FETCHMODE_ASSOC);
 
@@ -114,6 +122,10 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      * area names as the key of the 1st dimension.
      * Group rights and invididual rights are being merged
      * in the process.
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array of false on failure
      */
     function readUserRights($permUserId)
     {
@@ -125,9 +137,9 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'userrights U
             WHERE
-                R.right_id=U.right_id
+                R.right_id = U.right_id
             AND
-                U.perm_user_id='.$this->dbc->quote($permUserId, 'integer');
+                U.perm_user_id = '.$this->dbc->quote($permUserId, 'integer');
 
         $types = array('integer', 'integer');
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
@@ -139,6 +151,13 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array or false on failure
+     */
     function readAreaAdminAreas($permUserId)
     {
         // get all areas in which the user is area admin
@@ -150,9 +169,9 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'area_admin_areas AAA,
                 '.$this->prefix.'rights R
             WHERE
-                AAA.area_id=R.area_id
+                AAA.area_id = R.area_id
             AND
-                AAA.perm_user_id='.$this->dbc->quote($permUserId, 'integer');
+                AAA.perm_user_id = '.$this->dbc->quote($permUserId, 'integer');
 
         $types = array('integer', 'integer');
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
@@ -169,8 +188,9 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      * (all groups that are subgroups of these are also added recursively)
      *
      * @access private
+     * @param int $permUserId
      * @see    readRights()
-     * @return void
+     * @return mixed array or false on failure
      */
     function readGroups($permUserId)
     {
@@ -181,11 +201,11 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'groupusers GU,
                 '.$this->prefix.'groups G
             WHERE
-                GU.group_id=G.group_id
+                GU.group_id = G. group_id
             AND
-                G.is_active='.$this->dbc->quote(true, 'boolean').'
+                G.is_active = '.$this->dbc->quote(true, 'boolean').'
             AND
-                perm_user_id='.$this->dbc->quote($permUserId, 'integer');
+                perm_user_id = '.$this->dbc->quote($permUserId, 'integer');
 
         $result = $this->dbc->queryCol($query, $this->groupTableCols['required']['group_id']['type']);
 
@@ -203,7 +223,9 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      * right => 1
      *
      * @access  public
-     * @return  mixed   MDB2_Error on failure or nothing
+     * @param   array $groupIds array with id's for the groups 
+     *                          that rights will be read from
+     * @return  mixed   array or false on failure
      */
     function readGroupRights($groupIds)
     {
@@ -228,6 +250,14 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         return $result;
     } // end func readGroupRights
 
+    /**
+     *
+     *
+     * @access public
+     * @param array $groupIds
+     * @param array $newGroupIds
+     * @return mixed array or false on failure
+     */
     function readSubGroups($groupIds, $newGroupIds)
     {
         $query = '
@@ -258,6 +288,14 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         return $result;
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param array $rightsId
+     * @param string $table
+     * @return mixed array or false on failure
+     */
     function readImplyingRights($rightIds, $table)
     {
         $query = '
@@ -269,7 +307,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'rights R,
                 '.$this->prefix.$table.'rights TR
             WHERE
-                TR.right_id=R.right_id
+                TR.right_id = R.right_id
             AND
                 R.right_id IN ('.$this->dbc->datatype->implodeArray(array_keys($rightIds), 'integer').')
             AND
@@ -285,6 +323,14 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         return $result;
     }
 
+    /**
+    *
+    *
+    * @access public
+    * @param array $currentRights
+    * @param string $currentLevel
+    * @return mixed array or false on failure
+    */
     function readImpliedRights($currentRights, $currentLevel)
     {
         $query = '
@@ -296,7 +342,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'right_implied RI
             WHERE
-                RI.implied_right_id=R.right_id
+                RI.implied_right_id = R.right_id
             AND
                 RI.right_id IN ('.$this->dbc->datatype->implodeArray($currentRights, 'integer').')';
 

@@ -111,6 +111,14 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
         $this->LiveUser_Perm_Storage($confArray, $storageConf);
     }
 
+    /**
+     *
+     *
+     * @access public
+     * @param int $uid
+     * @param string $containerName
+     * @return mixed array or false on failure
+     */
     function mapUser($uid, $containerName)
     {
     }
@@ -121,6 +129,10 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
      * area names as the key of the 1st dimension.
      * Group rights and invididual rights are being merged
      * in the process.
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array of false on failure
      */
     function readUserRights($permUserId)
     {

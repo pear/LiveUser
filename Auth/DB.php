@@ -35,7 +35,7 @@ require_once 'DB.php';
  * existing connection. Alternatively, a DSN can be passed to open a new one.
  *
  * Requirements:
- * - File "LoginManager.php" (contains the parent class "LiveUser")
+ * - File "LiveUser.php" (contains the parent class "LiveUser")
  * - Array of connection options or a PEAR::DB connection object must be
  *   passed to the constructor.
  *   Example: array('dsn'                   => 'mysql://user:pass@host/db_name',
@@ -182,9 +182,8 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
             }
 
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
