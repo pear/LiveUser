@@ -43,6 +43,7 @@ $notes = <<<EOT
   - added an observer class in example1 to show how they work
   - added support for checking arbitrary values in unfreeze()
     (for example the user agent) to make session high-jacking more difficult)
+  - use the new config array
 EOT;
 
 $description = <<<EOT
