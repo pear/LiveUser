@@ -55,7 +55,6 @@ class LU_Default_observer
     function notify(&$notification)
     {
         echo "observer called on event: " . $notification->getNotificationName() . " \n";
-        var_dump($notification);
     }
 }
 
