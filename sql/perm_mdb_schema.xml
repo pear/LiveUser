@@ -38,7 +38,6 @@
     <unique>1</unique>
     <field>
      <name>application_define_name</name>
-     <sorting>ascending</sorting>
     </field>
    </index>
 
@@ -67,16 +66,11 @@
    </field>
 
    <index>
-    <name>area_id</name>
+    <name>area_admin_area_rel</name>
     <unique>1</unique>
     <field>
      <name>area_id</name>
     </field>
-   </index>
-
-   <index>
-    <name>perm_user_id</name>
-    <unique>1</unique>
     <field>
      <name>perm_user_id</name>
     </field>
@@ -127,19 +121,9 @@
     <unique>1</unique>
     <field>
      <name>application_id</name>
-     <sorting>ascending</sorting>
     </field>
     <field>
      <name>area_define_name</name>
-     <sorting>ascending</sorting>
-    </field>
-   </index>
-
-   <index>
-    <name>areas_application_id</name>
-    <field>
-     <name>application_id</name>
-     <sorting>ascending</sorting>
     </field>
    </index>
 
@@ -168,16 +152,11 @@
    </field>
 
    <index>
-    <name>group_id</name>
+    <name>group_subgroup_rel</name>
     <unique>1</unique>
     <field>
      <name>group_id</name>
     </field>
-   </index>
-
-   <index>
-    <name>subgroup_id</name>
-    <unique>1</unique>
     <field>
      <name>subgroup_id</name>
     </field>
@@ -214,16 +193,11 @@
    </field>
 
    <index>
-    <name>group_id</name>
+    <name>group_right_rel</name>
     <unique>1</unique>
     <field>
      <name>group_id</name>
     </field>
-   </index>
-
-   <index>
-    <name>right_id</name>
-    <unique>1</unique>
     <field>
      <name>right_id</name>
     </field>
@@ -290,7 +264,6 @@
     <unique>1</unique>
     <field>
      <name><variable>group_define_name_name</variable></name>
-     <sorting>ascending</sorting>
     </field>
    </index>
 
@@ -319,60 +292,13 @@
    </field>
 
    <index>
-    <name>perm_user_id</name>
+    <name>perm_user_group_rel</name>
     <unique>1</unique>
     <field>
      <name>perm_user_id</name>
     </field>
-   </index>
-
-   <index>
-    <name>group_id</name>
-    <unique>1</unique>
     <field>
      <name>group_id</name>
-    </field>
-   </index>
-
-  </declaration>
-
- </table>
-
- <table>
-
-  <name><variable>table_prefix</variable>languages</name>
-
-  <declaration>
-
-   <field>
-    <name>language_id</name>
-    <type>integer</type>
-    <notnull>1</notnull>
-    <default>0</default>
-   </field>
-
-   <field>
-    <name>two_letter_name</name>
-    <type>text</type>
-    <length>2</length>
-    <notnull>1</notnull>
-    <default></default>
-   </field>
-
-   <index>
-    <name>language_id</name>
-    <unique>1</unique>
-    <field>
-     <name>language_id</name>
-    </field>
-   </index>
-
-   <index>
-    <name>two_letter_name</name>
-    <unique>1</unique>
-    <field>
-     <name>two_letter_name</name>
-     <sorting>ascending</sorting>
     </field>
    </index>
 
@@ -422,6 +348,17 @@
     </field>
    </index>
 
+   <index>
+    <name>auth_user_container_rel</name>
+    <unique>1</unique>
+    <field>
+     <name>auth_user_id</name>
+    </field>
+    <field>
+     <name>auth_container_name</name>
+    </field>
+   </index>
+
   </declaration>
 
  </table>
@@ -447,50 +384,13 @@
    </field>
 
    <index>
-    <name>right_id</name>
+    <name>right_implied_right_rel</name>
     <unique>1</unique>
     <field>
      <name>right_id</name>
     </field>
-   </index>
-
-   <index>
-    <name>implied_right_id</name>
-    <unique>1</unique>
     <field>
      <name>implied_right_id</name>
-    </field>
-   </index>
-
-  </declaration>
-
- </table>
-
- <table>
-
-  <name><variable>table_prefix</variable>right_scopes</name>
-
-  <declaration>
-
-   <field>
-    <name>right_id</name>
-    <type>integer</type>
-    <notnull>1</notnull>
-    <default>0</default>
-   </field>
-
-   <field>
-    <name>right_type</name>
-    <type>integer</type>
-    <notnull>1</notnull>
-    <default>0</default>
-   </field>
-
-   <index>
-    <name>right_id</name>
-    <unique>1</unique>
-    <field>
-     <name>right_id</name>
     </field>
    </index>
 
@@ -540,13 +440,6 @@
     <default>N</default>
    </field>
 
-   <field>
-    <name>has_scope</name>
-    <type>boolean</type>
-    <notnull>1</notnull>
-    <default>N</default>
-   </field>
-
    <index>
     <name>right_id</name>
     <unique>1</unique>
@@ -560,19 +453,9 @@
     <unique>1</unique>
     <field>
      <name>area_id</name>
-     <sorting>ascending</sorting>
     </field>
     <field>
      <name>right_define_name</name>
-     <sorting>ascending</sorting>
-    </field>
-   </index>
-
-   <index>
-    <name>rights_area_id</name>
-    <field>
-     <name>area_id</name>
-     <sorting>ascending</sorting>
     </field>
    </index>
 
@@ -602,9 +485,10 @@
 
    <field>
     <name>language_id</name>
-    <type>integer</type>
+    <type>text</type>
+    <length>2</length>
     <notnull>1</notnull>
-    <default>0</default>
+    <default></default>
    </field>
 
    <field>
@@ -622,25 +506,11 @@
    </field>
 
    <index>
-    <name>section_id</name>
+    <name>section_item</name>
     <unique>1</unique>
     <field>
      <name>section_id</name>
-    </field>
-   </index>
-
-   <index>
-    <name>section_type</name>
-    <unique>1</unique>
-    <field>
      <name>section_type</name>
-    </field>
-   </index>
-
-   <index>
-    <name>language_id</name>
-    <unique>1</unique>
-    <field>
      <name>language_id</name>
     </field>
    </index>
@@ -676,16 +546,11 @@
    </field>
 
    <index>
-    <name>perm_user_id</name>
+    <name>perm_user_right_rel</name>
     <unique>1</unique>
     <field>
      <name>perm_user_id</name>
     </field>
-   </index>
-
-   <index>
-    <name>right_id</name>
-    <unique>1</unique>
     <field>
      <name>right_id</name>
     </field>

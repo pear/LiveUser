@@ -66,32 +66,6 @@
     <unique>1</unique>
     <field>
      <name><variable>auth_user_id_name</variable></name>
-     <sorting>ascending</sorting>
-    </field>
-   </index>
-
-   <index>
-    <name><variable>handle_name</variable></name>
-    <unique>1</unique>
-    <field>
-     <name><variable>handle_name</variable></name>
-     <sorting>ascending</sorting>
-    </field>
-   </index>
-
-   <index>
-    <name><variable>owner_group_id_name</variable></name>
-    <field>
-     <name><variable>owner_group_id_name</variable></name>
-     <sorting>ascending</sorting>
-    </field>
-   </index>
-
-   <index>
-    <name><variable>owner_user_id_name</variable></name>
-    <field>
-     <name><variable>owner_user_id_name</variable></name>
-     <sorting>ascending</sorting>
     </field>
    </index>
 
