@@ -6,12 +6,12 @@ require_once 'conf.php';
 
 // If the user hasn't the right to write news -> access denied.
 if (!$LU->checkRight(RIGHT_NEWS_NEW)) {
-    $tpl->loadTemplatefile('news_notallowed.tpl.php', false, false);
+    $tpl->loadTemplatefile('news_notallowed.tpl.php');
     include_once 'finish.inc.php';
     exit();
 }
 
-$tpl->loadTemplatefile('news_new.tpl.php', false, false);
+$tpl->loadTemplatefile('news_new.tpl.php');
 
 // Read form data.
 $news     = isset($_POST['news'])     ? $_POST['news'] : '';

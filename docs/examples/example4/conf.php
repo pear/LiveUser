@@ -16,7 +16,7 @@ function php_error_handler($errno, $errstr, $errfile, $errline)
 {
     if (error_reporting() && $errno != 2048) {
         $tpl = new HTML_Template_IT();
-        $tpl->loadTemplatefile('error-page.tpl.php', false, false);
+        $tpl->loadTemplatefile('error-page.tpl.php');
 
         $tpl->setVariable('error_msg', "<b>$errfile ($errline)</b><br />$errstr");
         $tpl->show();

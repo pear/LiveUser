@@ -4,7 +4,7 @@
 
   // If the user hasn't the right to change news -> access denied.
   if (!$LU->checkRight(RIGHT_NEWS_CHANGE)) {
-      $tpl->loadTemplatefile('news_notallowed.tpl.php', false, false);
+      $tpl->loadTemplatefile('news_notallowed.tpl.php');
       include_once 'finish.inc.php';
       exit();
   }
@@ -134,7 +134,7 @@
    */
   if (empty($action)) {
 
-      $tpl->loadTemplatefile('news_change.tpl.php', false, false);
+      $tpl->loadTemplatefile('news_change.tpl.php');
 
       // Get the last five news.
       $res = $db->query('SELECT

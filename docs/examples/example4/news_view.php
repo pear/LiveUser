@@ -2,7 +2,7 @@
 // CREATING ENVIRONMENT
 require_once 'conf.php';
 
-$tpl->loadTemplatefile('news_view.tpl.php', false, false);
+$tpl->loadTemplatefile('news_view.tpl.php');
 
 $res = $db->query('SELECT
                        DATE_FORMAT(news.created_at,"%d.%m.%Y - %H:%i") AS date,
