@@ -204,7 +204,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
-                    $this->dbc->quoteSmart(true);
+                    $this->dbc->quoteSmart('Y');
         }
 
         $result = $this->dbc->getCol($query);
