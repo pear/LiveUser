@@ -297,7 +297,7 @@ class LiveUser
     var $_errorMessages = array(
         LIVEUSER_ERROR                        => 'Unknown error',
         LIVEUSER_ERROR_NOT_SUPPORTED          => 'Feature not supported by the container: %feature%',
-        LIVEUSER_ERROR_CONFIG                 => 'There is an errror in the configuration parameters',
+        LIVEUSER_ERROR_CONFIG                 => 'There is an error in the configuration parameters',
         LIVEUSER_ERROR_MISSING_DEPS           => 'Missing package depedencies: %msg%',
         LIVEUSER_ERROR_COOKIE                 => 'There was an error processing the Remember Me cookie',
         LIVEUSER_ERROR_MISSING_FILE           => 'The file %file% is missing',
