@@ -152,7 +152,6 @@ class LiveUser_Auth_Common
                                  'RC4'   => 'RC4',
                                  'SHA1'  => 'SHA1');
 
-
     /**
      * Defines the algorithm used for encrypting/decrypting
      * passwords. Default: "MD5".
@@ -161,6 +160,14 @@ class LiveUser_Auth_Common
      * @var    string
      */
     var $passwordEncryptionMode = 'MD5';
+
+    /**
+     * Defines the secret to use for encryption if needed
+     *
+     * @access protected
+     * @var    string
+     */
+    var $secret;
 
     /**
      * Defines the array index number of the LoginManager?s "backends" property.
@@ -313,15 +320,7 @@ class LiveUser_Auth_Common
                 $decryptedPW = $encryptedPW;
                 break;
             case 'RC4':
-                if (!is_object($this->rc4)) {
-                    $rc4 =& LiveUser::CryptRC4Factory($this->_options['cookie']['secret']);
-                    if (!$rc4) {
-                        return false;
-                    }
-                    $this->rc4 =& $rc4;
-                }
-                $decryptedPW = $encryptedPW;
-                $this->rc4->decrypt($decryptedPW);
+                $decryptedPW = LiveUser::cryptRC4($decryptedPW, $this->secret, false);
                 break;
             case 'SHA1':
                 // SHA1 can't be decoded, so return the string unmodified
@@ -352,21 +351,13 @@ class LiveUser_Auth_Common
                 $encryptedPW = md5($plainPW);
                 break;
             case 'RC4':
-                if (!is_object($this->rc4)) {
-                    $rc4 =& LiveUser::CryptRC4Factory($this->_options['cookie']['secret']);
-                    if (!$rc4) {
-                        return false;
-                    }
-                    $this->rc4 =& $rc4;
-                }
-                $encryptedPW = $plainPW;
-                $this->rc4->crypt($encryptedPW);
+                $encryptedPW = LiveUser::cryptRC4($plainPW, $this->secret, true);
                 break;
             case 'SHA1':
                 if (!function_exists('sha1')) {
-                        $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED,
-                            'exception', array(), 'SHA1 function doesn\'t exist. Upgrade your PHP version');
-                        return false;
+                    $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED,
+                        'exception', array(), 'SHA1 function doesn\'t exist. Upgrade your PHP version');
+                    return false;
                 }
                 $encryptedPW = sha1($plainPW);
                 break;
