@@ -98,7 +98,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
 
         if ($this->userType == LIVEUSER_AREAADMIN_TYPE_ID) {
             $result = $this->readAreaAdminAreas($this->permUserId);
-            if (PEAR::isError($result)) {
+            if ($result === false) {
                return false;
             }
 
@@ -171,7 +171,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         }
 
         $this->areaAdminAreas = $result;
-        return $result;
+        return $this->areaAdminAreas;
     }
 
     /**
@@ -191,7 +191,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         }
 
         $this->groupIds = $result;
-        return $result;
+        return $this->groupIds;
     }
 
     /**
@@ -215,7 +215,25 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         }
 
         $this->groupRights = $result;
-        return $result;
+        return $this->groupRights;
     }
+
+    /**
+     * Checks if the current user is a member of a certain group
+     * If $this->ondemand and $ondemand is true, the groups will be loaded on
+     * the fly.
+     *
+     * @access  public
+     * @param   integer $group_id  Id of the group to check for.
+     * @param   boolean $ondemand  allow ondemand reading of groups
+     * @return  boolean.
+     */
+    function checkGroup($group_id)
+    {
+        if (is_array($this->groupIds)) {
+            return in_array($group_id, $this->groupIds);
+        }
+        return false;
+    } // end func checkGroup
 } // end class LiveUser_Perm_Container_MDB2_Medium
 ?>
