@@ -141,7 +141,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                 } else {
                     $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                         array('container' => "Auth initialisation failed. Can't find XML_Tree class."));
-                    return falseM
+                    return false;
                    ;
                 }
             } else {
