@@ -46,7 +46,7 @@ $liveuserConfig = array(
                                 ),
     'permContainer' => array(
         'type'   => 'Complex',
-        'stack' => array(
+        'storage' => array(
             'DB' => array(
                 'dsn' => $dsn,
                 'prefix' => 'liveuser_',

@@ -43,7 +43,7 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
                                            )
         ),
         'permContainer'     => array('type'  => 'Simple',
-                                     'stack' => array('XML' => array('file' => 'Perm_XML.xml')),
+                                     'storage' => array('XML' => array('file' => 'Perm_XML.xml')),
         ),
     );
     // Get LiveUser class definition

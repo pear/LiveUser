@@ -122,7 +122,7 @@ $LUOptions = array(
                         ),
     'permContainer'  => array(
                             'type'  => 'Complex',
-                            'stack' => array('DB' => array('dsn' => $dsn, 'prefix'     => 'liveuser_')),
+                            'storage' => array('DB' => array('dsn' => $dsn, 'prefix'     => 'liveuser_')),
                         )
     );
 
