@@ -32,6 +32,8 @@ $notes = <<<EOT
   - adding getErrors() method to get the error stack
   - added LiveUser::checkGroup() in order to check for membership in groups
   - added second auth container to example4
+  - added 'session_cookie_params' option
+  - LiveUser now expects a true from the auth container unfreeze() method
 EOT;
 
 $description = <<<EOT
