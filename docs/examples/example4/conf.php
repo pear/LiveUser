@@ -1,4 +1,5 @@
 <?php
+
 define('EMAIL_WEBMASTER', 'krausbn@php.net');
 
 // PEAR path
@@ -11,7 +12,7 @@ function php_error_handler($errno, $errstr, $errfile, $errline)
 {
     include_once 'HTML/Template/IT.php';
     $tpl = new HTML_Template_IT();
-    $tpl->loadTemplatefile('error-page.tpl.php');
+    $tpl->loadTemplatefile('error-page.tpl.php', false, false);
 
     $tpl->setVariable('error_msg', "<b>$errfile ($errline)</b><br />$errstr");
     $tpl->show();
@@ -87,10 +88,6 @@ $LUOptions = array(
                         )
     );
 
-$username = isset($_REQUEST['username']) ? $_REQUEST['username'] : null;
-$password = isset($_REQUEST['password']) ? $_REQUEST['password'] : null;
-$logout = isset($_REQUEST['logout']) ? $_REQUEST['logout'] : null;
-
 require_once 'LiveUser.php';
 
 function showLoginForm(&$liveUserObj)
@@ -130,8 +127,8 @@ $LU =& LiveUser::factory($LUOptions);
 $function = 'showLoginForm';
 $LU->attachObserver($function, 'forceLogin');
 
-$username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : NULL;
-$password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : NULL;
+$username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : null;
+$password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : null;
 $logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
 $LU->init($username, $password, $logout);
 
