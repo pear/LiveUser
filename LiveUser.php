@@ -78,6 +78,32 @@ define('LIVEUSER_STATUS_AUTHFAILED',     -9);
  */
 define('LIVEUSER_MAX_LEVEL',            3);
 
+/**#@+
+ * Usertypes
+ *
+ * @var integer
+ */
+/**
+ * lowest user type id
+ */
+define('LIVEUSER_ANONYMOUS_TYPE_ID',    0);
+/**
+ * lowest user type id
+ */
+// higest user type id
+define('LIVEUSER_USER_TYPE_ID',         1);
+/**
+ * lowest admin type id
+ */
+define('LIVEUSER_ADMIN_TYPE_ID',        2);
+define('LIVEUSER_AREAADMIN_TYPE_ID',    3);
+define('LIVEUSER_SUPERADMIN_TYPE_ID',   4);
+/**
+ * higest admin type id
+ */
+define('LIVEUSER_MASTERADMIN_TYPE_ID',  5);
+/**#@-*/
+
 /**
  * Debug global. When set to true the
  * error stack will be printed to
@@ -515,13 +541,17 @@ class LiveUser
      * @return object|false  Returns an instance of an auth container
      *                       class or false on error
      */
-    function &authFactory($conf)
+    function &authFactory($conf, $containerName, $admin = false)
     {
-        $classname = 'LiveUser_Auth_' . $conf['type'];
+        if ($admin) {
+            $classname = 'LiveUser_Admin_Auth_' . $conf['type'];
+        } else {
+            $classname = 'LiveUser_Auth_' . $conf['type'];
+        }
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
-        $auth = &new $classname($conf);
+        $auth = &new $classname($conf, $containerName);
         return $auth;
     }
 
@@ -533,9 +563,13 @@ class LiveUser
      * @return object|false  Returns an instance of a perm container
      *                       class or false on error
      */
-    function &permFactory($conf)
+    function &permFactory($conf, $admin = false)
     {
-        $classname = 'LiveUser_Perm_' . $conf['type'];
+        if ($admin) {
+            $classname = 'LiveUser_Admin_Perm_' . $conf['type'];
+        } else {
+            $classname = 'LiveUser_Perm_' . $conf['type'];
+        }
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
@@ -550,10 +584,14 @@ class LiveUser
      * @return object|false will return an instance of a Storage container
      *                      or false upon error
      */
-    function &storageFactory($confArray)
+    function &storageFactory($confArray, $admin = false)
     {
         end($confArray);
-        $storageName = 'LiveUser_Perm_Storage_' . key($confArray);
+        if ($admin) {
+            $storageName = 'LiveUser_Admin_Perm_Storage_' . key($confArray);
+        } else {
+            $storageName = 'LiveUser_Perm_Storage_' . key($confArray);
+        }
         $res = LiveUser::loadClass($storageName);
         if (!$res) {
             PEAR_ErrorStack::staticPush(
