@@ -393,7 +393,7 @@ class LiveUser
      *            'loginTimeout'  => 0,
      *            'expireTime'    => 3600,
      *            'idleTime'      => 1800,
-     *            'allowDuplicateHandles' => 0,
+     *            'updateLastLogin' => true,
      *            'authTable'     => 'liveuser_users',
      *            'authTableCols' => array(
      *                'required' => array(
@@ -498,8 +498,7 @@ class LiveUser
         $signature = serialize(array($handle, $passwd, $confName));
         if (!isset($instances[$signature])) {
             $obj = &LiveUser::factory(
-                $conf, $handle, $passwd, $logout,
-                $remember, $confName
+                $conf, $handle, $passwd, $logout, $remember, $confName
             );
             $instances[$signature] =& $obj;
         }
@@ -896,12 +895,12 @@ class LiveUser
             }
         }
 
+        // Try to fetch auth object from session
+        $this->unfreeze();
+
         if ($logout || $handle) {
             $this->logout($logout);
         }
-
-        // Try to fetch auth object from session
-        $this->unfreeze();
 
         if ($this->isLoggedIn()) {
             // Check if user authenticated with new credentials
@@ -967,11 +966,14 @@ class LiveUser
         $this->status = LIVEUSER_STATUS_AUTHFAILED;
         //loop into auth containers
         while ($backend_cnt > $counter) {
-            $auth = &$this->authFactory($this->authContainers[$backends[$counter]], $backends[$counter]);
+            $auth = &$this->authFactory(
+                $this->authContainers[$backends[$counter]],
+                $backends[$counter]
+            );
             if ($auth === false) {
                 return false;
             }
-            $auth->login($handle, $passwd, true);
+            $auth->login($handle, $passwd);
             if ($auth->loggedIn) {
                 $this->_auth = $auth;
                 $this->_auth->backendArrayIndex = $backends[$counter];
@@ -982,7 +984,10 @@ class LiveUser
                         return false;
                     }
                     $this->_perm =& $perm;
-                    $this->_perm->mapUser($this->_auth->authUserId, $this->_auth->backendArrayIndex);
+                    $this->_perm->mapUser(
+                        $this->_auth->authUserId,
+                        $this->_auth->backendArrayIndex
+                    );
                 }
                 $this->freeze();
                 $this->setRememberCookie($handle, $passwd, $remember);
