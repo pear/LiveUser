@@ -933,7 +933,7 @@ class LiveUser
         //loop into auth containers
         while ($backend_cnt > $counter) {
             $auth = &$this->authFactory($this->authContainers[$backends[$counter]]);
-            $auth->login($this->_handle, $this->_passwd, true);
+            $auth->login($handle, $passwd, true);
             if ($auth->loggedIn) {
                 $this->status = LIVEUSER_STATUS_OK;
                 $this->_auth  = $auth;
@@ -944,7 +944,7 @@ class LiveUser
                     $this->_perm->init($this->_auth->authUserId, $this->_auth->backendArrayIndex);
                 }
                 $this->freeze();
-                $this->setRememberCookie($this->_handle, $this->_passwd, $this->_remember);
+                $this->setRememberCookie($handle, $passwd, $remember);
                 break;
             } elseif ($auth->isActive === false) {
                 $this->status = LIVEUSER_STATUS_ISINACTIVE;
