@@ -1507,6 +1507,14 @@ class LiveUser
      * You can use the $methods parameter to set what method should act
      * as an observer for what event.
      *
+     * If you're only passing a function name, then you need to do as follows:
+     * <code>
+     * $function = 'foo';
+     * $lu->attachObserver($function, array('event'));
+     * </code>
+     *
+     * Same goes if you have to pass a object instead of function name.
+     *
      * @access public
      * @param  object  object with observer methods
      * @param  mixed   optional used to change method names this way:
