@@ -896,8 +896,8 @@ class LiveUser
 
         if ($this->isLoggedIn()) {
             // user wants to logout or authenticate with new credentials
-            if ($logout || $handle) {
-                $this->logout($logout);
+            if ($logout) {
+                $this->logout(true);
             // Check if user authenticated with new credentials
             } elseif ($handle && $this->_auth->handle != $handle) {
                 $this->logout(false);
