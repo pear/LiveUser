@@ -27,6 +27,7 @@ $GLOBALS['_LiveUser']['tables'] = array(
         'joins' => array(
             'userrights' => 'perm_user_id',
             'groupusers' => 'perm_user_id',
+            'area_admin_areas' => 'perm_user_id',
         ),
         'ids' => array(
             'perm_user_id'
@@ -124,10 +125,21 @@ $GLOBALS['_LiveUser']['tables'] = array(
                 'area_id' => 'section_id',
                 LIVEUSER_SECTION_AREA => 'section_type',
             ),
+            'area_admin_areas' => 'area_id',
         ),
         'ids' => array(
             'area_id',
         ),
+    ),
+    'area_admin_areas' => array(
+        'fields' => array(
+            'area_id' => true,
+            'perm_user_id' => true,
+        ),
+        'joins' => array(
+            'perm_users' => 'perm_user_id',
+            'areas' => 'area_id',
+        )
     ),
     'applications' => array(
         'fields' => array(
