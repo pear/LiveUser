@@ -64,7 +64,7 @@
   </maintainers>
   <release>
     <version>0.14.0</version>
-    <date>2004-11-17</date>
+    <date>2004-12-08</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>  - DB containers no longer use CASE in the sql query.
@@ -84,7 +84,9 @@
   - removed options of reading parameters from the superglobals
   - reworked init() method severly
   - remove the callback that catches PEAR_Error errors
-  - adding getErrors() method to get the error stack</notes>
+  - adding getErrors() method to get the error stack
+  - added LiveUser::checkGroup() in order to check for membership in groups
+  - added second auth container to example4</notes>
     <deps>
       <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
       <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
@@ -136,6 +138,7 @@
           <file role="doc" name="testarea.php"/>
          </dir> <!-- docs/examples/example3 -->
          <dir name="example4">
+          <file role="doc" name="Auth_XML.xml"/>
           <file role="doc" name="conf.php"/>
           <file role="doc" name="demodata.sql"/>
           <file role="doc" name="error-page.tpl.php"/>
@@ -188,7 +191,7 @@
   <changelog>
     <release>
       <version>0.14.0</version>
-      <date>2004-11-17</date>
+      <date>2004-12-08</date>
       <license>LGPL</license>
       <state>beta</state>
       <notes>  - DB containers no longer use CASE in the sql query.
@@ -208,7 +211,9 @@
   - removed options of reading parameters from the superglobals
   - reworked init() method severly
   - remove the callback that catches PEAR_Error errors
-  - adding getErrors() method to get the error stack</notes>
+  - adding getErrors() method to get the error stack
+  - added LiveUser::checkGroup() in order to check for membership in groups
+  - added second auth container to example4</notes>
     </release>
     <release>
       <version>0.14</version>
@@ -241,9 +246,9 @@
 - Fix #2528 LiverUser::Factory calls PEAR::isError. The methods return false and not
   a PEAR_Error so the check is wrong
 - Fix #1957 one to many boolean in the type array in getRights.
-- Fix #2527 have raiseError in the admin class and change the calls from 
+- Fix #2527 have raiseError in the admin class and change the calls from
   PEAR::raiseError to LiveUser_Admin::raiseError.
-- Fix #2568 LiveUser_Admin::setAdminAuthContainer() returns true on 
+- Fix #2568 LiveUser_Admin::setAdminAuthContainer() returns true on
   failure</notes>
     </release>
     <release>
