@@ -199,16 +199,28 @@ class LiveUser_Auth_Common
     var $propertyValues = array();
 
     /**
+     * The name associated with this auth container. The name is used
+     * when adding users from this container to the reference table
+     * in the permission container. This way it is possible to see
+     * from which auth container the user data is coming from.
+     *
+     * @var    string
+     * @access public
+     */
+    var $containerName = null;
+
+    /**
      * Class constructor. Feel free to override in backend subclasses.
-	 *
+     *
      * @access protected
      * @var    array     configuration options
      * @return void
      */
-    function LiveUser_Auth_Common($connectOptions)
+    function LiveUser_Auth_Common($connectOptions, $containerName)
     {
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
 
+        $this->containerName = $containerName;
         if (is_array($connectOptions)) {
             foreach ($connectOptions as $key => $value) {
                 if (isset($this->$key)) {
