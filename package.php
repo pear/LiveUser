@@ -9,7 +9,7 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.155555';
+$version = '0.15.0';
 
 $notes = <<<EOT
 general notes
@@ -32,11 +32,11 @@ general notes
   - removed unused userExists() auth container method (use admin interface instead)
   - accept all config parameters by reference inside the containers
   - move readAreaAdminsAreas over to Complex where it should be.
+  - the observers mechanism now use PEAR::Event_Dispatcher
 
 perm schema structure
   - moved default database structure into separate file (using the GLOBALS super globals)
   - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
-  - the observers mechanism now use Event_Dispatcher (http://pear.php.net/Event_Dispatcher)
   - table rights_implied should have been right_implied in the perm schema structure
   - removed has_level from the database schema
   - added area_admin_areas and all it's joins
@@ -128,14 +128,15 @@ $package->addMaintainer('lsmith',  'lead',        'Lukas Kahwe Smith', 'smith@ba
 $package->addMaintainer('krausbn', 'developer',   'Bjoern Kraus',      'krausbn@php.net');
 $package->addMaintainer('dufuz',   'developer',   'Helgi Þormar',      'dufuz@php.net');
 
-$package->addDependency('php',       '4.2.0', 'ge',  'php', false);
-$package->addDependency('PEAR',      '1.3.3',   'ge', 'pkg', false);
-$package->addDependency('Log',       '1.7.0',   'ge',  'pkg', true);
-$package->addDependency('DB',        '1.6.0',   'ge',  'pkg', true);
-$package->addDependency('MDB',       '1.1.4', 'ge',  'pkg', true);
-$package->addDependency('MDB2',      '2.0.0beta2', 'ge', 'pkg', true);
-$package->addDependency('XML_Tree',  false,   'has', 'pkg', true);
-$package->addDependency('Crypt_RC4', false,   'has', 'pkg', true);
+$package->addDependency('php',              '4.2.0',      'ge',  'php', false);
+$package->addDependency('PEAR',             '1.3.3',      'ge',  'pkg', false);
+$package->addDependency('Event_Dispatcher', false,        'has', 'pkg', false);
+$package->addDependency('Log',              '1.7.0',      'ge',  'pkg', true);
+$package->addDependency('DB',               '1.6.0',      'ge',  'pkg', true);
+$package->addDependency('MDB',              '1.1.4',      'ge',  'pkg', true);
+$package->addDependency('MDB2',             '2.0.0beta2', 'ge',  'pkg', true);
+$package->addDependency('XML_Tree',         false,        'has', 'pkg', true);
+$package->addDependency('Crypt_RC4',        false,        'has', 'pkg', true);
 
 if (isset($_GET['make']) || (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'make')) {
     $result = $package->writePackageFile();
