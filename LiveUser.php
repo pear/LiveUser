@@ -325,7 +325,7 @@ class LiveUser
             if (!$this->_log_loaded) {
                 $this->loadPEARLog();
             }
-            $this->_log->addChild(Log::factory('win'));
+            $this->_log->addChild(Log::factory('win', 'LiveUser'));
         }
 
         $this->_stack->setErrorMessageTemplate($this->_errorMessages);
