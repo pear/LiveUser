@@ -110,15 +110,11 @@ $result = $package->setOptions(array(
         'LiveUser.php'            => '/',
     ),
     'installas'         => array(
-        'sql/Auth_DB.sql'           => 'misc/schema/Auth_DB.sql',
-        'sql/Auth_XML.xml'          => 'misc/schema/Auth_XML.xml',
-        'sql/perm_db.sql'           => 'misc/schema/perm_db.sql',
-        'sql/Perm_XML.xml'          => 'misc/schema/Perm_XML.xml',
+        'sql/Auth_XML.xml'          => 'misc/Auth_XML.xml',
+        'sql/Perm_XML.xml'          => 'misc/Perm_XML.xml',
         'sql/auth_mdb_schema.xml'   => 'misc/schema/auth_mdb_schema.xml',
+        'sql/perm_mdb_schema.xml'   => 'misc/schema/perm_mdb_schema.xml',
         'sql/README'                => 'misc/schema/README',
-        'sql/perm_db_simple.sql'    => 'misc/schema/perm_db_simple.sql',
-        'sql/perm_db_medium.sql'    => 'misc/schema/perm_db_medium.sql',
-        'sql/perm_db_complex.sql'   => 'misc/schema/perm_db_complex.sql',
         'sql/install.php'           => 'misc/schema/install.php',
     ),
     'exceptions'         => array(

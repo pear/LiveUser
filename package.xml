@@ -190,10 +190,10 @@ examples
        </dir> <!-- Perm -->
        <dir name="sql">
         <file role="data" install-as="misc/schema/auth_mdb_schema.xml" name="auth_mdb_schema.xml"/>
-        <file role="data" install-as="misc/schema/Auth_XML.xml" name="Auth_XML.xml"/>
+        <file role="data" install-as="misc/Auth_XML.xml" name="Auth_XML.xml"/>
         <file role="data" install-as="misc/schema/install.php" name="install.php"/>
-        <file role="data" name="perm_mdb_schema.xml"/>
-        <file role="data" install-as="misc/schema/Perm_XML.xml" name="Perm_XML.xml"/>
+        <file role="data" install-as="misc/schema/perm_mdb_schema.xml" name="perm_mdb_schema.xml"/>
+        <file role="data" install-as="misc/Perm_XML.xml" name="Perm_XML.xml"/>
         <file role="data" install-as="misc/schema/README" name="README"/>
        </dir> <!-- sql -->
        <file role="doc" name="lgpl.txt"/>
