@@ -64,7 +64,7 @@
   </maintainers>
   <release>
     <version>0.14.0</version>
-    <date>2004-12-08</date>
+    <date>2004-12-13</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>  - DB containers no longer use CASE in the sql query.
@@ -86,7 +86,19 @@
   - remove the callback that catches PEAR_Error errors
   - adding getErrors() method to get the error stack
   - added LiveUser::checkGroup() in order to check for membership in groups
-  - added second auth container to example4</notes>
+  - added second auth container to example4
+  - fix #2678: have more control on callback function
+  - Matthias Nothhaft contributed a patch to add observers to the main class.
+    There are several events triggered for many different actions giving
+    fine control to the user to add custom schemes
+  - added 'session_cookie_params' option
+  - LiveUser now expects a true from the auth container unfreeze() method
+  - Removed a potential security issue in Auth freeze()
+  - added Observers, see the wiki for more information
+  - added an observer class in example1 to show how they work
+  - added support for checking arbitrary values in unfreeze()
+    (for example the user agent) to make session high-jacking more difficult)
+  - use the new config array</notes>
     <deps>
       <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
       <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
@@ -191,7 +203,7 @@
   <changelog>
     <release>
       <version>0.14.0</version>
-      <date>2004-12-08</date>
+      <date>2004-12-13</date>
       <license>LGPL</license>
       <state>beta</state>
       <notes>  - DB containers no longer use CASE in the sql query.
@@ -213,7 +225,19 @@
   - remove the callback that catches PEAR_Error errors
   - adding getErrors() method to get the error stack
   - added LiveUser::checkGroup() in order to check for membership in groups
-  - added second auth container to example4</notes>
+  - added second auth container to example4
+  - fix #2678: have more control on callback function
+  - Matthias Nothhaft contributed a patch to add observers to the main class.
+    There are several events triggered for many different actions giving
+    fine control to the user to add custom schemes
+  - added 'session_cookie_params' option
+  - LiveUser now expects a true from the auth container unfreeze() method
+  - Removed a potential security issue in Auth freeze()
+  - added Observers, see the wiki for more information
+  - added an observer class in example1 to show how they work
+  - added support for checking arbitrary values in unfreeze()
+    (for example the user agent) to make session high-jacking more difficult)
+  - use the new config array</notes>
     </release>
     <release>
       <version>0.14</version>
