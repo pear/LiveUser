@@ -15,6 +15,7 @@ $notes = <<<EOT
 - checkRightLevel incorrectly required that a user needs to be authenticated
 - moved logic in regard to handling empty owner id's into complex container
 - typo fix in error message (bug #3899)
+- fixed bug auth_user_id => authUserId in liveuser_user queries (bug #3964)
 EOT;
 
 $description = <<<EOT
