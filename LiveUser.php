@@ -415,11 +415,14 @@ class LiveUser
      *      ),
      *  ),
      *  'permContainer' => array(
-     *      'type'       => 'DB_Complex',
-     *      'connection' => 'db connection object, use this or dsn',
-     *      'dsn'        => 'database dsn, use this or connection',
-     *      'prefix'     => 'liveuser_',
-     *  )
+     *      'type'       => 'Complex',
+     *      'storage' => array(
+     *          'DB' => array(
+     *              'dsn' => $dsn,
+     *              'prefix'     => 'liveuser_'
+     *          ),
+     *      ),
+     *  ),
      *
      * </code>
      *
