@@ -94,7 +94,7 @@ class LiveUser_Misc_Schema_Install
             'right_max_level' => LIVEUSER_MAX_LEVEL,
         );
 
-        return $this->installSchema($dsn, $file, $variables);
+        return $this->installSchema($dsn, $file, $variables, $create);
     }
 
     function installSchema($dsn, $file, $variables, $create = true)
