@@ -687,7 +687,7 @@ class LiveUser
             return true;
         }
 
-        if (!LiveUser::fileExits($conf)) {
+        if (!LiveUser::fileExists($conf)) {
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 "Configuration file does not exist in LiveUser::readConfig(): $conf");
             return false;
