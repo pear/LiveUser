@@ -72,6 +72,7 @@ class LiveUser_Auth_Common
      * @see    LiveUser_Auth_Common::loggedIn
      */
     var $isActive = null;
+
     var $ownerUserId = null;
     var $ownerGroupId = null;
 
@@ -211,6 +212,31 @@ class LiveUser_Auth_Common
      * @access public
      */
     var $externalValues = array();
+
+    /**
+     * Columns of the auth table.
+     * Associative array with the names of the auth table columns.
+     * The 'auth_user_id', 'handle' and 'passwd' fields have to be set.
+     * 'lastlogin' and 'is_active' are optional.
+     * It doesn't make sense to set only one of the time columns without the
+     * other.
+     *
+     * The type attribute is only useful when using MDB or CAPTCHA.
+     *
+     * @access public
+     * @var    array
+     */
+    var $authTableCols = array(
+        'required' => array(
+            'auth_user_id' => array('name' => 'auth_user_id', 'type' => 'text'),
+            'handle'       => array('name' => 'handle',       'type' => 'text'),
+            'passwd'       => array('name' => 'passwd',       'type' => 'text'),
+        ),
+        'optional' => array(
+            'lastlogin'    => array('name' => 'lastlogin',    'type' => 'timestamp'),
+            'is_active'    => array('name' => 'is_active',    'type' => 'boolean')
+        )
+    );
 
     /**
      * Class constructor. Feel free to override in backend subclasses.
