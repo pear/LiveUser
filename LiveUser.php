@@ -752,10 +752,10 @@ class LiveUser
      */
     function &CryptRC4Factory($secret)
     {
-        if (!LiveUser::loadClass('Crypt_RC4')) {
+        if (!LiveUser::loadClass('Crypt_Rc4')) {
             return false;
         }
-        $rc4 =& new Crypt_RC4($secret);
+        $rc4 =& new Crypt_Rc4($secret);
         return $rc4;
     }
 
