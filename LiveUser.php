@@ -573,7 +573,7 @@ class LiveUser
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
-        $perm = &new $classname($conf['stack']);
+        $perm = &new $classname($conf['storage']);
         return $perm;
     }
     /**
@@ -588,12 +588,15 @@ class LiveUser
     {
         end($confArray);
         $storageName = $classprefix.'Perm_Storage_' . key($confArray);
-        if (!LiveUser::loadClass($storageName)) {
+        if (!LiveUser::loadClass($storageName) && count($confArray) > 1) {
             PEAR_ErrorStack::staticPush(
                 LIVEUSER_ERROR_FAILED_INSTANTIATION,
                 array('class' => $storageName)
             );
             return false;
+        } elseif(count($confArray) > 1) {
+            $storageConf =& array_pop($confArray);
+            return LiveUser::storageFactory($confArray, $classprefix);
         }
         $storageConf =& array_pop($confArray);
         $storage = &new $storageName($confArray, $storageConf);
