@@ -105,9 +105,21 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     {
         $this->LiveUser_Perm_Storage($confArray, $storageConf);
 
-        $this->tables = LiveUser::arrayMergeClobber(LiveUser_Perm_Storage_SQL::getTableDefaults(), $this->tables);
-        $this->fields = LiveUser::arrayMergeClobber(LiveUser_Perm_Storage_SQL::getFieldDefaults(), $this->fields);
-        $this->alias = LiveUser::arrayMergeClobber(LiveUser_Perm_Storage_SQL::getAliasDefaults(), $this->alias);
+        if (empty($this->tables)) {
+            $this->tables = LiveUser_Perm_Storage_SQL::getTableDefaults();
+        } else {
+            $this->tables = LiveUser::arrayMergeClobber(LiveUser_Perm_Storage_SQL::getTableDefaults(), $this->tables);
+        }
+        if (empty($this->fields)) {
+            $this->fields = LiveUser_Perm_Storage_SQL::getFieldDefaults();
+        } else {
+            $this->fields = LiveUser::arrayMergeClobber(LiveUser_Perm_Storage_SQL::getFieldDefaults(), $this->fields);
+        }
+        if (empty($this->alias)) {
+            $this->alias = LiveUser_Perm_Storage_SQL::getAliasDefaults();
+        } else {
+            $this->alias = LiveUser::arrayMergeClobber(LiveUser_Perm_Storage_SQL::getAliasDefaults(), $this->alias);
+        }
     }
 
     function getTableDefaults()
