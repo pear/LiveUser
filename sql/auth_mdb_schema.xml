@@ -65,6 +65,14 @@
     </field>
    </index>
 
+   <index>
+    <name><variable>handle_name</variable></name>
+    <unique>1</unique>
+    <field>
+     <name><variable>handle_name</variable></name>
+    </field>
+   </index>
+
   </declaration>
 
  </table>
