@@ -395,6 +395,7 @@ class LiveUser
      *            'idleTime'      => 1800,
      *            'updateLastLogin' => true,
      *            'allowDuplicateHandles' => false,
+     *            'allowEmptyPasswords' => false,
      *            'authTable'     => 'liveuser_users',
      *            'authTableCols' => array(
      *                'required' => array(
@@ -964,24 +965,23 @@ class LiveUser
             $passwd = $result['passwd'];
         }
 
-        $counter     = 0;
-        $backends    = array_keys($this->authContainers);
-        $backend_cnt = count($backends);
-
         $this->status = LIVEUSER_STATUS_AUTHFAILED;
+
         //loop into auth containers
-        while ($backend_cnt > $counter) {
-            $auth = &$this->authFactory(
-                $this->authContainers[$backends[$counter]],
-                $backends[$counter]
-            );
+        foreach ($this->authContainers as $index => $foo) {
+            if (!$passwd && (!isset($this->authContainers[$index]['allowEmptyPasswords'])
+                || !$this->authContainers[$index]['allowEmptyPasswords'])
+            ) {
+                continue;
+            }
+            $auth = &$this->authFactory($this->authContainers[$index], $index);
             if ($auth === false) {
                 return false;
             }
             $auth->login($handle, $passwd);
             if ($auth->loggedIn) {
                 $this->_auth = $auth;
-                $this->_auth->backendArrayIndex = $backends[$counter];
+                $this->_auth->backendArrayIndex = $index;
                 // Create permission object
                 if (is_array($this->permContainer)) {
                     $perm =& $this->permFactory($this->permContainer);
@@ -1002,7 +1002,6 @@ class LiveUser
                 $this->status = LIVEUSER_STATUS_ISINACTIVE;
                 break;
             }
-            $counter++;
         }
 
         if (!$this->isLoggedIn()) {

@@ -151,6 +151,14 @@ class LiveUser_Auth_Common
     var $allowDuplicateHandles = false;
 
     /**
+     * Allow empty passwords to be passed to LiveUser. Default: false.
+     *
+     * @access protected
+     * @var    boolean
+     */
+    var $allowEmptyPasswords = false;
+
+    /**
      * Set posible encryption modes.
      *
      * @access protected
