@@ -13,6 +13,8 @@ $version = '0.14.1';
 
 $notes = <<<EOT
   - fixed php5 issues in example4
+  - reworked RC4 handling into cryptRC4() method
+  - perm container now also has a default init() method that is called in the factory
 EOT;
 
 $description = <<<EOT
