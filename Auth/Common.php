@@ -269,7 +269,7 @@ class LiveUser_Auth_Common
      *
      * @access  public
      * @param   array  $propertyValues
-     * @return  void
+     * @return  boolean
      */
     function unfreeze($propertyValues)
     {
@@ -280,6 +280,7 @@ class LiveUser_Auth_Common
                 $this->{$key} = $value;
             }
         }
+        return true;
     } // end func unfreeze
 
     /**
