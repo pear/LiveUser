@@ -62,13 +62,13 @@ $LUOptions = array(
                                 'authTable'     => 'liveuser_users',
                                 'authTableCols' => array(
                                     'required'  => array(
-                                        'auth_user_id' => array('name' => 'auth_user_id', 'type' => 'text'),
+                                        'auth_user_id' => array('name' => 'authUserId', 'type' => 'text'),
                                         'handle'       => array('name' => 'handle',       'type' => 'text'),
                                         'passwd'       => array('name' => 'passwd',       'type' => 'text'),
                                     ),
                                     'optional' => array(
-                                        'lastlogin'    => array('name' => 'lastlogin',    'type' => 'timestamp'),
-                                        'is_active'    => array('name' => 'is_active',    'type' => 'boolean')
+                                        'lastlogin'    => array('name' => 'lastLogin',    'type' => 'timestamp'),
+                                        'is_active'    => array('name' => 'isActive',    'type' => 'boolean')
                                     ),
                                 ),
                             ),
@@ -90,16 +90,17 @@ $LUOptions = array(
 
 require_once 'LiveUser.php';
 
-function showLoginForm(&$liveUserObj)
+function showLoginForm(&$notification)
 {
     $tpl = new HTML_Template_IT();
     $tpl->loadTemplatefile('loginform.tpl.php');
 
     $tpl->setVariable('form_action', $_SERVER['PHP_SELF']);
 
+    $liveUserObj =& $notification->getNotificationObject();
     if (is_object($liveUserObj)) {
-        if ($liveUserObj->status) {
-            switch ($liveUserObj->status) {
+        if ($liveUserObj->getStatus()) {
+            switch ($liveUserObj->getStatus()) {
                 case LIVEUSER_STATUS_ISINACTIVE:
                     $tpl->touchBlock('inactive');
                     break;
@@ -123,8 +124,7 @@ function showLoginForm(&$liveUserObj)
 // Create new LiveUser (LiveUser) object.
 // We´ll only use the auth container, permissions are not used.
 $LU =& LiveUser::factory($LUOptions);
-$function = 'showLoginForm';
-$LU->attachObserver($function, 'forceLogin');
+$LU->dispatcher->addObserver('showLoginForm', 'forceLogin');
 
 $username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : null;
 $password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : null;
