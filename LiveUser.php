@@ -923,7 +923,7 @@ class LiveUser
         }
         if ($this->_options['session_cookie_params']) {
             session_set_cookie_params((
-                time() + (8* @access private6400 * $this->_options['session_cookie_params']['lifetime'])),
+                time() + (8 * 6400 * $this->_options['session_cookie_params']['lifetime'])),
                 $this->_options['session_cookie_params']['path'],
                 $this->_options['session_cookie_params']['domain'],
                 $this->_options['session_cookie_params']['secure']);
