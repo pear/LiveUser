@@ -95,6 +95,14 @@ class LiveUser_Auth_Common
     var $lastLogin = 0;
 
     /**
+     * Update the last login time or not
+     *
+     * @access protected
+     * @var    boolean
+     */
+    var $updateLastLogin = true;
+
+    /**
      * Timestamp of current login (last to be written)
      *
      * @access protected
@@ -132,15 +140,6 @@ class LiveUser_Auth_Common
      * @var    integer
      */
     var $idleTime = 0;
-
-    /**
-     * Allow multiple users in the database to have the same
-     * login handle. Default: false.
-     *
-     * @access protected
-     * @var    boolean
-     */
-    var $allowDuplicateHandles = false;
 
     /**
      * Set posible encryption modes.
@@ -411,75 +410,37 @@ class LiveUser_Auth_Common
 
     /**
      * Tries to make a login with the given handle and password.
-     * If $checkpw is set to false, the password won't be
-     * validated and the user will be logged in anyway. Set this
-     * option if you want to allow your users to be
-     * authenticated by a simple cookie... however, this is
-     * NOT RECOMMENDED !!!
-     * In any case, a user can't login if he's not active.
+     * A user can't login if he's not active.
      *
      * @param string   user handle
      * @param string   user password
-     * @param boolean  check password ? useful for some backends like LDAP
-     * @param boolean  update the last login data ?
      */
-    function login($handle, $passwd, $checkpw = true, $updateLastLogin = true)
+    function login($handle, $passwd)
     {
-        // Init value: Has user data successfully been read?
-        $success        = false;
         // Init value: Is user logged in?
         $this->loggedIn = false;
         // Read user data from database
-        if ($this->allowDuplicateHandles == true || $checkpw == true) {
-            // If duplicate handles are allowed or the password _has_
-            // to be checked, only read in data if a matching user is found
-            $success = $this->_readUserData($handle, $passwd);
-        } else {
-            // If duplicate handles are not allowed or the password
-            // doesn't need to be checked, just read in the data based
-            // on the handle
-            $success = $this->_readUserData($handle);
-        }
+        $success = $this->_readUserData($handle, $passwd);
 
         // If login is successful (user data has been read)
         if ($success == true) {
-            $pwCheck = false; // Init value
-
-            // Just in case: Some databases will return whitespace when using
-            // CHAR fields to store passwords, so we?ll remove it.
-            $this->passwd = trim($this->passwd);
-
-            // ...check again if we have to check the password...
-            if ($checkpw == true) {
-                // If yes, does the password from the database match the given one?
-                if (strtoupper($this->passwordEncryptionMode) == 'MD5'
-                        && $this->passwd == $this->encryptPW($passwd)){
-                    // If yes, set pwCheck Flag
-                    $pwCheck = true;
-                } else if ($this->passwd == $passwd) {
-                    // If yes, set pwCheck Flag
-                    $pwCheck = true;
-                }
-            } else {
-                // We don't have to check for the password, so set the pwCheck Flag
-                // regardless of the user's input
-                $pwCheck = true;
-            }
-
-            // ...we still need to check if this user is declared active and
-            // if the pwCheck Flag is set to true...
-            if ($this->isActive != false && $pwCheck == true) {
+            // ...we still need to check if this user is declared active
+            if ($this->isActive !== false) {
                 // ...and if so, we have a successful login (hooray)!
                 $this->loggedIn = true;
                 $this->currentLogin = time();
             }
+
+            // In case Login was successful, check if this can be counted
+            // as a _new_ login by definition...
+            if ($this->updateLastLogin == true &&
+                $this->isNewLogin() == true && $this->loggedIn == true
+            ) {
+                $this->_updateUserData();
+            }
         }
 
-        // In case Login was successful, check if this can be counted
-        // as a _new_ login by definition...
-        if ($updateLastLogin == true && $this->isNewLogin() == true && $this->loggedIn == true) {
-            $this->_updateUserData();
-        }
+        return $success;
     }
 
     /**
@@ -517,7 +478,7 @@ class LiveUser_Auth_Common
      * @param  boolean user password
      * @return void
      */
-    function _readUserData($handle, $passwd = false)
+    function _readUserData($handle, $passwd = '')
     {
         $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
             array('feature' => '_readUserData'));
