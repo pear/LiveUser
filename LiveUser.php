@@ -1022,7 +1022,7 @@ class LiveUser
                 ) {
                     $perm = &$this->permFactory($this->permContainer);
                     if ($perm === false) {
-                        return $perm:
+                        return $perm;
                     }
                     $this->_perm = &$perm;
                     if ($this->_options['cache_perm']) {
