@@ -431,6 +431,7 @@ class LiveUser
      * @param  mixed           Name of array containing the configuration.
      * @return LiveUser|false  Returns an object of either LiveUser or false on error
      *                         if so use LiveUser::getErrors() to get the errors
+     * @see LiveUser::getErrors
      */
     function &factory($conf, $handle = '', $passwd = '',$logout = false,
         $remember = false, $confName = 'liveuserConfig')
@@ -1185,7 +1186,7 @@ class LiveUser
             unset($_SESSION[$this->_options['session']['varname']]);
         }
 
-        // Finally, set the LoginManager's internal auth object back to
+        // Delete the container objects
         $this->_auth = null;
         $this->_perm = null;
 
@@ -1407,9 +1408,9 @@ class LiveUser
                 LIVEUSER_STATUS_PERMINITERROR   => 'Cannot instantiate permission container',
                 LIVEUSER_STATUS_AUTHINITERROR   => 'Cannot instantiate authentication configuration',
                 LIVEUSER_STATUS_AUTHNOTFOUND    => 'Cannot retrieve Auth object from session',
-                LIVEUSER_STATUS_UNKNOWN         => 'Something went wrong in whatever you were trying to do',
+                LIVEUSER_STATUS_UNKNOWN         => 'Something went wrong but I do not know what',
                 LIVEUSER_STATUS_LOGGEDOUT       => 'User was logged out correctly',
-                LIVEUSER_STATUS_AUTHFAILED      => 'No auth container authenticated successfully',
+                LIVEUSER_STATUS_AUTHFAILED      => 'I could not authenticate the user',
             );
         }
 
