@@ -74,32 +74,6 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     var $prefix = 'liveuser_';
 
     /**
-     * Columns of the perm table.
-     * Associative array with the names of the perm table columns.
-     * The 'group_id' and 'group_define_name' fields have to be set.
-     * 'group_type', 'is_active', 'owner_user_id' and 'owner_group_id' are optional.
-     * It doesn't make sense to set only one of the time columns without the
-     * other.
-     *
-     * The type attribute is only useful when using MDB or MDB2.
-     *
-     * @access public
-     * @var    array
-     */
-    var $groupTableCols = array(
-        'required' => array(
-            'group_id' => array('type' => 'integer', 'name' => 'group_id'),
-            'group_define_name' => array('type' => 'text', 'name' => 'group_define_name')
-        ),
-        'optional' => array(
-             'group_type'    => array('type' => 'integer', 'name' => 'group_type'),
-             'is_active'    => array('type' => 'boolean', 'name' => 'is_active'),
-            'owner_user_id'  => array('type' => 'integer', 'name' => 'owner_user_id'),
-            'owner_group_id' => array('type' => 'integer', 'name' => 'owner_group_id')
-        )
-    );
-
-    /**
      *
      * @access public
      * @var    array
@@ -114,6 +88,13 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     var $fields = array();
 
     /**
+     *
+     * @access public
+     * @var    array
+     */
+    var $alias = array();
+
+    /**
      * Constructor
      *
      * @access protected
@@ -126,6 +107,18 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
 
         $this->tables = LiveUser::arrayMergeClobber(LiveUser_Perm_Simple::getTableDefaults(), $this->tables);
         $this->fields = LiveUser::arrayMergeClobber(LiveUser_Perm_Simple::getFieldDefaults(), $this->fields);
+        $this->alias = LiveUser::arrayMergeClobber(LiveUser_Perm_Simple::getAliasDefaults(), $this->alias);
+    }
+
+    /**
+     * Get the alias name if available
+     */
+    function getAlias($name)
+    {
+        if (isset($this->alias[$name])) {
+            return $this->alias[$name];
+        }
+        return $name;
     }
 
     function getTableDefaults()
@@ -319,11 +312,11 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
      *
      *
      * @access public
-     * @param int $uid
+     * @param int $authUserId
      * @param string $containerName
      * @return mixed array or false on failure
      */
-    function mapUser($uid, $containerName)
+    function mapUser($authUserId, $containerName)
     {
     }
 
