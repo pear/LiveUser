@@ -124,7 +124,9 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                     'userrights' => 'perm_user_id',
                     'groupusers' => 'perm_user_id',
                 ),
-                'id' => 'perm_user_id',
+                'ids' => array(
+                    'perm_user_id'
+                ),
             ),
             'userrights' => array(
                 'fields' => array(
@@ -156,7 +158,9 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                         LIVEUSER_SECTION_RIGHT => 'section_type',
                     ),
                 ),
-                'id' => 'right_id',
+                'ids' => array(
+                    'right_id'
+                ),
             ),
             'rights_implied' => array(
                 'fields' => array(
@@ -195,6 +199,10 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                         'section_type' => LIVEUSER_SECTION_GROUP,
                     ),
                 ),
+                'ids' => array(
+                    'section_id',
+                    'section_type',
+                ),
             ),
             'areas' => array(
                 'fields' => array(
@@ -210,7 +218,9 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                         LIVEUSER_SECTION_AREA => 'section_type',
                     ),
                 ),
-                'id' => 'area_id',
+                'ids' => array(
+                    'area_id',
+                ),
             ),
             'applications' => array(
                 'fields' => array(
@@ -224,7 +234,9 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                         LIVEUSER_SECTION_APPLICATION => 'section_type',
                     ),
                 ),
-                'id' => 'application_id',
+                'ids' => array(
+                    'application_id',
+                ),
             ),
             'groups' => array(
                 'fields' => array(
@@ -243,7 +255,9 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                         LIVEUSER_SECTION_GROUP => 'section_type',
                     ),
                 ),
-                'id' => 'group_id',
+                'ids' => array(
+                    'group_id',
+                ),
             ),
             'groupusers' => array(
                 'fields' => array(
