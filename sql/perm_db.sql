@@ -135,7 +135,6 @@ CREATE TABLE `liveuser_rights` (
   `area_id` int(11) unsigned NOT NULL default '0',
   `right_define_name` varchar(32) NOT NULL default '',
   `has_implied` char(1) NOT NULL default 'N',
-  `has_level` char(1) NOT NULL default 'N',
   PRIMARY KEY  (`right_id`),
   UNIQUE KEY `right_define_name` (`area_id`, `right_define_name`),
   KEY `rights_area_id` (`area_id`)

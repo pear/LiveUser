@@ -49,7 +49,6 @@ $GLOBALS['_LiveUser']['tables'] = array(
             'area_id' => false,
             'right_define_name' => false,
             'has_implied' => false,
-            'has_level' => false,
         ),
         'joins' => array(
             'areas' => 'area_id',
@@ -224,7 +223,6 @@ $GLOBALS['_LiveUser']['fields'] = array(
     'owner_user_id' => 'integer',
     'owner_group_id' => 'integer',
     'has_implied' => 'boolean',
-    'has_level' => 'boolean',
     'implied_right_id' => 'integer',
     'subgroup_id' => 'integer'
 );
@@ -253,7 +251,6 @@ $GLOBALS['_LiveUser']['alias'] = array(
     'owner_user_id' => 'owner_user_id',
     'owner_group_id' => 'owner_group_id',
     'has_implied' => 'has_implied',
-    'has_level' => 'has_level',
     'implied_right_id' => 'implied_right_id',
     'subgroup_id' => 'subgroup_id',
 );
