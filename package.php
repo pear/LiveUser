@@ -42,6 +42,7 @@ perm schema structure
   - added area_admin_areas and all it's joins
   - fixed remember me feature in example2
   - remove empty placeholders and block in loadTemplate() calls in example4
+  - added translation_id field in liveuser_translations table
 
 examples
   - fixed bug in example1 onLogout -> postLogout (bug #3135)
