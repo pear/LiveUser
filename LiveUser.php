@@ -891,16 +891,18 @@ class LiveUser
         // If there's no session yet, start it now
         @session_start();
 
-        if (!$logout && empty($handle)) {
+        // Try to fetch auth object from session
+        $this->unfreeze();
+
+        // If the user did not previously authenticate and is neither
+        // logging out or login in, check if there is a remember me cookie
+        if (!$this->isLoggedIn() && !$logout && empty($handle)) {
             $result = $this->readRememberCookie();
             if (is_array($result)) {
                 $handle = $result['handle'];
                 $passwd = $result['passwd'];
             }
         }
-
-        // Try to fetch auth object from session
-        $this->unfreeze();
 
         if ($logout || $handle) {
             $this->logout($logout);
