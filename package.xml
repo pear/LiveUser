@@ -64,7 +64,7 @@
   </maintainers>
   <release>
     <version>0.15.0</version>
-    <date>2005-03-14</date>
+    <date>2005-03-15</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>Important:
@@ -94,6 +94,9 @@ general notes
   - accept all config parameters by reference inside the containers
   - move readAreaAdminsAreas over to Complex where it should be.
   - the observers mechanism now use PEAR::Event_Dispatcher
+
+auth schema structure
+  - handle is now unqiue by default
 
 perm schema structure
   - moved default database structure into separate file (using the GLOBALS super globals)
@@ -201,7 +204,7 @@ examples
   <changelog>
     <release>
       <version>0.15.0</version>
-      <date>2005-03-14</date>
+      <date>2005-03-15</date>
       <license>LGPL</license>
       <state>beta</state>
       <notes>Important:
@@ -231,6 +234,9 @@ general notes
   - accept all config parameters by reference inside the containers
   - move readAreaAdminsAreas over to Complex where it should be.
   - the observers mechanism now use PEAR::Event_Dispatcher
+
+auth schema structure
+  - handle is now unqiue by default
 
 perm schema structure
   - moved default database structure into separate file (using the GLOBALS super globals)

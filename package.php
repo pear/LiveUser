@@ -40,6 +40,9 @@ general notes
   - move readAreaAdminsAreas over to Complex where it should be.
   - the observers mechanism now use PEAR::Event_Dispatcher
 
+auth schema structure
+  - handle is now unqiue by default
+
 perm schema structure
   - moved default database structure into separate file (using the GLOBALS super globals)
   - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
