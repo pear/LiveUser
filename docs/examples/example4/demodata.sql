@@ -92,9 +92,9 @@ INSERT INTO liveuser_right_implied VALUES (3, 2);
 # Dumping data for table `liveuser_rights`
 #
 
-INSERT INTO liveuser_rights VALUES (1, 1, 'NEW', 'N', 'N');
-INSERT INTO liveuser_rights VALUES (2, 1, 'CHANGE', 'Y', 'N');
-INSERT INTO liveuser_rights VALUES (3, 1, 'DELETE', 'Y', 'N');
+INSERT INTO liveuser_rights VALUES (1, 1, 'NEW', 'N');
+INSERT INTO liveuser_rights VALUES (2, 1, 'CHANGE', 'Y');
+INSERT INTO liveuser_rights VALUES (3, 1, 'DELETE', 'Y');
 # --------------------------------------------------------
 
 #
