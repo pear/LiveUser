@@ -125,7 +125,7 @@ $package->addMaintainer('mw21st',  'lead',        'Markus Wolff',      'mw21st@p
 $package->addMaintainer('arnaud',  'lead',        'Arnaud Limbourg',   'arnaud@php.net');
 $package->addMaintainer('lsmith',  'lead',        'Lukas Kahwe Smith', 'smith@backendmedia.com');
 $package->addMaintainer('krausbn', 'developer',   'Bjoern Kraus',      'krausbn@php.net');
-$package->addMaintainer('dufuz',   'developer',   'Helgi Þormar',      'dufuz@php.net');
+$package->addMaintainer('dufuz',   'developer',   'Helgi &#x00DE;ormar',      'dufuz@php.net');
 
 $package->addDependency('php',       '4.2.0', 'ge',  'php', false);
 $package->addDependency('PEAR',      '1.3.3',   'ge', 'pkg', false);
