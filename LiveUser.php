@@ -399,8 +399,12 @@ class LiveUser
      *                'custom'   => array(
      *                    'myaliasforfield1' => array('type' => 'text', 'name' => 'myfield1')
      *                )
-     *           )
-     *      )
+     *           ),
+     *           'externalValues' => array(
+     *                  'values'      => &$_SERVER,
+     *                  'keysToCheck' => array('HTTP_USER_AGENT')
+     *           ),
+     *      ),
      *  ),
      *  'permContainer' => array(
      *      'type'       => 'DB_Complex',
@@ -875,7 +879,7 @@ class LiveUser
 
         if ($this->isLoggedIn()) {
             // Check if user authenticated with new credentials
-            if ($handle && $this->auth->handle != $handle) {
+            if ($handle && $this->_auth->handle != $handle) {
                 $this->logout(false);
             } elseif ($this->_auth->expireTime > 0 && $this->_auth->currentLogin > 0) {
                 // Check if authentication session is expired.
@@ -987,19 +991,19 @@ class LiveUser
             && isset($_SESSION[$this->_options['session']['varname']]['auth_name'])
             && strlen($_SESSION[$this->_options['session']['varname']]['auth_name']) > 0)
         {
-            $this->_auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
             if($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
                 if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
-                    && $_SESSION[$this->_options['session']['varname']]['perm'])
-                {
+                    && $_SESSION[$this->_options['session']['varname']]['perm']
+                ) {
+                    $auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
                     $this->_auth = &$auth;
                     $this->_perm = &$this->permFactory($this->permContainer);
                     if ($this->_options['cache_perm']) {
                         $this->_perm->unfreeze($this->_options['session']['varname']);
                     } else {
-                        $this->_perm->init($this->_auth->authUserId, $this->_auth->backendArrayIndex);
+                        $this->_perm->init($auth->authUserId, $auth->backendArrayIndex);
                     }
                 }
                 $this->_status = LIVEUSER_STATUS_UNFROZEN;
@@ -1360,10 +1364,10 @@ class LiveUser
     function getProperty($what, $container = 'auth')
     {
         $that = null;
-        if ($container == 'auth' && $this->_auth && $this->_auth->getProperty($what) !== null) {
-            $that = $this->_auth ? $this->_auth->getProperty($what) : null;
-        } elseif ($this->_perm && $this->_perm->getProperty($what) !== null) {
-            $that = $this->_perm ? $this->_perm->getProperty($what) : null;
+        if ($container == 'auth' && is_object($this->_auth) && $this->_auth->getProperty($what) !== null) {
+            $that = $this->_auth->getProperty($what);
+        } elseif (is_object($this->_perm) && $this->_perm->getProperty($what) !== null) {
+            $that = $this->_perm->getProperty($what);
         }
         return $that;
     }
