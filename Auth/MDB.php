@@ -209,7 +209,9 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
                    WHERE '  . $this->authTableCols['required']['handle']['name'] . '=' .
                     $this->dbc->getValue($this->authTableCols['required']['handle']['type'], $handle);
 
-        if (isset($this->authTableCols['required']['passwd'])) {
+        if (isset($this->authTableCols['required']['passwd'])
+            && $this->authTableCols['required']['passwd']
+        ) {
             // If $passwd is set, try to find the first user with the given
             // handle and password.
             $sql .= ' AND '   . $this->authTableCols['required']['passwd']['name'] . '=' .

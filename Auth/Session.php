@@ -85,7 +85,9 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      */
     function _readUserData($handle, $passwd = false)
     {
-        if (isset($this->authTableCols['required']['passwd'])) {
+        if (isset($this->authTableCols['required']['passwd'])
+            && $this->authTableCols['required']['passwd']
+        ) {
             if (!isset($_SESSION[$this->authTableCols['required']['passwd']['name']]) ||
                 $_SESSION[$this->authTableCols['required']['passwd']['name']] !== $passwd
             ) {
