@@ -798,6 +798,10 @@ class LiveUser
         } else {
             $rc4 =& LiveUser::cryptRC4Factory($secret);
             if (!$rc4) {
+                $this->_stack->push(
+                    LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                    'RememberMe feature requires either the mcrypt extension or PEAR::Crypt_RC4'
+                );
                 return false;
             }
             if ($crypt) {
