@@ -79,6 +79,13 @@ class LiveUser_Perm_Simple
     var $_stack = null;
 
     /**
+     * Storage Container
+     *
+     * @var object
+     */
+    var $_storage = null;
+
+    /**
      * Class constructor. Feel free to override in backend subclasses.
      */
     function LiveUser_Perm_Simple(&$confArray)
@@ -136,14 +143,12 @@ class LiveUser_Perm_Simple
     function readRights()
     {
         $this->rights = array();
-
         $result = $this->readUserRights($this->permUserId);
         if ($result === false) {
             return false;
         }
-
         $this->rights = $result;
-        return $result;
+        return $this->rights;
     }
 
     /**
@@ -156,14 +161,12 @@ class LiveUser_Perm_Simple
     function readUserRights($permUserId)
     {
         $this->userRights = array();
-
         $result = $this->_storage->readUserRights($permUserId);
         if ($result === false) {
             return false;
         }
-
         $this->userRights = $result;
-        return $result;
+        return $this->userRights;
     }
 
     /**
@@ -179,17 +182,13 @@ class LiveUser_Perm_Simple
      */
     function checkRight($right_id)
     {
-        if (is_array($this->rights)) {
-            // check if the user is above areaadmin
-            if (!$right_id || $this->userType > LIVEUSER_AREAADMIN_TYPE_ID) {
-                return LIVEUSER_MAX_LEVEL;
-            } else {
-                // If he does, look for the right in question.
-                if (in_array($right_id, array_keys($this->rights))) {
-                    // We know the user has the right so the right level will be returned.
-                    return $this->rights[$right_id];
-                }
-            }
+        // check if the user is above areaadmin
+        if (!$right_id || $this->userType > LIVEUSER_AREAADMIN_TYPE_ID) {
+            return LIVEUSER_MAX_LEVEL;
+        // If he does, look for the right in question.
+        } elseif (is_array($this->rights) && isset($this->rights[$right_id])) {
+            // We know the user has the right so the right level will be returned.
+            return $this->rights[$right_id];
         }
         return false;
     } // end func checkRight
@@ -204,13 +203,10 @@ class LiveUser_Perm_Simple
      * @param   boolean $ondemand  allow ondemand reading of groups
      * @return  boolean.
      */
-    function checkGroup($group_id, $ondemand = true)
+    function checkGroup($group_id)
     {
         if (is_array($this->groupIds)) {
             return in_array($group_id, $this->groupIds);
-        } elseif ($this->ondemand && $ondemand) {
-            $this->readGroups();
-            return $this->checkGroup($group_id, false);
         }
         return false;
     } // end func checkGroup
