@@ -13,17 +13,14 @@ $version = '0.14.0';
 
 $notes = <<<EOT
   - DB containers no longer use CASE in the sql query.
-  - BC break! [de]activateGroup was removed in favor of using the optional array for handling that.
-  - BC break! getUsersFromGroup removed in favor of people using searchUsers/getUsers with the option where_group_id
   - lazy loading of PEAR::Log
   - getProperty can now handle fooBar fieldnames, on the auth side.
-  - removeUsersFromGroup implanted in Admin Perm *_medium containers
-  - removeGroup now uses removeUsersFromGroup as well as revokeGroupRight (previously had it's own identical implantion of those functions)
-  - Request #2038 implanted, Admin/Perm getUsers can now filter also by auth_user_id in addition to perm_user_id and group_id
   - Fixed Bug #2672, #2713, #2714 Typo fixes
-  - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/ which are from now on installed in pear_folder/LiveUser/misc/schema/
+  - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/
+    which are from now on installed in pear_folder/LiveUser/misc/schema/
   - fixed regenid option
-  - refactored client part to the new layout (using storage containers) .. fixed example2 to use the new config layout
+  - refactored client part to the new layout (using storage containers)
+  - fixed example2 to use the new config layout
   - disabled perm caching by default
   - added sessionName param to (un)freeze method calls to the perm container
   - removed options of reading parameters from the superglobals
@@ -33,17 +30,16 @@ $notes = <<<EOT
   - added LiveUser::checkGroup() in order to check for membership in groups
   - added second auth container to example4
   - fix #2678: have more control on callback function
-  - Matthias Nothhaft contributed a patch to add observers to the main class.
-    There are several events triggered for many different actions giving
-    fine control to the user to add custom schemes
   - added 'session_cookie_params' option
   - LiveUser now expects a true from the auth container unfreeze() method
   - Removed a potential security issue in Auth freeze()
   - added Observers, see the wiki for more information
-  - added an observer class in example1 to show how they work
+  - added an observer class in example1 and example4 to show how they work
+  - added usage example for multiple auth containers to example4
   - added support for checking arbitrary values in unfreeze()
     (for example the user agent) to make session high-jacking more difficult)
   - use the new config array
+  - moved example3 to the admin package
 EOT;
 
 $description = <<<EOT
