@@ -1496,7 +1496,7 @@ class LiveUser
 
         $num = count($this->_observers[$event]);
         for ($i = 0; $i < $num; $i++) {
-            if (!is_callable($this->_observers[$event][$i])) {
+            if (is_callable($this->_observers[$event][$i])) {
                call_user_func($this->_observers[$event][$i], &$this, $params);
                 // no error push here, because it should be pushed by the handler
                 $success = false;
