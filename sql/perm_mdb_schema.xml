@@ -470,6 +470,13 @@
   <declaration>
 
    <field>
+    <name>translation_id</name>
+    <type>integer</type>
+    <notnull>1</notnull>
+    <default>0</default>
+   </field>
+
+   <field>
     <name>section_id</name>
     <type>integer</type>
     <notnull>1</notnull>
@@ -504,6 +511,14 @@
     <type>text</type>
     <length>255</length>
    </field>
+
+   <index>
+    <name>translation_id</name>
+    <unique>1</unique>
+    <field>
+     <name>translation_id</name>
+    </field>
+   </index>
 
    <index>
     <name>section_item</name>
@@ -606,6 +621,15 @@
   <on>
    <field>perm_user_id</field>
    <table><variable>table_prefix</variable>perm_users</table>
+  </on>
+ </sequence>
+
+ <sequence>
+  <name><variable>table_prefix</variable>translations</name>
+  <start>1</start>
+  <on>
+   <field>translation_id</field>
+   <table><variable>table_prefix</variable>translations</table>
   </on>
  </sequence>
 

@@ -120,6 +120,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
     ),
     'translations' => array(
         'fields' => array(
+            'translation_id' => 'seq',
             'section_id' => true,
             'section_type' => true,
             'language_id' => true,
@@ -145,6 +146,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
             ),
         ),
         'ids' => array(
+            'translation_id',
             'section_id',
             'section_type',
             'language_id',
@@ -261,6 +263,7 @@ $GLOBALS['_LiveUser']['perm']['fields'] = array(
     'right_define_name' => 'text',
     'area_define_name' => 'text',
     'application_define_name' => 'text',
+    'translation_id' => 'integer',
     'section_id' => 'integer',
     'section_type' => 'integer',
     'name' => 'text',
@@ -289,6 +292,7 @@ $GLOBALS['_LiveUser']['perm']['alias'] = array(
     'right_define_name' => 'right_define_name',
     'area_define_name' => 'area_define_name',
     'application_define_name' => 'application_define_name',
+    'translation_id' => 'translation_id',
     'section_id' => 'section_id',
     'section_type' => 'section_type',
     'name' => 'name',
