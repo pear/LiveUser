@@ -181,27 +181,25 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      *                  unencrypted pwd or false.
      * @return boolean true on success or false on failure
      */
-    function _readUserData($userHandle, $userPasswd = false)
+    function _readUserData($handle, $passwd = false)
     {
         $success = false;
         $index = 0;
 
         foreach ($this->tree->root->children as $user) {
-            $userId = '';
-            $handle = '';
-            $password = '';
-            $lastLogin = 0;
-            $isActive = '';
-
             foreach ($user->children as $value) {
-                if (isset(${$value->name})) {
-                    ${$value->name} = $value->content;
-                }
+                $result[$value->name] = $value->content;
             }
 
-            if ($userHandle == $handle) {
-                if ($userPasswd !== false) {
-                    if ($this->encryptPW($userPasswd) == $password) {
+            if (isset($result[$this->authTableCols['required']['handle']['name']]) &&
+                $handle === $result[$this->authTableCols['required']['handle']['name']]
+            ) {
+                if (isset($this->authTableCols['required']['passwd'])
+                    && $this->authTableCols['required']['passwd']
+                ) {
+                    if (isset($result[$this->authTableCols['required']['passwd']['name']]) &&
+                        $this->encryptPW($passwd) === $result[$this->authTableCols['required']['passwd']['name']]
+                    ) {
                         $success = true;
                         break;
                     }
@@ -214,18 +212,30 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
             $index++;
         }
 
-        // If a user was found, read data into class variables and save
-        // the tree object for faster access in the other functions.
-        if ($success) {
-            $this->handle       = $handle;
-            $this->passwd       = $this->decryptPW($password);
-            $this->isActive     = ($isActive == 'Y' ? true : false);
-            $this->authUserId   = $userId;
-            $this->lastLogin    = (!empty($lastLogin) ? $lastLogin : 0);
-            $this->userObj      =& $this->tree->root->getElement(array($index));
+        if (!$success) {
+            return false;
         }
 
-        return $success;
+        // If a user was found, read data into class variables and save
+        // the tree object for faster access in the other functions.
+        $this->handle       = $result[$this->authTableCols['required']['handle']['name']];
+        $this->passwd       = $this->decryptPW($result[$this->authTableCols['required']['passwd']['name']]);
+        $this->authUserId   = $result[$this->authTableCols['required']['auth_user_id']['name']];
+        $this->isActive     = ((isset($this->authTableCols['optional']['is_active']) && isset($result[$this->authTableCols['optional']['is_active']['name']]))
+            ? (bool)$result[$this->authTableCols['optional']['is_active']['name']] : false);
+        $this->lastLogin     = ((isset($this->authTableCols['optional']['lastlogin']) && isset($result[$this->authTableCols['optional']['lastlogin']['name']]))
+            ? $result[$this->authTableCols['optional']['lastlogin']['name']] : null);
+        $this->ownerUserId  = isset($result['ownerUserId']) ? $result['ownerUserId'] : null;
+        $this->ownerGroupid = isset($result['ownerGroupId']) ? $result['ownerGroupId'] : null;
+        if (isset($this->authTableCols['custom'])) {
+            foreach ($this->authTableCols['custom'] as $alias => $value) {
+                $alias = strtolower($alias);
+                $this->propertyValues['custom'][$alias] = $result[$alias];
+            }
+        }
+        $this->userObj      =& $this->tree->root->getElement(array($index));
+
+        return true;
     }
 
     /**
@@ -280,10 +290,8 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                 }
             } else {
                 // check for a user with both handle and password matching
-                if ($checkHandle == $handle) {
-                    if ($this->encryptPW($checkPW) == $password) {
-                        return true;
-                    }
+                if ($checkHandle == $handle && $this->encryptPW($checkPW) == $password) {
+                    return true;
                 }
             }
         }
