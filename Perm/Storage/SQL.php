@@ -110,17 +110,6 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
         $this->alias = LiveUser::arrayMergeClobber(LiveUser_Perm_Simple::getAliasDefaults(), $this->alias);
     }
 
-    /**
-     * Get the alias name if available
-     */
-    function getAlias($name)
-    {
-        if (isset($this->alias[$name])) {
-            return $this->alias[$name];
-        }
-        return $name;
-    }
-
     function getTableDefaults()
     {
         return array(
