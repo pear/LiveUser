@@ -113,8 +113,7 @@ define('LIVEUSER_MASTERADMIN_TYPE_ID',  5);
 define('LIVEUSER_SECTION_APPLICATION',  1);
 define('LIVEUSER_SECTION_AREA',         2);
 define('LIVEUSER_SECTION_GROUP',        3);
-define('LIVEUSER_SECTION_LANGUAGE',     4);
-define('LIVEUSER_SECTION_RIGHT',        5);
+define('LIVEUSER_SECTION_RIGHT',        4);
 /**#@-*/
 
 /**
@@ -327,7 +326,8 @@ class LiveUser
             if (!is_object($this->_log)) {
                 $this->loadPEARLog();
             }
-            $this->_log->addChild(Log::factory('win', 'LiveUser'));
+            $winlog = &Log::factory('win', 'LiveUser');
+            $this->_log->addChild($winlog);
         }
 
         $this->_stack->setErrorMessageTemplate($this->_errorMessages);
@@ -381,6 +381,7 @@ class LiveUser
      *      'domain'   => 'Cookie domain',
      *      'secret'   => 'Secret key used for cookie value encryption',
      *      'savedir'  => '/absolute/path/to/writeable/directory' // No / at the end !
+     *      'secure'   => 'Cookie send only over secure connections',
      *  ),
      *  'authContainers' => array(
      *      'name' => array(
@@ -450,6 +451,7 @@ class LiveUser
 
         if (!empty($conf)) {
             $init = $obj->_readConfig($conf, $confName);
+
             if (!$init) {
                 return false;
             }
@@ -547,13 +549,16 @@ class LiveUser
      * @return object|false  Returns an instance of an auth container
      *                       class or false on error
      */
-    function &authFactory($conf, $containerName, $classprefix = 'LiveUser_')
+    function &authFactory(&$conf, $containerName, $classprefix = 'LiveUser_')
     {
         $classname = $classprefix.'Auth_' . $conf['type'];
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
         $auth = &new $classname($conf, $containerName);
+        if ($auth->init($conf) === false) {
+            return false;
+        }
         return $auth;
     }
 
@@ -565,7 +570,7 @@ class LiveUser
      * @return object|false  Returns an instance of a perm container
      *                       class or false on error
      */
-    function &permFactory($conf, $classprefix = 'LiveUser_')
+    function &permFactory(&$conf, $classprefix = 'LiveUser_')
     {
         $classname = $classprefix.'Perm_' . $conf['type'];
         if (!LiveUser::loadClass($classname)) {
@@ -582,23 +587,25 @@ class LiveUser
      * @return object|false will return an instance of a Storage container
      *                      or false upon error
      */
-    function &storageFactory($confArray, $classprefix = 'LiveUser_')
+    function &storageFactory(&$confArray, $classprefix = 'LiveUser_')
     {
         end($confArray);
         $storageName = $classprefix.'Perm_Storage_' . key($confArray);
-        if (!LiveUser::loadClass($storageName) && count($confArray) > 1) {
+        if (!LiveUser::loadClass($storageName) && count($confArray) <= 1) {
             PEAR_ErrorStack::staticPush(
                 LIVEUSER_ERROR_FAILED_INSTANTIATION,
                 array('class' => $storageName)
             );
             return false;
-        } elseif(count($confArray) > 1) {
+        } elseif (count($confArray) > 1) {
             $storageConf =& array_pop($confArray);
             return LiveUser::storageFactory($confArray, $classprefix);
         }
         $storageConf =& array_pop($confArray);
         $storage = &new $storageName($confArray, $storageConf);
-
+        if ($storage->init($storageConf) === false) {
+            return false;
+        }
         return $storage;
     }
 
@@ -804,10 +811,8 @@ class LiveUser
             $this->_options[$option] = $value;
             return true;
         }
-        $this->_stack->push(
-            LIVEUSER_ERROR_CONFIG, 'exception',
-            array(), "unknown option $option"
-            );
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
+            array(), "unknown option $option");
         return false;
     }
 
@@ -823,10 +828,8 @@ class LiveUser
         if (isset($this->_options[$option])) {
             return $this->_options[$option];
         }
-        $this->_stack->push(
-            LIVEUSER_ERROR_CONFIG, 'exception',
-            array(), "unknown option $option"
-        );
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
+            array(), "unknown option $option");
         return false;
     }
 
@@ -859,19 +862,27 @@ class LiveUser
             );
         }
         if ($this->_options['session_cookie_params']) {
-            $cookieTimeout = time() + (86400 * $this->_options['cookie']['lifetime']);
-            session_set_cookie_params($cookieTimeout,
-                $this->_options['cookie']['path'],
-                $this->_options['cookie']['domain'],
-                $this->_options['cookie']['secure']);
+            session_set_cookie_params((
+                time() + (86400 * $this->_options['session_cookie_params']['lifetime'])),
+                $this->_options['session_cookie_params']['path'],
+                $this->_options['session_cookie_params']['domain'],
+                $this->_options['session_cookie_params']['secure']);
         }
         // Set the name of the current session
         session_name($this->_options['session']['name']);
         // If there's no session yet, start it now
         @session_start();
 
-        if ($logout) {
-            $this->logout(true);
+        if (!$logout && empty($handle)) {
+            $result = $this->readRememberCookie();
+            if (is_array($result)) {
+                $handle = $result['handle'];
+                $passwd = $result['passwd'];
+            }
+        }
+
+        if ($logout || $handle) {
+            $this->logout($logout);
         }
 
         // Try to fetch auth object from session
@@ -901,11 +912,7 @@ class LiveUser
         $_SESSION[$this->_options['session']['varname']]['idle'] = time();
 
         if (!$this->isLoggedIn()) {
-            $onLogin = $this->login($handle, $passwd, $remember);
-            if ($onLogin) {
-                // user has just logged in
-                $this->triggerEvent('onLogin');
-            }
+            $this->login($handle, $passwd, $remember);
         }
 
         // Force user login.
@@ -919,7 +926,7 @@ class LiveUser
             if ($this->_options['login']['regenid']) {
                 session_regenerate_id();
             }
-        $this->_status = LIVEUSER_STATUS_OK;
+            $this->_status = LIVEUSER_STATUS_OK;
             return true;
         }
 
@@ -938,6 +945,7 @@ class LiveUser
      */
     function login($handle = '', $passwd = '', $remember = false)
     {
+        // if we remove this we could allow anonymous login?
         if (empty($handle)) {
             return false;
         }
@@ -952,8 +960,7 @@ class LiveUser
             $auth = &$this->authFactory($this->authContainers[$backends[$counter]], $backends[$counter]);
             $auth->login($handle, $passwd, true);
             if ($auth->loggedIn) {
-                $this->status = LIVEUSER_STATUS_OK;
-                $this->_auth  = $auth;
+                $this->_auth = $auth;
                 $this->_auth->backendArrayIndex = $backends[$counter];
                 // Create permission object
                 if (is_array($this->permContainer)) {
@@ -962,6 +969,7 @@ class LiveUser
                 }
                 $this->freeze();
                 $this->setRememberCookie($handle, $passwd, $remember);
+                $this->status = LIVEUSER_STATUS_OK;
                 break;
             } elseif ($auth->isActive === false) {
                 $this->status = LIVEUSER_STATUS_ISINACTIVE;
@@ -974,6 +982,10 @@ class LiveUser
             $this->_stack->push(LIVEUSER_ERROR_WRONG_CREDENTIALS, 'error');
             return false;
         }
+
+        // user has just logged in
+        $this->triggerEvent('onLogin');
+
         return true;
     }
 
@@ -993,7 +1005,7 @@ class LiveUser
         {
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
-            if($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
+            if ($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
                 if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
                     && $_SESSION[$this->_options['session']['varname']]['perm']
                 ) {
@@ -1035,7 +1047,8 @@ class LiveUser
             }
             return true;
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'No data available to store inside session');
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
+            array(), 'No data available to store inside session');
         return false;
     }
 
@@ -1056,7 +1069,8 @@ class LiveUser
             }
             return true;
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'No connection to disconnect in LiveUser::disconnect()');
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
+            array(), 'No connection to disconnect in LiveUser::disconnect()');
         return false;
     }
 
@@ -1073,82 +1087,147 @@ class LiveUser
      */
     function setRememberCookie($handle, $passwd, $remember)
     {
-        if ($remember && isset($this->_options['cookie'])) {
-            // Calculate cookie timeout in days
-            $cookieTimeout = time() + (86400 * $this->_options['cookie']['lifetime']);
-
-            $store_id = md5($handle . $passwd);
-
-            if (!$passwd_id = $this->_storeCookiePasswdId($passwd, $store_id)) {
-                $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'Cannot save cookie data');
-                return false;
-            }
-
-            $setcookie = setcookie(
-                          $this->_options['cookie']['name'],
-                          serialize(array($store_id, $handle, $passwd_id)),
-                          $cookieTimeout,
-                          $this->_options['cookie']['path'],
-                          $this->_options['cookie']['domain']);
-
-            if (!$setcookie) {
-                $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'Unable to set cookie');
-                return false;
-            }
+        if (!$remember) {
+            return true;
         }
+
+        if (!isset($this->_options['cookie'])) {
+            return false;
+        }
+
+        $dir = $this->_options['cookie']['savedir'];
+        $store_id = md5($handle . $passwd);
+        $file = $dir . '/'.$store_id.'.lu';
+
+        if (!is_writable($dir)) {
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Cannot create file, please check path and permissions');
+            return false;
+        }
+
+        $fh = @fopen($file, 'wb');
+        if (!$fh) {
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Cannot open file for writting');
+            return false;
+        }
+
+        $passwd_id = md5($passwd);
+        $crypted_data = $this->_cookieCryptMode(true, serialize(array($passwd_id, $passwd)));
+
+        $write = fwrite($fh, $crypted_data);
+        fclose($fh);
+        if (!$write) {
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Cannot save cookie data');
+            return false;
+        }
+
+        $setcookie = setcookie(
+            $this->_options['cookie']['name'],
+            serialize(array($store_id, $handle, $passwd_id)),
+            (time() + (86400 * $this->_options['cookie']['lifetime'])),
+            $this->_options['cookie']['path'],
+            $this->_options['cookie']['domain'],
+            $this->_options['cookie']['secure']
+        );
+
+        if (!$setcookie) {
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Unable to set cookie');
+            return false;
+        }
+
         return true;
     }
 
     /**
-     * A "store" on the server contains the password and the
-     * cookie id in an encrypted form.
-     *
-     * This method generates a md5 from given password and writes it
-     * into the "store" along with crypted password.
-     *
-     * Cookies are not secure but keeping the password in plain text
-     * in the cookie is not the best way to go. Since some
-     * containers like LDAP need the clear text password, we store
-     * an encrypted version of the password using Crypt_Rc4 which
-     * provides a simple two-way mechanism.
-     *
-     * To do this LiveUser needs access to a writeable directory.
-     * If you do no have access to the ini_get() function please
-     * set a constant named LIVEUSER_TMPDIR with an absolute
-     * path to a writeable directory.
+     * Handles the rememberMe cookie login.
      *
      * @access private
-     * @param  string   the password to store
-     * @param  string   file name used as storage
-     * @return boolean  true if success, false otherwise
+     * @return boolean true on success or false on failure
      */
-    function _storeCookiePasswdId($passwd, $store)
+    function readRememberCookie()
     {
+        if (!isset($this->_options['cookie'])) {
+            return false;
+        }
+
+        if (!isset($_COOKIE[$this->_options['cookie']['name']])) {
+            return false;
+        }
+
+        $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
+        if (!is_array($cookieData) || count($cookieData) != 3) {
+            // Delete cookie if it's not valid, keeping it messes up the
+            // authentication process
+            $this->deleteRememberCookie();
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
+                'Wrong data in cookie store in LiveUser::_readRememberMeCookie()');
+            return false;
+        }
+
         $dir = $this->_options['cookie']['savedir'];
 
-        if (!is_writable($dir)) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'Cannot create file, please check path and permissions');
+        $fh = @fopen($dir . '/'.$cookieData[0].'.lu', 'rb');
+        if (!$fh) {
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
+                array(), 'Cannot open file for reading');
             return false;
         }
 
-        if (!$fh = @fopen($dir . "/$store.lu", 'wb')) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'Cannot open file for writting');
-            return false;
-        }
-
-        $data = serialize(array(md5($passwd), $passwd));
-
-        $crypted_data = $this->_cookieCryptMode(true, $data);
-
-        if (!fwrite($fh, $crypted_data)) {
-            fclose($fh);
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'Cannot save cookie data');
-            return false;
-        }
-
+        $fields = fread($fh, 4096);
         fclose($fh);
+        if (!$fields) {
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
+                array(), 'Cannot read file');
+            return false;
+        }
 
-        return true;
+        $serverData = @unserialize($this->_cookieCryptMode(false, $fields));
+        if (!is_array($serverData) || count($serverData) != 2) {
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'exception',
+                array(), 'Incorrect array structure');
+            return false;
+        }
+
+        if ($serverData[0] != $cookieData[2]) {
+            // Delete cookie if it's not valid, keeping it messes up the
+            // authentication process
+            $this->deleteRememberCookie();
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
+                'Passwords hashes do not match in cookie in LiveUser::_readRememberMeCookie()');
+            return false;
+        }
+
+        return array('handle' => $cookieData[1], 'passwd' => $serverData[1]);
+    }
+
+    /**
+     * Deletes the rememberMe cookie login.
+     *
+     * @access private
+     * @return boolean true on success or false on failure
+     */
+    function deleteRememberCookie()
+    {
+        if (isset($this->_options['cookie']) &&
+            isset($_COOKIE[$this->_options['cookie']['name']]))
+        {
+            $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
+            if (isset($cookieData[0])) {
+                $dir = $this->_options['cookie']['savedir'];
+                @unlink($dir . '/'.$cookieData[0].'.lu');
+            }
+            setcookie($this->_options['cookie']['name'],
+                '',
+                (time() - 86400),
+                $this->_options['cookie']['path'],
+                $this->_options['cookie']['domain'],
+                $this->_options['cookie']['secure']
+            );
+            unset($_COOKIE[$this->_options['cookie']['name']]);
+        }
     }
 
     /**
@@ -1162,24 +1241,11 @@ class LiveUser
     {
         $this->status = LIVEUSER_STATUS_LOGGEDOUT;
 
-        // trigger event 'onLogout' as replacement for logout callback function
         if ($direct) {
+            // trigger event 'onLogout' as replacement for logout callback function
             $this->triggerEvent('onLogout');
-        }
-
-        // If there's a cookie and the session hasn't idled or expired, kill that one too...
-        if (isset($this->_options['cookie']) &&
-            isset($_COOKIE[$this->_options['cookie']['name']]))
-        {
-            // is this what we want?
-            $cookieKillTime = time() - 86400;
-            setcookie($this->_options['cookie']['name'],
-                '',
-                $cookieKillTime,
-                          $this->_options['cookie']['path'],
-                          $this->_options['cookie']['domain']
-            );
-            unset($_COOKIE[$this->_options['cookie']['name']]);
+            // If there's a cookie and the session hasn't idled or expired, kill that one too...
+            $this->deleteRememberCookie();
         }
 
         // If the session should be destroyed, do so now...
@@ -1199,11 +1265,11 @@ class LiveUser
             }
 
             if ($this->_options['session_cookie_params']) {
-                $cookieTimeout = time() + (86400 * $this->_options['cookie']['lifetime']);
-                session_set_cookie_params($cookieTimeout,
-                    $this->_options['cookie']['path'],
-                    $this->_options['cookie']['domain'],
-                    $this->_options['cookie']['secure']);
+                session_set_cookie_params(
+                    (time() + (86400 * $this->_options['session_cookie_params']['lifetime'])),
+                    $this->_options['session_cookie_params']['path'],
+                    $this->_options['session_cookie_params']['domain'],
+                    $this->_options['session_cookie_params']['secure']);
             }
             // Set the name of the current session
             session_name($this->_options['session']['name']);
@@ -1217,8 +1283,8 @@ class LiveUser
         $this->_auth = null;
         $this->_perm = null;
 
-        // trigger event 'postLogout', can be used to do a redirect
         if ($direct) {
+            // trigger event 'postLogout', can be used to do a redirect
             $this->triggerEvent('postLogout');
         }
     }
@@ -1237,25 +1303,20 @@ class LiveUser
         }
 
         if (is_a($this->_perm, 'LiveUser_Perm_Simple')) {
-            $hasright = false;
-
             if (is_array($rights)) {
                 // assume user has the right in order to have min() work
                 $hasright = LIVEUSER_MAX_LEVEL;
                 foreach ($rights as $currentright) {
-                    if ($level = $this->_perm->checkRight($currentright)) {
-                        $hasright = min($hasright, $level);
-                    } else {
-                        $hasright = false;
-                        break;
+                    $level = $this->_perm->checkRight($currentright);
+                    if (!$level) {
+                        return false;
                     }
+                    $hasright = min($hasright, $level);
                 }
+                return $hasright;
             } else {
-                // Remember: $rights is a single value at this point!
-                $hasright = $this->_perm->checkRight($rights);
+                return $this->_perm->checkRight($rights);
             }
-
-            return $hasright;
         }
 
         return false;
@@ -1274,14 +1335,12 @@ class LiveUser
      */
     function checkRightLevel($rights, $owner_user_id, $owner_group_id)
     {
-        if (is_null($rights)) {
-            return LIVEUSER_MAX_LEVEL;
-        }
-
-        if (is_a($this->_perm, 'LiveUser_Perm_Simple')) {
-            $level = $this->checkRight($rights);
-            $hasright = $this->_perm->checkLevel($level, $owner_user_id, $owner_group_id);
-            return $hasright;
+        $level = $this->checkRight($rights);
+        if ($level) {
+            if (is_a($this->_perm, 'LiveUser_Perm_Complex')) {
+                return $this->_perm->checkLevel($level, $owner_user_id, $owner_group_id);
+            }
+            return $level;
         }
 
         return false;
@@ -1300,19 +1359,15 @@ class LiveUser
             return true;
         }
 
-        if (is_object($this->_perm)) {
+        if (is_a($this->_perm, 'LiveUser_Perm_Medium')) {
             if (is_array($groups)) {
-                // assume user has the group
-                $ingroup = true;
                 foreach ($groups as $group) {
                     if (!$this->_perm->checkGroup($group)) {
-                        $ingroup = false;
-                        break;
+                        return false;
                     }
                 }
-                return $ingroup;
+                return true;
             } else {
-                // Remember: $groups is a single value at this point!
                 return $this->_perm->checkGroup($groups);
             }
         }
@@ -1364,9 +1419,13 @@ class LiveUser
     function getProperty($what, $container = 'auth')
     {
         $that = null;
-        if ($container == 'auth' && is_object($this->_auth) && $this->_auth->getProperty($what) !== null) {
+        if ($container == 'auth' && is_object($this->_auth) &&
+            !is_null($this->_auth->getProperty($what))
+        ) {
             $that = $this->_auth->getProperty($what);
-        } elseif (is_object($this->_perm) && $this->_perm->getProperty($what) !== null) {
+        } elseif (is_object($this->_perm) &&
+            !is_null($this->_perm->getProperty($what))
+        ) {
             $that = $this->_perm->getProperty($what);
         }
         return $that;
@@ -1408,7 +1467,7 @@ class LiveUser
                     $methods[$event] = $event;
                 }
             }
-        } elseif(is_string($methods)) {
+        } elseif (is_string($methods)) {
             $methods = array($methods => $methods);
         }
 
@@ -1461,9 +1520,7 @@ class LiveUser
         $num = count($this->_observers[$event]);
         for ($i = 0; $i < $num; $i++) {
             if (is_callable($this->_observers[$event][$i])) {
-                call_user_func($this->_observers[$event][$i], $this, $params);
-                // no error push here, because it should be pushed by the handler
-                $success = false;
+                $success = call_user_func($this->_observers[$event][$i], $this, $params);
             }
         }
         return $success;
@@ -1510,7 +1567,8 @@ class LiveUser
         }
 
         // return the textual error message corresponding to the code
-        return isset($statusMessages[$value]) ? $statusMessages[$value] : $statusMessages[LIVEUSER_STATUS_UNKNOWN];
+        return isset($statusMessages[$value])
+            ? $statusMessages[$value] : $statusMessages[LIVEUSER_STATUS_UNKNOWN];
     }
 
     /**
@@ -1521,7 +1579,7 @@ class LiveUser
      */
     function loadPEARLog()
     {
-        require 'Log.php';
+        require_once 'Log.php';
         $this->_log = &Log::factory('composite');
         $this->_stack->setLogger($this->_log);
     }
