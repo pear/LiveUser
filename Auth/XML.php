@@ -64,6 +64,30 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      */
     var $userObj = null;
 
+    /**
+     * Columns of the auth table.
+     * Associative array with the names of the auth table columns.
+     * The 'auth_user_id', 'handle' and 'passwd' fields have to be set.
+     * 'lastlogin' and 'is_active' are optional.
+     * It doesn't make sense to set only one of the time columns without the
+     * other.
+     *
+     * The type attribute is only useful when using MDB or CAPTCHA.
+     *
+     * @access public
+     * @var    array
+     */
+    var $authTableCols = array(
+        'required' => array(
+            'auth_user_id' => array('name' => 'userId', 'type' => 'text'),
+            'handle'       => array('name' => 'handle',       'type' => 'text'),
+            'passwd'       => array('name' => 'password',       'type' => 'text'),
+        ),
+        'optional' => array(
+            'lastlogin'    => array('name' => 'lastLogin',    'type' => 'timestamp'),
+            'is_active'    => array('name' => 'isActive',    'type' => 'boolean')
+        )
+    );
     function init(&$connectOptions)
     {
         if (is_array($connectOptions)) {
