@@ -313,7 +313,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     {
         return array(
             'perm_user_id' => 'integer',
-            'auth_user_id' => 'integer',
+            'auth_user_id' => 'text',
             'auth_container_name' => 'text',
             'perm_type' => 'integer',
             'right_id' => 'integer',
