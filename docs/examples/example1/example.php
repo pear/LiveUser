@@ -85,7 +85,7 @@ class Log_LU extends Log
             ob_clean(); 
         }
     }
-    function onLogout()
+    function postLogout()
     {
         print 'You have been logged out';
         exit();
