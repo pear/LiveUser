@@ -576,7 +576,10 @@ class LiveUser
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
-        $perm = &new $classname($conf['storage']);
+        $perm = &new $classname($conf);
+        if ($perm->init($conf) === false) {
+            return false;
+        }
         return $perm;
     }
     /**
@@ -592,10 +595,6 @@ class LiveUser
         end($confArray);
         $storageName = $classprefix.'Perm_Storage_' . key($confArray);
         if (!LiveUser::loadClass($storageName) && count($confArray) <= 1) {
-            PEAR_ErrorStack::staticPush(
-                LIVEUSER_ERROR_FAILED_INSTANTIATION,
-                array('class' => $storageName)
-            );
             return false;
         } elseif (count($confArray) > 1) {
             $storageConf =& array_pop($confArray);
@@ -750,7 +749,7 @@ class LiveUser
      * @param  string  token to use to encrypt data
      * @return object  Returns an instance of the Crypt_RC4 class
      */
-    function &CryptRC4Factory($secret)
+    function &cryptRC4Factory($secret)
     {
         if (!LiveUser::loadClass('Crypt_Rc4')) {
             return false;
@@ -767,12 +766,12 @@ class LiveUser
      * @param  string  data to crypt
      * @return string  crypted data
      */
-    function _cookieCryptMode($crypt, $data)
+    function cryptRC4($data, $secret, $crypt)
     {
         if (function_exists('mcrypt_module_open')) {
             $td = mcrypt_module_open('tripledes', '', 'ecb', '');
             $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size ($td), MCRYPT_RAND);
-            mcrypt_generic_init($td, $this->_options['cookie']['secret'], $iv);
+            mcrypt_generic_init($td, $secret, $iv);
             if ($crypt) {
                 $data = mcrypt_generic($td, $data);
             } else {
@@ -781,11 +780,10 @@ class LiveUser
             mcrypt_generic_deinit($td);
             mcrypt_module_close($td);
         } else {
-            $rc4 =& LiveUser::CryptRC4Factory($this->_options['cookie']['secret']);
+            $rc4 =& LiveUser::cryptRC4Factory($secret);
             if (!$rc4) {
                 return false;
             }
-            $this->rc4 =& $rc4;
             if ($crypt) {
                 $rc4->crypt($data);
             } else {
@@ -965,7 +963,7 @@ class LiveUser
                 // Create permission object
                 if (is_array($this->permContainer)) {
                     $this->_perm =& $this->permFactory($this->permContainer);
-                    $this->_perm->init($this->_auth->authUserId, $this->_auth->backendArrayIndex);
+                    $this->_perm->mapUser($this->_auth->authUserId, $this->_auth->backendArrayIndex);
                 }
                 $this->freeze();
                 $this->setRememberCookie($handle, $passwd, $remember);
@@ -1015,7 +1013,7 @@ class LiveUser
                     if ($this->_options['cache_perm']) {
                         $this->_perm->unfreeze($this->_options['session']['varname']);
                     } else {
-                        $this->_perm->init($auth->authUserId, $auth->backendArrayIndex);
+                        $this->_perm->mapUser($auth->authUserId, $auth->backendArrayIndex);
                     }
                 }
                 $this->_status = LIVEUSER_STATUS_UNFROZEN;
@@ -1113,7 +1111,11 @@ class LiveUser
         }
 
         $passwd_id = md5($passwd);
-        $crypted_data = $this->_cookieCryptMode(true, serialize(array($passwd_id, $passwd)));
+        $crypted_data = $this->cryptRC4(
+            serialize(array($passwd_id, $passwd)),
+            $this->_options['cookie']['secret'],
+            true
+        );
 
         $write = fwrite($fh, $crypted_data);
         fclose($fh);
@@ -1184,7 +1186,14 @@ class LiveUser
             return false;
         }
 
-        $serverData = @unserialize($this->_cookieCryptMode(false, $fields));
+        $serverData = @unserialize(
+            $this->cryptRC4(
+                $fields,
+                $this->_options['cookie']['secret'],
+                false
+            )
+        );
+
         if (!is_array($serverData) || count($serverData) != 2) {
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'exception',
                 array(), 'Incorrect array structure');
