@@ -68,7 +68,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      * @param  array     configuration array
      * @return void
      */
-    function LiveUser_Auth_PEARAuth(&$connectOptions)
+    function LiveUser_Auth_PEARAuth(&$connectOptions, $containerName)
     {
         require_once 'Auth.php';
         $this->LiveUser_Auth_Common($connectOptions, $containerName);
