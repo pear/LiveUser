@@ -94,34 +94,6 @@ class LiveUser_Perm_Simple
         }
     }
 
-    function getAliasDefaults()
-    {
-        return array(
-            'perm_user_id' => 'perm_user_id',
-            'auth_user_id' => 'auth_user_id',
-            'auth_container_name' => 'auth_container_name',
-            'perm_type' => 'perm_type',
-            'right_id' => 'right_id',
-            'right_level' => 'right_level',
-            'area_id' => 'area_id',
-            'application_id' => 'application_id',
-            'right_define_name' => 'right_define_name',
-            'area_define_name' => 'area_define_name',
-            'application_define_name' => 'application_define_name',
-            'section_id' => 'section_id',
-            'section_type' => 'section_type',
-            'name' => 'name',
-            'description' => 'description',
-            'group_id' => 'group_id',
-            'group_type' => 'group_type',
-            'group_define_name' => 'group_define_name',
-            'is_active' => 'is_active',
-            'owner_user_id' => 'owner_user_id',
-            'owner_group_id' => 'owner_group_id',
-            'implied_right_id' => 'implied_right_id',
-        );
-    }
-
     /**
      * Tries to find the user with the given user ID in the permissions
      * container. Will read all permission data and return true on success.
