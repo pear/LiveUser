@@ -894,12 +894,11 @@ class LiveUser
         // Try to fetch auth object from session
         $this->unfreeze();
 
-        if ($this->isLoggedIn()) {
-            // user wants to logout or authenticate with new credentials
-            if ($logout) {
-                $this->logout(true);
+        if ($logout) {
+            $this->logout(true);
+        } elseif ($this->isLoggedIn()) {
             // Check if user authenticated with new credentials
-            } elseif ($handle && $this->_auth->handle != $handle) {
+            if ($handle && $this->_auth->handle != $handle) {
                 $this->logout(false);
             } elseif ($this->_auth->expireTime > 0 && $this->_auth->currentLogin > 0) {
                 // Check if authentication session is expired.
@@ -951,10 +950,11 @@ class LiveUser
     {
         if (empty($handle)) {
             $result = $this->readRememberCookie();
-            if (is_array($result)) {
-                $handle = $result['handle'];
-                $passwd = $result['passwd'];
+            if (!is_array($result)) {
+                return false;
             }
+            $handle = $result['handle'];
+            $passwd = $result['passwd'];
         }
 
         $counter     = 0;
