@@ -38,6 +38,7 @@ $notes = <<<EOT
     fine control to the user to add custom schemes
   - added 'session_cookie_params' option
   - LiveUser now expects a true from the auth container unfreeze() method
+  - Removed a potential security issue in Auth freeze()
 EOT;
 
 $description = <<<EOT
