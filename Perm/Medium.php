@@ -149,26 +149,6 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * @param int $permUserId
      * @return mixed array or false on failure
      */
-    function readAreaAdminAreas($permUserId)
-    {
-        $this->userRights = array();
-
-        $result = $this->_storage->readAreaAdminAreas($permUserId);
-        if ($result === false) {
-            return false;
-        }
-
-        $this->areaAdminAreas = $result;
-        return $this->areaAdminAreas;
-    }
-
-    /**
-     *
-     *
-     * @access public
-     * @param int $permUserId
-     * @return mixed array or false on failure
-     */
     function readGroups($permUserId)
     {
         $this->groupIds = array();

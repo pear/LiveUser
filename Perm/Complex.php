@@ -235,5 +235,25 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         }
         return false;
     } // end func checkLevel
+
+    /**
+     *
+     *
+     * @access public
+     * @param int $permUserId
+     * @return mixed array or false on failure
+     */
+    function readAreaAdminAreas($permUserId)
+    {
+        $this->userRights = array();
+
+        $result = $this->_storage->readAreaAdminAreas($permUserId);
+        if ($result === false) {
+            return false;
+        }
+
+        $this->areaAdminAreas = $result;
+        return $this->areaAdminAreas;
+    }
 }
 ?>
