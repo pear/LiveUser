@@ -14,7 +14,7 @@ require_once 'DB.php';
 
 function php_error_handler($errno, $errstr, $errfile, $errline)
 {
-    if ($errno && $errno != 2048) {
+    if (error_reporting() && $errno != 2048) {
         $tpl = new HTML_Template_IT();
         $tpl->loadTemplatefile('error-page.tpl.php', false, false);
 
