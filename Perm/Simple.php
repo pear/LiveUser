@@ -136,7 +136,7 @@ class LiveUser_Perm_Simple
     function init(&$conf)
     {
         if (!isset($conf['storage'])) {
-            $this->_stack->push(LIVEUSER_ADMIN_ERROR, 'exception',
+            $this->_stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Missing storage configuration array'));
             return false;
         }
@@ -152,7 +152,7 @@ class LiveUser_Perm_Simple
 
         $this->_storage = LiveUser::storageFactory($conf['storage']);
         if ($this->_storage === false) {
-            $this->_stack->push(LIVEUSER_ADMIN_ERROR, 'exception',
+            $this->_stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Could not instanciate storage container'));
             return false;
         }
