@@ -510,7 +510,11 @@
     <unique>1</unique>
     <field>
      <name>section_id</name>
+    </field>
+    <field>
      <name>section_type</name>
+    </field>
+    <field>
      <name>language_id</name>
     </field>
    </index>
@@ -559,15 +563,6 @@
   </declaration>
 
  </table>
-
- <sequence>
-  <name><variable>table_prefix</variable>languages</name>
-  <start>1</start>
-  <on>
-   <field>language_id</field>
-   <table><variable>table_prefix</variable>languages</table>
-  </on>
- </sequence>
 
  <sequence>
   <name><variable>table_prefix</variable>applications</name>
