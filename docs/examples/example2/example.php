@@ -90,7 +90,7 @@ if (!$LU->isLoggedIn()) {
             <tr>
                 <td>Remember me:</td>
                 <td>
-                    <input type="checkbox" name="remember" />
+                    <input type="checkbox" name="remember" value="1" />
                 </td>
             </tr>
             <tr>
