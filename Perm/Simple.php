@@ -23,32 +23,6 @@
  * @category authentication
  */
 
-/**#@+
- * Usertypes
- *
- * @var integer
- */
-/**
- * lowest user type id
- */
-define('LIVEUSER_ANONYMOUS_TYPE_ID',    0);
-/**
- * lowest user type id
- */
-// higest user type id
-define('LIVEUSER_USER_TYPE_ID',         1);
-/**
- * lowest admin type id
- */
-define('LIVEUSER_ADMIN_TYPE_ID',        2);
-define('LIVEUSER_AREAADMIN_TYPE_ID',    3);
-define('LIVEUSER_SUPERADMIN_TYPE_ID',   4);
-/**
- * higest admin type id
- */
-define('LIVEUSER_MASTERADMIN_TYPE_ID',  5);
-/**#@-*/
-
 /**
  * This class provides a set of functions for implementing a user
  * permission management system on live websites. All authorisation
