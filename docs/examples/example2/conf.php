@@ -30,7 +30,14 @@ $xml_is_writable = is_writable('Auth_XML.xml');
 
 if ($xml_is_readable != false && $xml_is_writable != false) {
     $liveuserConfig = array(
-        'cookie'            => array('name' => 'loginInfo', 'path' => '', 'domain' => '', 'lifetime' => 30),
+        'cookie'            => array(
+            'name' => 'loginInfo',
+            'path' => '',
+            'domain' => '',
+            'lifetime' => 30,
+            'savedir' => '.',
+            'secure' => false,
+        ),
         'authContainers'    => array(
                                 0 => array(
                                             'type' => 'XML',
@@ -68,7 +75,8 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
     $handle = isset($_REQUEST['handle']) ? $_REQUEST['handle'] : null;
     $password = isset($_REQUEST['password']) ? $_REQUEST['password'] : null;
     $logout = isset($_REQUEST['logout']) ? $_REQUEST['logout'] : null;
-    $LU->init($handle, $password, $logout);
+    $remember = isset($_REQUEST['remember']) ? $_REQUEST['remember'] : null;
+    $LU->init($handle, $password, $logout, $remember);
 }
 
 ?>
