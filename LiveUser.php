@@ -894,23 +894,12 @@ class LiveUser
         // Try to fetch auth object from session
         $this->unfreeze();
 
-        // If the user did not previously authenticate and is neither
-        // logging out or login in, check if there is a remember me cookie
-        if (!$this->isLoggedIn() && !$logout && empty($handle)) {
-            $result = $this->readRememberCookie();
-            if (is_array($result)) {
-                $handle = $result['handle'];
-                $passwd = $result['passwd'];
-            }
-        }
-
-        if ($logout || $handle) {
-            $this->logout($logout);
-        }
-
         if ($this->isLoggedIn()) {
+            // user wants to logout or authenticate with new credentials
+            if ($logout || $handle)) {
+                $this->logout($logout);
             // Check if user authenticated with new credentials
-            if ($handle && $this->_auth->handle != $handle) {
+            } elseif ($handle && $this->_auth->handle != $handle) {
                 $this->logout(false);
             } elseif ($this->_auth->expireTime > 0 && $this->_auth->currentLogin > 0) {
                 // Check if authentication session is expired.
@@ -960,9 +949,12 @@ class LiveUser
      */
     function login($handle = '', $passwd = '', $remember = false)
     {
-        // if we remove this we could allow anonymous login?
         if (empty($handle)) {
-            return false;
+            $result = $this->readRememberCookie();
+            if (is_array($result)) {
+                $handle = $result['handle'];
+                $passwd = $result['passwd'];
+            }
         }
 
         $counter     = 0;
