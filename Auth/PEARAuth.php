@@ -82,11 +82,20 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     /**
      * Contains the PEAR::Auth object.
      *
-     * @access private
      * @var    Auth
+     * @access private
      */
     var $pearAuth = null;
 
+    /**
+     * Load the storage container
+     *
+     * @param  mixed &$conf   Name of array containing the configuration.
+     * @param string $containerName name of the container that should be used
+     * @return  boolean true on success or false on failure
+     *
+     * @access  public
+     */
     function init(&$conf, $containerName)
     {
         parent::init($conf, $containerName);
@@ -111,8 +120,9 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     /**
      * Starts and verifies the PEAR::Auth login process
      *
-     * @access private
      * @return boolean  true upon success or false on failure
+     *
+     * @access private
      */
     function _readUserData()
     {

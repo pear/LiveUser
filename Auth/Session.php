@@ -67,11 +67,20 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
     /**
      * name of the key containing the Session phrase inside the auth session array
      *
-     * @access public
      * @var    string
+     * @access public
      */
     var $sessionKey = 'password';
 
+    /**
+     * Load the storage container
+     *
+     * @param  mixed &$conf   Name of array containing the configuration.
+     * @param string $containerName name of the container that should be used
+     * @return  boolean true on success or false on failure
+     *
+     * @access  public
+     */
     function init(&$conf, $containerName)
     {
         parent::init($conf, $containerName);
@@ -84,8 +93,9 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      * This method does nothing in the base class and is supposed to
      * be overridden in subclasses according to the supported backend.
      *
-     * @access private
      * @return boolean true on success or false on failure
+     *
+     * @access private
      */
     function _updateUserData()
     {
@@ -106,10 +116,12 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      * passwords - yep, some people want this).
      * If no match is found, false is being returned.
      *
-     * @access private
-     * @param  string   user handle
-     * @param  boolean  user password
+     
+     * @param  string $handle  user handle
+     * @param  boolean $passwd user password
      * @return boolean true on success or false on failure
+     *
+     * @access private
      */
     function _readUserData($handle, $passwd = '')
     {

@@ -72,6 +72,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
 {
     /**
      * XML file in which the auth data is stored.
+     *
      * @var string
      * @access private
      */
@@ -80,20 +81,30 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      * XML::Tree object.
      *
-     * @access private
      * @var    XML_Tree
+     * @access private
      */
     var $tree = null;
 
     /**
      * XML::Tree object of the user logged in.
      *
-     * @access private
      * @var    XML_Tree
+     *
+     * @access private
      * @see    readUserData()
      */
     var $userObj = null;
 
+    /**
+     *
+     *
+     *
+     * @param array &$storageConf Array with the storage configuration
+     * @return boolean true on success, false on failure.
+     *
+     * @access public
+     */
     function init(&$storageConf)
     {
         parent::init($storageConf);
@@ -125,10 +136,11 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      *
      *
-     * @access public
      * @param int $authUserId
      * @param string $containerName
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function mapUser($authUserId, $containerName)
     {
@@ -165,9 +177,10 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @access public
      * @param int $permUserId
      * @return mixed array of false on failure
+     *
+     * @access public
      */
     function readUserRights()
     {
@@ -194,6 +207,8 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
 
     /**
      * properly disconnect from resources
+     *
+     * @return void
      *
      * @access  public
      */

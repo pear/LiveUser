@@ -80,24 +80,24 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     /**
      * dsn to connect to
      *
-     * @access private
      * @var    string
+     * @access private
      */
     var $dsn = null;
 
     /**
      * disconnect
      *
-     * @access private
      * @var    boolean
+     * @access private
      */
     var $disconnect = false;
 
     /**
      * PEAR::MDB connection object
      *
-     * @access private
      * @var    MDB
+     * @access private
      */
     var $dbc = null;
 
@@ -105,11 +105,20 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
      * Auth table
      * Table where the auth data is stored.
      *
-     * @access public
      * @var    string
+     * @access public
      */
     var $authTable = 'liveuser_users';
 
+    /**
+     * Load the storage container
+     *
+     * @param  mixed &$conf   Name of array containing the configuration.
+     * @param string $containerName name of the container that should be used
+     * @return  boolean true on success or false on failure
+     *
+     * @access  public
+     */
     function init(&$conf, $containerName)
     {
         parent::init($conf, $containerName);
@@ -146,34 +155,13 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     }
 
     /**
-     * Properly disconnect from database
-     *
-     * @access public
-     * @return void
-     */
-    function disconnect()
-    {
-        if ($this->disconnect) {
-            $result = $this->dbc->disconnect();
-            if (PEAR::isError($result)) {
-                $this->_stack->push(
-                    LIVEUSER_ERROR, 'exception',
-                    array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
-                );
-                return false;
-            }
-            $this->dbc = null;
-        }
-        return true;
-    }
-
-    /**
      * Writes current values for user back to the database.
      * This method does nothing in the base class and is supposed to
      * be overridden in subclasses according to the supported backend.
      *
-     * @access private
      * @return boolean true on success or false on failure
+     *
+     * @access private
      */
     function _updateUserData()
     {
@@ -213,10 +201,11 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
      * passwords - yep, some people want this).
      * If no match is found, false is being returned.
      *
-     * @access private
-     * @param  string   user handle
-     * @param  boolean  user password
+     * @param  string $handle  user handle
+     * @param  boolean $passwd user password
      * @return boolean  true upon success or false on failure
+     *
+     * @access private
      */
     function _readUserData($handle, $passwd = '')
     {
@@ -277,6 +266,29 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Properly disconnect from database
+     *
+     * @return void
+     *
+     * @access public
+     */
+    function disconnect()
+    {
+        if ($this->disconnect) {
+            $result = $this->dbc->disconnect();
+            if (PEAR::isError($result)) {
+                $this->_stack->push(
+                    LIVEUSER_ERROR, 'exception',
+                    array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+                );
+                return false;
+            }
+            $this->dbc = null;
+        }
         return true;
     }
 }

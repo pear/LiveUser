@@ -65,10 +65,12 @@
  */
 class LiveUser_Auth_Common
 {
+/**#@+
+ * @access protected
+ */
     /**
      * The handle (username) of the current user
      *
-     * @access protected
      * @var    string
      */
     var $handle = '';
@@ -77,7 +79,6 @@ class LiveUser_Auth_Common
      * The password of the current user as given to the
      * login() method.
      *
-     * @access protected
      * @var    string
      */
     var $passwd = '';
@@ -85,7 +86,6 @@ class LiveUser_Auth_Common
     /**
      * Current user's database record id
      *
-     * @access protected
      * @var    integer
      */
     var $authUserId = 0;
@@ -98,20 +98,29 @@ class LiveUser_Auth_Common
      * administrator before they can actually use your application.
      * Default: false
      *
-     * @access protected
      * @var    boolean
      * @see    LiveUser_Auth_Common::loggedIn
      */
     var $isActive = null;
 
+    /**
+     * Owner User Id
+     *
+     * @var int
+     */
     var $ownerUserId = null;
+
+    /**
+     * Owner User Id
+     *
+     * @var int
+     */
     var $ownerGroupId = null;
 
     /**
      * Has the current user successfully logged in?
      * Default: false
      *
-     * @access protected
      * @var    boolean
      * @see    LiveUser_Auth_Common::isActive
      */
@@ -120,7 +129,6 @@ class LiveUser_Auth_Common
     /**
      * Timestamp of last login (previous to currentLogin)
      *
-     * @access protected
      * @var    integer
      */
     var $lastLogin = 0;
@@ -128,7 +136,6 @@ class LiveUser_Auth_Common
     /**
      * Update the last login time or not
      *
-     * @access protected
      * @var    boolean
      */
     var $updateLastLogin = true;
@@ -136,7 +143,6 @@ class LiveUser_Auth_Common
     /**
      * Timestamp of current login (last to be written)
      *
-     * @access protected
      * @var    integer
      */
     var $currentLogin = 0;
@@ -146,7 +152,6 @@ class LiveUser_Auth_Common
      * to be counted as a new login. Comes in handy in
      * some situations. Default: 12
      *
-     * @access protected
      * @var    integer
      */
     var $loginTimeout = 12;
@@ -156,7 +161,6 @@ class LiveUser_Auth_Common
      *
      * If this variable is set to 0, auth never expires
      *
-     * @access protected
      * @var    integer
      */
     var $expireTime = 0;
@@ -167,7 +171,6 @@ class LiveUser_Auth_Common
      * Idletime gets refreshed each time, init() is called. If this
      * variable is set to 0, idle time is never checked.
      *
-     * @access protected
      * @var    integer
      */
     var $idleTime = 0;
@@ -176,7 +179,6 @@ class LiveUser_Auth_Common
      * Allow multiple users in the database to have the same
      * login handle. Default: false.
      *
-     * @access protected
      * @var    boolean
      */
     var $allowDuplicateHandles = false;
@@ -184,7 +186,6 @@ class LiveUser_Auth_Common
     /**
      * Allow empty passwords to be passed to LiveUser. Default: false.
      *
-     * @access protected
      * @var    boolean
      */
     var $allowEmptyPasswords = false;
@@ -192,7 +193,6 @@ class LiveUser_Auth_Common
     /**
      * Set posible encryption modes.
      *
-     * @access protected
      * @var    array
      */
     var $encryptionModes = array('MD5'   => 'MD5',
@@ -204,7 +204,6 @@ class LiveUser_Auth_Common
      * Defines the algorithm used for encrypting/decrypting
      * passwords. Default: "MD5".
      *
-     * @access protected
      * @var    string
      */
     var $passwordEncryptionMode = 'MD5';
@@ -212,7 +211,6 @@ class LiveUser_Auth_Common
     /**
      * Defines the secret to use for encryption if needed
      *
-     * @access protected
      * @var    string
      */
     var $secret;
@@ -220,7 +218,6 @@ class LiveUser_Auth_Common
     /**
      * Defines the array index number of the LoginManager?s "backends" property.
      *
-     * @access protected
      * @var    integer
      */
     var $backendArrayIndex = 0;
@@ -228,16 +225,16 @@ class LiveUser_Auth_Common
     /**
      * Error stack
      *
-     * @access protected
      * @var    PEAR_ErrorStack
      */
     var $_stack = null;
+/**#@-*/
 
     /**
     * Property values
     *
-    * @access public
     * @var array
+    * @access public
     */
     var $propertyValues = array();
 
@@ -270,8 +267,8 @@ class LiveUser_Auth_Common
      *
      * The type attribute is only useful when using MDB or CAPTCHA.
      *
-     * @access public
      * @var    array
+     * @access public
      */
     var $authTableCols = array(
         'required' => array(
@@ -288,15 +285,25 @@ class LiveUser_Auth_Common
     /**
      * Class constructor. Feel free to override in backend subclasses.
      *
-     * @access protected
      * @var    array     configuration options
      * @return void
+     *
+     * @access protected
      */
     function LiveUser_Auth_Common()
     {
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
     }
 
+    /**
+     * Load the storage container
+     *
+     * @param  mixed &$conf   Name of array containing the configuration.
+     * @param string $containerName name of the container that should be used
+     * @return  boolean true on success or false on failure
+     *
+     * @access  public
+     */
     function init($conf, $containerName)
     {
         $this->containerName = $containerName;
@@ -313,8 +320,9 @@ class LiveUser_Auth_Common
     /**
      * store all properties in an array
      *
-     * @access  public
      * @return  array
+     *
+     * @access  public
      */
     function freeze()
     {
@@ -347,21 +355,12 @@ class LiveUser_Auth_Common
     }
 
     /**
-     * properly disconnect from resources
-     *
-     * @access  public
-     * @return  void
-     */
-    function disconnect()
-    {
-    }
-
-    /**
      * Reinitializes properties
      *
-     * @access  public
      * @param   array  $propertyValues
      * @return  boolean
+     *
+     * @access  publi
      */
     function unfreeze($propertyValues)
     {
@@ -383,6 +382,8 @@ class LiveUser_Auth_Common
      *
      * @param  string the encrypted password
      * @return string The decrypted password
+     *
+     * @access public
      */
     function decryptPW($encryptedPW)
     {
@@ -415,6 +416,8 @@ class LiveUser_Auth_Common
      *
      * @param string  encryption type
      * @return string The encrypted password
+     *
+     * @access public
      */
     function encryptPW($plainPW)
     {
@@ -447,8 +450,9 @@ class LiveUser_Auth_Common
      * Checks if there's enough time between lastLogin
      * and current login (now) to count as a new login.
      *
-     * @access public
      * @return boolean  true if it is a new login, false if not
+     *
+     * @access public
      */
     function isNewLogin()
     {
@@ -466,6 +470,9 @@ class LiveUser_Auth_Common
      *
      * @param string   user handle
      * @param string   user password
+     * @return boolean
+     *
+     * @access public
      */
     function login($handle, $passwd)
     {
@@ -500,8 +507,9 @@ class LiveUser_Auth_Common
      * This method does nothing in the base class and is supposed to
      * be overridden in subclasses according to the supported backend.
      *
-     * @access private
      * @return void
+     *
+     * @access private
      */
     function _updateUserData()
     {
@@ -525,10 +533,11 @@ class LiveUser_Auth_Common
      * described functionality must be implemented in a
      * subclass overriding this method.
      *
-     * @access private
-     * @param  string  user handle
-     * @param  boolean user password
+     * @param  string $handle user handle
+     * @param  boolean $passwd user password
      * @return void
+     *
+     * @access private
      */
     function _readUserData($handle, $passwd = '')
     {
@@ -540,8 +549,10 @@ class LiveUser_Auth_Common
     /**
      * Function returns the inquired value if it exists in the class.
      *
-     * @param  string   Name of the property to be returned.
+     * @param  string $what  Name of the property to be returned.
      * @return mixed    null, a value or an array.
+     *
+     * @access public
      */
     function getProperty($what)
     {
@@ -557,6 +568,8 @@ class LiveUser_Auth_Common
 
     /**
      * Creates associative array of values from $externalValues['values'] with $keysToCheck
+     *
+     * @return void
      *
      * @access public
      */
@@ -577,8 +590,9 @@ class LiveUser_Auth_Common
     /**
      * Check if the stored external values match the current external values
      *
+     * @return boolean
+     *
      * @access  public
-     * @param   array   $values
      */
     function externalValuesMatch()
     {
@@ -596,5 +610,17 @@ class LiveUser_Auth_Common
         }
         return true;
     }
+
+    /**
+     * properly disconnect from resources
+     *
+     * @return  void
+     *
+     * @access  public
+     */
+    function disconnect()
+    {
+    }
+
 }
 ?>

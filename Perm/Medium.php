@@ -78,6 +78,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * Format: "RightId" => "Level"
      *
      * @var array
+     * @access public
      */
     var $groupIds = array();
 
@@ -88,6 +89,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * Format: "RightId" => "Level"
      *
      * @var array
+     * @access public
      */
     var $groupRights = array();
 
@@ -97,8 +99,9 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @access private
      * @return void
+     *
+     * @access private
      */
     function readRights()
     {
@@ -170,9 +173,10 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
     /**
      *
      *
-     * @access public
      * @param int $permUserId
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readGroups($permUserId)
     {
@@ -190,9 +194,10 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
     /**
      *
      *
-     * @access public
      * @param array $groupIds
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readGroupRights($groupIds)
     {
@@ -216,10 +221,12 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * If $this->ondemand and $ondemand is true, the groups will be loaded on
      * the fly.
      *
-     * @access  public
      * @param   integer $group_id  Id of the group to check for.
      * @param   boolean $ondemand  allow ondemand reading of groups
-     * @return  boolean.
+     * @return  boolean. If groupIds isn't populated then false, 
+                         if the group_id exists in groupIds then true else false.
+     *
+     * @access  public
      */
     function checkGroup($group_id)
     {

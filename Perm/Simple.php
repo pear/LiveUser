@@ -66,6 +66,7 @@ class LiveUser_Perm_Simple
      * Unique user ID, used to identify users from the auth container.
      *
      * @var string
+     * @access public
      */
     var $permUserId = '';
 
@@ -77,6 +78,7 @@ class LiveUser_Perm_Simple
      * Format: "RightId" => "Level"
      *
      * @var mixed
+     * @access public
      */
     var $rights = false;
 
@@ -87,6 +89,7 @@ class LiveUser_Perm_Simple
      * Format: "RightId" => "Level"
      *
      * @var array
+     * @access public
      */
     var $userRights = array();
 
@@ -94,6 +97,7 @@ class LiveUser_Perm_Simple
      * Defines the user type.
      *
      * @var integer
+     * @access public
      */
     var $userType = LIVEUSER_ANONYMOUS_TYPE_ID;
 
@@ -101,6 +105,7 @@ class LiveUser_Perm_Simple
      * Error stack
      *
      * @var PEAR_ErrorStack
+     * @access public
      */
     var $_stack = null;
 
@@ -108,6 +113,7 @@ class LiveUser_Perm_Simple
      * Storage Container
      *
      * @var object
+     * @access public
      */
     var $_storage = null;
 
@@ -122,9 +128,10 @@ class LiveUser_Perm_Simple
     /**
      * Load the storage container
      *
-     * @access  public
-     * @param  mixed         Name of array containing the configuration.
+     * @param  mixed &$conf   Name of array containing the configuration.
      * @return  boolean true on success or false on failure
+     *
+     * @access  public
      */
     function init(&$conf)
     {
@@ -157,10 +164,11 @@ class LiveUser_Perm_Simple
      * Tries to find the user with the given user ID in the permissions
      * container. Will read all permission data and return true on success.
      *
-     * @access  public
-     * @param   string  user identifier
-     * @param   string  name of the auth container
+     * @param   string $authUserId  user identifier
+     * @param   string $containerName  name of the auth container
      * @return  boolean true on success or false on failure
+     *
+     * @access  public
      */
     function mapUser($authUserId = null, $containerName = null)
     {
@@ -188,9 +196,9 @@ class LiveUser_Perm_Simple
      * Group rights and invididual rights are being merged
      * in the process.
      *
+     * @return mixed array or false on failure
      *
      * @access public
-     * @return mixed array or false on failure
      */
     function readRights()
     {
@@ -206,9 +214,10 @@ class LiveUser_Perm_Simple
     /**
      *
      *
-     * @access public
      * @param int $permUserId
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readUserRights($permUserId)
     {
@@ -227,10 +236,10 @@ class LiveUser_Perm_Simple
      * If $this->ondemand and $ondemand is true, the rights will be loaded on
      * the fly.
      *
-     * @access  public
      * @param   integer $right_id  Id of the right to check for.
-     * @param   boolean $ondemand  allow ondemand reading of rights
      * @return  integer Level of the right.
+     *
+     * @access  public
      */
     function checkRight($right_id)
     {
@@ -248,8 +257,10 @@ class LiveUser_Perm_Simple
     /**
      * Function returns the inquired value if it exists in the class.
      *
-     * @param  string   Name of the property to be returned.
+     * @param  string $what  Name of the property to be returned.
      * @return mixed    null, a value or an array.
+     *
+     * @access public
      */
     function getProperty($what)
     {
@@ -263,8 +274,10 @@ class LiveUser_Perm_Simple
     /**
      * store all properties in an array
      *
-     * @access  public
+     * @param string $sessionName name of the session in use.
      * @return  array containing the property values
+     *
+     * @access  public
      */
     function freeze($sessionName)
     {
@@ -282,8 +295,10 @@ class LiveUser_Perm_Simple
     /**
      * Reinitializes properties
      *
+     * @param   array  $sessionName name of the session in use.
+     * @param boolean always returns true
+     *
      * @access  public
-     * @param   array  $propertyValues
      */
     function unfreeze($sessionName)
     {
@@ -298,6 +313,8 @@ class LiveUser_Perm_Simple
 
     /**
      * properly disconnect from resources
+     *
+     * @return void
      *
      * @access  public
      */

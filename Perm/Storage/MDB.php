@@ -76,6 +76,15 @@ require_once 'MDB.php';
  */
 class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
 {
+    /**
+     *
+     *
+     *
+     * @param array &$storageConf Array with the storage configuration
+     * @return boolean true on success, false on failure.
+     *
+     * @access public
+     */
     function init($storageConf)
     {
         parent::init($storageConf);
@@ -112,10 +121,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     /**
      *
      *
-     * @access public
      * @param int $authUserId
      * @param string $containerName
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function mapUser($authUserId, $containerName)
     {
@@ -154,9 +164,10 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @access public
      * @param int $permUserId
      * @return mixed array of false on failure
+     *
+     * @access public
      */
     function readUserRights($permUserId)
     {
@@ -191,9 +202,10 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     /**
      *
      *
-     * @access public
      * @param int $permUserId
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readAreaAdminAreas($permUserId)
     {
@@ -230,10 +242,12 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @access private
+    
      * @param int $permUserId
-     * @see    readRights()
      * @return mixed array or false on failure
+     *
+     * @access private
+     * @see    readRights()
      */
     function readGroups($permUserId)
     {
@@ -272,10 +286,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      *
      * right => 1
      *
-     * @access  public
      * @param   array $groupIds array with id's for the groups
      *                          that rights will be read from
      * @return  mixed   array or false on failure
+     *
+     * @access  public
      */
     function readGroupRights($groupIds)
     {
@@ -309,10 +324,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     /**
      *
      *
-     * @access public
      * @param array $groupIds
      * @param array $newGroupIds
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readSubGroups($groupIds, $newGroupIds)
     {
@@ -352,10 +368,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     /**
      *
      *
-     * @access public
      * @param array $rightIds
      * @param string $table
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readImplyingRights($rightIds, $table)
     {
@@ -394,10 +411,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     /**
     *
     *
-    * @access public
     * @param array $currentRights
     * @param string $currentLevel
     * @return mixed array or false on failure
+    *
+    * @access public
     */
     function readImpliedRights($currentRights, $currentLevel)
     {

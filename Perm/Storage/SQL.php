@@ -109,6 +109,15 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
      */
     var $alias = array();
 
+    /**
+     *
+     *
+     *
+     * @param array &$storageConf Array with the storage configuration
+     * @return boolean true on success, false on failure.
+     *
+     * @access public
+     */
     function init(&$storageConf)
     {
         parent::init($storageConf);

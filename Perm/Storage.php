@@ -70,6 +70,15 @@ class LiveUser_Perm_Storage
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
     }
 
+    /**
+     *
+     *
+     *
+     * @param array &$storageConf Array with the storage configuration
+     * @return boolean true on success, false on failure.
+     *
+     * @access public
+     */
     function init(&$storageConf)
     {
         if (is_array($storageConf)) {
@@ -84,6 +93,15 @@ class LiveUser_Perm_Storage
         return true;
     }
 
+    /**
+     *
+     *
+     * @param int $authUserId
+     * @param string $containerName
+     * @return mixed array or false on failure
+     *
+     * @access public
+     */
     function mapUser($authUserId, $containerName)
     {
     }
@@ -94,11 +112,24 @@ class LiveUser_Perm_Storage
      * area names as the key of the 1st dimension.
      * Group rights and invididual rights are being merged
      * in the process.
+     *
+     * @param int $permUserId
+     * @return mixed array of false on failure
+     *
+     * @access public
      */
     function readUserRights($permUserId)
     {
     }
 
+    /**
+     *
+     *
+     * @param int $permUserId
+     * @return mixed array or false on failure
+     *
+     * @access public
+     */
     function readAreaAdminAreas($permUserId)
     {
     }
@@ -107,9 +138,11 @@ class LiveUser_Perm_Storage
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @access private
-     * @see    readRights()
+     * @param int $permUserId
      * @return void
+     *
+     * @see    readRights()
+     * @access private
      */
     function readGroups($permUserId)
     {
@@ -121,18 +154,36 @@ class LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @access  public
+     * @param array $groupIds
      * @return  mixed   MDB2_Error on failure or nothing
+     *
+     * @access  public
      */
     function readGroupRights($groupIds)
     {
     } // end func readGroupRights
 
     /**
+     *
+     *
+     * @param array $groupIds
+     * @param array $newGroupIds
+     * @return mixed array or false on failure
+     *
+     * @access public
+     */
+    function readSubGroups($groupIds, $newGroupIds)
+    {
+    }
+
+    /**
      * store all properties in an array
      *
-     * @access  public
+     * @param string $sessionName name of the session in use.
+     * @param array $propertyValues
      * @return  array containing the property values
+     *
+     * @access  public
      */
     function freeze($sessionName, $propertyValues)
     {
@@ -143,8 +194,10 @@ class LiveUser_Perm_Storage
     /**
      * Reinitializes properties
      *
-     * @access  public
      * @param   array  $propertyValues
+     * @return array
+     *
+     * @access  public
      */
     function unfreeze($sessionName)
     {
@@ -154,6 +207,8 @@ class LiveUser_Perm_Storage
 
     /**
      * properly disconnect from resources
+     *
+     * @return void
      *
      * @access  public
      */

@@ -71,10 +71,11 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * an array of this format:
      * RightName -> Value
      *
-     * @access private
      * @param array $rightIds
      * @param string $table
      * @return array with rightIds as key and level as value
+     *
+     * @access private
      */
     function _readImpliedRights($rightIds, $table)
     {
@@ -120,10 +121,11 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * an array of this format:
      * RightName -> Value
      *
-     * @access private
      * @param int $permUserId
      * @see    readRights()
      * @return void
+     *
+     * @access private
      */
     function readUserRights($permUserId)
     {
@@ -139,10 +141,11 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @access private
      * @param int $permUserId
      * @see    readRights()
      * @return void
+     *
+     * @access private
      */
     function readGroups($permUserId)
     {
@@ -161,10 +164,11 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
     /**
      *
      *
-     * @access public
      * @param array $groupIds
      * @param array $newGroupIds
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readSubGroups($groupIds, $newGroupIds)
     {
@@ -180,11 +184,12 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * a two-dimensional array of this format:
      * "GroupName" => "RightName" -> "Level"
      *
-     * @access private
      * @param   array $groupIds array with id's for the groups
      *                          that rights will be read from
      * @see    readRights()
      * @return void
+     *
+      * @access private
      */
     function readGroupRights($groupIds)
     {
@@ -213,7 +218,6 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      *          Therefore, $owner_user_id and/or $owner_group_id can
      *          either be an integer or null.
      *
-     * @access private
      * @see    checkRightLevel()
      * @param  integer  $level          Level value as returned by checkRight().
      * @param  mixed  $owner_user_id  Id or array of Ids of the owner of the
@@ -221,6 +225,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * @param  mixed  $owner_group_id Id or array of Ids of the group of the
      *                                  ressource for which the right is requested.
      * @return boolean  level if the level is sufficient to grant access else false.
+     *
+     * @access private
      */
     function checkLevel($level, $owner_user_id, $owner_group_id)
     {
@@ -256,9 +262,10 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
     /**
      *
      *
-     * @access public
      * @param int $permUserId
      * @return mixed array or false on failure
+     *
+     * @access public
      */
     function readAreaAdminAreas($permUserId)
     {

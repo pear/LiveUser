@@ -65,6 +65,15 @@ require_once 'LiveUser/Perm/Storage.php';
  */
 class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
 {
+    /**
+     *
+     *
+     *
+     * @param array &$storageConf Array with the storage configuration
+     * @return boolean true on success, false on failure.
+     *
+     * @access public
+     */
     function init(&$storageConf, &$confArray)
     {
         parent::init($storageConf);
@@ -79,6 +88,15 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         return true;
     }
 
+    /**
+     *
+     *
+     * @param int $authUserId
+     * @param string $containerName
+     * @return mixed array or false on failure
+     *
+     * @access public
+     */
     function mapUser($authUserId, $containerName)
     {
         if (in_cache) {
@@ -98,6 +116,11 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * area names as the key of the 1st dimension.
      * Group rights and invididual rights are being merged
      * in the process.
+     *
+     * @param int $permUserId
+     * @return mixed array of false on failure
+     *
+     * @access public
      */
     function readUserRights($permUserId)
     {
@@ -129,9 +152,11 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
+     * @param int $permUserId
+     * @return void
+     *
      * @access private
      * @see    readRights()
-     * @return void
      */
     function readGroups($permUserId)
     {
@@ -152,8 +177,10 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @access  public
+     * @param array $groupRights
      * @return  boolean
+     *
+     * @access  public
      */
     function readGroupRights($groupIds)
     {
@@ -168,6 +195,15 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         return $result;
     } // end func readGroupRights
 
+    /**
+     *
+     *
+     * @param array $groupIds
+     * @param array $newGroupIds
+     * @return mixed array or false on failure
+     *
+     * @access public
+     */
     function readSubGroups($groupIds, $newGroupIds)
     {
         if (in_cache) {
@@ -209,6 +245,8 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
 
     /**
      * properly disconnect from resources
+     *
+     * @return void
      *
      * @access  public
      */

@@ -68,24 +68,24 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     /**
      * XML file in which the auth data is stored.
      *
-     * @access private
      * @var    string
+      * @access private
      */
     var $file = '';
 
     /**
      * XML::Tree object.
      *
-     * @access private
      * @var    XML_Tree
+     * @access private
      */
     var $tree = null;
 
     /**
      * XML::Tree object of the user logged in.
      *
-     * @access private
      * @var    XML_Tree
+     * @access private
      * @see    _readUserData()
      */
     var $userObj = null;
@@ -115,6 +115,15 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
         )
     );
 
+    /**
+     * Load the storage container
+     *
+     * @param  mixed &$conf   Name of array containing the configuration.
+     * @param string $containerName name of the container that should be used
+     * @return  boolean true on success or false on failure
+     *
+     * @access  public
+     */
     function init(&$conf, $containerName)
     {
         parent::init($conf, $containerName);
@@ -154,24 +163,13 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     }
 
     /**
-     * Properly disconnect from resources
-     *
-     * @access public
-     * @return void
-     */
-    function disconnect()
-    {
-        $this->tree = null;
-        $this->userObj = null;
-    }
-
-    /**
      * Writes current values for user back to the database.
      * This method does nothing in the base class and is supposed to
      * be overridden in subclasses according to the supported backend.
      *
-     * @access private
      * @return boolean true on success or false on failure
+     *
+     * @access private
      */
     function _updateUserData()
     {
@@ -229,10 +227,12 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      * passwords - yep, some people want this).
      * If no match is found, false is being returned.
      *
-     * @param string    Handle of the current user.
-     * @param mixed     Can be a string with an
+     * @param string $handle   Handle of the current user.
+     * @param mixed $passwd    Can be a string with an
      *                  unencrypted pwd or false.
      * @return boolean true on success or false on failure
+     *
+     * @access private
      */
     function _readUserData($handle, $passwd = '')
     {
@@ -293,6 +293,19 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
         $this->userObj      =& $this->tree->root->getElement(array($index));
 
         return true;
+    }
+
+    /**
+     * Properly disconnect from resources
+     *
+     * @return void
+     *
+     * @access public
+     */
+    function disconnect()
+    {
+        $this->tree = null;
+        $this->userObj = null;
     }
 }
 ?>

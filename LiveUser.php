@@ -183,8 +183,8 @@ class LiveUser
     /**
      * LiveUser options set in the configuration file.
      *
-     * @access  private
      * @var     array
+     * @access  private
      */
     var $_options = array(
         'autoInit' => false,
@@ -207,16 +207,16 @@ class LiveUser
     /**
      * The auth container object.
      *
-     * @access private
      * @var    object
+     * @access private
      */
     var $_auth = null;
 
     /**
      * The permission container object.
      *
-     * @access private
      * @var    object
+     * @access private
      */
     var $_perm = null;
 
@@ -243,8 +243,8 @@ class LiveUser
      *   auth container a specific user was coming from.
      *</ul>
      *
-     * @access private
      * @var    array
+     * @access private
      */
     var $authContainers = array();
 
@@ -256,16 +256,16 @@ class LiveUser
      * The array element 'type' must be present for the LoginManager to be able
      * to include the correct class definition (example: "DB_Complex").
      *
-     * @access private
      * @var    mixed
+     * @access private
      */
     var $permContainer = false;
 
     /**
      * Current status of the LiveUser object.
      *
-     * @access private
      * @var    string
+     * @access private
      * @see    LIVEUSER_STATUS_* constants
      */
     var $status = LIVEUSER_STATUS_UNKNOWN;
@@ -273,8 +273,8 @@ class LiveUser
     /**
      * Error stack
      *
-     * @access private
      * @var    PEAR_ErrorStack
+     * @access private
      */
     var $_stack = null;
 
@@ -290,8 +290,8 @@ class LiveUser
     /**
      * Error codes to message mapping array
      *
-     * @access private
      * @var    array
+     * @access private
      */
     var $_errorMessages = array(
         LIVEUSER_ERROR                        => 'Unknown error',
@@ -311,8 +311,8 @@ class LiveUser
     /**
      * Events that are allowed to be triggered (built in events are preset).
      *
-     * @access protected
      * @var    array
+     * @access protected
      */
     var $events = array(
         'onLogin',          // successfully logged in
@@ -328,16 +328,16 @@ class LiveUser
     /**
      * Used to store attached observers.
      *
-     * @access protected
      * @var    array
+     * @access protected
      */
     var $_observers = array();
 
     /**
      * Constructor
      *
-     * @access protected
      * @return void
+     * @access protected
      */
     function LiveUser()
     {
@@ -460,15 +460,16 @@ class LiveUser
      * The examples for containers provided are just general
      * do not reflect all the options for all containers.
      *
-     * @access public
-     * @param  mixed           The config file or the config array to configure.
-     * @param  string          Handle of the user trying to authenticate
-     * @param  string          Password of the user trying to authenticate
-     * @param  boolean         set to true if user wants to logout
-     * @param  boolean         set if remember me is set
-     * @param  mixed           Name of array containing the configuration.
-     * @return LiveUser|false  Returns an object of either LiveUser or false on error
+     * @param  mixed $conf       The config file or the config array to configure.
+     * @param  string $handle    Handle of the user trying to authenticate
+     * @param  string $passwd    Password of the user trying to authenticate
+     * @param  boolean $logout   set to true if user wants to logout
+     * @param  boolean $remember set if remember me is set
+     * @param  mixed $confName   Name of array containing the configuration.
+     * @return LiveUser|false    Returns an object of either LiveUser or false on error
      *                         if so use LiveUser::getErrors() to get the errors
+     *
+     * @access public
      * @see LiveUser::getErrors
      */
     function &factory($conf, $handle = '', $passwd = '',$logout = false,
@@ -496,14 +497,15 @@ class LiveUser
      * Without the ampersand (&) in front of the method name, you will not get
      * a reference, you will get a copy.</b>
      *
+     * @param  array|file $conf  The config file or the config array to configure.
+     * @param  string $handle    Handle of the user trying to authenticate
+     * @param  string $passwd    Password of the user trying to authenticate
+     * @param  boolean $logout   set to true if user wants to logout
+     * @param  boolean $remember set if remember me is set
+     * @param  string $confName  Name of array containing the configuration.
+     * @return LiveUser|false    Returns an object of either LiveUser or false on failure
+     *
      * @access public
-     * @param  array|file      The config file or the config array to configure.
-     * @param  string          Handle of the user trying to authenticate
-     * @param  string          Password of the user trying to authenticate
-     * @param  boolean         set to true if user wants to logout
-     * @param  boolean         set if remember me is set
-     * @param  string          Name of array containing the configuration.
-     * @return LiveUser|false  Returns an object of either LiveUser or false on failure
      * @see    LiveUser::factory
      */
     function &singleton($conf, $handle = '', $passwd = '', $logout = false,
@@ -528,8 +530,9 @@ class LiveUser
     /**
      * Wrapper method to get the Error Stack
      *
-     * @access public
      * @return array  an array of the errors
+     *
+     * @access public
      */
     function getErrors()
     {
@@ -542,9 +545,10 @@ class LiveUser
     /**
      * Loads a PEAR class
      *
-     * @access public
-     * @param  string  classname
+     * @param  string $classname classname
      * @return boolean true success or false on failure
+     *
+     * @access public
      */
     function loadClass($classname)
     {
@@ -564,10 +568,13 @@ class LiveUser
     /**
      * Creates an instance of an auth object
      *
-     * @access public
-     * @param  array|file    Name of array containing the configuration.
+     * @param  array|file &$conf    Name of array containing the configuration.
+     * @param string $containerName Name of the container we'll be using.
+     * @param string $classprefix   Prefix of the class that will be used.
      * @return object|false  Returns an instance of an auth container
      *                       class or false on error
+     *
+     * @access public
      */
     function &authFactory(&$conf, $containerName, $classprefix = 'LiveUser_')
     {
@@ -585,10 +592,12 @@ class LiveUser
     /**
      * Creates an instance of an perm object
      *
-     * @access public
-     * @param  mixed         Name of array containing the configuration.
+     * @param array|file          Name of array containing the configuration.
+     * @param string $classprefix Prefix of the class that will be used.
      * @return object|false  Returns an instance of a perm container
      *                       class or false on error
+     *
+     * @access public
      */
     function &permFactory(&$conf, $classprefix = 'LiveUser_')
     {
@@ -606,10 +615,12 @@ class LiveUser
     /**
      * Returns an instance of a storage Container
      *
-     * @access protected
      * @param  array        configuration array to pass to the storage container
+     * @param string        $classprefix Prefix of the class that will be used.
      * @return object|false will return an instance of a Storage container
      *                      or false upon error
+     *
+     * @access protected
      */
     function &storageFactory(&$confArray, $classprefix = 'LiveUser_')
     {
@@ -636,11 +647,12 @@ class LiveUser
      * used in LiveUser::_readConfig()
      * may be called statically
      *
-     * @access public
-     * @param  array        array that should be clobbered
-     * @param  array        array that should be clobbered
+     * @param  array $a1    array that should be clobbered
+     * @param  array $a2    array that should be clobbered
      * @return array|false  array on success and false on error
      * @author kc@hireability.com
+     *
+     * @access public
      */
     function arrayMergeClobber($a1, $a2)
     {
@@ -663,9 +675,10 @@ class LiveUser
     /**
      * checks if a file exists in the include path
      *
-     * @access public
-     * @param  string   filename
+     * @param  string $file filename
      * @return boolean  true success and false on error
+     *
+     * @access public
      */
     function fileExists($file)
     {
@@ -681,10 +694,11 @@ class LiveUser
     /**
      * Reads the configuration
      *
-     * @access private
-     * @param  array|file  Conf array or file path to configuration
-     * @param  string      Name of array containing the configuration
+     * @param  array|file $conf Conf array or file path to configuration
+     * @param  string $confName Name of array containing the configuration
      * @return boolean     true on success or false on failure
+     *
+     * @access private
      */
     function _readConfig($conf, $confName)
     {
@@ -739,8 +753,9 @@ class LiveUser
     /**
      * This method lazy loads PEAR::Log
      *
-     * @access protected
      * @return void
+     *
+     * @access protected
      */
     function loadPEARLog()
     {
@@ -765,9 +780,10 @@ class LiveUser
      * $lu_object->addErrorLog($logger);
      * </code>
      *
-     * @access public
-     * @param  Log     logger instance
+     * @param  Log &$log    logger instance
      * @return boolean true on success or false on failure
+     *
+     * @access public
      */
     function addErrorLog(&$log)
     {
@@ -780,9 +796,10 @@ class LiveUser
     /**
      * Creates an instance of the PEAR::Crypt_Rc4 class
      *
-     * @access public
-     * @param  string  token to use to encrypt data
+     * @param  string $secret  token to use to encrypt data
      * @return object  Returns an instance of the Crypt_RC4 class
+     *
+     * @access public
      */
     function &cryptRC4Factory($secret)
     {
@@ -796,12 +813,15 @@ class LiveUser
     /**
      * Crypts data using mcrypt or userland if not available
      *
+     * @param  boolean $data true to crypt, false to decrypt
+     * @param  string $secret data to crypt
+     * @param boolean true if it should be crypted, 
+     *                false if it should be decrypted
+     * @return string crypted data
+     *
      * @access private
-     * @param  boolean true to crypt, false to decrypt
-     * @param  string  data to crypt
-     * @return string  crypted data
      */
-    function cryptRC4($data, $secret, $crypt)
+    function cryptRC4($data, $secret, $crypt = true)
     {
         if (function_exists('mcrypt_module_open')) {
             $td = mcrypt_module_open('tripledes', '', 'ecb', '');
@@ -836,10 +856,11 @@ class LiveUser
     /**
      * Sets an option.
      *
-     * @access public
-     * @param  string  option name
-     * @param  mixed   value for the option
+     * @param  string $option option name
+     * @param  mixed $value  value for the option
      * @return boolean true on success or false on failure
+     *
+     * @access public
      * @see    LiveUser::_options
      */
     function setOption($option, $value)
@@ -856,9 +877,10 @@ class LiveUser
     /**
      * Returns the value of an option
      *
-     * @access public
-     * @param  string option name
+     * @param  string $option option name
      * @return mixed  the option value or false on failure
+     *
+     * @access public
      */
     function getOption($option)
     {
@@ -877,13 +899,14 @@ class LiveUser
      * Returns true if a auth object was successfully retrieved or created.
      * Otherwise, false is returned.
      *
-     * @access public
-     * @param  string   handle of the user trying to authenticate
-     * @param  string   password of the user trying to authenticate
-     * @param  boolean  set to true if user wants to logout
-     * @param  boolean  set if remember me is set
+     * @param  string $handle    handle of the user trying to authenticate
+     * @param  string $passwd    password of the user trying to authenticate
+     * @param  boolean $logout   set to true if user wants to logout
+     * @param  boolean $remember set if remember me is set
      * @return boolean  true if init process well, false if something
      *                  went wrong.
+     *
+     * @access public
      */
     function init($handle = '', $passwd = '', $logout = false, $remember = false)
     {
@@ -900,7 +923,7 @@ class LiveUser
         }
         if ($this->_options['session_cookie_params']) {
             session_set_cookie_params((
-                time() + (86400 * $this->_options['session_cookie_params']['lifetime'])),
+                time() + (8* @access private6400 * $this->_options['session_cookie_params']['lifetime'])),
                 $this->_options['session_cookie_params']['path'],
                 $this->_options['session_cookie_params']['domain'],
                 $this->_options['session_cookie_params']['secure']);
@@ -965,11 +988,12 @@ class LiveUser
      * Tries to log the user in by trying all the Auth containers defined
      * in the configuration file until there is a success or failure.
      *
-     * @access private
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
      * @param  boolean  set rememberMe cookie
      * @return boolean  true on success or false on failure
+     *
+     * @access private
      */
     function login($handle = '', $passwd = '', $remember = false)
     {
@@ -1041,8 +1065,9 @@ class LiveUser
      * Gets auth and perm container objects back from session and tries
      * to give them an active database/whatever connection again
      *
-     * @access private
      * @return boolean true on success or false on failure
+     *
+     * @access private
      */
     function unfreeze()
     {
@@ -1085,8 +1110,9 @@ class LiveUser
     /**
      * Store all properties in an array
      *
-     * @access  public
      * @return  boolean true on sucess or false on failure
+     *
+     * @access  public
      */
     function freeze()
     {
@@ -1111,8 +1137,9 @@ class LiveUser
     /**
      * Properly disconnect resources in the active container
      *
-     * @access  public
      * @return  boolean true on success or false on failure
+     *
+     * @access  public
      */
     function disconnect()
     {
@@ -1138,11 +1165,12 @@ class LiveUser
      * a cookie to be set so he doesn't have to enter handle and password
      * for his next login. If true, it will set the cookie.
      *
-     * @access private
-     * @param  string   handle of the user trying to authenticate
-     * @param  string   password of the user trying to authenticate
-     * @param  boolean  set if remember me is set
+     * @param  string $handle   handle of the user trying to authenticate
+     * @param  string $passwd    password of the user trying to authenticate
+     * @param  boolean $remember set if remember me is set
      * @return boolean  true if the cookie can be set, false otherwise
+     *
+     * @access private
      */
     function setRememberCookie($handle, $passwd, $remember)
     {
@@ -1207,8 +1235,9 @@ class LiveUser
     /**
      * Handles the rememberMe cookie login.
      *
-     * @access private
      * @return boolean true on success or false on failure
+     *
+     * @access private
      */
     function readRememberCookie()
     {
@@ -1309,9 +1338,10 @@ class LiveUser
     /**
      * This destroys the session object.
      *
-     * @access public
-     * @param  boolean  set to true if the logout was initiated directly
+     * @param  boolean $direct  set to true if the logout was initiated directly
      * @return void
+     *
+     * @access public
      */
     function logout($direct = true)
     {
@@ -1367,9 +1397,10 @@ class LiveUser
     /**
      * Wrapper method for the permission object's own checkRight method.
      *
-     * @access public
-     * @param  array|int  A right id or an array of rights.
+     * @param  array|int $rights A right id or an array of rights.
      * @return int|false  level if the user has the right/rights false if not
+     *
+     * @access public
      */
     function checkRight($rights)
     {
@@ -1400,13 +1431,14 @@ class LiveUser
     /**
      * Wrapper method for the permission object's own checkRightLevel method.
      *
-     * @access public
-     * @param  array|int  A right id or an array of rights.
-     * @param  array|int  Id or array of Ids of the owner of the
+     * @param  array|int $rights  A right id or an array of rights.
+     * @param  array|int $owner_user_id Id or array of Ids of the owner of the
                           ressource for which the right is requested.
-     * @param  array|int  Id or array of Ids of the group of the
+     * @param  array|int $owner_group_id  Id or array of Ids of the group of the
      *                    ressource for which the right is requested.
      * @return boolean    true on success or false on failure
+     *
+     * @access public
      */
     function checkRightLevel($rights, $owner_user_id, $owner_group_id)
     {
@@ -1424,9 +1456,10 @@ class LiveUser
     /**
      * Wrapper method for the permission object's own checkGroup method.
      *
-     * @access public
-     * @param  array|int  A group id or an array of groups.
+     * @param  array|int $groups  A group id or an array of groups.
      * @return boolean    true on success or false on failure
+     *
+     * @access public
      */
     function checkGroup($groups)
     {
@@ -1453,8 +1486,9 @@ class LiveUser
     /**
      * Checks if a user is logged in.
      *
-     * @access public
      * @return boolean true if user is logged in, false if not
+     *
+     * @access public
      */
     function isLoggedIn()
     {
@@ -1474,9 +1508,10 @@ class LiveUser
      * true ==  user account is NOT active
      * false == user account is active
      *
-     * @access public
      * @return boolean true if the user account is *not* active
      *                 false if the user account *is* active
+     *
+     * @access public
      */
     function isInactive()
     {
@@ -1487,10 +1522,11 @@ class LiveUser
      * Wrapper method to access properties from the auth and
      * permission containers.
      *
-     * @access public
-     * @param  string   Name of the property to be returned.
-     * @param  string   'auth' or 'perm'
+     * @param  string $what  Name of the property to be returned.
+     * @param  string $container  'auth' or 'perm'
      * @return mixed    a value or an array.
+     *
+     * @access public
      */
     function getProperty($what, $container = 'auth')
     {
@@ -1510,8 +1546,9 @@ class LiveUser
     /**
      * Get the current status.
      *
-     * @access public
      * @return integer
+     *
+     * @access public
      */
     function getStatus()
     {
@@ -1536,11 +1573,12 @@ class LiveUser
      *
      * Same goes if you have to pass a object instead of function name.
      *
-     * @access public
-     * @param  object  object with observer methods
-     * @param  mixed   optional used to change method names this way:
+     * @param  object &$object object with observer methods
+     * @param  mixed $methods   optional used to change method names this way:
      *                 array('event' => 'realMethodName', ...) or string
      * @return bool    true on success, otherwise false
+     *
+     * @access public
      * @see    LiveUser::triggerEvent
      */
     function attachObserver(&$object, $methods = array())
@@ -1579,10 +1617,11 @@ class LiveUser
      * not be used as a parameter but is useful if you want to use
      * one single observer callback function for multiple events.
      *
-     * @access public
-     * @param  string  event name
-     * @param  array   optional params to send to observers
+     * @param  string $event event name
+     * @param  array $params  optional params to send to observers
      * @return bool    true on success, false otherwise
+     *
+     * @access public
      * @see    LiveUser::attachObserver(), LiveUser::attachObserverObj(), LiveUser::registerEvent()
      */
     function triggerEvent($event, $params = array())
@@ -1613,8 +1652,9 @@ class LiveUser
     /**
      * make a string representation of the object
      *
-     * @access  public
      * @return  string
+     *
+     * @access  public
      */
     function __toString()
     {
@@ -1624,9 +1664,10 @@ class LiveUser
     /**
      * Return a textual status message for a LiveUser status code.
      *
-     * @access  public
-     * @param   int     status code
+     * @param   int $value    status code
      * @return  string  error message
+     *
+     * @access  public
      */
     function statusMessage($value)
     {
