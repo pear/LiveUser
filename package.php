@@ -15,6 +15,7 @@ $notes = <<<EOT
   - fixed php5 issues in example4
   - reworked RC4 handling into cryptRC4() method
   - perm container now also has a default init() method that is called in the factory
+  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
 EOT;
 
 $description = <<<EOT
