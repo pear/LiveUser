@@ -30,7 +30,7 @@ PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'eHandler');
 
 function eHandler($errObj)
 {
-    echo('<hr /><span style="color: red">' . $errObj->getMessage() . ':<br />'. $errObj->getUserinfo() . '</span><hr />');
+    echo('<hr /><span style="color: red">' . $errObj->getMessage() . ':<br />'. $errObj->getUserInfo() . '</span><hr />');
 }
 
 $GLOBALS['obs'] = '';

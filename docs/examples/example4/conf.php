@@ -15,7 +15,6 @@ function php_error_handler($errno, $errstr, $errfile, $errline)
 
     $tpl->setVariable('error_msg', "<b>$errfile ($errline)</b><br />$errstr");
     $tpl->show();
-var_dump(debug_backtrace());
     exit();
 }
 
@@ -25,7 +24,7 @@ require_once 'PEAR.php';
 
 function pear_error_handler($err_obj)
 {
-    $error_string = $err_obj->getMessage() . '<br />' . $err_obj->getUserinfo();
+    $error_string = $err_obj->getMessage() . '<br />' . $err_obj->getUserInfo();
     trigger_error($error_string, E_USER_ERROR);
 }
 
