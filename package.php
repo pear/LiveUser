@@ -79,11 +79,9 @@ $result = $package->setOptions(array(
     'baseinstalldir'    => '/LiveUser',
     'packagedirectory'  => './',
     'installexceptions' => array(
-        'Admin/Admin.php'         => '/',
         'LiveUser.php'            => '/',
     ),
     'installas'         => array(
-        'Admin/Admin.php'         => '/LiveUser/Admin.php',
         'sql/Auth_DB.sql'         => 'misc/schema/Auth_DB.sql',
         'sql/Auth_XML.xml'        => 'misc/schema/Auth_XML.xml',
         'sql/perm_db.sql'         => 'misc/schema/perm_db.sql',

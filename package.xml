@@ -63,8 +63,8 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>0.14</version>
-    <date>2004-11-09</date>
+    <version>0.14.0</version>
+    <date>2004-11-17</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>  - DB containers no longer use CASE in the sql query.
@@ -78,7 +78,13 @@
   - Fixed Bug #2672, #2713, #2714 Typo fixes
   - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/ which are from now on installed in pear_folder/LiveUser/misc/schema/
   - fixed regenid option
-  - refactored client part to the new layout (using storage containers) .. fixed example2 to use the new config layout</notes>
+  - refactored client part to the new layout (using storage containers) .. fixed example2 to use the new config layout
+  - disabled perm caching by default
+  - added sessionName param to (un)freeze method calls to the perm container
+  - removed options of reading parameters from the superglobals
+  - reworked init() method severly
+  - remove the callback that catches PEAR_Error errors
+  - adding getErrors() method to get the error stack</notes>
     <deps>
       <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
       <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
@@ -91,31 +97,6 @@
     </deps>
     <filelist>
       <dir baseinstalldir="/LiveUser" name="/">
-       <dir name="Admin">
-        <file role="php" baseinstalldir="/" install-as="/LiveUser/Admin.php" name="Admin.php"/>
-        <dir name="Auth">
-         <file role="php" name="Common.php"/>
-         <dir name="Container">
-          <file role="php" name="DB.php"/>
-          <file role="php" name="MDB.php"/>
-          <file role="php" name="MDB2.php"/>
-         </dir> <!-- Admin/Auth/Container -->
-        </dir> <!-- Admin/Auth -->
-        <dir name="Perm">
-         <file role="php" name="Common.php"/>
-         <dir name="Container">
-          <file role="php" name="DB_Complex.php"/>
-          <file role="php" name="DB_Medium.php"/>
-          <file role="php" name="DB_Simple.php"/>
-          <file role="php" name="MDB2_Complex.php"/>
-          <file role="php" name="MDB2_Medium.php"/>
-          <file role="php" name="MDB2_Simple.php"/>
-          <file role="php" name="MDB_Complex.php"/>
-          <file role="php" name="MDB_Medium.php"/>
-          <file role="php" name="MDB_Simple.php"/>
-         </dir> <!-- Admin/Perm/Container -->
-        </dir> <!-- Admin/Perm -->
-       </dir> <!-- Admin -->
        <dir name="Auth">
         <file role="php" name="Common.php"/>
         <file role="php" name="DB.php"/>
@@ -125,28 +106,8 @@
         <file role="php" name="XML.php"/>
        </dir> <!-- Auth -->
        <dir name="docs">
-        <file role="doc" name="dia_admin_diagram.xml"/>
-        <file role="doc" name="dia_diagram.xml"/>
-        <file role="doc" name="Perm_DB_Complex.png"/>
-        <file role="doc" name="Perm_DB_Simple.png"/>
         <dir name="examples">
          <file role="doc" name="README"/>
-         <dir name="admin_example">
-          <file role="doc" name="create_db.sql"/>
-          <file role="doc" name="README"/>
-          <dir name="DB">
-           <file role="doc" name="admin_example.php"/>
-           <file role="doc" name="config.inc.php"/>
-          </dir> <!-- docs/examples/admin_example/DB -->
-          <dir name="MDB">
-           <file role="doc" name="admin_example_mdb.php"/>
-           <file role="doc" name="config_mdb.inc.php"/>
-          </dir> <!-- docs/examples/admin_example/MDB -->
-          <dir name="MDB2">
-           <file role="doc" name="admin_example_mdb2.php"/>
-           <file role="doc" name="config_mdb2.inc.php"/>
-          </dir> <!-- docs/examples/admin_example/MDB2 -->
-         </dir> <!-- docs/examples/admin_example -->
          <dir name="example1">
           <file role="doc" name="Auth_XML.xml"/>
           <file role="doc" name="conf.php"/>
@@ -191,23 +152,6 @@
           <file role="doc" name="news_view.tpl.php"/>
           <file role="doc" name="style.css"/>
          </dir> <!-- docs/examples/example4 -->
-         <dir name="example5">
-          <file role="doc" name="admin.php"/>
-          <file role="doc" name="admin.tpl"/>
-          <file role="doc" name="admin_example.php"/>
-          <file role="doc" name="conf.php"/>
-          <file role="doc" name="create_db.sql"/>
-          <file role="doc" name="home.php"/>
-          <file role="doc" name="home.tpl"/>
-          <file role="doc" name="index.php"/>
-          <file role="doc" name="layout_frontend.css"/>
-          <file role="doc" name="liveuser_rights.php"/>
-          <file role="doc" name="login_form.tpl"/>
-          <file role="doc" name="news.tpl"/>
-          <file role="doc" name="news_edit.tpl"/>
-          <file role="doc" name="news_list.tpl"/>
-          <file role="doc" name="README"/>
-         </dir> <!-- docs/examples/example5 -->
         </dir> <!-- docs/examples -->
        </dir> <!-- docs -->
        <dir name="Perm">
@@ -243,8 +187,8 @@
   </release>
   <changelog>
     <release>
-      <version>0.14</version>
-      <date>2004-11-09</date>
+      <version>0.14.0</version>
+      <date>2004-11-17</date>
       <license>LGPL</license>
       <state>beta</state>
       <notes>  - DB containers no longer use CASE in the sql query.
@@ -258,7 +202,31 @@
   - Fixed Bug #2672, #2713, #2714 Typo fixes
   - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/ which are from now on installed in pear_folder/LiveUser/misc/schema/
   - fixed regenid option
-  - refactored client part to the new layout (using storage containers) .. fixed example2 to use the new config layout</notes>
+  - refactored client part to the new layout (using storage containers) .. fixed example2 to use the new config layout
+  - disabled perm caching by default
+  - added sessionName param to (un)freeze method calls to the perm container
+  - removed options of reading parameters from the superglobals
+  - reworked init() method severly
+  - remove the callback that catches PEAR_Error errors
+  - adding getErrors() method to get the error stack</notes>
+    </release>
+    <release>
+      <version>0.14</version>
+      <date>2004-11-09</date>
+      <license>LGPL</license>
+      <state>beta</state>
+      <notes>- DB containers no longer use CASE in the sql query.
+- BC break! [de]activateGroup was removed in favor of using the optional array for handling that.
+- BC break! getUsersFromGroup removed in favor of people using searchUsers/getUsers with the option where_group_id
+- lazy loading of PEAR::Log
+- getProperty can now handle fooBar fieldnames, on the auth side.
+- removeUsersFromGroup implanted in Admin Perm *_medium containers
+- removeGroup now uses removeUsersFromGroup as well as revokeGroupRight (previously had it's own identical implantion of those functions)
+- Request #2038 implanted, Admin/Perm getUsers can now filter also by auth_user_id in addition to perm_user_id and group_id
+- Fixed Bug #2672, #2713, #2714 Typo fixes
+- Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/ which are from now on installed in pear_folder/LiveUser/misc/schema/
+- fixed regenid option
+- refactored client part to the new layout (using storage containers) .. fixed example2 to use the new config layout</notes>
     </release>
     <release>
       <version>0.13.3</version>
