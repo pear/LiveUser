@@ -36,7 +36,7 @@ PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'pear_error_handler');
 
 // Data Source Name (DSN)
 //$dsn = '{dbtype}://{user}:{passwd}@{dbhost}/{dbname}';
-$dsn = 'mysql://root:@localhost/liveuser_test';
+$dsn = 'mysql://root:@localhost/liveuser_test_example4';
 
 $db =& DB::connect($dsn, true);
 $db->setFetchMode(DB_FETCHMODE_ASSOC);
