@@ -105,6 +105,18 @@ define('LIVEUSER_SUPERADMIN_TYPE_ID',   4);
 define('LIVEUSER_MASTERADMIN_TYPE_ID',  5);
 /**#@-*/
 
+/**#@+
+ * Section types
+ *
+ * @var integer
+ */
+define('LIVEUSER_SECTION_APPLICATION',  1);
+define('LIVEUSER_SECTION_AREA',         2);
+define('LIVEUSER_SECTION_GROUP',        3);
+define('LIVEUSER_SECTION_LANGUAGE',     4);
+define('LIVEUSER_SECTION_RIGHT',        5);
+/**#@-*/
+
 /**
  * Debug global. When set to true the
  * error stack will be printed to
