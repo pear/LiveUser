@@ -214,20 +214,20 @@
   <declaration>
 
    <field>
-    <name><variable>group_id_name</variable></name>
+    <name>group_id</name>
     <type>integer</type>
     <notnull>1</notnull>
     <default>0</default>
    </field>
 
    <field>
-    <name><variable>group_type_name</variable></name>
+    <name>group_type</name>
     <type>integer</type>
     <default>1</default>
    </field>
 
    <field>
-    <name><variable>group_define_name_name</variable></name>
+    <name>group_define_name</name>
     <type>text</type>
     <length>32</length>
     <notnull>1</notnull>
@@ -235,35 +235,35 @@
    </field>
 
    <field>
-    <name><variable>owner_user_id_name</variable></name>
+    <name>owner_user_id</name>
     <type>integer</type>
    </field>
 
    <field>
-    <name><variable>owner_group_id_name</variable></name>
+    <name>owner_group_id</name>
     <type>integer</type>
    </field>
 
    <field>
-    <name><variable>is_active_name</variable></name>
+    <name>is_active</name>
     <type>boolean</type>
     <notnull>1</notnull>
     <default>N</default>
    </field>
 
    <index>
-    <name><variable>group_id_name</variable></name>
+    <name>group_id</name>
     <unique>1</unique>
     <field>
-     <name><variable>group_id_name</variable></name>
+     <name>group_id</name>
     </field>
    </index>
 
    <index>
-    <name><variable>group_define_name_name</variable></name>
+    <name>group_define_name</name>
     <unique>1</unique>
     <field>
-     <name><variable>group_define_name_name</variable></name>
+     <name>group_define_name</name>
     </field>
    </index>
 
