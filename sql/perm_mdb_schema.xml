@@ -13,7 +13,7 @@
    <field>
     <name>application_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -21,13 +21,13 @@
     <name>application_define_name</name>
     <type>text</type>
     <length>32</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default></default>
    </field>
 
    <index>
     <name>application_id</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>application_id</name>
     </field>
@@ -35,7 +35,7 @@
 
    <index>
     <name>application_define_name</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>application_define_name</name>
     </field>
@@ -54,20 +54,20 @@
    <field>
     <name>area_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>perm_user_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <index>
     <name>area_admin_area_rel</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>area_id</name>
     </field>
@@ -89,14 +89,14 @@
    <field>
     <name>area_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>application_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -104,13 +104,13 @@
     <name>area_define_name</name>
     <type>text</type>
     <length>32</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default></default>
    </field>
 
    <index>
     <name>area_id</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>area_id</name>
     </field>
@@ -118,7 +118,7 @@
 
    <index>
     <name>area_define_name</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>application_id</name>
     </field>
@@ -140,20 +140,20 @@
    <field>
     <name>group_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>subgroup_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <index>
     <name>group_subgroup_rel</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>group_id</name>
     </field>
@@ -175,14 +175,14 @@
    <field>
     <name>group_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>right_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -194,7 +194,7 @@
 
    <index>
     <name>group_right_rel</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>group_id</name>
     </field>
@@ -216,7 +216,7 @@
    <field>
     <name>group_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -230,7 +230,7 @@
     <name>group_define_name</name>
     <type>text</type>
     <length>32</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default></default>
    </field>
 
@@ -247,13 +247,13 @@
    <field>
     <name>is_active</name>
     <type>boolean</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>N</default>
    </field>
 
    <index>
     <name>group_id</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>group_id</name>
     </field>
@@ -261,7 +261,7 @@
 
    <index>
     <name>group_define_name</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>group_define_name</name>
     </field>
@@ -280,20 +280,20 @@
    <field>
     <name>perm_user_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>group_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <index>
     <name>perm_user_group_rel</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>perm_user_id</name>
     </field>
@@ -315,7 +315,7 @@
    <field>
     <name>perm_user_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -323,7 +323,7 @@
     <name>auth_user_id</name>
     <type>text</type>
     <length>32</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -336,13 +336,13 @@
     <name>auth_container_name</name>
     <type>text</type>
     <length>32</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default></default>
    </field>
 
    <index>
     <name>perm_user_id</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>perm_user_id</name>
     </field>
@@ -350,7 +350,7 @@
 
    <index>
     <name>auth_user_container_rel</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>auth_user_id</name>
     </field>
@@ -372,20 +372,20 @@
    <field>
     <name>right_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>implied_right_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <index>
     <name>right_implied_right_rel</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>right_id</name>
     </field>
@@ -407,14 +407,14 @@
    <field>
     <name>right_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>area_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -422,20 +422,20 @@
     <name>right_define_name</name>
     <type>text</type>
     <length>32</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default></default>
    </field>
 
    <field>
     <name>has_implied</name>
     <type>boolean</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>N</default>
    </field>
 
    <index>
     <name>right_id</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>right_id</name>
     </field>
@@ -443,7 +443,7 @@
 
    <index>
     <name>right_define_name</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>area_id</name>
     </field>
@@ -465,21 +465,21 @@
    <field>
     <name>translation_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>section_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>section_type</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -487,7 +487,7 @@
     <name>language_id</name>
     <type>text</type>
     <length>2</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default></default>
    </field>
 
@@ -495,7 +495,7 @@
     <name>name</name>
     <type>text</type>
     <length>50</length>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default></default>
    </field>
 
@@ -507,7 +507,7 @@
 
    <index>
     <name>translation_id</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>translation_id</name>
     </field>
@@ -515,7 +515,7 @@
 
    <index>
     <name>section_item</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>section_id</name>
     </field>
@@ -540,14 +540,14 @@
    <field>
     <name>perm_user_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
    <field>
     <name>right_id</name>
     <type>integer</type>
-    <notnull>1</notnull>
+    <notnull>true</notnull>
     <default>0</default>
    </field>
 
@@ -559,7 +559,7 @@
 
    <index>
     <name>perm_user_right_rel</name>
-    <unique>1</unique>
+    <unique>true</unique>
     <field>
      <name>perm_user_id</name>
     </field>
