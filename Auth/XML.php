@@ -66,7 +66,6 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
 
     function init(&$connectOptions)
     {
-        $this->LiveUser_Auth_Common($connectOptions, $containerName);
         if (is_array($connectOptions)) {
             if (!is_file($this->file)) {
                 if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
