@@ -444,9 +444,7 @@ class LiveUser
             }
         }
 
-        if (isset($obj->_options['autoInit']) &&
-            $obj->_options['autoInit'])
-        {
+        if (isset($obj->_options['autoInit']) && $obj->_options['autoInit']) {
             $init = $obj->init($handle, $passwd, $logout, $remember);
             if (!$init) {
                 return false;
@@ -454,17 +452,6 @@ class LiveUser
         }
 
         return $obj;
-    }
-
-    /**
-     * Wrapper method to get the Error Stack
-     *
-     * @access public
-     * @return array  an array of the errors
-     */
-    function getErrors()
-    {
-        return $obj->_stack->getErrors();
     }
 
     /**
@@ -489,7 +476,9 @@ class LiveUser
         $remember = false, $confName = 'liveuserConfig')
     {
         static $instances;
-        if (!isset($instances)) $instances = array();
+        if (!isset($instances)) {
+            $instances = array();
+        }
 
         $signature = serialize(array($handle, $passwd, $confName));
         if (!isset($instances[$signature])) {
@@ -504,6 +493,17 @@ class LiveUser
     }
 
     /**
+     * Wrapper method to get the Error Stack
+     *
+     * @access public
+     * @return array  an array of the errors
+     */
+    function getErrors()
+    {
+        return $obj->_stack->getErrors();
+    }
+
+    /**
      * Loads a PEAR class
      *
      * @access public
@@ -515,18 +515,10 @@ class LiveUser
         if (!class_exists($classname)) {
             $filename = str_replace('_', '/', $classname).'.php';
             if (!LiveUser::fileExists($filename)) {
-                $this->_stack->push(
-                    LIVEUSER_ERROR_MISSING_FILE, 'exception',
-                    array('file' =>$filename)
-                );
                 return false;
             }
             include_once($filename);
             if (!class_exists($classname)) {
-                $this->_stack->push(
-                    LIVEUSER_ERROR_MISSING_CLASS, 'exception',
-                    array('class' => $classname, 'file' => $filename)
-                );
                 return false;
             }
         }
