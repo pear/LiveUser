@@ -44,8 +44,6 @@ define('LIVEUSER_ERROR',                        -1);
 define('LIVEUSER_ERROR_NOT_SUPPORTED',          -2);
 define('LIVEUSER_ERROR_CONFIG',                 -3);
 define('LIVEUSER_ERROR_MISSING_DEPS',           -4);
-define('LIVEUSER_ERROR_MISSING_LOGINFUNCTION',  -5);
-define('LIVEUSER_ERROR_MISSING_LOGOUTFUNCTION', -6);
 define('LIVEUSER_ERROR_COOKIE',                 -7);
 define('LIVEUSER_ERROR_MISSING_FILE',           -8);
 define('LIVEUSER_ERROR_FAILED_INSTANTIATION',   -9);
@@ -169,13 +167,11 @@ class LiveUser
         'cache_perm' => false,
         'login'   => array(
             'force'    => false,
-            'function' => '',
-            'regenid'    => false,
+            'regenid'    => false
         ),
         'logout'  => array(
             'redirect' => '',
-            'destroy'  => true,
-            'function' => '',
+            'destroy'  => true
         )
     );
 
@@ -273,8 +269,6 @@ class LiveUser
         LIVEUSER_ERROR_NOT_SUPPORTED          => 'Feature not supported by the container: %feature%',
         LIVEUSER_ERROR_CONFIG                 => 'There is an errror in the configuration parameters',
         LIVEUSER_ERROR_MISSING_DEPS           => 'Missing package depedencies: %msg%',
-        LIVEUSER_ERROR_MISSING_LOGINFUNCTION  => 'The Login function cannot be found',
-        LIVEUSER_ERROR_MISSING_LOGOUTFUNCTION => 'The Logout function cannot be found',
         LIVEUSER_ERROR_COOKIE                 => 'There was an error processing the Remember Me cookie',
         LIVEUSER_ERROR_MISSING_FILE           => 'The file %file% is missing',
         LIVEUSER_ERROR_FAILED_INSTANTIATION   => 'Cannot instantiate class %class%',
