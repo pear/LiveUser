@@ -1,0 +1,10 @@
+If you intend to use the Simple containers you only need perm_db_simple.sql, but if you go for the Medium containers you'll need both perm_db_simple.sql and perm_db_medium.sql.
+
+Same goes with Complex, then you need, perm_db_(simple && medium && complex).sql
+
+
+This is only a basic readme which could be extended into something a lot bigger, for example describing why you'd need the medium container and etc. this has often be done on the mailinglist at http://news.gmane.org/gmane.comp.php.pear.liveuser
+
+if anyone cares to write this thing up, please do so and email us to the mailinglist or post it to pear.limbourg.com (a link or the whole thing.)
+
+We'll still maintain perm_db.sql for the next few releases, and then finally remove it.
