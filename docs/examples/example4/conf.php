@@ -94,46 +94,42 @@ $logout = isset($_REQUEST['logout']) ? $_REQUEST['logout'] : null;
 
 require_once 'LiveUser.php';
 
-class showLoginForm
+function showLoginForm(&$liveUserObj)
 {
-    function forceLogin(&$liveUserObj)
-    {
-        include_once 'HTML/Template/IT.php';
-        $tpl = new HTML_Template_IT();
-        $tpl->loadTemplatefile('loginform.tpl.php');
+    include_once 'HTML/Template/IT.php';
+    $tpl = new HTML_Template_IT();
+    $tpl->loadTemplatefile('loginform.tpl.php');
 
-        $tpl->setVariable('form_action', $_SERVER['PHP_SELF']);
+    $tpl->setVariable('form_action', $_SERVER['PHP_SELF']);
 
-        if (is_object($liveUserObj)) {
-            if ($liveUserObj->status) {
-                switch ($liveUserObj->status) {
-                    case LIVEUSER_STATUS_ISINACTIVE:
-                        $tpl->touchBlock('inactive');
-                        break;
-                    case LIVEUSER_STATUS_IDLED:
-                        $tpl->touchBlock('idled');
-                        break;
-                    case LIVEUSER_STATUS_EXPIRED:
-                        $tpl->touchBlock('expired');
-                        break;
-                    default:
-                        $tpl->touchBlock('failure');
-                        break;
-                }
+    if (is_object($liveUserObj)) {
+        if ($liveUserObj->status) {
+            switch ($liveUserObj->status) {
+                case LIVEUSER_STATUS_ISINACTIVE:
+                    $tpl->touchBlock('inactive');
+                    break;
+                case LIVEUSER_STATUS_IDLED:
+                    $tpl->touchBlock('idled');
+                    break;
+                case LIVEUSER_STATUS_EXPIRED:
+                    $tpl->touchBlock('expired');
+                    break;
+                default:
+                    $tpl->touchBlock('failure');
+                    break;
             }
         }
-
-        $tpl->show();
-        exit();
     }
-}
 
-$showLoginForm =& new showLoginForm();
+    $tpl->show();
+    exit();
+}
 
 // Create new LiveUser (LiveUser) object.
 // We´ll only use the auth container, permissions are not used.
 $LU =& LiveUser::factory($LUOptions);
-$LU->attachObserver($showLoginForm, 'forceLogin');
+$function = 'showLoginForm';
+$LU->attachObserver($function, 'forceLogin');
 
 $username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : NULL;
 $password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : NULL;
