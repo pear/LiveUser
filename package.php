@@ -9,7 +9,7 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.15.0';
+$version = '0.155555';
 
 $notes = <<<EOT
 general notes
@@ -36,6 +36,7 @@ general notes
 perm schema structure
   - moved default database structure into separate file (using the GLOBALS super globals)
   - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - the observers mechanism now use Event_Dispatcher (http://pear.php.net/Event_Dispatcher)
   - table rights_implied should have been right_implied in the perm schema structure
   - removed has_level from the database schema
   - added area_admin_areas and all it's joins
