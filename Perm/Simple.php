@@ -253,7 +253,7 @@ class LiveUser_Perm_Simple
      * @access  public
      * @param   array  $propertyValues
      */
-    function unfreeze($sessionName, &$conf)
+    function unfreeze($sessionName)
     {
         $propertyValues = $this->_storage->unfreeze($sessionName);
         if ($propertyValues) {
@@ -261,7 +261,7 @@ class LiveUser_Perm_Simple
                 $this->{$key} = $value;
             }
         }
-        return $this->init($conf);
+        return true;
     } // end func unfreeze
 
     /**
