@@ -111,10 +111,8 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
             foreach ($this->tree->root->children as $node) {
                 if ($node->name == 'users') {
                     foreach ($node->children as $user) {
-                        if ($user->name != 'user') {
-                            continue;
-                        }
-                        if ($authUserId == $user->attributes['authUserId'] &&
+                        if ($user->name == 'user' &&
+                            $authUserId == $user->attributes['authUserId'] &&
                             $containerName == $user->attributes['authContainerName']
                         ) {
                             $result['perm_user_id'] = $user->attributes['userId'];
@@ -146,6 +144,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     function readUserRights($permUserId)
     {
         $result = array();
+
         foreach ($this->userObj->children as $node) {
             if ($node->name == 'rights') {
                 $tmp = explode(',', $node->content);
@@ -160,6 +159,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
                 }
             }
         }
+
         return $result;
     }
 
