@@ -893,7 +893,10 @@ class LiveUser
         @session_start();
 
         // Try to fetch auth object from session
-        $this->unfreeze();
+        $isReturningUser = $this->unfreeze();
+
+        // current timestamp
+        $now = time();
 
         if ($logout) {
             $this->logout(true);
@@ -901,16 +904,19 @@ class LiveUser
             // Check if user authenticated with new credentials
             if ($handle && $this->_auth->handle != $handle) {
                 $this->logout(false);
-            } elseif ($this->_auth->expireTime > 0 && $this->_auth->currentLogin > 0) {
+            } elseif ($isReturningUser) {
                 // Check if authentication session is expired.
-                if (($this->_auth->currentLogin + $this->_auth->expireTime) < time()) {
+                if ($this->_auth->expireTime > 0 &&
+                    ($this->_auth->currentLogin + $this->_auth->expireTime) < $now
+                ) {
                     $this->status = LIVEUSER_STATUS_EXPIRED;
                     $this->triggerEvent('onExpired');
                     $this->logout(false);
                 // Check if maximum idle time is reached.
-                } elseif (isset($_SESSION[$this->_options['session']['varname']]['idle']) &&
-                    ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->_auth->idleTime) < time())
-                {
+                } elseif ($this->_auth->idleTime > 0 &&
+                    isset($_SESSION[$this->_options['session']['varname']]['idle']) &&
+                    ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->_auth->idleTime) < $now
+                ) {
                     $this->status = LIVEUSER_STATUS_IDLED;
                     $this->triggerEvent('onIdled');
                     $this->logout(false);
@@ -918,7 +924,7 @@ class LiveUser
             }
         }
 
-        $_SESSION[$this->_options['session']['varname']]['idle'] = time();
+        $_SESSION[$this->_options['session']['varname']]['idle'] = $now;
 
         if (!$this->isLoggedIn()) {
             $this->login($handle, $passwd, $remember);
@@ -1045,7 +1051,7 @@ class LiveUser
                     }
                     $this->_perm = &$perm;
                     if ($this->_options['cache_perm']) {
-                        $this->_perm->unfreeze($this->_options['session']['varname'], $this->permContainer);
+                        $this->_perm->unfreeze($this->_options['session']['varname']);
                     } else {
                         $this->_perm->mapUser($auth->authUserId, $auth->backendArrayIndex);
                     }
