@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /**
- * MDB2_Medium container for permission handling
+ * Medium container for permission handling
  *
  * @package  LiveUser
  * @category authentication
@@ -29,10 +29,10 @@
 require_once 'LiveUser/Perm/Simple.php';
 
 /**
- * Medium MDB2-based complexity driver for LiveUser.
+ * Medium permission complexity driver for LiveUser.
  *
  * Description:
- * The MDB2_Medium provides the following functionalities
+ * The Medium provides the following functionalities
  * - users
  * - groups
  * - grouprights
