@@ -403,8 +403,8 @@ class LiveUser
      * @param  boolean         set to true if user wants to logout
      * @param  boolean         set if remember me is set
      * @param  mixed           Name of array containing the configuration.
-     * @return LiveUser|array|false  Returns an object of either LiveUser, an
-     *                              array of the error stack or false if unknown
+     * @return LiveUser|false  Returns an object of either LiveUser or false on error
+     *                         if so use LiveUser::getErrors() to get the errors
      */
     function &factory($conf, $handle = '', $passwd = '',$logout = false,
         $remember = false, $confName = 'liveuserConfig')
@@ -423,9 +423,6 @@ class LiveUser
         {
             $init = $obj->init($handle, $passwd, $logout, $remember);
             if (!$init) {
-                if ($obj->_stack->hasErrors()) {
-                    return $obj->_stack->getErrors();
-                }
                 return false;
             }
         }
