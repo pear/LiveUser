@@ -31,7 +31,7 @@
  *
  *
  * @category authentication
- * @package  LiveUser_Admin
+ * @package  LiveUser
  * @author  Markus Wolff <wolff@21st.de>
  * @author Helgi Þormar Þorbjörnsson <dufuz@php.net>
  * @author  Lukas Smith <smith@backendmedia.com>
