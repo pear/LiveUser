@@ -9,15 +9,43 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.14.1';
+$version = '0.15.0';
 
 $notes = <<<EOT
-  - fixed php5 issues in example4
+general notes
+  - moved all config parameter handling inside the containers into init() methods
   - reworked RC4 handling into cryptRC4() method
-  - perm container now also has a default init() method that is called in the factory
-  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - fixed bug in LiveUser_Perm_Storage_XML::mapUser() method which would result
+    in read issues if the user is not the first user in the xml file
+  - moved authTableCols from the database containers into common
+  - added conversion of PEAR errors to error stack in several places
+  - disable password checks in the auth containters if password is set to false
+    in the authTableCols config option
+  - some cleanups and refactoring to add support for the authTableCols fields
+    in the XML container like in the database containers
+  - added Session auth container that checks a password as set inside the
+    session. this could be useful in combination with a CAPTCHA
+  - use LIVEUSER_ERROR constant instead of LIVEUSER_ADMIN_ERROR_QUERY_BUILDER
+  - added allowEmptyPasswords auth container option
+  - added install.php class to handle database schema installation via the MDB2
+    schema manager to provide support for other RDBMS than only MySQL
+  - removed unused userExists() auth container method (use admin interface instead)
+  - accept all config parameters by reference inside the containers
+  - move readAreaAdminsAreas over to Complex where it should be.
+
+perm schema structure
   - moved default database structure into separate file (using the GLOBALS super globals)
-  - table rights_implied should have been right_implied
+  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - table rights_implied should have been right_implied in the perm schema structure
+  - removed has_level from the database schema
+  - added area_admin_areas and all it's joins
+  - fixed remember me feature in example2
+  - remove empty placeholders and block in loadTemplate() calls in example4
+
+examples
+  - fixed bug in example1 onLogout -> postLogout (bug #3135)
+  - fixed php5 issues in example4
+  - all examples now have a unique database name by default
 EOT;
 
 $description = <<<EOT
