@@ -1,13 +1,26 @@
-# phpMyAdmin MySQL-Dump
-# version 2.4.0
-# http://www.phpmyadmin.net/ (download page)
+# $Id$
+
 #
-# Host: localhost
-# Generation Time: Mar 16, 2003 at 11:12 PM
-# Server version: 3.23.52
-# PHP Version: 4.2.0
-# Database : `test`
-# --------------------------------------------------------
+# Table structure for table 'liveuser_languages'
+#
+CREATE TABLE `liveuser_languages` (
+    `language_id` smallint(5) unsigned NOT NULL default '0', 
+    `two_letter_name` char(2) NOT NULL default '',
+    PRIMARY KEY (`language_id`),
+    UNIQUE KEY `two_letter_name` (`two_letter_name`)
+);
+
+#
+# Table structure for table 'liveuser_translations'
+#
+CREATE TABLE `liveuser_translations` (
+    `section_id` int(11) unsigned NOT NULL default '0',
+    `section_type` tinyint(3) unsigned NOT NULL default '0',
+    `language_id` smallint(5) unsigned NOT NULL default '0',
+    `name` varchar(50) NOT NULL default '',
+    `description` varchar(255) default NULL,
+    PRIMARY KEY (`section_id`,`section_type`, `language_id`)
+);
 
 #
 # Dumping data for table `liveuser_applications`
