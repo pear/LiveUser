@@ -441,9 +441,13 @@ class LiveUser
      *  'permContainer' => array(
      *      'type'       => 'Complex',
      *      'storage' => array(
-     *          'DB' => array(
+     *          'MDB2' => array(
      *              'dsn' => $dsn,
      *              'prefix'     => 'liveuser_'
+     *              'tables' => array(),
+     *              'fields' => array(),
+     *              'alias' => array(),
+     *              'force_seq' => true,
      *          ),
      *      ),
      *  ),
