@@ -116,11 +116,10 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      * @param  array     configuration array
      * @return void
      */
-    function LiveUser_Auth_MDB2(&$connectOptions)
+    function LiveUser_Auth_MDB2(&$connectOptions, $containerName)
     {
-        $this->LiveUser_Auth_Common($connectOptions);
+        $this->LiveUser_Auth_Common($connectOptions, $containerName);
         if (is_array($connectOptions)) {
-            $this->LiveUser_Auth_Common($connectOptions);
             if (isset($connectOptions['connection']) &&
                 MDB2::isConnection($connectOptions['connection'])
             ) {

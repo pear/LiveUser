@@ -115,11 +115,10 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      * @param  array     configuration array
      * @return void
      */
-    function LiveUser_Auth_DB(&$connectOptions)
+    function LiveUser_Auth_DB(&$connectOptions, $containerName)
     {
-        $this->LiveUser_Auth_Common($connectOptions);
+        $this->LiveUser_Auth_Common($connectOptions, $containerName);
         if (is_array($connectOptions)) {
-            $this->LiveUser_Auth_Common($connectOptions);
             if (isset($connectOptions['connection']) &&
                 DB::isConnection($connectOptions['connection'])
             ) {

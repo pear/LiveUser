@@ -928,7 +928,7 @@ class LiveUser
         $this->status = LIVEUSER_STATUS_AUTHFAILED;
         //loop into auth containers
         while ($backend_cnt > $counter) {
-            $auth = &$this->authFactory($this->authContainers[$backends[$counter]]);
+            $auth = &$this->authFactory($this->authContainers[$backends[$counter]], $backends[$counter]);
             $auth->login($handle, $passwd, true);
             if ($auth->loggedIn) {
                 $this->status = LIVEUSER_STATUS_OK;
@@ -971,7 +971,8 @@ class LiveUser
             && strlen($_SESSION[$this->_options['session']['varname']]['auth_name']) > 0)
         {
             $this->_auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
-            $this->_auth = &$this->authFactory($this->authContainers[$_SESSION[$this->_options['session']['varname']]['auth_name']]);
+            $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
+            $this->_auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
             $this->_auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth']);
 
             if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
