@@ -110,6 +110,10 @@ class LiveUser_Perm_Simple
             return false;
         }
 
+        if (is_null($result)) {
+            return false;
+        }
+
         $this->permUserId = $result['userid'];
         $this->userType   = $result['usertype'];
 
