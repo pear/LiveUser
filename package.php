@@ -39,6 +39,8 @@ $notes = <<<EOT
   - added 'session_cookie_params' option
   - LiveUser now expects a true from the auth container unfreeze() method
   - Removed a potential security issue in Auth freeze()
+  - added Observers, see the wiki for more information
+  - added an observer class in example1 to show how they work
 EOT;
 
 $description = <<<EOT
