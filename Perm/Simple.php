@@ -194,24 +194,6 @@ class LiveUser_Perm_Simple
     } // end func checkRight
 
     /**
-     * Checks if the current user is a member of a certain group
-     * If $this->ondemand and $ondemand is true, the groups will be loaded on
-     * the fly.
-     *
-     * @access  public
-     * @param   integer $group_id  Id of the group to check for.
-     * @param   boolean $ondemand  allow ondemand reading of groups
-     * @return  boolean.
-     */
-    function checkGroup($group_id)
-    {
-        if (is_array($this->groupIds)) {
-            return in_array($group_id, $this->groupIds);
-        }
-        return false;
-    } // end func checkGroup
-
-    /**
      * Function returns the inquired value if it exists in the class.
      *
      * @param  string   Name of the property to be returned.
