@@ -40,6 +40,9 @@ $notes = <<<EOT
     (for example the user agent) to make session high-jacking more difficult)
   - use the new config array
   - moved example3 to the admin package
+  - moved connection handling into init() methods that are called inside
+    the factory methods
+  - moved error handling over to error stack
 EOT;
 
 $description = <<<EOT
