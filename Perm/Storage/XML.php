@@ -143,7 +143,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      * @param int $permUserId
      * @return mixed array of false on failure
      */
-    function readUserRights($permUserId)
+    function readUserRights()
     {
         $result = array();
 
@@ -153,6 +153,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
                 foreach ($tmp as $value) {
                     $level = LIVEUSER_MAX_LEVEL;
                     // level syntax: 10(2) => right id 10 at level 2
+                    $match = array();
                     if (preg_match('/(\d+)\((\d+)\)/', $value, $match)) {
                         $value = $match[1];
                         $level = $match[2];

@@ -129,6 +129,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
             }
             $this->dbc = null;
         }
+        return true;
     }
 
     /**
@@ -184,10 +185,8 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      */
     function _readUserData($handle, $passwd = '')
     {
-        $success = false;
-
         $fields = array();
-        foreach ($this->authTableCols as $key => $value) {
+        foreach ($this->authTableCols as $value) {
             if (sizeof($value) > 0) {
                 foreach ($value as $alias => $field_data) {
                     $fields[] = $field_data['name'] . ' AS ' . $alias;
