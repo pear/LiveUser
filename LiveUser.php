@@ -1262,6 +1262,38 @@ class LiveUser
     }
 
     /**
+     * Wrapper method for the permission object's own checkGroup method.
+     *
+     * @access public
+     * @param  array|int  A group id or an array of groups.
+     * @return boolean    true on success or false on failure
+     */
+    function checkGroup($groups)
+    {
+        if (is_null($groups)) {
+            return true;
+        }
+
+        if (is_object($this->_perm)) {
+            if (is_array($groups)) {
+                // assume user has the group
+                $ingroup = true;
+                foreach ($groups as $group) {
+                    if (!$this->_perm->checkGroup($group)) {
+                        $ingroup = false;
+                        break;
+                    }
+                }
+                return $ingroup;
+            } else {
+                // Remember: $groups is a single value at this point!
+                return $this->_perm->checkGroup($groups);
+            }
+        }
+
+        return false;
+    }
+    /**
      * Checks if a user is logged in.
      *
      * @access public

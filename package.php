@@ -30,6 +30,7 @@ $notes = <<<EOT
   - reworked init() method severly
   - remove the callback that catches PEAR_Error errors
   - adding getErrors() method to get the error stack
+  - added LiveUser::checkGroup() in order to check for membership in groups
 EOT;
 
 $description = <<<EOT
