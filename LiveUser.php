@@ -856,7 +856,7 @@ class LiveUser
 
         if ($this->isLoggedIn()) {
             // Check if user authenticated with new credentials
-            if ($handle && $this->_handle != $handle) {
+            if ($handle && $this->auth->handle != $handle) {
                 $this->logout(false);
             } elseif ($this->_auth->expireTime > 0 && $this->_auth->currentLogin > 0) {
                 // Check if authentication session is expired.
@@ -919,11 +919,6 @@ class LiveUser
         if (empty($handle)) {
             return false;
         }
-
-        $this->_handle   = $handle;
-        // potential security risk!
-        $this->_passwd   = $passwd;
-        $this->_remember = $remember;
 
         $counter     = 0;
         $backends    = array_keys($this->authContainers);
