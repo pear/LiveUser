@@ -171,18 +171,6 @@ class LiveUser_Auth_Common
     var $backendArrayIndex = 0;
 
     /**
-     * Indicates if backend module initialized correctly. If yes,
-     * true, if not false. Backend module won't initialize if the
-     * init value (usually an object or resource handle that
-     * identifies the backend to be used) is not of the required
-     * type.
-     *
-     * @access protected
-     * @var    boolean
-     */
-    var $init_ok = false;
-
-    /**
      * Error stack
      *
      * @access protected

@@ -108,22 +108,13 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         )
     );
 
-    /**
-     * Class constructor.
-     *
-     * @access protected
-     * @param  array     configuration array
-     * @return void
-     */
-    function LiveUser_Auth_DB(&$connectOptions, $containerName)
+    function init(&$connectOptions)
     {
-        $this->LiveUser_Auth_Common($connectOptions, $containerName);
         if (is_array($connectOptions)) {
             if (isset($connectOptions['connection']) &&
                 DB::isConnection($connectOptions['connection'])
             ) {
                 $this->dbc     = &$connectOptions['connection'];
-                $this->init_ok = true;
             } elseif (isset($connectOptions['dsn'])) {
                 $this->dsn = $connectOptions['dsn'];
                 $options = null;
@@ -132,13 +123,14 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
                 }
                 $options['portability'] = DB_PORTABILITY_ALL;
                 $this->dbc =& DB::connect($connectOptions['dsn'], $options);
-                if (DB::isError($this->dbc)) {
-                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => 'could not connect: '.$this->dbc->getMessage()));
-                } else {
-                    $this->init_ok = true;
+                if (PEAR::isError($this->dbc)) {
+                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                        array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     /**
@@ -152,7 +144,6 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         if ($this->disconnect) {
             $this->dbc->disconnect();
             $this->dbc = null;
-            $this->init_ok = null;
         }
     }
 
@@ -166,25 +157,27 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
+        if (!isset($this->authTableCols['optional']['lastlogin'])) {
+            return true;
+        }
+
+        $sql  = 'UPDATE ' . $this->authTable.'
+                 SET '    . $this->authTableCols['optional']['lastlogin']['name'] . '=' .
+                    $this->dbc->quoteSmart(date('Y-m-d H:i:s', $this->currentLogin)) . '
+                 WHERE '  . $this->authTableCols['required']['auth_user_id']['name']   . '=' .
+                    $this->dbc->quoteSmart($this->authUserId);
+
+        $result = $this->dbc->query($sql);
+
+        if (PEAR::isError($result)) {
+            $this->_stack->push(
+                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+            );
             return false;
         }
 
-        if (isset($this->authTableCols['optional']['lastlogin'])) {
-            $sql  = 'UPDATE ' . $this->authTable.'
-                     SET '    . $this->authTableCols['optional']['lastlogin']['name'] . '=' . $this->dbc->quoteSmart(date('Y-m-d H:i:s', $this->currentLogin)) . '
-                     WHERE '  . $this->authTableCols['required']['auth_user_id']['name']   . '=' . $this->dbc->quoteSmart($this->authUserId);
-
-            $res = $this->dbc->query($sql);
-
-            if (DB::isError($res)) {
-                return false;
-            }
-
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -207,10 +200,6 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      */
     function _readUserData($handle, $passwd = false)
     {
-        if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
-            return false;
-        }
         $success = false;
 
         $fields = array();
@@ -225,38 +214,49 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         // Setting the default sql query.
         $sql    = 'SELECT ' . implode(',', $fields) . '
                    FROM   ' . $this->authTable.'
-                   WHERE  ' . $this->authTableCols['required']['handle']['name'] . '=' . $this->dbc->quoteSmart($handle);
+                   WHERE  ' . $this->authTableCols['required']['handle']['name'] . '='
+                    . $this->dbc->quoteSmart($handle);
 
         if ($passwd !== false) {
             // If $passwd is set, try to find the first user with the given
             // handle and password.
-            $sql .= 'AND   ' . $this->authTableCols['required']['passwd']['name'] . '=' . $this->dbc->quoteSmart($this->encryptPW($passwd));
+            $sql .= ' AND   ' . $this->authTableCols['required']['passwd']['name'] . '='
+                . $this->dbc->quoteSmart($this->encryptPW($passwd));
         }
 
         // Query database
         $result = $this->dbc->getRow($sql, null, DB_FETCHMODE_ASSOC);
 
+        if (PEAR::isError($result)) {
         // If a user was found, read data into class variables and set
         // return value to true
-        if (!DB::isError($result) && is_array($result)) {
-            $this->handle       = $result['handle'];
-            $this->passwd       = $this->decryptPW($result['passwd']);
-            $this->isActive     = ((!isset($result['is_active']) || $result['is_active'] == 'Y') ? true : false);
-            $this->authUserId   = $result['auth_user_id'];
-            $this->lastLogin    = !empty($result['lastlogin']) ?
-                                    strtotime($result['lastlogin']) : '';
-            $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
-            $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
-            if (isset($this->authTableCols['custom'])) {
-                foreach ($this->authTableCols['custom'] as $alias => $value) {
-                    $alias = strtolower($alias);
-                    $this->propertyValues['custom'][$alias] = $result[$alias];
-                }
-            }
-
-            $success = true;
+            $this->_stack->push(
+                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+            );
+            return false;
         }
-        return $success;
+
+        if (!is_array($result)) {
+            return false;
+        }
+
+        $this->handle       = $result['handle'];
+        $this->passwd       = $this->decryptPW($result['passwd']);
+        $this->isActive     = ((!isset($result['is_active']) || $result['is_active'] == 'Y') ? true : false);
+        $this->authUserId   = $result['auth_user_id'];
+        $this->lastLogin    = !empty($result['lastlogin']) ?
+                                strtotime($result['lastlogin']) : '';
+        $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
+        $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
+        if (isset($this->authTableCols['custom'])) {
+            foreach ($this->authTableCols['custom'] as $alias => $value) {
+                $alias = strtolower($alias);
+                $this->propertyValues['custom'][$alias] = $result[$alias];
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -289,37 +289,36 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      */
     function userExists($checkHandle = false,$checkPW = false)
     {
-        if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
-            return false;
-        }
-
         $sql    = 'SELECT ' . $this->authTableCols['required']['auth_user_id'] . '
                    FROM   ' . $this->authTable;
 
         if ($checkHandle !== false && $checkPW === false) {
             // only search for the first user with the given handle
-            $sql .= 'WHERE  ' . $this->authTableCols['required']['handle'] . '=' . $this->dbc->quoteSmart($checkHandle);
+            $sql .= 'WHERE  ' . $this->authTableCols['required']['handle'] . '=' .
+                $this->dbc->quoteSmart($checkHandle);
         } elseif ($checkHandle === false && $checkPW !== false) {
             // only search for the first user with the given password
-            $sql .= 'WHERE  ' . $this->authTableCols['required']['passwd'] . '=' . $this->dbc->quoteSmart($this->encryptPW($checkPW));
+            $sql .= 'WHERE  ' . $this->authTableCols['required']['passwd'] . '=' .
+                $this->dbc->quoteSmart($this->encryptPW($checkPW));
         } else {
             // check for a user with both handle and password matching
-            $sql .= 'WHERE ' . $this->authTableCols['required']['handle'] . '=' . $this->dbc->quoteSmart($checkHandle) . '
-                     AND   ' . $this->authTableCols['required']['passwd'] . '=' . $this->dbc->quoteSmart($this->encryptPW($checkPW));
+            $sql .= 'WHERE ' . $this->authTableCols['required']['handle'] . '=' .
+                $this->dbc->quoteSmart($checkHandle) . '
+                     AND   ' . $this->authTableCols['required']['passwd'] . '=' .
+                $this->dbc->quoteSmart($this->encryptPW($checkPW));
         }
 
         $result = $this->dbc->getOne($sql);
 
-        if (DB::isError($result)) {
+        if (PEAR::isError($result)) {
+            $this->_stack->push(
+                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+            );
             return false;
         }
 
-        if (is_null($result)) {
-            return false;
-        }
-
-        return true;
+        return (bool)$result;
     }
 }
 ?>

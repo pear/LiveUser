@@ -109,22 +109,13 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
         )
     );
 
-    /**
-     * Class constructor.
-     *
-     * @access protected
-     * @param  array     configuration array
-     * @return void
-     */
-    function LiveUser_Auth_MDB2(&$connectOptions, $containerName)
+    function init(&$connectOptions)
     {
-        $this->LiveUser_Auth_Common($connectOptions, $containerName);
         if (is_array($connectOptions)) {
             if (isset($connectOptions['connection']) &&
                 MDB2::isConnection($connectOptions['connection'])
             ) {
                 $this->dbc     = &$connectOptions['connection'];
-                $this->init_ok = true;
             } elseif (isset($connectOptions['dsn'])) {
                 $this->dsn = $connectOptions['dsn'];
                 $function = null;
@@ -141,13 +132,14 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                 } else {
                     $this->dbc =& MDB2::connect($connectOptions['dsn'], $options);
                 }
-                if (MDB2::isError($this->dbc)) {
-                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => 'could not connect: '.$this->dbc->getMessage()));
-                } else {
-                    $this->init_ok = true;
+                if (PEAR::isError($this->dbc)) {
+                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                        array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     /**
@@ -161,7 +153,6 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
         if ($this->disconnect) {
             $this->dbc->disconnect();
             $this->dbc = null;
-            $this->init_ok = null;
         }
     }
 
@@ -175,27 +166,27 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
+        if (!isset($this->authTableCols['optional']['lastlogin'])) {
+            return true;
+        }
+
+        $sql  = 'UPDATE ' . $this->authTable.'
+                 SET '    . $this->authTableCols['optional']['lastlogin']['name']
+                    .'='  . $this->dbc->quote(MDB2_Date::unix2Mdbstamp($this->currentLogin), $this->authTableCols['optional']['lastlogin']['type']) . '
+                 WHERE '  . $this->authTableCols['required']['auth_user_id']['name']
+                    .'='  . $this->dbc->quote($this->authUserId, $this->authTableCols['required']['auth_user_id']['type']);
+
+        $result = $this->dbc->query($sql);
+
+        if (PEAR::isError($result)) {
+            $this->_stack->push(
+                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+            );
             return false;
         }
 
-        if (isset($this->authTableCols['optional']['lastlogin'])) {
-            $sql  = 'UPDATE ' . $this->authTable.'
-                     SET '    . $this->authTableCols['optional']['lastlogin']['name']
-                        .'='  . $this->dbc->quote(MDB2_Date::unix2Mdbstamp($this->currentLogin), $this->authTableCols['optional']['lastlogin']['type']) . '
-                     WHERE '  . $this->authTableCols['required']['auth_user_id']['name']
-                        .'='  . $this->dbc->quote($this->authUserId, $this->authTableCols['required']['auth_user_id']['type']);
-
-            $res = $this->dbc->query($sql);
-
-            if (MDB2::isError($res)) {
-                return false;
-            }
-
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**
@@ -218,10 +209,6 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      */
     function _readUserData($handle, $passwd = false)
     {
-        if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
-            return false;
-        }
         $success = false;
 
         $fields = array();
@@ -252,26 +239,34 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
 
         // If a user was found, read data into class variables and set
         // return value to true
-        if (!MDB2::isError($result) && is_array($result)) {
-
-            $this->handle       = $result['handle'];
-            $this->passwd       = $this->decryptPW($result['passwd']);
-            $this->isActive     = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
-            $this->authUserId   = $result['auth_user_id'];
-            $this->lastLogin    = isset($result['lastlogin'])?
-                                    MDB2_Date::mdbstamp2Unix($result['lastlogin']):'';
-            $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
-            $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
-            if (isset($this->authTableCols['custom'])) {
-                foreach ($this->authTableCols['custom'] as $alias => $value) {
-                    $alias = strtolower($alias);
-                    $this->propertyValues['custom'][$alias] = $result[$alias];
-                }
-            }
-
-            $success = true;
+        if (PEAR::isError($result)
+            $this->_stack->push(
+                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+            );
+            return false;
         }
-        return $success;
+
+        if (!is_array($result)) {
+            return false;
+        }
+
+        $this->handle       = $result['handle'];
+        $this->passwd       = $this->decryptPW($result['passwd']);
+        $this->isActive     = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
+        $this->authUserId   = $result['auth_user_id'];
+        $this->lastLogin    = isset($result['lastlogin'])?
+                                MDB2_Date::mdbstamp2Unix($result['lastlogin']):'';
+        $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
+        $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
+        if (isset($this->authTableCols['custom'])) {
+            foreach ($this->authTableCols['custom'] as $alias => $value) {
+                $alias = strtolower($alias);
+                $this->propertyValues['custom'][$alias] = $result[$alias];
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -304,11 +299,6 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      */
     function userExists($checkHandle = false, $checkPW = false)
     {
-        if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
-            return false;
-        }
-
         $sql    = 'SELECT ' . $this->authTableCols['required']['auth_user_id']['name'] . '
                    FROM '   . $this->authTable;
 
@@ -330,7 +320,11 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
 
         $result = $this->dbc->queryOne($sql, $this->authTableCols['required']['auth_user_id']['type']);
 
-        if (MDB2::isError($result)) {
+        if (PEAR::isError($result)) {
+            $this->_stack->push(
+                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+            );
             return false;
         }
 
