@@ -1,26 +1,47 @@
 <?php
-// LiveUser: A framework for authentication and authorization in PHP applications
-// Copyright (C) 2002-2003 Markus Wolff
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * MDB2_Complex container for permission handling
+ * A framework for authentication and authorization in PHP applications
  *
- * @package  LiveUser
+ * LiveUser is an authentication/permission framework designed
+ * to be flexible and easily extendable.
+ *
+ * Since it is impossible to have a
+ * "one size fits all" it takes a container
+ * approach which should enable it to
+ * be versatile enough to meet most needs.
+ *
+ * PHP version 4 and 5 
+ *
+ * LICENSE: This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ * MA  02111-1307  USA 
+ *
+ *
  * @category authentication
+ * @package  LiveUser_Admin
+ * @author  Markus Wolff <wolff@21st.de>
+ * @author Helgi Þormar Þorbjörnsson <dufuz@php.net>
+ * @author  Lukas Smith <smith@backendmedia.com>
+ * @author Arnaud Limbourg <arnaud@php.net>
+ * @author   Pierre-Alain Joye  <pajoye@php.net>
+ * @author  Bjoern Kraus <krausbn@php.net>
+ * @copyright 2002-2005 Markus Wolff
+ * @license http://www.gnu.org/licenses/lgpl.txt
+ * @version CVS: $Id$
+ * @link http://pear.php.net/LiveUser
  */
 
 /**
@@ -30,17 +51,22 @@ require_once 'LiveUser/Perm/Storage.php';
 require_once 'XML/Tree.php';
 
 /**
+ * XML container for permission handling
+ *
  * This is a XML backend driver for the LiveUser class.
  *
  * Requirements:
  * - File "Liveuser.php" (contains the parent class "LiveUser")
  * - XML_Parser
  *
+ * @category authentication
+ * @package  LiveUser
  * @author  Lukas Smith <smith@backendmedia.com>
  * @author  Bjoern Kraus <krausbn@php.net>
- * @version $Id$
- * @package LiveUser
- * @category authentication
+ * @copyright 2002-2005 Markus Wolff
+ * @license http://www.gnu.org/licenses/lgpl.txt
+ * @version Release: @package_version@
+ * @link http://pear.php.net/LiveUser
  */
 class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
 {
