@@ -1045,7 +1045,7 @@ class LiveUser
                     }
                     $this->_perm = &$perm;
                     if ($this->_options['cache_perm']) {
-                        $this->_perm->unfreeze($this->_options['session']['varname']);
+                        $this->_perm->unfreeze($this->_options['session']['varname'], $this->permContainer);
                     } else {
                         $this->_perm->mapUser($auth->authUserId, $auth->backendArrayIndex);
                     }
