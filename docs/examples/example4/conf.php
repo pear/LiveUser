@@ -8,20 +8,23 @@ define('EMAIL_WEBMASTER', 'krausbn@php.net');
 
 error_reporting(E_ALL);
 
+require_once 'PEAR.php';
+include_once 'HTML/Template/IT.php';
+require_once 'DB.php';
+
 function php_error_handler($errno, $errstr, $errfile, $errline)
 {
-    include_once 'HTML/Template/IT.php';
-    $tpl = new HTML_Template_IT();
-    $tpl->loadTemplatefile('error-page.tpl.php', false, false);
+    if ($errno && $errno != 2048) {
+        $tpl = new HTML_Template_IT();
+        $tpl->loadTemplatefile('error-page.tpl.php', false, false);
 
-    $tpl->setVariable('error_msg', "<b>$errfile ($errline)</b><br />$errstr");
-    $tpl->show();
-    exit();
+        $tpl->setVariable('error_msg', "<b>$errfile ($errline)</b><br />$errstr");
+        $tpl->show();
+        exit();
+    }
 }
 
 set_error_handler('php_error_handler');
-
-require_once 'PEAR.php';
 
 function pear_error_handler($err_obj)
 {
@@ -31,8 +34,6 @@ function pear_error_handler($err_obj)
 
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'pear_error_handler');
 
-require_once 'DB.php';
-
 // Data Source Name (DSN)
 //$dsn = '{dbtype}://{user}:{passwd}@{dbhost}/{dbname}';
 $dsn = 'mysql://root:@localhost/liveuser_test';
@@ -41,7 +42,6 @@ $db =& DB::connect($dsn, true);
 $db->setFetchMode(DB_FETCHMODE_ASSOC);
 
 
-require_once 'HTML/Template/IT.php';
 $tpl = new HTML_Template_IT();
 
 $LUOptions = array(
@@ -92,7 +92,6 @@ require_once 'LiveUser.php';
 
 function showLoginForm(&$liveUserObj)
 {
-    include_once 'HTML/Template/IT.php';
     $tpl = new HTML_Template_IT();
     $tpl->loadTemplatefile('loginform.tpl.php');
 
