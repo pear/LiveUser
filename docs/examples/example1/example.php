@@ -102,7 +102,7 @@ $log = &Log::factory('LU');
 // Create new LiveUser (LiveUser) object.
 // We´ll only use the auth container, permissions are not used.
 $LU =& LiveUser::factory($liveuserConfig);
-$LU->attachObserverObj($log);
+$LU->attachObserver($log);
 
 $username = (isset($_REQUEST['handle'])) ? $_REQUEST['handle'] : NULL;
 $password = (isset($_REQUEST['passwd'])) ? $_REQUEST['passwd'] : NULL;
