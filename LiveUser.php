@@ -1430,14 +1430,13 @@ class LiveUser
     function checkRightLevel($rights, $owner_user_id, $owner_group_id)
     {
         $level = $this->checkRight($rights);
-        if ($level && is_a($this->_perm, 'LiveUser_Perm_Complex')) {
-            if (!is_null($owner_user_id) || !is_null($owner_group_id)) {
-                $level = $this->_perm->checkLevel($level, $owner_user_id, $owner_group_id);
-            }
-            return $level;
+        if ($level && is_a($this->_perm, 'LiveUser_Perm_Complex')
+            && (!is_null($owner_user_id) || !is_null($owner_group_id))
+        ) {
+            $level = $this->_perm->checkLevel($level, $owner_user_id, $owner_group_id);
         }
 
-        return false;
+        return (bool)$level;
     }
 
     /**
