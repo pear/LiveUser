@@ -61,28 +61,17 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     {
         $this->LiveUser_Perm_Storage_SQL($confArray, $storageConf);
         if (isset($storageConf['connection']) &&
-                DB::isConnection($storageConf['connection']))
-        {
+                DB::isConnection($storageConf['connection'])
+        ) {
             $this->dbc = &$storageConf['connection'];
         } elseif (isset($storageConf['dsn'])) {
             $this->dsn = $storageConf['dsn'];
-            $function = null;
-            if (isset($storageConf['function'])) {
-                $function = $storageConf['function'];
-            }
             $options = null;
             if (isset($storageConf['options'])) {
                 $options = $storageConf['options'];
             }
             $options['portability'] = DB_PORTABILITY_ALL;
-            if ($function == 'singleton') {
-                $this->dbc =& DB::singleton($storageConf['dsn'], $options);
-            } else {
-                $this->dbc =& DB::connect($storageConf['dsn'], $options);
-            }
-            if (PEAR::isError($this->dbc)) {
-                return false;
-            }
+            $this->dbc =& DB::connect($storageConf['dsn'], $options);
         }
     }
 
@@ -90,26 +79,30 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      *
      * @access public
-     * @param int $uid
+     * @param int $authUserId
      * @param string $containerName
      * @return mixed array or false on failure
      */
-    function mapUser($uid, $containerName)
+    function mapUser($authUserId, $containerName)
     {
         $query = '
             SELECT
-                LU.perm_user_id AS userid,
-                LU.perm_type    AS usertype
+                ' . $this->getAlias('perm_user_id') . ' AS perm_user_id,
+                ' . $this->getAlias('perm_type') . '    AS perm_type
             FROM
-                '.$this->prefix.'perm_users LU
+                '.$this->prefix.'perm_users
             WHERE
-                auth_user_id = '.$this->dbc->quoteSmart($uid).'
+                ' . $this->getAlias('auth_user_id') . ' = '.
+                    $this->dbc->quoteSmart($authUserId).'
             AND
-                auth_container_name = '.$this->dbc->quoteSmart($containerName);
+                ' . $this->getAlias('auth_container_name') . ' = '.
+                    $this->dbc->quoteSmart((string)$containerName);
 
         $result = $this->dbc->getRow($query, null, DB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -125,25 +118,28 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      * @access public
      * @param int $permUserId
-     * @return mixed array or false on failure
+     * @return mixed array of false on failure
      */
     function readUserRights($permUserId)
     {
         $query = '
             SELECT
-                R.right_id,
-                U.right_level
+                R.' . $this->getAlias('right_id') . ',
+                U.' . $this->getAlias('right_level') . '
             FROM
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'userrights U
             WHERE
-                R.right_id = U.right_id
+                R.' . $this->getAlias('right_id') . ' = U.' . $this->getAlias('right_id') . '
             AND
-                U.perm_user_id = '.$permUserId;
+                U.' . $this->getAlias('perm_user_id') . ' = '.
+                    $this->dbc->quoteSmart($permUserId);
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -162,19 +158,22 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         // get all areas in which the user is area admin
         $query = '
             SELECT
-                R.right_id,
-                '.LIVEUSER_MAX_LEVEL.' AS right_level
+                R.' . $this->getAlias('right_id') . ' AS right_id,
+                '.LIVEUSER_MAX_LEVEL.'                AS right_level
             FROM
                 '.$this->prefix.'area_admin_areas AAA,
                 '.$this->prefix.'rights R
             WHERE
                 AAA.area_id = R.area_id
             AND
-                AAA.perm_user_id = '.$permUserId;
+                AAA.' . $this->getAlias('perm_user_id') . ' = '.
+                    $this->dbc->quoteSmart($permUserId);
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -194,20 +193,27 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                GU.group_id
+                GU.' . $this->getAlias('group_id') . '
             FROM
                 '.$this->prefix.'groupusers GU,
                 '.$this->prefix.'groups G
             WHERE
-                GU.group_id = G.group_id
+                GU.' . $this->getAlias('group_id') . ' = G. ' . $this->getAlias('group_id') . '
             AND
-                G.is_active = '.$this->dbc->quoteSmart('Y').'
-            AND
-                perm_user_id = '.$permUserId;
+                ' . $this->getAlias('perm_user_id') . ' = '.
+                    $this->dbc->quoteSmart($permUserId);
+
+        if (isset($this->tables['groups']['fields']['is_active'])) {
+            $query .= 'AND
+                G.' . $this->getAlias('is_active') . '=' .
+                    $this->dbc->quoteSmart(true);
+        }
 
         $result = $this->dbc->getCol($query);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -223,25 +229,27 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * @access  public
      * @param   array $groupIds array with id's for the groups
      *                          that rights will be read from
-     * @see    readRights()
-     * @return  mixed   DB_Error on failure or nothing
+     * @return  mixed   array or false on failure
      */
     function readGroupRights($groupIds)
     {
         $query = '
             SELECT
-                GR.right_id,
-                MAX(GR.right_level)
+                GR.' . $this->getAlias('right_id') . ',
+                MAX(GR.' . $this->getAlias('right_level') . ')
             FROM
                 '.$this->prefix.'grouprights GR
             WHERE
-                GR.group_id IN('.implode(', ', $groupIds).')
+                GR.' . $this->getAlias('group_id') . ' IN('.
+                    implode(', ', $groupIds).')
             GROUP BY
-                GR.right_id';
+                GR.' . $this->getAlias('right_id') . '';
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -260,26 +268,31 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                DISTINCT SG.subgroup_id
+                DISTINCT SG.' . $this->getAlias('subgroup_id') . '
             FROM
                 '.$this->prefix.'groups G,
                 '.$this->prefix.'group_subgroups SG
             WHERE
-                SG.subgroup_id = G.' . $this->groupTableCols['required']['group_id']['name'] . '
+                SG.' . $this->getAlias('subgroup_id') . ' = G.' .
+                    $this->getAlias('group_id') . '
             AND
-                SG.group_id IN ('.implode(', ', $newGroupIds).')
+                SG.' . $this->getAlias('group_id') . ' IN ('.
+                    implode(', ', $newGroupIds).')
             AND
-                SG.subgroup_id NOT IN ('.implode(', ', $groupIds).')';
+                SG.' . $this->getAlias('subgroup_id') . ' NOT IN ('.
+                    implode(', ', $groupIds).')';
 
-        if (isset($this->groupTableCols['optional']['is_active'])) {
+        if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= 'AND
-                G.' . $this->groupTableCols['optional']['is_active']['name'] . '=' .
+                G.' . $this->getAlias('is_active') . '=' .
                     $this->dbc->quoteSmart('Y');
         }
 
         $result = $this->dbc->getCol($query);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -299,21 +312,25 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $query = '
             SELECT
             DISTINCT
-                TR.right_level,
-                TR.right_id
+                TR.' . $this->getAlias('right_level') . ',
+                TR.' . $this->getAlias('right_id') . '
             FROM
                 '.$this->prefix.'rights R,
                 '.$this->prefix.$table.'rights TR
             WHERE
-                TR.right_id = R.right_id
+                TR.' . $this->getAlias('right_id') . ' = R.' . $this->getAlias('right_id') . '
             AND
-                R.right_id IN ('.implode(', ', array_keys($rightIds)).')
+                R.' . $this->getAlias('right_id') . ' IN ('.
+                    implode(', ', array_keys($rightIds)).')
             AND
-                R.has_implied = '.$this->dbc->quoteSmart('Y');
+                R.' . $this->getAlias('has_implied') . '='.
+                    $this->dbc->quoteSmart('Y');
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -321,40 +338,39 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     *
-     *
-     * @access public
-     * @param array $currentRights
-     * @param string $currentLevel
-     * @return mixed array of false on failure
-     */
+    *
+    *
+    * @access public
+    * @param array $currentRights
+    * @param string $currentLevel
+    * @return mixed array or false on failure
+    */
     function readImpliedRights($currentRights, $currentLevel)
     {
         $query = '
             SELECT
-                RI.implied_right_id AS right_id,
-                '.$currentLevel.' AS right_level,
-                R.has_implied
+                RI.' . $this->getAlias('implied_right_id') . ' AS right_id,
+                '.$currentLevel.'                              AS right_level,
+                R.' . $this->getAlias('has_implied') . '       AS has_implied
             FROM
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'right_implied RI
             WHERE
-                RI.implied_right_id = R.right_id
+                RI.' . $this->getAlias('implied_right_id') . ' = R.' . $this->getAlias('right_id') . '
             AND
-                RI.right_id IN ('.implode(', ', $currentRights).')';
+                RI.' . $this->getAlias('right_id') . ' IN ('.
+                    implode(', ', $currentRights).')';
 
         $result = $this->dbc->getAll($query, null, DB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
-        if (!is_array($result)) {
-            return null;
-        }
-
-        for ($i = 0, $j = count($result); $i < $j; ++$i) {
-            $result[$i]['has_implied'] = (bool)($result[$i]['has_implied'] == 'Y');
+        for($i=0,$j=count($result); $i<$j; ++$i) {
+            $result[$i]['has_implied'] = ($result[$i]['has_implied'] == 'Y');
         }
 
         return $result;

@@ -74,14 +74,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
             if (isset($storageConf['options'])) {
                 $options = $storageConf['options'];
             }
-            $options['optimize'] = 'portability';
+            $options['portability'] = MDB_PORTABILITY_ALL;
             if ($function == 'singleton') {
                 $this->dbc =& MDB::singleton($storageConf['dsn'], $options);
             } else {
                 $this->dbc =& MDB::connect($storageConf['dsn'], $options);
-            }
-            if (PEAR::isError($this->dbc)) {
-                return false;
             }
         }
     }
@@ -90,27 +87,34 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      *
      *
      * @access public
-     * @param int $uid
+     * @param int $authUserId
      * @param string $containerName
      * @return mixed array or false on failure
      */
-    function mapUser($uid, $containerName)
+    function mapUser($authUserId, $containerName)
     {
         $query = '
             SELECT
-                LU.perm_user_id AS userid,
-                LU.perm_type    AS usertype
+                ' . $this->getAlias('perm_user_id') . ' AS perm_user_id,
+                ' . $this->getAlias('perm_type') . '    AS perm_type
             FROM
-                '.$this->prefix.'perm_users LU
+                '.$this->prefix.'perm_users
             WHERE
-                auth_user_id = '.$this->dbc->getValue('text', $uid).'
+                ' . $this->getAlias('auth_user_id') . ' = '.
+                    $this->dbc->getValue($this->fields[$this->getAlias('auth_user_id')], $authUserId).'
             AND
-                auth_container_name = '.$this->dbc->getValue('text', $containerName);
+                ' . $this->getAlias('auth_container_name') . ' = '.
+                    $this->dbc->getValue($this->fields[$this->getAlias('auth_container_name')], $containerName);
 
-        $types = array('integer', 'integer');
+        $types = array(
+            $this->fields[$this->getAlias('perm_user_id')],
+            $this->fields[$this->getAlias('perm_type')]
+        );
         $result = $this->dbc->queryRow($query, $types, MDB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -132,20 +136,26 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                R.right_id,
-                U.right_level
+                R.' . $this->getAlias('right_id') . ',
+                U.' . $this->getAlias('right_level') . '
             FROM
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'userrights U
             WHERE
-                R.right_id = U.right_id
+                R.' . $this->getAlias('right_id') . ' = U.' . $this->getAlias('right_id') . '
             AND
-                U.perm_user_id = '.$this->dbc->getValue('integer', $permUserId);
+                U.' . $this->getAlias('perm_user_id') . ' = '.
+                    $this->dbc->getValue($this->fields[$this->getAlias('perm_user_id')], $permUserId);
 
-        $types = array('integer', 'integer');
+        $types = array(
+            $this->fields[$this->getAlias('right_id')],
+            $this->fields[$this->getAlias('right_level')]
+        );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -164,20 +174,26 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
         // get all areas in which the user is area admin
         $query = '
             SELECT
-                R.right_id,
-                '.LIVEUSER_MAX_LEVEL.' AS right_level
+                R.' . $this->getAlias('right_id') . ' AS right_id,
+                '.LIVEUSER_MAX_LEVEL.'                AS right_level
             FROM
                 '.$this->prefix.'area_admin_areas AAA,
                 '.$this->prefix.'rights R
             WHERE
                 AAA.area_id = R.area_id
             AND
-                AAA.perm_user_id = '.$this->dbc->getValue('integer', $permUserId);
+                AAA.' . $this->getAlias('perm_user_id') . ' = '.
+                    $this->dbc->getValue($this->fields[$this->getAlias('perm_user_id')], $permUserId);
 
-        $types = array('integer', 'integer');
+        $types = array(
+            $this->fields[$this->getAlias('right_id')],
+            $this->fields[$this->getAlias('right_level')]
+        );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -197,20 +213,27 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                GU.group_id
+                GU.' . $this->getAlias('group_id') . '
             FROM
                 '.$this->prefix.'groupusers GU,
                 '.$this->prefix.'groups G
             WHERE
-                GU.group_id = G.group_id
+                GU.' . $this->getAlias('group_id') . ' = G. ' . $this->getAlias('group_id') . '
             AND
-                G.is_active = '.$this->dbc->getValue('boolean', true).'
-            AND
-                perm_user_id = '.$this->dbc->getValue('integer', $permUserId);
+                ' . $this->getAlias('perm_user_id') . ' = '.
+                    $this->dbc->getValue($this->fields[$this->getAlias('perm_user_id')], $permUserId);
 
-        $result = $this->dbc->queryCol($query, $this->groupTableCols['required']['group_id']['type']);
+        if (isset($this->tables['groups']['fields']['is_active'])) {
+            $query .= 'AND
+                G.' . $this->getAlias('is_active') . '=' .
+                    $this->dbc->getValue($this->fields[$this->getAlias('is_active')], true);
+        }
+
+        $result = $this->dbc->queryCol($query, $this->fields[$this->getAlias('group_id')]);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -232,19 +255,25 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                GR.right_id,
-                MAX(GR.right_level)
+                GR.' . $this->getAlias('right_id') . ',
+                MAX(GR.' . $this->getAlias('right_level') . ')
             FROM
                 '.$this->prefix.'grouprights GR
             WHERE
-                GR.group_id IN('.implode(', ', $groupIds).')
+                GR.' . $this->getAlias('group_id') . ' IN('.
+                    implode(', ', $groupIds).')
             GROUP BY
-                GR.right_id';
+                GR.' . $this->getAlias('right_id') . '';
 
-        $types = array('integer', 'integer');
+        $types = array(
+            $this->fields[$this->getAlias('right_id')],
+            $this->fields[$this->getAlias('right_level')]
+        );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -263,26 +292,31 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                DISTINCT SG.subgroup_id
+                DISTINCT SG.' . $this->getAlias('subgroup_id') . '
             FROM
                 '.$this->prefix.'groups G,
                 '.$this->prefix.'group_subgroups SG
             WHERE
-                SG.subgroup_id = G.' . $this->groupTableCols['required']['group_id']['name'] . '
+                SG.' . $this->getAlias('subgroup_id') . ' = G.' .
+                    $this->getAlias('group_id') . '
             AND
-                SG.group_id IN ('.implode(', ', $newGroupIds).')
+                SG.' . $this->getAlias('group_id') . ' IN ('.
+                    implode(', ', $newGroupIds).')
             AND
-                SG.subgroup_id NOT IN ('.implode(', ', $groupIds).')';
+                SG.' . $this->getAlias('subgroup_id') . ' NOT IN ('.
+                    implode(', ', $groupIds).')';
 
-        if (isset($this->groupTableCols['optional']['is_active'])) {
+        if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= 'AND
-                G.' . $this->groupTableCols['optional']['is_active']['name'] . '=' .
-                    $this->dbc->getValue($this->groupTableCols['optional']['is_active']['type'], true);
+                G.' . $this->getAlias('is_active') . '=' .
+                    $this->dbc->getValue($this->fields[$this->getAlias('is_active')], true);
         }
 
-        $result = $this->dbc->queryCol($query, $this->groupTableCols['required']['group_id']['type']);
+        $result = $this->dbc->queryCol($query, $this->fields[$this->getAlias('group_id')]);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -293,7 +327,7 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      *
      *
      * @access public
-     * @param array $rightsId
+     * @param array $rightIds
      * @param string $table
      * @return mixed array or false on failure
      */
@@ -302,22 +336,29 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
         $query = '
             SELECT
             DISTINCT
-                TR.right_level,
-                TR.right_id
+                TR.' . $this->getAlias('right_level') . ',
+                TR.' . $this->getAlias('right_id') . '
             FROM
                 '.$this->prefix.'rights R,
                 '.$this->prefix.$table.'rights TR
             WHERE
-                TR.right_id = R.right_id
+                TR.' . $this->getAlias('right_id') . ' = R.' . $this->getAlias('right_id') . '
             AND
-                R.right_id IN ('.implode(', ', array_keys($rightIds)).')
+                R.' . $this->getAlias('right_id') . ' IN ('.
+                    implode(', ', array_keys($rightIds)).')
             AND
-                R.has_implied='.$this->dbc->getValue('boolean', true);
+                R.' . $this->getAlias('has_implied') . '='.
+                    $this->dbc->getValue($this->fields[$this->getAlias('has_implied')], true);
 
-        $types = array('integer', 'integer');
+        $types = array(
+            $this->fields[$this->getAlias('right_level')],
+            $this->fields[$this->getAlias('right_id')],
+        );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true, false, true);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
@@ -336,21 +377,28 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                RI.implied_right_id AS right_id,
-                '.$currentLevel.' AS right_level,
-                R.has_implied
+                RI.' . $this->getAlias('implied_right_id') . ' AS right_id,
+                '.$currentLevel.'                              AS right_level,
+                R.' . $this->getAlias('has_implied') . '       AS has_implied
             FROM
                 '.$this->prefix.'rights R,
                 '.$this->prefix.'right_implied RI
             WHERE
-                RI.implied_right_id = R.right_id
+                RI.' . $this->getAlias('implied_right_id') . ' = R.' . $this->getAlias('right_id') . '
             AND
-                RI.right_id IN ('.implode(', ', $currentRights).')';
+                RI.' . $this->getAlias('right_id') . ' IN ('.
+                    implode(', ', $currentRights).')';
 
-        $types = array('integer', 'integer', 'boolean');
+        $types = array(
+            $this->fields[$this->getAlias('right_id')],
+            $this->fields[$this->getAlias('right_level')],
+            $this->fields[$this->getAlias('has_implied')]
+        );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
             return false;
         }
 
