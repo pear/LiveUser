@@ -36,8 +36,8 @@ $conf = array(
 );
 
 $installer =& new LiveUser_Misc_Schema_Install();
-#$result = $installer->installAuthSchema($conf['authContainers'][0], 'auth_mdb_schema.xml', true);
-#var_dump($result);
+$result = $installer->installAuthSchema($conf['authContainers'][0], 'auth_mdb_schema.xml', true);
+var_dump($result);
 $result = $installer->installPermSchema($conf['permContainer']['storage']['DB'], 'perm_mdb_schema.xml', false);
 var_dump($result);
 */
