@@ -291,7 +291,7 @@ class LiveUser
      * @access protected
      * @var    array
      */
-    var $_events = array(
+    var $events = array(
         'onLogin',     // successfully logged in
         'forceLogin',  // login required -> you could display a login form
         'onLogout',    // before logout -> can be used to cleanup own stuff
@@ -1402,7 +1402,7 @@ class LiveUser
      */
     function attachObserver($event, &$observer)
     {
-        if (!in_array($event, $this->_events)) {
+        if (!in_array($event, $this->events)) {
             $this->_stack->push(
                 LIVEUSER_ERROR_UNKNOWN_EVENT, 'exception',
                     array('event' => $event),
@@ -1447,7 +1447,7 @@ class LiveUser
     function attachObserverObj(&$object, $methods = array())
     {
         if (empty($methods)) {
-            foreach ($this->_events as $event) {
+            foreach ($this->events as $event) {
                 if (method_exists($object, $event)) {
                     $methods[$event] = $event;
                 }
