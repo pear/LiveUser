@@ -961,7 +961,7 @@ class LiveUser
         // Return boolean that indicates whether a auth object has been created
         // or retrieved from session
         if ($this->isLoggedIn()) {
-            $this->_status = LIVEUSER_STATUS_OK;
+            $this->status = LIVEUSER_STATUS_OK;
             return true;
         // Force user login.
         } elseif ($this->_options['login']['force']) {
@@ -1085,7 +1085,7 @@ class LiveUser
                         $this->_perm->mapUser($auth->authUserId, $auth->backendArrayIndex);
                     }
                 }
-                $this->_status = LIVEUSER_STATUS_UNFROZEN;
+                $this->status = LIVEUSER_STATUS_UNFROZEN;
                 $this->dispatcher->post($this, 'onUnfreeze');
                 return true;
             }
