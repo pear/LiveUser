@@ -78,8 +78,6 @@ class LiveUser_Perm_Simple
      */
     var $_stack = null;
 
-    var $alias = array();
-
     /**
      * Class constructor. Feel free to override in backend subclasses.
      */
@@ -94,7 +92,6 @@ class LiveUser_Perm_Simple
                 }
             }
         }
-        $this->alias = LiveUser::arrayMergeClobber(LiveUser_Perm_Simple::getAliasDefaults(), $this->alias);
     }
 
     function getAliasDefaults()
@@ -134,9 +131,9 @@ class LiveUser_Perm_Simple
      * @param   string  name of the auth container
      * @return  boolean true on success or false on failure
      */
-    function init($uid = null, $containerName = null)
+    function init($authUserId = null, $containerName = null)
     {
-        $result = $this->_storage->mapUser($uid, $containerName);
+        $result = $this->_storage->mapUser($authUserId, $containerName);
         if ($result === false) {
             return false;
         }
@@ -145,8 +142,8 @@ class LiveUser_Perm_Simple
             return false;
         }
 
-        $this->permUserId = $result['userid'];
-        $this->userType   = $result['usertype'];
+        $this->permUserId = $result['perm_user_id'];
+        $this->userType   = $result['perm_type'];
 
         $this->readRights();
 

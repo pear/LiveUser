@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /**
- * MDB2_Complex container for permission handling
+ * Cache container for permission handling
  *
  * @package  LiveUser
  * @category authentication
@@ -29,17 +29,7 @@
 require_once 'LiveUser/Perm/Storage.php';
 
 /**
- * This is a PEAR::MDB2 backend driver for the LiveUser class.
- * A PEAR::MDB2 connection object can be passed to the constructor to reuse an
- * existing connection. Alternatively, a DSN can be passed to open a new one.
- *
- * Requirements:
- * - File "Liveuser.php" (contains the parent class "LiveUser")
- * - Array of connection options or a PEAR::MDB2 connection object must be
- *   passed to the constructor.
- *   Example: array('dsn' => 'mysql://user:pass@host/db_name')
- *              OR
- *            &$conn (PEAR::MDB2 connection object)
+ * This is a Cache backend driver for the LiveUser class.
  *
  * @author  Lukas Smith <smith@backendmedia.com>
  * @author  Bjoern Kraus <krausbn@php.net>
@@ -61,12 +51,12 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         $this->_storage = LiveUser::storageFactory($confArray, $storageConf);
     }
 
-    function mapUser($uid, $containerName)
+    function mapUser($authUserId, $containerName)
     {
         if (in_cache) {
             return cache;
         }
-        $result = $this->_storage->mapUser($uid, $containerName);
+        $result = $this->_storage->mapUser($authUserId, $containerName);
         if ($result === false) {
             return false;
         }
@@ -135,7 +125,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * right => 1
      *
      * @access  public
-     * @return  mixed   MDB2_Error on failure or nothing
+     * @return  boolean
      */
     function readGroupRights($groupIds)
     {

@@ -45,32 +45,6 @@
 class LiveUser_Perm_Storage
 {
     /**
-     * Columns of the perm table.
-     * Associative array with the names of the perm table columns.
-     * The 'group_id' and 'group_define_name' fields have to be set.
-     * 'group_type', 'is_active', 'owner_user_id' and 'owner_group_id' are optional.
-     * It doesn't make sense to set only one of the time columns without the
-     * other.
-     *
-     * The type attribute is only useful when using MDB or MDB2.
-     *
-     * @access public
-     * @var    array
-     */
-    var $groupTableCols = array(
-        'required' => array(
-            'group_id' => array('type' => 'integer', 'name' => 'group_id'),
-            'group_define_name' => array('type' => 'text', 'name' => 'group_define_name')
-        ),
-        'optional' => array(
-            'group_type'    => array('type' => 'integer', 'name' => 'group_type'),
-            'is_active'    => array('type' => 'boolean', 'name' => 'is_active'),
-            'owner_user_id'  => array('type' => 'integer', 'name' => 'owner_user_id'),
-            'owner_group_id' => array('type' => 'integer', 'name' => 'owner_group_id')
-        )
-    );
-
-    /**
      * Constructor
      *
      * @access protected
@@ -89,7 +63,7 @@ class LiveUser_Perm_Storage
         }
     }
 
-    function mapUser($uid, $containerName)
+    function mapUser($authUserId, $containerName)
     {
     }
 

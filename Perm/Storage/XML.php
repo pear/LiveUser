@@ -69,32 +69,6 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     var $userObj = null;
 
     /**
-     * Columns of the perm table.
-     * Associative array with the names of the perm table columns.
-     * The 'group_id' and 'group_define_name' fields have to be set.
-     * 'group_type', 'is_active', 'owner_user_id' and 'owner_group_id' are optional.
-     * It doesn't make sense to set only one of the time columns without the
-     * other.
-     *
-     * The type attribute is only useful when using MDB or MDB2.
-     *
-     * @access public
-     * @var    array
-     */
-    var $groupTableCols = array(
-        'required' => array(
-            'group_id' => array('type' => 'integer', 'name' => 'group_id'),
-            'group_define_name' => array('type' => 'text', 'name' => 'group_define_name')
-        ),
-        'optional' => array(
-            'group_type'    => array('type' => 'integer', 'name' => 'group_type'),
-            'is_active'    => array('type' => 'boolean', 'name' => 'is_active'),
-            'owner_user_id'  => array('type' => 'integer', 'name' => 'owner_user_id'),
-            'owner_group_id' => array('type' => 'integer', 'name' => 'owner_group_id')
-        )
-    );
-
-    /**
      * Constructor
      *
      * @access protected
@@ -131,11 +105,11 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      *
      *
      * @access public
-     * @param int $uid
+     * @param int $authUserId
      * @param string $containerName
      * @return mixed array or false on failure
      */
-    function mapUser($uid, $containerName)
+    function mapUser($authUserId, $containerName)
     {
         $nodeIndex = 0;
         $userIndex = 0;
@@ -147,11 +121,11 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
                         if ($user->name != 'user') {
                             continue;
                         }
-                        if ($uid == $user->attributes['authUserId'] &&
+                        if ($authUserId == $user->attributes['authUserId'] &&
                             $containerName == $user->attributes['authContainerName']
                         ) {
-                            $result['userid'] = $user->attributes['userId'];
-                            $result['usertype']   = $user->attributes['type'];
+                            $result['perm_user_id'] = $user->attributes['userId'];
+                            $result['perm_users']   = $user->attributes['type'];
                             $this->userObj    =& $this->tree->root->getElement(array($nodeIndex, $userIndex));
                             return $result;
                         }

@@ -79,7 +79,8 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                 if (is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
                     $this->file = getenv('DOCUMENT_ROOT') . $this->file;
                 } else {
-                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => "Auth initialisation failed. Can't find xml file."));
+                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                        array('container' => "Auth initialisation failed. Can't find xml file."));
                 }
             }
             if ($this->file) {
@@ -87,16 +88,19 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                     $tree =& new XML_Tree($this->file);
                     $err =& $tree->getTreeFromFile();
                     if (PEAR::isError($err)) {
-                        $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => 'could not connect: '.$err->getMessage()));
+                        $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                            array('container' => 'could not connect: '.$err->getMessage()));
                     } else {
                         $this->tree = $tree;
                         $this->init_ok = true;
                     }
                 } else {
-                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => "Auth initialisation failed. Can't find XML_Tree class."));
+                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                        array('container' => "Auth initialisation failed. Can't find XML_Tree class."));
                 }
             } else {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => "Auth initialisation failed. Can't find xml file."));
+                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                    array('container' => "Auth initialisation failed. Can't find xml file."));
             }
         }
     }
@@ -125,7 +129,8 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     function _updateUserData()
     {
         if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => get_class($this)));
             return false;
         }
 
@@ -163,7 +168,8 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
         @fclose($fp);
 
         if (!$success) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(), 'Cannot read XML Auth file');
+            $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                array(), 'Cannot read XML Auth file');
         }
 
         return $success;
@@ -190,7 +196,8 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     function _readUserData($userHandle, $userPasswd = false)
     {
         if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => get_class($this)));
             return false;
         }
         $success = false;
@@ -269,7 +276,8 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     function userExists($checkHandle=false,$checkPW=false)
     {
         if (!$this->init_ok) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error', array('container' => get_class($this)));
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => get_class($this)));
             return false;
         }
         foreach ($this->tree->root->children as $user) {
