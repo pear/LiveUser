@@ -144,6 +144,8 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                     'right_id' => 'seq',
                     'area_id' => false,
                     'right_define_name' => false,
+                    'has_implied' => false,
+                    'has_level' => false,
                 ),
                 'joins' => array(
                     'areas' => 'area_id',
@@ -178,6 +180,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                 'fields' => array(
                     'section_id' => true,
                     'section_type' => true,
+                    'language_id' => true,
                     'name' => false,
                     'description' => false,
                 ),
@@ -202,6 +205,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                 'ids' => array(
                     'section_id',
                     'section_type',
+                    'language_id',
                 ),
             ),
             'areas' => array(
@@ -250,6 +254,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                 'joins' => array(
                     'groupusers' => 'group_id',
                     'grouprights' => 'group_id',
+                    'group_subgroups' => 'subgroup_id',
                     'translations' => array(
                         'group_id' => 'section_id',
                         LIVEUSER_SECTION_GROUP => 'section_type',
@@ -280,6 +285,15 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                     'groups' => 'group_id',
                 ),
             ),
+            'group_subgroups' => array(
+                'fields' => array(
+                    'group_id' => true,
+                    'subgroup_id' => true,
+                ),
+                'joins' => array(
+                    'groups' => 'group_id',
+                ),
+            ),
         );
     }
 
@@ -301,13 +315,17 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
             'section_type' => 'integer',
             'name' => 'text',
             'description' => 'text',
+            'language_id' => 'text',
             'group_id' => 'integer',
             'group_type' => 'integer',
             'group_define_name' => 'text',
             'is_active' => 'boolean',
             'owner_user_id' => 'integer',
             'owner_group_id' => 'integer',
+            'has_implied' => 'boolean',
+            'has_level' => 'boolean',
             'implied_right_id' => 'integer',
+            'subgroup_id' => 'integer'
         );
     }
 
@@ -329,50 +347,18 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
             'section_type' => 'section_type',
             'name' => 'name',
             'description' => 'description',
+            'language_id' => 'language_id',
             'group_id' => 'group_id',
             'group_type' => 'group_type',
             'group_define_name' => 'group_define_name',
             'is_active' => 'is_active',
             'owner_user_id' => 'owner_user_id',
             'owner_group_id' => 'owner_group_id',
+            'has_implied' => 'has_implied',
+            'has_level' => 'has_level',
             'implied_right_id' => 'implied_right_id',
+            'subgroup_id' => 'subgroup_id',
         );
-    }
-
-    /**
-     *
-     *
-     * @access public
-     * @param int $authUserId
-     * @param string $containerName
-     * @return mixed array or false on failure
-     */
-    function mapUser($authUserId, $containerName)
-    {
-    }
-
-    /**
-     * Reads all rights of current user into a
-     * two-dimensional associative array, having the
-     * area names as the key of the 1st dimension.
-     * Group rights and invididual rights are being merged
-     * in the process.
-     *
-     * @access public
-     * @param int $permUserId
-     * @return mixed array of false on failure
-     */
-    function readUserRights($permUserId)
-    {
-    }
-
-    /**
-     * properly disconnect from resources
-     *
-     * @access  public
-     */
-    function disconnect()
-    {
     }
 }
 ?>
