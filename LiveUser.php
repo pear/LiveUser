@@ -454,19 +454,13 @@ class LiveUser
         $obj = &new LiveUser();
 
         if (!empty($conf)) {
-            $init = $obj->_readConfig($conf, $confName);
-
-            if (!$init) {
-                return false;
+            if ($obj->_readConfig($conf, $confName)) {
+                if (isset($obj->_options['autoInit']) && $obj->_options['autoInit']) {
+                    $obj->init($handle, $passwd, $logout, $remember);
+                }
             }
         }
 
-        if (isset($obj->_options['autoInit']) && $obj->_options['autoInit']) {
-            $init = $obj->init($handle, $passwd, $logout, $remember);
-            if (!$init) {
-                return false;
-            }
-        }
 
         return $obj;
     }
@@ -558,8 +552,8 @@ class LiveUser
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
-        $auth = &new $classname($conf, $containerName);
-        if ($auth->init($conf) === false) {
+        $auth = &new $classname();
+        if ($auth->init($conf, $containerName) === false) {
             return false;
         }
         return $auth;
@@ -579,7 +573,7 @@ class LiveUser
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
-        $perm = &new $classname($conf);
+        $perm = &new $classname();
         if ($perm->init($conf) === false) {
             return false;
         }
@@ -602,12 +596,12 @@ class LiveUser
             return false;
         // if the storage container does not exist try the next one in the stack
         } elseif (count($confArray) > 1) {
-            $storageConf =& array_pop($confArray);
+            array_pop($confArray);
             return LiveUser::storageFactory($confArray, $classprefix);
         }
         $storageConf =& array_pop($confArray);
-        $storage = &new $storageName($confArray, $storageConf);
-        if ($storage->init($storageConf) === false) {
+        $storage = &new $storageName();
+        if ($storage->init($storageConf, $confArray) === false) {
             return false;
         }
         return $storage;
@@ -968,7 +962,8 @@ class LiveUser
         $this->status = LIVEUSER_STATUS_AUTHFAILED;
 
         //loop into auth containers
-        foreach ($this->authContainers as $index => $foo) {
+        $indexes = array_keys($this->authContainers);
+        foreach ($indexes as $index) {
             if (!$passwd && (!isset($this->authContainers[$index]['allowEmptyPasswords'])
                 || !$this->authContainers[$index]['allowEmptyPasswords'])
             ) {
