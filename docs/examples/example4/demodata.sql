@@ -1,22 +1,13 @@
 # $Id$
 
 #
-# Table structure for table 'liveuser_languages'
-#
-CREATE TABLE `liveuser_languages` (
-    `language_id` smallint(5) unsigned NOT NULL default '0', 
-    `two_letter_name` char(2) NOT NULL default '',
-    PRIMARY KEY (`language_id`),
-    UNIQUE KEY `two_letter_name` (`two_letter_name`)
-);
-
-#
 # Table structure for table 'liveuser_translations'
 #
+DROP TABLE IF EXISTS `liveuser_translations`;
 CREATE TABLE `liveuser_translations` (
     `section_id` int(11) unsigned NOT NULL default '0',
     `section_type` tinyint(3) unsigned NOT NULL default '0',
-    `language_id` smallint(5) unsigned NOT NULL default '0',
+    `language_id` varchar(2) NOT NULL default '',
     `name` varchar(50) NOT NULL default '',
     `description` varchar(255) default NULL,
     PRIMARY KEY (`section_id`,`section_type`, `language_id`)
@@ -66,25 +57,17 @@ INSERT INTO liveuser_groupusers VALUES (4, 3);
 # --------------------------------------------------------
 
 #
-# Dumping data for table `liveuser_languages`
-#
-
-INSERT INTO liveuser_languages VALUES (1, 'en');
-# --------------------------------------------------------
-
-#
 # Dumping data for table `liveuser_translations`
 #
 
-INSERT INTO liveuser_translations VALUES (1, 1, 1, 'BACKOFFICE', 'BackOffice for testing');
-INSERT INTO liveuser_translations VALUES (1, 2, 1, 'NEWS', 'News');
-INSERT INTO liveuser_translations VALUES (1, 3, 1, 'ADMINS', 'The admin group can change everything.');
-INSERT INTO liveuser_translations VALUES (2, 3, 1, 'GroupA', 'Standard user group.');
-INSERT INTO liveuser_translations VALUES (3, 3, 1, 'GroupB', 'Another group.');
-INSERT INTO liveuser_translations VALUES (1, 4, 1, 'English', 'English language');
-INSERT INTO liveuser_translations VALUES (1, 5, 1, 'NEW', 'Write news');
-INSERT INTO liveuser_translations VALUES (2, 5, 1, 'CHANGE', 'Change news');
-INSERT INTO liveuser_translations VALUES (3, 5, 1, 'DELETE', 'Delete news');
+INSERT INTO liveuser_translations VALUES (1, 1, 'de', 'BACKOFFICE', 'BackOffice for testing');
+INSERT INTO liveuser_translations VALUES (1, 2, 'de', 'NEWS', 'News');
+INSERT INTO liveuser_translations VALUES (1, 3, 'de', 'ADMINS', 'The admin group can change everything.');
+INSERT INTO liveuser_translations VALUES (2, 3, 'de', 'GroupA', 'Standard user group.');
+INSERT INTO liveuser_translations VALUES (3, 3, 'de', 'GroupB', 'Another group.');
+INSERT INTO liveuser_translations VALUES (1, 4, 'de', 'NEW', 'Write news');
+INSERT INTO liveuser_translations VALUES (2, 4, 'de', 'CHANGE', 'Change news');
+INSERT INTO liveuser_translations VALUES (3, 4, 'de', 'DELETE', 'Delete news');
 # --------------------------------------------------------
 
 #
@@ -133,7 +116,7 @@ INSERT INTO liveuser_users VALUES ('7ddf260b66b9a5c182a91a413f1aa461', 'userC', 
 #
 # Table structure for table `news`
 #
-
+DROP TABLE IF EXISTS `news`;
 CREATE TABLE news (
   news_id int(11) NOT NULL auto_increment,
   created_at datetime NOT NULL default '0000-00-00 00:00:00',
