@@ -263,30 +263,6 @@ class LiveUser
     var $_log = null;
 
     /**
-     * Handle used to login
-     *
-     * @access private
-     * @var    string
-     */
-    var $_handle = '';
-
-    /**
-     * Password used to login
-     *
-     * @access private
-     * @var    string
-     */
-    var $_passwd = '';
-
-    /**
-     * RememberMe cookie set ?
-     *
-     * @access private
-     * @var    boolean
-     */
-    var $_remember = false;
-
-    /**
      * Error codes to message mapping array
      *
      * @access private
@@ -310,17 +286,9 @@ class LiveUser
     );
 
     /**
-     * For lazy loading of PEAR::Log
-     *
-     * @acess private
-     * @var   boolean
-     */
-    var $_log_loaded = false;
-    
-    /**
      * Events that are allowed to be triggered (built in events are preset).
      *
-     * @access protected     
+     * @access protected
      * @var    array
      */
     var $_events = array(
@@ -331,7 +299,7 @@ class LiveUser
         'onIdled',     // maximum idle time is reached
         'onExpired'    // authentication session is expired
     );
-        
+
     /**
      * Used to store attached observers.
      *
@@ -351,7 +319,7 @@ class LiveUser
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
 
         if ($GLOBALS['_LIVEUSER_DEBUG']) {
-            if (!$this->_log_loaded) {
+            if (!is_object($this->_log)) {
                 $this->loadPEARLog();
             }
             $this->_log->addChild(Log::factory('win', 'LiveUser'));
@@ -761,7 +729,7 @@ class LiveUser
      */
     function addErrorLog(&$log)
     {
-        if (!$this->_log_loaded) {
+        if (!is_object($this->_log)) {
             $this->loadPEARLog();
         }
         return $this->_log->addChild($log);
@@ -1195,7 +1163,7 @@ class LiveUser
 
         // trigger event 'onLogout' as replacement for logout callback function
         if ($direct) {
-            $this->triggerEvent('onLogout');        
+            $this->triggerEvent('onLogout');
         }
 
         // If there's a cookie and the session hasn't idled or expired, kill that one too...
@@ -1248,7 +1216,7 @@ class LiveUser
         $this->_auth = null;
         $this->_perm = null;
 
-        // trigger event 'postLogout', can be used to do a redirect 
+        // trigger event 'postLogout', can be used to do a redirect
         if ($direct) {
             $this->triggerEvent('postLogout');
         }
@@ -1417,10 +1385,10 @@ class LiveUser
     /**
      * Add an observer to listen to a certain event
      *
-     * An observer is any valid callback function. You may attach 
-     * multiple observers for each event. If an event is triggered 
+     * An observer is any valid callback function. You may attach
+     * multiple observers for each event. If an event is triggered
      * observers of that event are called in the order they were attached.
-     * LiveUser object and optional settings from the trigger call are set 
+     * LiveUser object and optional settings from the trigger call are set
      * as first and second parameters for each observer notification.
      *
      * @access public
@@ -1433,30 +1401,29 @@ class LiveUser
     {
         if (!in_array($event, $this->_events)) {
             $this->_stack->push(
-                LIVEUSER_ERROR_UNKNOWN_EVENT, 'exception', 
-        array('event' => $event), 
-                'attempt to attach to an unknown event'
-        );
+                LIVEUSER_ERROR_UNKNOWN_EVENT, 'exception',
+                    array('event' => $event),
+                    'attempt to attach to an unknown event');
             return false;
         }
-        
+
         if (!is_callable($observer)) {
             $this->_stack->push(
-                LIVEUSER_ERROR_NOT_CALLABLE, 'exception', 
-        array('callback' => $observer), 
+                LIVEUSER_ERROR_NOT_CALLABLE, 'exception',
+                array('callback' => $observer),
                 'observer is not callable'
-        );
+            );
             return false;
         }
-        
+
         if (!isset($this->_observers[$event])) {
             $this->_observers[$event] = array();
         }
-        
+
         $this->_observers[$event][] = &$observer;
         return true;
     }
-    
+
     /**
      * Add an observer object to listen to multiple events
      *
@@ -1464,15 +1431,15 @@ class LiveUser
      * an object providing observer methods for some or all events.
      * If you don't set parameter $methods it tries to find matching methods
      * for each registered event and adds them as observer callback.
-     * You can use the $methods parameter to set what method should act 
-     * as an observer for what event. 
+     * You can use the $methods parameter to set what method should act
+     * as an observer for what event.
      *
      * @access public
      * @param  object  object with observer methods
      * @param  array   optional used to change method names this way:
      *                 array('event' => 'realMethodName', ...)
      * @return bool    true on success, otherwise false
-     * @see    LiveUser::triggerEvent    
+     * @see    LiveUser::triggerEvent
      */
     function attachObserverObj(&$object, $methods = array())
     {
@@ -1492,18 +1459,18 @@ class LiveUser
         }
         return true;
     }
-    
+
     /**
      * Notify all attached observers about a certain event
      *
-     * LiveUser object ($this) and $params are set as first and 
+     * LiveUser object ($this) and $params are set as first and
      * second parameters for each observer notification.
      * $event is always set as 'event' field in $params, so this can
      * not be used as a parameter but is useful if you want to use
      * one single observer callback function for multiple events.
      *
      * @access public
-     * @param  string  event name 
+     * @param  string  event name
      * @param  array   optional params to send to observers
      * @return bool    true on success, false otherwise
      * @see    LiveUser::attachObserver(), LiveUser::attachObserverObj(), LiveUser::registerEvent()
@@ -1514,16 +1481,16 @@ class LiveUser
             if ($GLOBALS['_LIVEUSER_DEBUG']) {
                 $this->_stack->push(
                     LIVEUSER_ERROR_UNKNOWN_EVENT,
-                    'notice', array('event' => $event), 
+                    'notice', array('event' => $event),
                     'no observer to notify for event ' . $event);
             }
-            // it is no error if no observer was attached to handle an event, so 
+            // it is no error if no observer was attached to handle an event, so
             return true;
         }
 
-        $params['event'] = $event;        
+        $params['event'] = $event;
         $success = true;
-        
+
         $num = count($this->_observers[$event]);
         for ($i = 0; $i < $num; $i++) {
             if (!is_callable($this->_observers[$event][$i])) {
@@ -1534,7 +1501,7 @@ class LiveUser
         }
         return $success;
     }
-    
+
     /**
      * make a string representation of the object
      *
@@ -1590,7 +1557,6 @@ class LiveUser
         require 'Log.php';
         $this->_log = &Log::factory('composite');
         $this->_stack->setLogger($this->_log);
-        $this->_log_loaded = true;
     }
 } // end class LiveUser
 ?>
