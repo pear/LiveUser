@@ -91,7 +91,6 @@ class LiveUser_Perm_Simple
     function LiveUser_Perm_Simple(&$confArray)
     {
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
-        $this->_storage = LiveUser::storageFactory($confArray);
         if (is_array($confArray)) {
             foreach ($confArray as $key => $value) {
                 if (isset($this->$key)) {
@@ -99,6 +98,27 @@ class LiveUser_Perm_Simple
                 }
             }
         }
+    }
+
+    /**
+     * Load the storage container
+     *
+     * @access  public
+     * @param  mixed         Name of array containing the configuration.
+     * @return  boolean true on success or false on failure
+     */
+    function init(&$conf)
+    {
+        if (!isset($conf['storage'])) {
+            return false;
+        }
+
+        $this->_storage = LiveUser::storageFactory($conf['storage']);
+        if ($this->_storage === false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -110,7 +130,7 @@ class LiveUser_Perm_Simple
      * @param   string  name of the auth container
      * @return  boolean true on success or false on failure
      */
-    function init($authUserId = null, $containerName = null)
+    function mapUser($authUserId = null, $containerName = null)
     {
         $result = $this->_storage->mapUser($authUserId, $containerName);
         if ($result === false) {
