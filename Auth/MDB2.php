@@ -189,7 +189,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      * @param  boolean  user password
      * @return boolean true on success or false on failure
      */
-    function _readUserData($handle, $passwd = false)
+    function _readUserData($handle, $passwd = '')
     {
         $success = false;
 

@@ -83,7 +83,7 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      * @param  boolean  user password
      * @return boolean true on success or false on failure
      */
-    function _readUserData($handle, $passwd = false)
+    function _readUserData($handle, $passwd = '')
     {
         if (isset($this->authTableCols['required']['passwd'])
             && $this->authTableCols['required']['passwd']

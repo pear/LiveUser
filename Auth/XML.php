@@ -181,7 +181,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      *                  unencrypted pwd or false.
      * @return boolean true on success or false on failure
      */
-    function _readUserData($handle, $passwd = false)
+    function _readUserData($handle, $passwd = '')
     {
         $success = false;
         $index = 0;
