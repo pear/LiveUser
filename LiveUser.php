@@ -159,12 +159,13 @@ class LiveUser
      * @var     array
      */
     var $_options = array(
-        'session_save_handler' => false,
         'autoInit'=> false,
         'session' => array(
             'name'     => 'PHPSESSID',
             'varname'  => 'ludata',
         ),
+        'session_save_handler' => false,
+        'session_cookie_params' => false,
         'cache_perm' => false,
         'login'   => array(
             'force'    => false,
@@ -372,6 +373,24 @@ class LiveUser
      *  'session'  => array(
      *      'name'    => 'liveuser session name',
      *      'varname' => 'liveuser session var name'
+     *  ),
+     * // The session_save_handler options are optional. If they are specified,
+     * // session_set_save_handler() will be called with the parameters
+     *  'session_save_handler' => array(
+     *      'open'    => 'name of the open function/method',
+     *      'close'   => 'name of the close function/method',
+     *      'read'    => 'name of the read function/method',
+     *      'write'   => 'name of the write function/method',
+     *      'destroy' => 'name of the destroy function/method',
+     *      'gc'      => 'name of the gc function/method',
+     *  ),
+     * // The session_cookie_params options are optional. If they are specified,
+     * // session_set_cookie_params() will be called with the parameters
+     *  'session_cookie_params' => array(
+     *      'lifetime' => 'Cookie lifetime in days',
+     *      'path'     => 'Cookie path',
+     *      'domain'   => 'Cookie domain',
+     *      'secure'   => 'Cookie send only over secure connections',
      *  ),
      *  'login' => array(
      *      'function' => '(optional) Function to be called when accessing a page without logging in first',
@@ -601,8 +620,7 @@ class LiveUser
     {
         end($confArray);
         $storageName = $classprefix.'Perm_Storage_' . key($confArray);
-        $res = LiveUser::loadClass($storageName);
-        if (!$res) {
+        if (!LiveUser::loadClass($storageName)) {
             PEAR_ErrorStack::staticPush(
                 LIVEUSER_ERROR_FAILED_INSTANTIATION,
                 array('class' => $storageName)
@@ -871,6 +889,13 @@ class LiveUser
                 $this->_options['session_save_handler']['gc']
             );
         }
+        if ($this->_options['session_cookie_params']) {
+            $cookieTimeout = time() + (86400 * $this->_options['cookie']['lifetime']);
+            session_set_cookie_params($cookieTimeout,
+                $this->_options['cookie']['path'],
+                $this->_options['cookie']['domain'],
+                $this->_options['cookie']['secure']);
+        }
         // Set the name of the current session
         session_name($this->_options['session']['name']);
         // If there's no session yet, start it now
@@ -999,21 +1024,22 @@ class LiveUser
         {
             $this->_auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
-            $this->_auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
-            $this->_auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth']);
-
-            if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
-                && $_SESSION[$this->_options['session']['varname']]['perm'])
-            {
-                $this->_perm = &$this->permFactory($this->permContainer);
-                if ($this->_options['cache_perm']) {
-                    $this->_perm->unfreeze($this->_options['session']['varname']);
-                } else {
-                    $res = $this->_perm->init($this->_auth->authUserId, $this->_auth->backendArrayIndex);
+            $auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
+            if($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
+                if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
+                    && $_SESSION[$this->_options['session']['varname']]['perm'])
+                {
+                    $this->_auth = &$auth;
+                    $this->_perm = &$this->permFactory($this->permContainer);
+                    if ($this->_options['cache_perm']) {
+                        $this->_perm->unfreeze($this->_options['session']['varname']);
+                    } else {
+                        $this->_perm->init($this->_auth->authUserId, $this->_auth->backendArrayIndex);
+                    }
                 }
+                $this->_status = LIVEUSER_STATUS_UNFROZEN;
+                return true;
             }
-        $this->_status = LIVEUSER_STATUS_UNFROZEN;
-            return true;
         }
 
         return false;
@@ -1203,6 +1229,13 @@ class LiveUser
                 );
             }
 
+            if ($this->_options['session_cookie_params']) {
+                $cookieTimeout = time() + (86400 * $this->_options['cookie']['lifetime']);
+                session_set_cookie_params($cookieTimeout,
+                    $this->_options['cookie']['path'],
+                    $this->_options['cookie']['domain'],
+                    $this->_options['cookie']['secure']);
+            }
             // Set the name of the current session
             session_name($this->_options['session']['name']);
             // If there's no session yet, start it now
