@@ -433,13 +433,6 @@
     <default>N</default>
    </field>
 
-   <field>
-    <name>has_level</name>
-    <type>boolean</type>
-    <notnull>1</notnull>
-    <default>N</default>
-   </field>
-
    <index>
     <name>right_id</name>
     <unique>1</unique>
