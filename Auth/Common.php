@@ -210,6 +210,14 @@ class LiveUser_Auth_Common
     var $containerName = null;
 
     /**
+     * External values to check (config settings)
+     *
+     * @var    array
+     * @access public
+     */
+    var $externalValues = array();
+
+    /**
      * Class constructor. Feel free to override in backend subclasses.
      *
      * @access protected
@@ -238,6 +246,10 @@ class LiveUser_Auth_Common
      */
     function freeze()
     {
+        // get values from $this->externalValues['values'] and
+        // store them into $this->propertyValues['storedExternalValues']
+        $this->setExternalValues();
+
         $propertyValues = array(
             'handle'       => $this->handle,
             'authUserId'   => $this->authUserId,
@@ -249,8 +261,16 @@ class LiveUser_Auth_Common
             'ownerUserId'  => $this->ownerUserId
         );
 
+        $propertyValues['storedExternalValues'] = null;
+        if (isset($this->propertyValues['storedExternalValues']) &&
+            !empty($this->propertyValues['storedExternalValues'])
+        ) {
+            $propertyValues['storedExternalValues'] = $this->propertyValues['storedExternalValues'];
+        }
+
         $propertyValues['custom'] = isset($this->propertyValues['custom'])
             ? $this->propertyValues['custom'] : null;
+
         return $propertyValues;
     }
 
@@ -280,7 +300,8 @@ class LiveUser_Auth_Common
                 $this->{$key} = $value;
             }
         }
-        return true;
+
+        return $this->externalValuesMatch();
     } // end func unfreeze
 
     /**
@@ -534,7 +555,7 @@ class LiveUser_Auth_Common
     {
         $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
             array('feature' => 'userExists'));
-            return false;
+        return false;
     }
 
     /**
@@ -553,6 +574,48 @@ class LiveUser_Auth_Common
             $that = $this->propertyValues['custom'][$lwhat];
         }
         return $that;
+    }
+
+    /**
+     * Creates associative array of values from $externalValues['values'] with $keysToCheck
+     *
+     * @access public
+     */
+    function setExternalValues()
+    {
+        if (isset($this->externalValues['keysToCheck']) &&
+            is_array($this->externalValues['keysToCheck'])
+        ) {
+            foreach ($this->externalValues['keysToCheck'] as $keyToCheck) {
+                if (isset($this->externalValues['values'][$keyToCheck])) {
+                    $this->propertyValues['storedExternalValues'][$keyToCheck] =
+                        md5($this->externalValues['values'][$keyToCheck]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if the stored external values match the current external values
+     *
+     * @access  public
+     * @param   array   $values
+     */
+    function externalValuesMatch()
+    {
+        if (isset($this->propertyValues['storedExternalValues']) &&
+            is_array($this->propertyValues['storedExternalValues'])
+        ) {
+            foreach ($this->propertyValues['storedExternalValues'] as $keyToCheck => $storedValue) {
+                // return false if any one of the stored values does not match the current value
+                if (!isset($this->externalValues['values'][$keyToCheck]) ||
+                    md5($this->externalValues['values'][$keyToCheck]) != $storedValue
+                ) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
 ?>

@@ -39,8 +39,12 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
                                             'expireTime'   => 3600,
                                             'idleTime'     => 1800,
                                             'allowDuplicateHandles'  => false,
-                                            'passwordEncryptionMode' => 'MD5'
-                                           )
+                                            'passwordEncryptionMode' => 'MD5',
+                                            'externalValues' => array(
+                                                'values'      => &$_SERVER,
+                                                'keysToCheck' => array('HTTP_USER_AGENT')
+                                            ),
+                                        ),
         ),
         'permContainer'     => array('type'  => 'Simple',
                                      'storage' => array('XML' => array('file' => 'Perm_XML.xml')),
