@@ -104,38 +104,5 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
 
         return true;
     }
-
-    /**
-     * Helper function that checks if there is a user in
-     * the database who's matching the given parameters.
-     * If $checkHandle is given and $checkPW is set to
-     * false, it only checks if a user with that handle
-     * exists. If only $checkPW is given and $checkHandle
-     * is set to false, it will check if there exists a
-     * user with that password. If both values are set to
-     * anything but false, it will find the first user in
-     * the database with both values matching.
-     * Please note:
-     * - If no match was found, the return value is false
-     * - If a match was found, the auth_user_id from the database
-     *   is being returned
-     * Whatever is returned, please keep in mind that this
-     * function only searches for the _first_ occurence
-     * of the search values in the database. So when you
-     * have multiple users with the same handle, only the
-     * ID of the first one is returned. Same goes for
-     * passwords. Searching for both password and handle
-     * should be pretty safe, though - having more than
-     * one user with the same handle/password combination
-     * in the database would be pretty stupid anyway.
-     *
-     * @param  boolean The handle (username) to search
-     * @param  boolean The password to check against
-     * @return mixed   true or false if the user does not exist
-     */
-    function userExists($checkHandle = false, $checkPW = false)
-    {
-        return true;
-    }
 }
 ?>

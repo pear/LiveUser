@@ -109,15 +109,5 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
         return $success;
     }
 
-    /**
-     * not yet implemented
-     *
-     * @return mixed   true or false if the user does not exist
-     */
-    function userExists()
-    {
-        return true;
-    }
-
 }
 ?>
