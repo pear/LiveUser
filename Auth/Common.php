@@ -240,7 +240,6 @@ class LiveUser_Auth_Common
     {
         $propertyValues = array(
             'handle'       => $this->handle,
-            'passwd'       => $this->passwd,
             'authUserId'   => $this->authUserId,
             'isActive'     => $this->isActive,
             'loggedIn'     => $this->loggedIn,
