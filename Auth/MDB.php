@@ -129,7 +129,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
             $result = $this->dbc->disconnect();
             if (PEAR::isError($result)) {
                 $this->_stack->push(
-                    LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                    LIVEUSER_ERROR, 'exception',
                     array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
                 );
                 return false;
@@ -162,7 +162,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
 
         if (PEAR::isError($result)) {
             $this->_stack->push(
-                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
             return false;
@@ -225,7 +225,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         // return value to true
         if (PEAR::isError($result)) {
             $this->_stack->push(
-                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
             return false;
@@ -306,7 +306,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
 
         if (PEAR::isError($result)) {
             $this->_stack->push(
-                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
             return false;

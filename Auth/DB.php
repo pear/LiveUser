@@ -120,7 +120,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
             $result = $this->dbc->disconnect();
             if (PEAR::isError($result)) {
                 $this->_stack->push(
-                    LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                    LIVEUSER_ERROR, 'exception',
                     array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
                 );
                 return false;
@@ -153,7 +153,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
 
         if (PEAR::isError($result)) {
             $this->_stack->push(
-                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
             return false;
@@ -215,7 +215,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         // If a user was found, read data into class variables and set
         // return value to true
             $this->_stack->push(
-                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
             return false;
@@ -296,7 +296,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
 
         if (PEAR::isError($result)) {
             $this->_stack->push(
-                LIVEUSER_ADMIN_ERROR_QUERY_BUILDER, 'exception',
+                LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
             return false;
