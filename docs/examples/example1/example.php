@@ -18,6 +18,7 @@ error_reporting(E_ALL);
 
 // Get LiveUser configuration array
 require_once 'conf.php';
+require 'Log.php';
 
 if ($xml_is_readable == false || $xml_is_writable == false) {
     die('<p style="color: red; text-align: center;">The XML file isn\'t readable/writable. Add the right permissions to it and then try again.</p>');
@@ -32,13 +33,80 @@ function eHandler($errObj)
     echo('<hr /><span style="color: red">' . $errObj->getMessage() . ':<br />'. $errObj->getUserinfo() . '</span><hr />');
 }
 
+$GLOBALS['obs'] = '';
+
+/**
+ * LiveUser observer example.
+ *
+ * This class uses the facilities provided by PEAR::Log
+ * to create an observer for LiveUser. 
+ *
+ * There are two ways to define an observer:
+ * - The class should contain methods
+ *   with the same names ar the events that can be triggered.
+ * - when the observer is attached to LiveUser you must define
+ *   the event => methodName mapping.
+ *
+ * @access public
+ * @param  object receives the main LiveUser object, fetch it by reference 
+ *                to avoid object copies
+ * @param  array  an array of optional paramaters the triggered event can send
+ * @return void  return is discarded
+ */
+class Log_LU extends Log
+{
+    function Log_LU($name = '', $ident = '', $conf = array(),
+                         $level = PEAR_LOG_DEBUG)
+    {
+        $this->_id = md5(microtime());
+        $this->_ident = $ident;
+        $this->_mask = Log::UPTO($level);
+
+        if (!empty($conf['error_prepend'])) {
+            $this->_error_prepend = $conf['error_prepend'];
+        } else {
+            $this->_error_prepend = ini_get('error_prepend_string');
+        }
+
+        if (!empty($conf['error_append'])) {
+            $this->_error_append = $conf['error_append'];
+        } else {
+            $this->_error_append = ini_get('error_append_string');
+        }
+    }
+    function onLogin(&$obj, $params = array())
+    {
+        $GLOBALS['obs'] .= '<p>Observer called with the Liveuser object';
+        if (count($params) > 0) {
+            $GLOBALS['obs'] .= ' and optional parameters</p>';
+            ob_start();
+            var_dump($params);
+            $GLOBALS['obs'] .= ob_get_contents();
+            ob_clean(); 
+        }
+    }
+    function onLogout()
+    {
+        print 'You have been logged out';
+        exit();
+    }
+    function onIdled()
+    {
+        print 'You have been idle for too long !<br />';
+        print 'Please login again';
+    }
+}
+
+$log = &Log::factory('LU');
+
 // Create new LiveUser (LiveUser) object.
 // We´ll only use the auth container, permissions are not used.
 $LU =& LiveUser::factory($liveuserConfig);
+$LU->attachObserverObj($log);
 
 $username = (isset($_REQUEST['handle'])) ? $_REQUEST['handle'] : NULL;
 $password = (isset($_REQUEST['passwd'])) ? $_REQUEST['passwd'] : NULL;
-$logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : FALSE;
+$logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
 $LU->init($username, $password, $logout);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -172,6 +240,9 @@ echo '<hr />';
 print_r($_SESSION);
 echo '<hr />';
 print_r($_REQUEST);
+echo '<hr />';
+echo 'Observer<br />';
+var_dump($GLOBALS['obs']);
 echo '</pre>';
 ?>
 </body>
