@@ -541,13 +541,9 @@ class LiveUser
      * @return object|false  Returns an instance of an auth container
      *                       class or false on error
      */
-    function &authFactory($conf, $containerName, $admin = false)
+    function &authFactory($conf, $containerName, $classprefix = 'LiveUser_')
     {
-        if ($admin) {
-            $classname = 'LiveUser_Admin_Auth_' . $conf['type'];
-        } else {
-            $classname = 'LiveUser_Auth_' . $conf['type'];
-        }
+        $classname = $classprefix.'Auth_' . $conf['type'];
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
@@ -563,13 +559,9 @@ class LiveUser
      * @return object|false  Returns an instance of a perm container
      *                       class or false on error
      */
-    function &permFactory($conf, $admin = false)
+    function &permFactory($conf, $classprefix = 'LiveUser_')
     {
-        if ($admin) {
-            $classname = 'LiveUser_Admin_Perm_' . $conf['type'];
-        } else {
-            $classname = 'LiveUser_Perm_' . $conf['type'];
-        }
+        $classname = $classprefix.'Perm_' . $conf['type'];
         if (!LiveUser::loadClass($classname)) {
             return false;
         }
@@ -584,14 +576,10 @@ class LiveUser
      * @return object|false will return an instance of a Storage container
      *                      or false upon error
      */
-    function &storageFactory($confArray, $admin = false)
+    function &storageFactory($confArray, $classprefix = 'LiveUser_')
     {
         end($confArray);
-        if ($admin) {
-            $storageName = 'LiveUser_Admin_Perm_Storage_' . key($confArray);
-        } else {
-            $storageName = 'LiveUser_Perm_Storage_' . key($confArray);
-        }
+        $storageName = $classprefix.'Perm_Storage_' . key($confArray);
         $res = LiveUser::loadClass($storageName);
         if (!$res) {
             PEAR_ErrorStack::staticPush(
@@ -830,42 +818,6 @@ class LiveUser
         $this->_stack->push(
             LIVEUSER_ERROR_CONFIG, 'exception',
             array(), "unknown option $option"
-        );
-        return false;
-    }
-
-    /**
-     * Get the Auth Container class instance of it exists
-     *
-     * @access public
-     * @return mixed object or PEAR Error
-     */
-    function &getAuthContainer()
-    {
-        if (is_a($this->_auth, 'LiveUser_Auth_Common')) {
-            return $this->_auth;
-        }
-        $this->_stack->push(
-            LIVEUSER_ERROR_CONFIG, 'exception', array(),
-            'authentication container has not yet been instantianted'
-        );
-        return false;
-    }
-
-    /**
-     * Get the Perm Container class instance if it exists
-     *
-     * @access public
-     * @return mixed object or false on failure
-     */
-    function &getPermContainer()
-    {
-        if (is_a($this->_perm, 'LiveUser_Perm_Simple')) {
-            return $this->_perm;
-        }
-        $this->_stack->push(
-            LIVEUSER_ERROR_CONFIG, 'exception', array(),
-            'permission container has not yet been instantianted'
         );
         return false;
     }
@@ -1187,7 +1139,6 @@ class LiveUser
         return true;
     }
 
-
     /**
      * This destroys the session object.
      *
@@ -1435,19 +1386,6 @@ class LiveUser
     {
         return $this->status;
     }
-
-    /**
-     * Tell whether a result from a LiveUser method is an error.
-     *
-     * @access  public
-     * @param   mixed   result code
-     * @return  bool    whether value is an error
-     */
-    function isError($value)
-    {
-        return (is_object($value) &&
-            (is_a($value, 'pear_error') || is_subclass_of($value, 'pear_error')));
-    } // end func isError
 
     /**
      * make a string representation of the object
