@@ -41,6 +41,8 @@ $notes = <<<EOT
   - Removed a potential security issue in Auth freeze()
   - added Observers, see the wiki for more information
   - added an observer class in example1 to show how they work
+  - added support for checking arbitrary values in unfreeze()
+    (for example the user agent) to make session high-jacking more difficult)
 EOT;
 
 $description = <<<EOT
