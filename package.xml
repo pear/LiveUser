@@ -70,7 +70,10 @@
     <notes>  - fixed php5 issues in example4
   - reworked RC4 handling into cryptRC4() method
   - perm container now also has a default init() method that is called in the factory
-  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)</notes>
+  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - moved default database structure into separate file (using the GLOBALS super globals)
+  - table rights_implied should have been right_implied</notes>
     <deps>
       <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
       <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
@@ -137,6 +140,7 @@
         <dir name="Storage">
          <file role="php" name="Cache.php"/>
          <file role="php" name="DB.php"/>
+         <file role="php" name="Globals.php"/>
          <file role="php" name="MDB.php"/>
          <file role="php" name="MDB2.php"/>
          <file role="php" name="SQL.php"/>
@@ -169,7 +173,9 @@
       <notes>  - fixed php5 issues in example4
   - reworked RC4 handling into cryptRC4() method
   - perm container now also has a default init() method that is called in the factory
-  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)</notes>
+  - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - moved default database structure into separate file (using the GLOBALS super globals)
+  - table rights_implied should have been right_implied</notes>
     </release>
     <release>
       <version>0.14.0</version>

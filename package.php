@@ -16,6 +16,7 @@ $notes = <<<EOT
   - reworked RC4 handling into cryptRC4() method
   - perm container now also has a default init() method that is called in the factory
   - default datatype for auth_user_id should be 'text' (thx Matthias aka Nomatt for spotting)
+  - moved default database structure into separate file (using the GLOBALS super globals)
   - table rights_implied should have been right_implied
 EOT;
 
