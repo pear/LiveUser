@@ -43,15 +43,11 @@
    <field>
     <name><variable>owner_user_id_name</variable></name>
     <type>integer</type>
-    <notnull>1</notnull>
-    <default></default>
    </field>
 
    <field>
     <name><variable>owner_group_id_name</variable></name>
     <type>integer</type>
-    <notnull>1</notnull>
-    <default></default>
    </field>
 
    <field>
