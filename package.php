@@ -43,6 +43,7 @@ perm schema structure
   - fixed remember me feature in example2
   - remove empty placeholders and block in loadTemplate() calls in example4
   - added translation_id field in liveuser_translations table
+  - fixed bug in group subgroup table joining in the schema structure
 
 examples
   - fixed bug in example1 onLogout -> postLogout (bug #3135)
@@ -123,11 +124,11 @@ if (PEAR::isError($result)) {
     echo $result->getMessage();
 }
 
-$package->addMaintainer('mw21st',  'lead',        'Markus Wolff',      'mw21st@php.net');
-$package->addMaintainer('arnaud',  'lead',        'Arnaud Limbourg',   'arnaud@php.net');
-$package->addMaintainer('lsmith',  'lead',        'Lukas Kahwe Smith', 'smith@backendmedia.com');
-$package->addMaintainer('krausbn', 'developer',   'Bjoern Kraus',      'krausbn@php.net');
-$package->addMaintainer('dufuz',   'developer',   'Helgi Þormar',      'dufuz@php.net');
+$package->addMaintainer('mw21st',  'lead',      'Markus Wolff',      'mw21st@php.net');
+$package->addMaintainer('arnaud',  'lead',      'Arnaud Limbourg',   'arnaud@php.net');
+$package->addMaintainer('lsmith',  'lead',      'Lukas Kahwe Smith', 'smith@backendmedia.com');
+$package->addMaintainer('krausbn', 'developer', 'Bjoern Kraus',      'krausbn@php.net');
+$package->addMaintainer('dufuz',   'lead',      'Helgi Þormar',      'dufuz@php.net');
 
 $package->addDependency('php',              '4.2.0',      'ge',  'php', false);
 $package->addDependency('PEAR',             '1.3.3',      'ge',  'pkg', false);
