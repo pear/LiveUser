@@ -12,6 +12,11 @@ require_once 'Console/Getopt.php';
 $version = '0.15.0';
 
 $notes = <<<EOT
+Important:
+We are migrading away from .sql dumps which were MySQL specific towards the
+MDB2 xml schema format. Therefore we have removed the .sql files from the sql
+directory in favor if xml schema files and a installer class defined in install.php.
+
 general notes
   - moved all config parameter handling inside the containers into init() methods
   - reworked RC4 handling into cryptRC4() method
@@ -28,6 +33,7 @@ general notes
   - use LIVEUSER_ERROR constant instead of LIVEUSER_ADMIN_ERROR_QUERY_BUILDER
   - added allowEmptyPasswords auth container option
   - added install.php class to handle database schema installation via the MDB2
+  - removed sql files from the sql directory
     schema manager to provide support for other RDBMS than only MySQL
   - removed unused userExists() auth container method (use admin interface instead)
   - accept all config parameters by reference inside the containers
