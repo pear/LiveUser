@@ -48,6 +48,7 @@
  * Include PEAR ErrorStack class
  */
 require_once 'PEAR/ErrorStack.php';
+require_once 'Event/Dispatcher.php';
 require_once 'PEAR.php';
 
 /**#@+
@@ -309,29 +310,13 @@ class LiveUser
     );
 
     /**
-     * Events that are allowed to be triggered (built in events are preset).
+     * Stores the event dispatcher which
+     * handles notifications
      *
      * @var    array
      * @access protected
      */
-    var $events = array(
-        'onLogin',          // successfully logged in
-        'onFailedLogin',    // failed login
-        'onUnfreeze',       // successfully unfreeze of a previously logged in user
-        'forceLogin',       // login required -> you could display a login form
-        'onLogout',         // before logout -> can be used to cleanup own stuff
-        'postLogout',       // after logout -> e.g. do a redirect to another page
-        'onIdled',          // maximum idle time is reached
-        'onExpired'         // authentication session is expired
-    );
-
-    /**
-     * Used to store attached observers.
-     *
-     * @var    array
-     * @access protected
-     */
-    var $_observers = array();
+    var $dispatcher = null;
 
     /**
      * Constructor
@@ -352,6 +337,8 @@ class LiveUser
         }
 
         $this->_stack->setErrorMessageTemplate($this->_errorMessages);
+        
+        $this->dispatcher =& Event_Dispatcher::getInstance();
     }
 
     /**
@@ -951,7 +938,7 @@ class LiveUser
                     ($this->_auth->currentLogin + $this->_auth->expireTime) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_EXPIRED;
-                    $this->triggerEvent('onExpired');
+                    $this->dispatcher->post($this,'onExpired');
                     $this->logout(false);
                 // Check if maximum idle time is reached.
                 } elseif ($this->_auth->idleTime > 0 &&
@@ -959,7 +946,7 @@ class LiveUser
                     ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->_auth->idleTime) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_IDLED;
-                    $this->triggerEvent('onIdled');
+                    $this->dispatcher->post($this,'onIdled');
                     $this->logout(false);
                 }
             }
@@ -978,7 +965,7 @@ class LiveUser
             return true;
         // Force user login.
         } elseif ($this->_options['login']['force']) {
-            $this->triggerEvent('forceLogin');
+            $this->dispatcher->post($this, 'forceLogin');
         }
 
         return false;
@@ -1048,12 +1035,12 @@ class LiveUser
 
         if (!$this->isLoggedIn()) {
             $this->_stack->push(LIVEUSER_ERROR_WRONG_CREDENTIALS, 'error');
-            $this->triggerEvent('onFailedLogin');
+            $this->dispatcher->post($this, 'onFailedLogin');
             return false;
         }
 
         // user has just logged in
-        $this->triggerEvent('onLogin');
+        $this->dispatcher->post($this, 'onLogin');
         if ($this->_options['login']['regenid']) {
             session_regenerate_id();
         }
@@ -1099,7 +1086,7 @@ class LiveUser
                     }
                 }
                 $this->_status = LIVEUSER_STATUS_UNFROZEN;
-                $this->triggerEvent('onUnfreeze');
+                $this->dispatcher->post($this, 'onUnfreeze');
                 return true;
             }
         }
@@ -1261,7 +1248,7 @@ class LiveUser
 
         $dir = $this->_options['cookie']['savedir'];
 
-        $fh = @fopen($dir . '/'.$cookieData[0].'.lu', 'rb');
+        $fh = @fopen($dir . '/' . $cookieData[0] . '.lu', 'rb');
         if (!$fh) {
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
                 array(), 'Cannot open file for reading');
@@ -1349,7 +1336,7 @@ class LiveUser
 
         if ($direct) {
             // trigger event 'onLogout' as replacement for logout callback function
-            $this->triggerEvent('onLogout');
+            $this->dispatcher->post($this,'onLogout');
             // If there's a cookie and the session hasn't idled or expired, kill that one too...
             $this->deleteRememberCookie();
         }
@@ -1390,7 +1377,7 @@ class LiveUser
 
         if ($direct) {
             // trigger event 'postLogout', can be used to do a redirect
-            $this->triggerEvent('postLogout');
+            $this->dispatcher->post($this,'postLogout');
         }
     }
 
@@ -1556,6 +1543,8 @@ class LiveUser
     }
 
     /**
+<<<<<<< LiveUser.php
+=======
      * Add an observer object to listen to multiple events
      *
      * In contrast to LiveUser::attachObserver() this can be used to add
@@ -1650,6 +1639,7 @@ class LiveUser
     }
 
     /**
+>>>>>>> 1.54
      * make a string representation of the object
      *
      * @return  string
@@ -1659,7 +1649,7 @@ class LiveUser
     function __toString()
     {
         return get_class($this) . ' logged in: ' . ($this->isLoggedIn() ? 'Yes' : 'No');
-    } // end func __toString
+    }
 
     /**
      * Return a textual status message for a LiveUser status code.
@@ -1695,5 +1685,5 @@ class LiveUser
         return isset($statusMessages[$value])
             ? $statusMessages[$value] : $statusMessages[LIVEUSER_STATUS_UNKNOWN];
     }
-} // end class LiveUser
+}
 ?>
