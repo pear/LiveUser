@@ -29,6 +29,7 @@ $notes = <<<EOT
   - removed options of reading parameters from the superglobals
   - reworked init() method severly
   - remove the callback that catches PEAR_Error errors
+  - adding getErrors() method to get the error stack
 EOT;
 
 $description = <<<EOT
