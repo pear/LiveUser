@@ -61,13 +61,15 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      */
     var $pearAuth = null;
 
-    function init(&$connectOptions)
+    function init(&$conf, $containerName)
     {
+        parent::init($conf, $containerName);
+
         require_once 'Auth.php';
         if (!is_object($this->pearAuth)) {
             $this->pearAuth = &new Auth(
-                $connectOptions['pearAuthContainer'],
-                $connectOptions['pearAuthOptions'],
+                $conf['pearAuthContainer'],
+                $conf['pearAuthOptions'],
                 '',
                 false
             );

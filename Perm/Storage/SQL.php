@@ -95,16 +95,9 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
      */
     var $alias = array();
 
-    /**
-     * Constructor
-     *
-     * @access protected
-     * @param  mixed      configuration array
-     * @return void
-     */
-    function LiveUser_Perm_Storage_SQL(&$confArray, &$storageConf)
+    function init(&$storageConf)
     {
-        $this->LiveUser_Perm_Storage($confArray, $storageConf);
+        parent::init($storageConf);
 
         if (empty($this->tables)) {
             $this->tables = $GLOBALS['_LiveUser']['perm']['tables'];

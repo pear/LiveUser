@@ -70,6 +70,8 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
 
     function init(&$storageConf)
     {
+        parent::init($storageConf);
+
         if (!is_file($this->file)) {
             if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
                 $this->_stack->push(LIVEUSER_ERROR_MISSING_DEPS, 'exception', array(),

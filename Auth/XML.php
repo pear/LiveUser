@@ -88,9 +88,12 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
             'is_active'    => array('name' => 'isActive',    'type' => 'boolean')
         )
     );
-    function init(&$connectOptions)
+
+    function init(&$conf, $containerName)
     {
-        if (is_array($connectOptions)) {
+        parent::init($conf, $containerName);
+
+        if (is_array($conf)) {
             if (!is_file($this->file)) {
                 if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
                     $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',

@@ -52,6 +52,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
 {
     function init(&$storageConf)
     {
+        parent::init($storageConf);
+
         if (isset($storageConf['connection']) &&
             MDB2::isConnection($storageConf['connection'])
         ) {
@@ -78,6 +80,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 return false;
             }
         }
+
         return true;
     }
 

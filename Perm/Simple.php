@@ -88,16 +88,9 @@ class LiveUser_Perm_Simple
     /**
      * Class constructor. Feel free to override in backend subclasses.
      */
-    function LiveUser_Perm_Simple(&$confArray)
+    function LiveUser_Perm_Simple()
     {
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
-        if (is_array($confArray)) {
-            foreach ($confArray as $key => $value) {
-                if (isset($this->$key)) {
-                    $this->$key =& $confArray[$key];
-                }
-            }
-        }
     }
 
     /**
@@ -111,6 +104,14 @@ class LiveUser_Perm_Simple
     {
         if (!isset($conf['storage'])) {
             return false;
+        }
+
+        if (is_array($conf)) {
+            foreach ($conf as $key => $value) {
+                if (isset($this->$key)) {
+                    $this->$key =& $conf[$key];
+                }
+            }
         }
 
         $this->_storage = LiveUser::storageFactory($conf['storage']);

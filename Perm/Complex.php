@@ -50,18 +50,6 @@ require_once 'LiveUser/Perm/Medium.php';
 class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
 {
     /**
-     * Constructor
-     *
-     * @access protected
-     * @param  mixed      configuration array
-     * @return void
-     */
-    function LiveUser_Perm_Complex(&$confArray)
-    {
-        $this->LiveUser_Perm_Medium($confArray);
-    }
-
-    /**
      * Reads all individual implied rights of current user into
      * an array of this format:
      * RightName -> Value

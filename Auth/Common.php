@@ -261,13 +261,16 @@ class LiveUser_Auth_Common
      * @var    array     configuration options
      * @return void
      */
-    function LiveUser_Auth_Common($connectOptions, $containerName)
+    function LiveUser_Auth_Common()
     {
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
+    }
 
+    function init($conf, $containerName)
+    {
         $this->containerName = $containerName;
-        if (is_array($connectOptions)) {
-            foreach ($connectOptions as $key => $value) {
+        if (is_array($conf)) {
+            foreach ($conf as $key => $value) {
                 if (isset($this->$key)) {
                     $this->$key = $value;
                 }

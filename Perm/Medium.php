@@ -67,18 +67,6 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
     var $groupRights = array();
 
     /**
-     * Constructor
-     *
-     * @access protected
-     * @param  mixed      configuration array
-     * @return void
-     */
-    function LiveUser_Perm_Medium(&$confArray)
-    {
-        $this->LiveUser_Perm_Simple($confArray);
-    }
-
-    /**
      * Reads all rights of current user into an
      * associative array.
      * Group rights and invididual rights are being merged

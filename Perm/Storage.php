@@ -51,9 +51,13 @@ class LiveUser_Perm_Storage
      * @param  mixed      configuration array
      * @return void
      */
-    function LiveUser_Perm_Storage(&$confArray, &$storageConf)
+    function LiveUser_Perm_Storage()
     {
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
+    }
+
+    function init(&$storageConf)
+    {
         if (is_array($storageConf)) {
             foreach ($storageConf as $key => $value) {
                 if (isset($this->$key)) {
@@ -61,6 +65,8 @@ class LiveUser_Perm_Storage
                 }
             }
         }
+
+        return true;
     }
 
     function mapUser($authUserId, $containerName)

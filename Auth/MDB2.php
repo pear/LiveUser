@@ -84,28 +84,30 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      */
     var $authTable = 'liveuser_users';
 
-    function init(&$connectOptions)
+    function init(&$conf, $containerName)
     {
-        if (is_array($connectOptions)) {
-            if (isset($connectOptions['connection']) &&
-                MDB2::isConnection($connectOptions['connection'])
+        parent::init($conf, $containerName);
+
+        if (is_array($conf)) {
+            if (isset($conf['connection']) &&
+                MDB2::isConnection($conf['connection'])
             ) {
-                $this->dbc     = &$connectOptions['connection'];
-            } elseif (isset($connectOptions['dsn'])) {
-                $this->dsn = $connectOptions['dsn'];
+                $this->dbc     = &$conf['connection'];
+            } elseif (isset($conf['dsn'])) {
+                $this->dsn = $conf['dsn'];
                 $function = null;
-                if (isset($connectOptions['function'])) {
-                    $function = $connectOptions['function'];
+                if (isset($conf['function'])) {
+                    $function = $conf['function'];
                 }
                 $options = null;
-                if (isset($connectOptions['options'])) {
-                    $options = $connectOptions['options'];
+                if (isset($conf['options'])) {
+                    $options = $conf['options'];
                 }
                 $options['portability'] = MDB2_PORTABILITY_ALL;
                 if ($function == 'singleton') {
-                    $this->dbc =& MDB2::singleton($connectOptions['dsn'], $options);
+                    $this->dbc =& MDB2::singleton($conf['dsn'], $options);
                 } else {
-                    $this->dbc =& MDB2::connect($connectOptions['dsn'], $options);
+                    $this->dbc =& MDB2::connect($conf['dsn'], $options);
                 }
                 if (PEAR::isError($this->dbc)) {
                     $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',

@@ -46,8 +46,10 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      */
     var $sessionKey = 'password';
 
-    function init(&$connectOptions)
+    function init(&$conf, $containerName)
     {
+        parent::init($conf, $containerName);
+
         return true;
     }
 
