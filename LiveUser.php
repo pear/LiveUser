@@ -52,6 +52,8 @@ define('LIVEUSER_ERROR_FAILED_INSTANTIATION',   -9);
 define('LIVEUSER_ERROR_INIT_ERROR',            -10);
 define('LIVEUSER_ERROR_MISSING_CLASS',         -11);
 define('LIVEUSER_ERROR_WRONG_CREDENTIALS',     -12);
+define('LIVEUSER_ERROR_UNKNOWN_EVENT',         -13);
+define('LIVEUSER_ERROR_NOT_CALLABLE',          -14);
 /**#@-*/
 
 /**#@+
@@ -69,6 +71,7 @@ define('LIVEUSER_STATUS_UNKNOWN',        -6);
 define('LIVEUSER_STATUS_AUTHNOTFOUND',   -7);
 define('LIVEUSER_STATUS_LOGGEDOUT',      -8);
 define('LIVEUSER_STATUS_AUTHFAILED',     -9);
+define('LIVEUSER_STATUS_UNFROZEN',      -10);
 /**#@-*/
 
 /**
@@ -239,7 +242,7 @@ class LiveUser
      * @var    string
      * @see    LIVEUSER_STATUS_* constants
      */
-    var $status = LIVEUSER_STATUS_OK;
+    var $status = LIVEUSER_STATUS_UNKNOWN;
 
     /**
      * Error stack
@@ -300,7 +303,9 @@ class LiveUser
         LIVEUSER_ERROR_FAILED_INSTANTIATION   => 'Cannot instantiate class %class%',
         LIVEUSER_ERROR_INIT_ERROR             => 'Container %container% was not initialized properly',
         LIVEUSER_ERROR_MISSING_CLASS          => 'Class %class% does not exist in file %file%',
-        LIVEUSER_ERROR_WRONG_CREDENTIALS      => 'The username and/or password you submitted are not known'
+        LIVEUSER_ERROR_WRONG_CREDENTIALS      => 'The username and/or password you submitted are not known',
+        LIVEUSER_ERROR_UNKNOWN_EVENT          => 'The event %event% is not known',
+        LIVEUSER_ERROR_NOT_CALLABLE           => 'Callback %callback% is not callable'
     );
 
     /**
@@ -310,6 +315,29 @@ class LiveUser
      * @var   boolean
      */
     var $_log_loaded = false;
+    
+    /**
+     * Events that are allowed to be triggered (built in events are preset).
+     *
+     * @access protected     
+     * @var    array
+     */
+    var $_events = array(
+        'onLogin',     // successfully logged in
+        'forceLogin',  // login required -> you could display a login form
+        'onLogout',    // before logout -> can be used to cleanup own stuff
+        'postLogout',  // after logout -> e.g. do a redirect to another page
+        'onIdled',     // maximum idle time is reached
+        'onExpired'    // authentication session is expired
+    );
+        
+    /**
+     * Used to store attached observers.
+     *
+     * @access protected
+     * @var    array
+     */
+    var $_observers = array();
 
     /**
      * Constructor
@@ -864,12 +892,14 @@ class LiveUser
                 if (($this->_auth->currentLogin + $this->_auth->expireTime) < time()) {
                     $this->logout();
                     $this->status = LIVEUSER_STATUS_EXPIRED;
+                    $this->triggerEvent('onExpired');
                 // Check if maximum idle time is reached.
                 } elseif (isset($_SESSION[$this->_options['session']['varname']]['idle']) &&
                     ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->_auth->idleTime) < time())
                 {
                     $this->logout();
                     $this->status = LIVEUSER_STATUS_IDLED;
+                    $this->triggerEvent('onIdled');
                 }
             }
         }
@@ -877,16 +907,16 @@ class LiveUser
         $_SESSION[$this->_options['session']['varname']]['idle'] = time();
 
         if (!$this->isLoggedIn()) {
-            $this->login($handle, $passwd, $remember);
+            $onLogin = $this->login($handle, $passwd, $remember);
+            if ($onLogin) {
+                // user has just logged in
+                $this->triggerEvent('onLogin');
+            }
         }
 
         // Force user login.
         if (!$this->isLoggedIn() && $this->_options['login']['force']) {
-            if (!empty($this->_options['login']['function']) &&
-                is_callable($this->_options['login']['function']))
-            {
-                call_user_func($this->_options['login']['function'], $this);
-            }
+            $this->triggerEvent('forceLogin');
         }
 
         // Return boolean that indicates whether a auth object has been created
@@ -895,11 +925,8 @@ class LiveUser
             if ($this->_options['login']['regenid']) {
                 session_regenerate_id();
             }
+        $this->_status = LIVEUSER_STATUS_OK;
             return true;
-        }
-
-        if ($this->status == LIVEUSER_STATUS_OK) {
-            $this->status = LIVEUSER_STATUS_UNKNOWN;
         }
 
         return false;
@@ -985,6 +1012,7 @@ class LiveUser
                     $res = $this->_perm->init($this->_auth->authUserId, $this->_auth->backendArrayIndex);
                 }
             }
+        $this->_status = LIVEUSER_STATUS_UNFROZEN;
             return true;
         }
 
@@ -1139,13 +1167,9 @@ class LiveUser
     {
         $this->status = LIVEUSER_STATUS_LOGGEDOUT;
 
-        // If a callback function is set, call it
+        // trigger event 'onLogout' as replacement for logout callback function
         if ($direct) {
-            if (!empty($this->_options['logout']['function']) &&
-                is_callable($this->_options['logout']['function']))
-            {
-                call_user_func($this->_options['logout']['function'], $this);
-            }
+            $this->triggerEvent('onLogout');        
         }
 
         // If there's a cookie and the session hasn't idled or expired, kill that one too...
@@ -1191,10 +1215,9 @@ class LiveUser
         $this->_auth = null;
         $this->_perm = null;
 
-        // If there's a URL to redirect to on logout, do so
-        if ($direct && !empty($this->_options['logout']['redirect'])) {
-            header('Location: ' . $this->_options['logout']['redirect']);
-            exit();
+        // trigger event 'postLogout', can be used to do a redirect 
+        if ($direct) {
+            $this->triggerEvent('postLogout');
         }
     }
 
@@ -1328,56 +1351,6 @@ class LiveUser
     }
 
     /**
-     * Sets a callback login function.
-     *
-     * The user can set a function that will be called if the user
-     * tries to access a page wihout logging in first. It will receive
-     * the liveuser object. If an empty string or a non-existent function is passed
-     * it deactivates the call.
-     *
-     * @access  public
-     * @param   string  The name of the function to be called.
-     * @return  boolean true on success false otherwise
-     * @see     LiveUser::_options
-     */
-    function setLoginFunction($functionName)
-    {
-        if (!empty($functionName) && is_callable($functionName)) {
-            $this->_options['login']['function'] = $functionName;
-            return true;
-        }
-
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'Login function not found');
-        return false;
-    }
-
-    /**
-     * Sets a callback logout function.
-     *
-     * The user can set a function that will be called if the user
-     * wants to logout (by providing the appropriate GET-parameter).
-     * If an empty string or a non-existent function is passed
-     * it deactivates the call.
-     * <b>Attention: Don't use a die() or exit() statement in your logout function.
-     *            Otherwise the user can't be logged out properly.</b>
-     *
-     * @access  public
-     * @param   string  The name of the function to be called.
-     * @return  boolean true on success false otherwise
-     * @see     LiveUser::_options
-     */
-    function setLogoutFunction($functionName)
-    {
-        if (!empty($functionName) && is_callable($functionName)) {
-            $this->_options['logout']['function'] = $functionName;
-            return true;
-        }
-
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 'Logout function not found');
-        return false;
-    }
-
-    /**
      * Wrapper method to access properties from the auth and
      * permission containers.
      *
@@ -1408,6 +1381,127 @@ class LiveUser
         return $this->status;
     }
 
+    /**
+     * Add an observer to listen to a certain event
+     *
+     * An observer is any valid callback function. You may attach 
+     * multiple observers for each event. If an event is triggered 
+     * observers of that event are called in the order they were attached.
+     * LiveUser object and optional settings from the trigger call are set 
+     * as first and second parameters for each observer notification.
+     *
+     * @access public
+     * @param  string  event name
+     * @param  mixed   callback function (string) or array($obj, $method)
+     * @return bool    true on success, otherwise false
+     * @see    LiveUser::triggerEvent
+     */
+    function attachObserver($event, &$observer)
+    {
+        if (!in_array($event, $this->_events)) {
+            $this->_stack->push(
+                LIVEUSER_ERROR_UNKNOWN_EVENT, 'exception', 
+        array('event' => $event), 
+                'attempt to attach to an unknown event'
+        );
+            return false;
+        }
+        
+        if (!is_callable($observer)) {
+            $this->_stack->push(
+                LIVEUSER_ERROR_NOT_CALLABLE, 'exception', 
+        array('callback' => $observer), 
+                'observer is not callable'
+        );
+            return false;
+        }
+        
+        if (!isset($this->_observers[$event])) {
+            $this->_observers[$event] = array();
+        }
+        
+        $this->_observers[$event][] = &$observer;
+        return true;
+    }
+    
+    /**
+     * Add an observer object to listen to multiple events
+     *
+     * In contrast to LiveUser::attachObserver() this can be used to add
+     * an object providing observer methods for some or all events.
+     * If you don't set parameter $methods it tries to find matching methods
+     * for each registered event and adds them as observer callback.
+     * You can use the $methods parameter to set what method should act 
+     * as an observer for what event. 
+     *
+     * @access public
+     * @param  object  object with observer methods
+     * @param  array   optional used to change method names this way:
+     *                 array('event' => 'realMethodName', ...)
+     * @return bool    true on success, otherwise false
+     * @see    LiveUser::triggerEvent    
+     */
+    function attachObserverObj(&$object, $methods = array())
+    {
+        if (empty($methods)) {
+            foreach ($this->_events as $event) {
+                if (method_exists($object, $event)) {
+                    $methods[$event] = $event;
+                }
+            }
+        }
+        foreach ($methods as $event => $method) {
+            if (!isset($this->_observers[$event])) {
+                $this->_observers[$event] = array();
+            }
+
+            $this->_observers[$event][] = array(&$object, $method);
+        }
+        return true;
+    }
+    
+    /**
+     * Notify all attached observers about a certain event
+     *
+     * LiveUser object ($this) and $params are set as first and 
+     * second parameters for each observer notification.
+     * $event is always set as 'event' field in $params, so this can
+     * not be used as a parameter but is useful if you want to use
+     * one single observer callback function for multiple events.
+     *
+     * @access public
+     * @param  string  event name 
+     * @param  array   optional params to send to observers
+     * @return bool    true on success, false otherwise
+     * @see    LiveUser::attachObserver(), LiveUser::attachObserverObj(), LiveUser::registerEvent()
+     */
+    function triggerEvent($event, $params = array())
+    {
+        if (!isset($this->_observers[$event]) or empty($this->_observers[$event])) {
+            if ($GLOBALS['_LIVEUSER_DEBUG']) {
+                $this->_stack->push(
+                    LIVEUSER_ERROR_UNKNOWN_EVENT,
+                    'notice', array('event' => $event), 
+                    'no observer to notify for event ' . $event);
+            }
+            // it is no error if no observer was attached to handle an event, so 
+            return true;
+        }
+
+        $params['event'] = $event;        
+        $success = true;
+        
+        $num = count($this->_observers[$event]);
+        for ($i = 0; $i < $num; $i++) {
+            if (!is_callable($this->_observers[$event][$i])) {
+               call_user_func($this->_observers[$event][$i], &$this, $params;
+                // no error push here, because it should be pushed by the handler
+                $success = false;
+            }
+        }
+        return $success;
+    }
+    
     /**
      * make a string representation of the object
      *
@@ -1444,6 +1538,7 @@ class LiveUser
                 LIVEUSER_STATUS_UNKNOWN         => 'An undefined error occurred',
                 LIVEUSER_STATUS_LOGGEDOUT       => 'User was logged out correctly',
                 LIVEUSER_STATUS_AUTHFAILED      => 'Cannot authenticate, username/password is probably wrong',
+                LIVEUSER_STATUS_UNFROZEN        => 'Object fetched from the session, the user was already logged in'
             );
         }
 
