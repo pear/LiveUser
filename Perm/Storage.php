@@ -59,7 +59,8 @@ class LiveUser_Perm_Storage
     function init(&$storageConf)
     {
         if (is_array($storageConf)) {
-            foreach ($storageConf as $key => $value) {
+            $keys = array_keys($storageConf);
+            foreach ($keys as $key) {
                 if (isset($this->$key)) {
                     $this->$key =& $storageConf[$key];
                 }

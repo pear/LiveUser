@@ -270,9 +270,10 @@ class LiveUser_Auth_Common
     {
         $this->containerName = $containerName;
         if (is_array($conf)) {
-            foreach ($conf as $key => $value) {
+            $keys = array_keys($conf);
+            foreach ($keys as $key) {
                 if (isset($this->$key)) {
-                    $this->$key = $value;
+                    $this->$key =& $conf[$key];
                 }
             }
         }
