@@ -168,20 +168,20 @@ class LiveUser
      * @var     array
      */
     var $_options = array(
-        'autoInit'=> false,
-        'session' => array(
-            'name'     => 'PHPSESSID',
-            'varname'  => 'ludata',
+        'autoInit' => false,
+        'session'  => array(
+            'name'    => 'PHPSESSID',
+            'varname' => 'ludata',
         ),
-        'session_save_handler' => false,
+        'session_save_handler'  => false,
         'session_cookie_params' => false,
         'cache_perm' => false,
-        'login'   => array(
-            'force'    => false,
-            'regenid'    => false
+        'login' => array(
+            'force'   => false,
+            'regenid' => false
         ),
-        'logout'  => array(
-            'destroy'  => true
+        'logout' => array(
+            'destroy' => true
         )
     );
 
@@ -296,12 +296,14 @@ class LiveUser
      * @var    array
      */
     var $events = array(
-        'onLogin',     // successfully logged in
-        'forceLogin',  // login required -> you could display a login form
-        'onLogout',    // before logout -> can be used to cleanup own stuff
-        'postLogout',  // after logout -> e.g. do a redirect to another page
-        'onIdled',     // maximum idle time is reached
-        'onExpired'    // authentication session is expired
+        'onLogin',          // successfully logged in
+        'onFailedLogin',    // failed logged in
+        'onUnfreeze',       // successfully unfreeze of a previously logged in user
+        'forceLogin',       // login required -> you could display a login form
+        'onLogout',         // before logout -> can be used to cleanup own stuff
+        'postLogout',       // after logout -> e.g. do a redirect to another page
+        'onIdled',          // maximum idle time is reached
+        'onExpired'         // authentication session is expired
     );
 
     /**
@@ -597,6 +599,7 @@ class LiveUser
         $storageName = $classprefix.'Perm_Storage_' . key($confArray);
         if (!LiveUser::loadClass($storageName) && count($confArray) <= 1) {
             return false;
+        // if the storage container does not exist try the next one in the stack
         } elseif (count($confArray) > 1) {
             $storageConf =& array_pop($confArray);
             return LiveUser::storageFactory($confArray, $classprefix);
@@ -713,6 +716,19 @@ class LiveUser
             array(), 'Configuration array not found in LiveUser::readConfig()'
         );
         return false;
+    }
+
+    /**
+     * This method lazy loads PEAR::Log
+     *
+     * @access protected
+     * @return void
+     */
+    function loadPEARLog()
+    {
+        require_once 'Log.php';
+        $this->_log = &Log::factory('composite');
+        $this->_stack->setLogger($this->_log);
     }
 
     /**
@@ -894,16 +910,16 @@ class LiveUser
             } elseif ($this->_auth->expireTime > 0 && $this->_auth->currentLogin > 0) {
                 // Check if authentication session is expired.
                 if (($this->_auth->currentLogin + $this->_auth->expireTime) < time()) {
-                    $this->logout();
                     $this->status = LIVEUSER_STATUS_EXPIRED;
                     $this->triggerEvent('onExpired');
+                    $this->logout(false);
                 // Check if maximum idle time is reached.
                 } elseif (isset($_SESSION[$this->_options['session']['varname']]['idle']) &&
                     ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->_auth->idleTime) < time())
                 {
-                    $this->logout();
                     $this->status = LIVEUSER_STATUS_IDLED;
                     $this->triggerEvent('onIdled');
+                    $this->logout(false);
                 }
             }
         }
@@ -914,19 +930,14 @@ class LiveUser
             $this->login($handle, $passwd, $remember);
         }
 
-        // Force user login.
-        if (!$this->isLoggedIn() && $this->_options['login']['force']) {
-            $this->triggerEvent('forceLogin');
-        }
-
         // Return boolean that indicates whether a auth object has been created
         // or retrieved from session
         if ($this->isLoggedIn()) {
-            if ($this->_options['login']['regenid']) {
-                session_regenerate_id();
-            }
             $this->_status = LIVEUSER_STATUS_OK;
             return true;
+        // Force user login.
+        } elseif ($this->_options['login']['force']) {
+            $this->triggerEvent('forceLogin');
         }
 
         return false;
@@ -986,11 +997,15 @@ class LiveUser
 
         if (!$this->isLoggedIn()) {
             $this->_stack->push(LIVEUSER_ERROR_WRONG_CREDENTIALS, 'error');
+            $this->triggerEvent('onFailedLogin');
             return false;
         }
 
         // user has just logged in
         $this->triggerEvent('onLogin');
+        if ($this->_options['login']['regenid']) {
+            session_regenerate_id();
+        }
 
         return true;
     }
@@ -1032,6 +1047,7 @@ class LiveUser
                     }
                 }
                 $this->_status = LIVEUSER_STATUS_UNFROZEN;
+                $this->triggerEvent('onUnfreeze');
                 return true;
             }
         }
@@ -1073,18 +1089,27 @@ class LiveUser
      */
     function disconnect()
     {
-        if (is_a($this->_auth, 'LiveUser_Auth_Common') && $this->_auth->loggedIn) {
-            $this->_auth->disconnect();
-            $this->_auth = null;
-            if (is_a($this->_perm, 'LiveUser_Perm_Simple')) {
-                $this->_perm->disconnect();
-                $this->_perm = null;
+        $result = false;
+        if (is_a($this->_auth, 'LiveUser_Auth_Common')) {
+            $result = $this->_auth->disconnect();
+            if ($result === false) {
+                return false;
             }
-            return true;
+            $this->_auth = null;
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
-            array(), 'No connection to disconnect in LiveUser::disconnect()');
-        return false;
+        if (is_a($this->_perm, 'LiveUser_Perm_Simple')) {
+            $result = $this->_perm->disconnect();
+            if ($result === false) {
+                return false;
+            }
+            $this->_perm = null;
+        }
+        if ($result === false) {
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
+                array(), 'No connection to disconnect in LiveUser::disconnect()');
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -1235,23 +1260,29 @@ class LiveUser
      */
     function deleteRememberCookie()
     {
-        if (isset($this->_options['cookie']) &&
-            isset($_COOKIE[$this->_options['cookie']['name']]))
-        {
-            $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
-            if (isset($cookieData[0])) {
-                $dir = $this->_options['cookie']['savedir'];
-                @unlink($dir . '/'.$cookieData[0].'.lu');
-            }
-            setcookie($this->_options['cookie']['name'],
-                '',
-                (time() - 86400),
-                $this->_options['cookie']['path'],
-                $this->_options['cookie']['domain'],
-                $this->_options['cookie']['secure']
-            );
-            unset($_COOKIE[$this->_options['cookie']['name']]);
+        if (!isset($this->_options['cookie'])) {
+            return false;
         }
+
+        if (!isset($_COOKIE[$this->_options['cookie']['name']])) {
+            return false;
+        }
+
+        $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
+        if (isset($cookieData[0])) {
+            $dir = $this->_options['cookie']['savedir'];
+            @unlink($dir . '/'.$cookieData[0].'.lu');
+        }
+        setcookie($this->_options['cookie']['name'],
+            '',
+            (time() - 86400),
+            $this->_options['cookie']['path'],
+            $this->_options['cookie']['domain'],
+            $this->_options['cookie']['secure']
+        );
+        unset($_COOKIE[$this->_options['cookie']['name']]);
+
+        return true;
     }
 
     /**
@@ -1304,8 +1335,7 @@ class LiveUser
         }
 
         // Delete the container objects
-        $this->_auth = null;
-        $this->_perm = null;
+        $this->disconnect();
 
         if ($direct) {
             // trigger event 'postLogout', can be used to do a redirect
@@ -1398,6 +1428,7 @@ class LiveUser
 
         return false;
     }
+
     /**
      * Checks if a user is logged in.
      *
@@ -1593,19 +1624,6 @@ class LiveUser
         // return the textual error message corresponding to the code
         return isset($statusMessages[$value])
             ? $statusMessages[$value] : $statusMessages[LIVEUSER_STATUS_UNKNOWN];
-    }
-
-    /**
-     * This method lazy loads PEAR::Log
-     *
-     * @access protected
-     * @return void
-     */
-    function loadPEARLog()
-    {
-        require_once 'Log.php';
-        $this->_log = &Log::factory('composite');
-        $this->_stack->setLogger($this->_log);
     }
 } // end class LiveUser
 ?>
