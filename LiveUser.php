@@ -1408,9 +1408,9 @@ class LiveUser
                 LIVEUSER_STATUS_PERMINITERROR   => 'Cannot instantiate permission container',
                 LIVEUSER_STATUS_AUTHINITERROR   => 'Cannot instantiate authentication configuration',
                 LIVEUSER_STATUS_AUTHNOTFOUND    => 'Cannot retrieve Auth object from session',
-                LIVEUSER_STATUS_UNKNOWN         => 'Something went wrong but I do not know what',
+                LIVEUSER_STATUS_UNKNOWN         => 'An undefined error occurred',
                 LIVEUSER_STATUS_LOGGEDOUT       => 'User was logged out correctly',
-                LIVEUSER_STATUS_AUTHFAILED      => 'I could not authenticate the user',
+                LIVEUSER_STATUS_AUTHFAILED      => 'Cannot authenticate, username/password is probably wrong',
             );
         }
 
