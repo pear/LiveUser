@@ -9,40 +9,10 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.14.0';
+$version = '0.14.1';
 
 $notes = <<<EOT
-  - DB containers no longer use CASE in the sql query.
-  - lazy loading of PEAR::Log
-  - getProperty can now handle mixed case field names, on the auth side.
-  - Fixed Bug #2672, #2713, #2714 Typo fixes
-  - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/
-    which are from now on installed in pear_folder/LiveUser/misc/schema/
-  - fixed regenid option
-  - refactored client part to the new class layout (using storage containers)
-  - fixed example2 to use the new config layout
-  - disabled perm caching by default
-  - added sessionName param to (un)freeze method calls to the perm container
-  - removed options of reading parameters from the superglobals
-  - reworked init() method severly
-  - remove the callback that catches PEAR_Error errors
-  - adding getErrors() method to get the error stack
-  - added LiveUser::checkGroup() in order to check for membership in groups
-  - added second auth container to example4
-  - fix #2678: have more control on callback function
-  - added 'session_cookie_params' option
-  - LiveUser now expects a true from the auth container unfreeze() method
-  - Removed a potential security issue in Auth freeze()
-  - added Observers, see the wiki for more information
-  - added an observer class in example1 and example4 to show how they work
-  - added usage example for multiple auth containers to example4
-  - added support for checking arbitrary values in unfreeze()
-    (for example the user agent) to make session high-jacking more difficult)
-  - use the new config array
-  - moved example3 to the admin package
-  - moved connection handling into init() methods that are called inside
-    the factory methods
-  - moved error handling over to error stack
+  - fixed php5 issues in example4
 EOT;
 
 $description = <<<EOT
