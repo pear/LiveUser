@@ -31,38 +31,6 @@ function pear_error_handler($err_obj)
 
 PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'pear_error_handler');
 
-function showLoginForm($liveUserObj = false)
-{
-    include_once 'HTML/Template/IT.php';
-    $tpl = new HTML_Template_IT();
-    $tpl->loadTemplatefile('loginform.tpl.php');
-
-    $tpl->setVariable('form_action', $_SERVER['PHP_SELF']);
-
-    if (is_object($liveUserObj)) {
-        if ($liveUserObj->status) {
-            switch ($liveUserObj->status) {
-                case LIVEUSER_STATUS_ISINACTIVE:
-                    $tpl->touchBlock('inactive');
-                    break;
-                case LIVEUSER_STATUS_IDLED:
-                    $tpl->touchBlock('idled');
-                    break;
-                case LIVEUSER_STATUS_EXPIRED:
-                    $tpl->touchBlock('expired');
-                    break;
-                default:
-                    $tpl->touchBlock('failure');
-                    break;
-            }
-        }
-    }
-
-    $tpl->show();
-    exit();
-}
-
-
 require_once 'DB.php';
 
 // Data Source Name (DSN)
@@ -77,17 +45,11 @@ require_once 'HTML/Template/IT.php';
 $tpl = new HTML_Template_IT();
 
 $LUOptions = array(
-    'autoInit' => true,
     'login' => array(
-        'function' => 'showLoginForm',
         'force'    => true
      ),
     'logout' => array(
-        'trigger'  => 'logout',
-        'redirect' => '',
         'destroy'  => true,
-        'method'   => 'get',
-        'function' => ''
      ),
     'authContainers' => array(
                             array(
@@ -131,7 +93,52 @@ $password = isset($_REQUEST['password']) ? $_REQUEST['password'] : null;
 $logout = isset($_REQUEST['logout']) ? $_REQUEST['logout'] : null;
 
 require_once 'LiveUser.php';
-$LU = &LiveUser::factory($LUOptions, $username, $password, $logout);
+
+class showLoginForm
+{
+    function forceLogin(&$liveUserObj)
+    {
+        include_once 'HTML/Template/IT.php';
+        $tpl = new HTML_Template_IT();
+        $tpl->loadTemplatefile('loginform.tpl.php');
+
+        $tpl->setVariable('form_action', $_SERVER['PHP_SELF']);
+
+        if (is_object($liveUserObj)) {
+            if ($liveUserObj->status) {
+                switch ($liveUserObj->status) {
+                    case LIVEUSER_STATUS_ISINACTIVE:
+                        $tpl->touchBlock('inactive');
+                        break;
+                    case LIVEUSER_STATUS_IDLED:
+                        $tpl->touchBlock('idled');
+                        break;
+                    case LIVEUSER_STATUS_EXPIRED:
+                        $tpl->touchBlock('expired');
+                        break;
+                    default:
+                        $tpl->touchBlock('failure');
+                        break;
+                }
+            }
+        }
+
+        $tpl->show();
+        exit();
+    }
+}
+
+$showLoginForm =& new showLoginForm();
+
+// Create new LiveUser (LiveUser) object.
+// We´ll only use the auth container, permissions are not used.
+$LU =& LiveUser::factory($LUOptions);
+$LU->attachObserver($showLoginForm, 'forceLogin');
+
+$username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : NULL;
+$password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : NULL;
+$logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
+$LU->init($username, $password, $logout);
 
 define('AREA_NEWS',          1);
 define('RIGHT_NEWS_NEW',     1);
