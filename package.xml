@@ -59,12 +59,12 @@
       <user>dufuz</user>
       <name>Helgi &THORN;ormar</name>
       <email>dufuz@php.net</email>
-      <role>developer</role>
+      <role>lead</role>
     </maintainer>
   </maintainers>
   <release>
     <version>0.15.0</version>
-    <date>2005-03-07</date>
+    <date>2005-03-14</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>general notes
@@ -98,6 +98,7 @@ perm schema structure
   - fixed remember me feature in example2
   - remove empty placeholders and block in loadTemplate() calls in example4
   - added translation_id field in liveuser_translations table
+  - fixed bug in group subgroup table joining in the schema structure
 
 examples
   - fixed bug in example1 onLogout -&gt; postLogout (bug #3135)
@@ -127,7 +128,6 @@ examples
        </dir> <!-- Auth -->
        <dir name="docs">
         <dir name="examples">
-         <file role="doc" name="README"/>
          <dir name="example1">
           <file role="doc" name="Auth_XML.xml"/>
           <file role="doc" name="conf.php"/>
@@ -159,6 +159,7 @@ examples
           <file role="doc" name="news_notallowed.tpl.php"/>
           <file role="doc" name="news_view.php"/>
           <file role="doc" name="news_view.tpl.php"/>
+          <file role="doc" name="README"/>
           <file role="doc" name="style.css"/>
          </dir> <!-- docs/examples/example4 -->
         </dir> <!-- docs/examples -->
@@ -194,7 +195,7 @@ examples
   <changelog>
     <release>
       <version>0.15.0</version>
-      <date>2005-03-07</date>
+      <date>2005-03-14</date>
       <license>LGPL</license>
       <state>beta</state>
       <notes>general notes
@@ -228,6 +229,7 @@ perm schema structure
   - fixed remember me feature in example2
   - remove empty placeholders and block in loadTemplate() calls in example4
   - added translation_id field in liveuser_translations table
+  - fixed bug in group subgroup table joining in the schema structure
 
 examples
   - fixed bug in example1 onLogout -&gt; postLogout (bug #3135)
