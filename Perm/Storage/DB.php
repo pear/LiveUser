@@ -50,18 +50,10 @@ require_once 'DB.php';
  */
 class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 {
-    /**
-     * Constructor
-     *
-     * @access protected
-     * @param  mixed      configuration array
-     * @return void
-     */
-    function LiveUser_Perm_Storage_DB(&$confArray, &$storageConf)
+    function init(&$storageConf)
     {
-        $this->LiveUser_Perm_Storage_SQL($confArray, $storageConf);
         if (isset($storageConf['connection']) &&
-                DB::isConnection($storageConf['connection'])
+            DB::isConnection($storageConf['connection'])
         ) {
             $this->dbc = &$storageConf['connection'];
         } elseif (isset($storageConf['dsn'])) {
@@ -72,7 +64,13 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             }
             $options['portability'] = DB_PORTABILITY_ALL;
             $this->dbc =& DB::connect($storageConf['dsn'], $options);
+            if (PEAR::isError($this->dbc)) {
+                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                    array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                return false;
+            }
         }
+        return true;
     }
 
     /**
@@ -102,7 +100,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -139,7 +137,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -173,7 +171,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -200,11 +198,11 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             WHERE
                 GU.' . $this->alias['group_id'] . ' = G. ' . $this->alias['group_id'] . '
             AND
-                ' . $this->alias['perm_user_id'] . ' = '.
+                GU.' . $this->alias['perm_user_id'] . ' = '.
                     $this->dbc->quoteSmart($permUserId);
 
         if (isset($this->tables['groups']['fields']['is_active'])) {
-            $query .= 'AND
+            $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
                     $this->dbc->quoteSmart(true);
         }
@@ -213,7 +211,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -249,7 +247,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -283,7 +281,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                     implode(', ', $groupIds).')';
 
         if (isset($this->tables['groups']['fields']['is_active'])) {
-            $query .= 'AND
+            $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
                     $this->dbc->quoteSmart('Y');
         }
@@ -292,7 +290,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -330,7 +328,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -365,11 +363,11 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserinfo());
+                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
         }
 
-        for($i=0,$j=count($result); $i<$j; ++$i) {
+        for ($i=0,$j=count($result); $i<$j; ++$i) {
             $result[$i]['has_implied'] = ($result[$i]['has_implied'] == 'Y');
         }
 

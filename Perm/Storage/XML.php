@@ -68,37 +68,30 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      */
     var $userObj = null;
 
-    /**
-     * Constructor
-     *
-     * @access protected
-     * @param  mixed      configuration array
-     * @return void
-     */
-    function LiveUser_Perm_Storage_XML(&$confArray, &$storageConf)
+    function init(&$storageConf)
     {
-        $this->LiveUser_Perm_Storage($confArray, $storageConf);
         if (!is_file($this->file)) {
             if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
                 $this->_stack->push(LIVEUSER_ERROR_MISSING_DEPS, 'exception', array(),
                     "Perm initialisation failed. Can't find xml file.");
-                return $this;
+                return false;
             }
             $this->file = getenv('DOCUMENT_ROOT') . $this->file;
         }
         if (!class_exists('XML_Tree')) {
             $this->_stack->push(LIVEUSER_ERROR_MISSING_DEPS, 'exception', array(),
                 "Perm initialisation failed. Can't find XML_Tree class");
-            return $this;
+            return false;
         }
         $tree =& new XML_Tree($this->file);
         $err =& $tree->getTreeFromFile();
         if (PEAR::isError($err)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
                 "Perm initialisation failed. Can't get tree from file");
-            return $this;
+            return false;
         }
         $this->tree = $tree;
+        return true;
     }
 
     /**

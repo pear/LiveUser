@@ -39,18 +39,6 @@ require_once 'LiveUser/Perm/Storage.php';
  */
 class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
 {
-    /**
-     * Constructor
-     *
-     * @access protected
-     * @param  mixed      configuration array
-     * @return void
-     */
-    function LiveUser_Perm_Storage_Cache(&$confArray, &$storageConf)
-    {
-        $this->_storage = LiveUser::storageFactory($confArray, $storageConf);
-    }
-
     function mapUser($authUserId, $containerName)
     {
         if (in_cache) {
