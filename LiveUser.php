@@ -1094,7 +1094,6 @@ class LiveUser
      */
     function disconnect()
     {
-        $result = false;
         if (is_a($this->_auth, 'LiveUser_Auth_Common')) {
             $result = $this->_auth->disconnect();
             if ($result === false) {
@@ -1108,11 +1107,6 @@ class LiveUser
                 return false;
             }
             $this->_perm = null;
-        }
-        if ($result === false) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
-                array(), 'No connection to disconnect in LiveUser::disconnect()');
-            return false;
         }
         return true;
     }
