@@ -32,6 +32,10 @@ $notes = <<<EOT
   - adding getErrors() method to get the error stack
   - added LiveUser::checkGroup() in order to check for membership in groups
   - added second auth container to example4
+  - fix #2678: have more control on callback function
+  - Matthias Nothhaft contributed a patch to add observers to the main class.
+    There are several events triggered for many different actions giving
+    fine control to the user to add custom schemes
   - added 'session_cookie_params' option
   - LiveUser now expects a true from the auth container unfreeze() method
 EOT;
