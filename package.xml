@@ -64,17 +64,17 @@
   </maintainers>
   <release>
     <version>0.14.0</version>
-    <date>2004-12-15</date>
+    <date>2004-12-20</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>  - DB containers no longer use CASE in the sql query.
   - lazy loading of PEAR::Log
-  - getProperty can now handle fooBar fieldnames, on the auth side.
+  - getProperty can now handle mixed case field names, on the auth side.
   - Fixed Bug #2672, #2713, #2714 Typo fixes
   - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/
     which are from now on installed in pear_folder/LiveUser/misc/schema/
   - fixed regenid option
-  - refactored client part to the new layout (using storage containers)
+  - refactored client part to the new class layout (using storage containers)
   - fixed example2 to use the new config layout
   - disabled perm caching by default
   - added sessionName param to (un)freeze method calls to the perm container
@@ -94,7 +94,10 @@
   - added support for checking arbitrary values in unfreeze()
     (for example the user agent) to make session high-jacking more difficult)
   - use the new config array
-  - moved example3 to the admin package</notes>
+  - moved example3 to the admin package
+  - moved connection handling into init() methods that are called inside
+    the factory methods
+  - moved error handling over to error stack</notes>
     <deps>
       <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
       <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
@@ -187,17 +190,17 @@
   <changelog>
     <release>
       <version>0.14.0</version>
-      <date>2004-12-15</date>
+      <date>2004-12-20</date>
       <license>LGPL</license>
       <state>beta</state>
       <notes>  - DB containers no longer use CASE in the sql query.
   - lazy loading of PEAR::Log
-  - getProperty can now handle fooBar fieldnames, on the auth side.
+  - getProperty can now handle mixed case field names, on the auth side.
   - Fixed Bug #2672, #2713, #2714 Typo fixes
   - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/
     which are from now on installed in pear_folder/LiveUser/misc/schema/
   - fixed regenid option
-  - refactored client part to the new layout (using storage containers)
+  - refactored client part to the new class layout (using storage containers)
   - fixed example2 to use the new config layout
   - disabled perm caching by default
   - added sessionName param to (un)freeze method calls to the perm container
@@ -217,7 +220,10 @@
   - added support for checking arbitrary values in unfreeze()
     (for example the user agent) to make session high-jacking more difficult)
   - use the new config array
-  - moved example3 to the admin package</notes>
+  - moved example3 to the admin package
+  - moved connection handling into init() methods that are called inside
+    the factory methods
+  - moved error handling over to error stack</notes>
     </release>
     <release>
       <version>0.14</version>

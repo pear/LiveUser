@@ -14,12 +14,12 @@ $version = '0.14.0';
 $notes = <<<EOT
   - DB containers no longer use CASE in the sql query.
   - lazy loading of PEAR::Log
-  - getProperty can now handle fooBar fieldnames, on the auth side.
+  - getProperty can now handle mixed case field names, on the auth side.
   - Fixed Bug #2672, #2713, #2714 Typo fixes
   - Bug #2692 some SQL files go installed under pear_folder/LiveUser/sql/
     which are from now on installed in pear_folder/LiveUser/misc/schema/
   - fixed regenid option
-  - refactored client part to the new layout (using storage containers)
+  - refactored client part to the new class layout (using storage containers)
   - fixed example2 to use the new config layout
   - disabled perm caching by default
   - added sessionName param to (un)freeze method calls to the perm container
