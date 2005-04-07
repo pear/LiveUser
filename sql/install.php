@@ -40,8 +40,7 @@
  */
 
 require_once 'LiveUser.php';
-require_once 'MDB2.php';
-MDB2::loadFile('Tools/Manager');
+require_once 'MDB2/Schema.php';
 
 /*
 $dsn = 'mysql://root:@localhost/liveuser_test_installer';
@@ -135,7 +134,7 @@ class LiveUser_Misc_Schema_Install
 
     function installSchema($dsn, $file, $variables, $create = true)
     {
-        $manager =& new MDB2_Tools_Manager;
+        $manager =& new MDB2_Schema;
 
         unset($dsn['database']);
 

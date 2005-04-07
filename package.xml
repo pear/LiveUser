@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.0a9">
+<package version="1.0" packagerversion="1.4.0a10">
  <name>LiveUser</name>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
@@ -64,14 +64,11 @@
   </maintainer>
   </maintainers>
  <release>
-  <version>0.15.1</version>
-  <date>2005-03-30</date>
+  <version>0.16.0</version>
+  <date>2005-04-06</date>
   <license>LGPL</license>
   <state>beta</state>
-  <notes>- checkRightLevel incorrectly required that a user needs to be authenticated
-- moved logic in regard to handling empty owner id's into complex container
-- typo fix in error message (bug #3899)
-- fixed bug auth_user_id =&gt; authUserId in liveuser_user queries (bug #3964)
+  <notes>- use MDB2_Schema as an optional dependency for the schema installer
   </notes>
   <deps>
    <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
@@ -83,6 +80,7 @@
    <dep type="pkg" rel="ge" version="1.3.3" optional="no">PEAR</dep>
    <dep type="pkg" rel="ge" version="1.7.0" optional="yes">Log</dep>
    <dep type="pkg" rel="has" optional="no">Event_Dispatcher</dep>
+   <dep type="pkg" rel="has" optional="yes">MDB2_Schema</dep>
   </deps>
   <filelist>
    <dir name="/" baseinstalldir="/LiveUser">
@@ -162,6 +160,14 @@
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>0.16.0</version>
+    <date>2005-04-06</date>
+    <license>LGPL</license>
+    <state>beta</state>
+    <notes>- use MDB2_Schema as an optional dependency for the schema installer
+    </notes>
+   </release>
    <release>
     <version>0.15.1</version>
     <date>2005-03-30</date>

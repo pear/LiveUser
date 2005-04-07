@@ -9,13 +9,11 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.15.1';
+$version = '0.16.0';
 
 $notes = <<<EOT
-- checkRightLevel incorrectly required that a user needs to be authenticated
-- moved logic in regard to handling empty owner id's into complex container
-- typo fix in error message (bug #3899)
-- fixed bug auth_user_id => authUserId in liveuser_user queries (bug #3964)
+- use MDB2_Schema as an optional dependency for the schema installer
+- forgot to pass 'create' param to installSchema() in installPermSchema()
 EOT;
 
 $description = <<<EOT
@@ -100,6 +98,7 @@ $package->addDependency('Log',              '1.7.0',      'ge',  'pkg', true);
 $package->addDependency('DB',               '1.6.0',      'ge',  'pkg', true);
 $package->addDependency('MDB',              '1.1.4',      'ge',  'pkg', true);
 $package->addDependency('MDB2',             '2.0.0beta2', 'ge',  'pkg', true);
+$package->addDependency('MDB2_Schema',      false,        'has', 'pkg', true);
 $package->addDependency('XML_Tree',         false,        'has', 'pkg', true);
 $package->addDependency('Crypt_RC4',        false,        'has', 'pkg', true);
 
