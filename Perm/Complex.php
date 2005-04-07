@@ -83,14 +83,12 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             return null;
         }
 
-        $queue = array();
         $result = $this->_storage->readImplyingRights($rightIds, $table);
-
-        if (!is_array($result) || !count($result)) {
+        if (!is_array($result)) {
             return false;
         }
-        $queue = $result;
 
+        $queue = $result;
         while (count($queue)) {
             $currentRights = reset($queue);
             $currentLevel = key($queue);
@@ -104,8 +102,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
                 // only store the implied right if the right wasn't stored before
                 // or if the level is higher
                 if (!isset($rightIds[$val['right_id']]) ||
-                    $rightIds[$val['right_id']] < $val['right_level'])
-                {
+                    $rightIds[$val['right_id']] < $val['right_level']
+                ) {
                     $rightIds[$val['right_id']] = $val['right_level'];
                     if ($val['has_implied']) {
                         $queue[$val['right_level']][] = $val['right_id'];
@@ -130,10 +128,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
     function readUserRights($permUserId)
     {
         $userRights = parent::readUserRights($permUserId);
-        $result = $this->_readImpliedRights($userRights, 'user');
-        if ($result) {
-            $this->userRights = array_merge($this->userRights, $result);
-        }
+        $this->userRights = $this->_readImpliedRights($userRights, 'user');
+
         return $this->userRights;
     } // end func readUserRights
 
@@ -194,11 +190,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
     function readGroupRights($groupIds)
     {
         $groupRights = parent::readGroupRights($groupIds);
+        $this->groupRights = $this->_readImpliedRights($groupRights, 'group');
 
-        $result = $this->_readImpliedRights($groupRights, 'group');
-        if ($result) {
-            $this->groupRights = $result;
-        }
         return $this->groupRights;
     } // end func readGroupRights
 
