@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -340,7 +340,7 @@ class LiveUser
         }
 
         $this->_stack->setErrorMessageTemplate($this->_errorMessages);
-        
+
         $this->dispatcher =& Event_Dispatcher::getInstance();
     }
 
@@ -521,9 +521,10 @@ class LiveUser
     /**
      * Wrapper method to get the Error Stack
      *
-     * @access public
      * @return array  an array of the errors or
      *                false if there are no errors
+     *
+     * @access public
      */
     function getErrors()
     {
@@ -538,6 +539,7 @@ class LiveUser
      *
      * @param  string   classname
      * @return boolean  true success or false on failure
+     *
      * @access public
      */
     function loadClass($classname)
@@ -563,6 +565,7 @@ class LiveUser
      * @param  string       Prefix of the class that will be used.
      * @return object|false Returns an instance of an auth container
      *                      class or false on error
+     *
      * @access public
      */
     function &authFactory(&$conf, $containerName, $classprefix = 'LiveUser_')
@@ -585,6 +588,7 @@ class LiveUser
      * @param  string        Prefix of the class that will be used.
      * @return object|false  Returns an instance of a perm container
      *                       class or false on error
+     *
      * @access public
      */
     function &permFactory(&$conf, $classprefix = 'LiveUser_')
@@ -607,6 +611,7 @@ class LiveUser
      * @param  string        Prefix of the class that will be used.
      * @return object|false  will return an instance of a Storage container
      *                       or false upon error
+     *
      * @access protected
      */
     function &storageFactory(&$confArray, $classprefix = 'LiveUser_')
@@ -638,8 +643,9 @@ class LiveUser
      * @param  array        array that should be clobbered
      * @param  array        array that should be clobbered
      * @return array|false  array on success and false on error
-     * @author kc@hireability.com
+     *
      * @access public
+     * @author kc@hireability.com
      */
     function arrayMergeClobber($a1, $a2)
     {
@@ -664,6 +670,7 @@ class LiveUser
      *
      * @param  string   filename
      * @return boolean  true success and false on error
+     *
      * @access public
      */
     function fileExists($file)
@@ -683,6 +690,7 @@ class LiveUser
      * @param  array|file  Conf array or file path to configuration
      * @param  string      Name of array containing the configuration
      * @return boolean     true on success or false on failure
+     *
      * @access private
      */
     function _readConfig($conf, $confName)
@@ -738,8 +746,9 @@ class LiveUser
     /**
      * This method lazy loads PEAR::Log.
      *
-     * @access protected
      * @return void
+     *
+     * @access protected
      */
     function loadPEARLog()
     {
@@ -766,6 +775,7 @@ class LiveUser
      *
      * @param  Log      logger instance
      * @return boolean  true on success or false on failure
+     *
      * @access public
      */
     function addErrorLog(&$log)
@@ -781,6 +791,7 @@ class LiveUser
      *
      * @param  string  token to use to encrypt data
      * @return object  returns an instance of the Crypt_RC4 class
+     *
      * @access public
      */
     function &cryptRC4Factory($secret)
@@ -797,9 +808,10 @@ class LiveUser
      *
      * @param  boolean  true to crypt, false to decrypt
      * @param  string   data to crypt
-     * @param  boolean  true if it should be crypted, 
+     * @param  boolean  true if it should be crypted,
      *                  false if it should be decrypted
      * @return string   crypted data
+     *
      * @access private
      */
     function cryptRC4($data, $secret, $crypt = true)
@@ -840,6 +852,7 @@ class LiveUser
      * @param  string   option name
      * @param  mixed    value for the option
      * @return boolean  true on success or false on failure
+     *
      * @access public
      * @see    LiveUser::_options
      */
@@ -859,6 +872,7 @@ class LiveUser
      *
      * @param  string  option name
      * @return mixed   the option value or false on failure
+     *
      * @access public
      */
     function getOption($option)
@@ -884,6 +898,7 @@ class LiveUser
      * @param  boolean  set if remember me is set
      * @return boolean  true if init process well, false if something
      *                  went wrong.
+     *
      * @access public
      */
     function init($handle = '', $passwd = '', $logout = false, $remember = false)
@@ -970,6 +985,7 @@ class LiveUser
      * @param  string   password of the user trying to authenticate
      * @param  boolean  set rememberMe cookie
      * @return boolean  true on success or false on failure
+     *
      * @access private
      */
     function login($handle = '', $passwd = '', $remember = false)
@@ -1043,6 +1059,7 @@ class LiveUser
      * to give them an active database/whatever connection again.
      *
      * @return boolean true on success or false on failure
+     *
      * @access private
      */
     function unfreeze()
@@ -1087,6 +1104,7 @@ class LiveUser
      * Stores all properties in the session.
      *
      * @return  boolean true on sucess or false on failure
+     *
      * @access  public
      */
     function freeze()
@@ -1113,6 +1131,7 @@ class LiveUser
      * Properly disconnect resources in the active container
      *
      * @return  boolean true on success or false on failure
+     *
      * @access  public
      */
     function disconnect()
@@ -1143,6 +1162,7 @@ class LiveUser
      * @param  string   password of the user trying to authenticate
      * @param  boolean  set if remember me is set
      * @return boolean  true if the cookie can be set, false otherwise
+     *
      * @access private
      */
     function setRememberCookie($handle, $passwd, $remember)
@@ -1209,6 +1229,7 @@ class LiveUser
      * Handles the rememberMe cookie login.
      *
      * @return boolean true on success or false on failure
+     *
      * @access private
      */
     function readRememberCookie()
@@ -1278,6 +1299,7 @@ class LiveUser
      * Deletes the rememberMe cookie login.
      *
      * @return boolean true on success or false on failure
+     *
      * @access private
      */
     function deleteRememberCookie()
@@ -1312,6 +1334,7 @@ class LiveUser
      *
      * @param  boolean $direct  set to true if the logout was initiated directly
      * @return void
+     *
      * @access private
      */
     function logout($direct = true)
@@ -1370,6 +1393,7 @@ class LiveUser
      *
      * @param  array|int   A right id or an array of rights.
      * @return int|false  level if the user has the right/rights false if not
+     *
      * @access public
      */
     function checkRight($rights)
@@ -1407,6 +1431,7 @@ class LiveUser
      * @param  array|int  Id or array of Ids of the group of the
      *                    ressource for which the right is requested.
      * @return boolean    true on success or false on failure
+     *
      * @access public
      */
     function checkRightLevel($rights, $owner_user_id, $owner_group_id)
@@ -1424,6 +1449,7 @@ class LiveUser
      *
      * @param  array|int  A group id or an array of groups.
      * @return boolean    true on success or false on failure
+     *
      * @access public
      */
     function checkGroup($groups)
@@ -1452,6 +1478,7 @@ class LiveUser
      * Checks if a user is logged in.
      *
      * @return boolean true if user is logged in, false if not
+     *
      * @access public
      */
     function isLoggedIn()
@@ -1474,6 +1501,7 @@ class LiveUser
      *
      * @return boolean true if the user account is *not* active
      *                 false if the user account *is* active
+     *
      * @access public
      */
     function isInactive()
@@ -1488,6 +1516,7 @@ class LiveUser
      * @param  string  Name of the property to be returned.
      * @param  string  'auth' or 'perm'
      * @return mixed   a value or an array.
+     *
      * @access public
      */
     function getProperty($what, $container = 'auth')
@@ -1509,6 +1538,7 @@ class LiveUser
      * Get the current status.
      *
      * @return integer
+     *
      * @access public
      * @see    LIVEUSER_STATUS_* constants
      */
@@ -1521,6 +1551,7 @@ class LiveUser
      * Make a string representation of the object.
      *
      * @return  string
+     *
      * @access  public
      */
     function __toString()
@@ -1533,6 +1564,7 @@ class LiveUser
      *
      * @param   int     status code
      * @return  string  error message
+     *
      * @access  public
      */
     function statusMessage($value)
