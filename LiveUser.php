@@ -1550,7 +1550,7 @@ class LiveUser
     /**
      * Make a string representation of the object.
      *
-     * @return  string
+     * @return  string  returns a string representation of the class
      *
      * @access  public
      */
