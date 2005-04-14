@@ -467,8 +467,8 @@ class LiveUser
     {
         $obj = &new LiveUser();
 
-        if (!empty($conf)) {
-            if ($obj->_readConfig($conf, $confName)) {
+        if (!empty($conf) || !is_array($conf)) {
+            if ($obj->readConfig($conf, $confName)) {
                 if (isset($obj->_options['autoInit']) && $obj->_options['autoInit']) {
                     $obj->init($handle, $passwd, $logout, $remember);
                 }
@@ -637,7 +637,7 @@ class LiveUser
      * Clobbers two arrays together.
      *
      * Function taken from the user notes of array_merge_recursive
-     * used in LiveUser::_readConfig()
+     * used in LiveUser::readConfig()
      * may be called statically
      *
      * @param  array        array that should be clobbered
@@ -691,9 +691,9 @@ class LiveUser
      * @param  string      Name of array containing the configuration
      * @return boolean     true on success or false on failure
      *
-     * @access private
+     * @access public
      */
-    function _readConfig($conf, $confName)
+    function readConfig($conf, $confName)
     {
         if (is_array($conf)) {
             if (isset($conf['authContainers'])) {
@@ -734,7 +734,7 @@ class LiveUser
             return false;
         }
         if (isset(${$confName}) && is_array(${$confName})) {
-            return $this->_readConfig(${$confName}, $confName);
+            return $this->readConfig(${$confName}, $confName);
         }
         $this->_stack->push(
             LIVEUSER_ERROR_CONFIG, 'exception',
@@ -1011,6 +1011,7 @@ class LiveUser
             }
             $auth = &$this->authFactory($this->authContainers[$index], $index);
             if ($auth === false) {
+                $this->status = LIVEUSER_STATUS_AUTHINITERROR;
                 return false;
             }
             $auth->login($handle, $passwd);
@@ -1021,6 +1022,7 @@ class LiveUser
                 if (is_array($this->permContainer)) {
                     $perm =& $this->permFactory($this->permContainer);
                     if ($perm === false) {
+                        $this->status = LIVEUSER_STATUS_PERMINITERROR;
                         return false;
                     }
                     $this->_perm =& $perm;
@@ -1386,6 +1388,8 @@ class LiveUser
             // trigger event 'postLogout', can be used to do a redirect
             $this->dispatcher->post($this,'postLogout');
         }
+
+        return true;
     }
 
     /**
