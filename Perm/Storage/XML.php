@@ -156,8 +156,8 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
                             $containerName == $user->attributes['authContainerName']
                         ) {
                             $result['perm_user_id'] = $user->attributes['userId'];
-                            $result['perm_type']   = $user->attributes['type'];
-                            $this->userObj    =& $this->tree->root->getElement(array($nodeIndex, $userIndex));
+                            $result['perm_type'] = $user->attributes['type'];
+                            $this->userObj =& $this->tree->root->getElement(array($nodeIndex, $userIndex));
                             return $result;
                         }
                         $userIndex++;
