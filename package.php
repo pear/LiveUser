@@ -14,6 +14,17 @@ $version = '0.16.0';
 $notes = <<<EOT
 - use MDB2_Schema as an optional dependency for the schema installer
 - forgot to pass 'create' param to installSchema() in installPermSchema()
+- cleaned up _readImpliedRights()
+- fixed bug in readUserRights() that would lead to overwriting the proper right keys
+- fixed typo (bug #4109)
+- updated authTableCols in the database drivers
+- made readConfig() public
+- use LIVEUSER_STATUS_AUTHINITERROR and LIVEUSER_STATUS_PERMINITERROR
+- improved handling of defaults in the installer
+- improved DB seq support in the installer
+- options can now be passed to the installer
+- made auth fields dynamic (thx dan)
+- added more infos into the old file names
 EOT;
 
 $description = <<<EOT
@@ -97,7 +108,7 @@ $package->addDependency('Event_Dispatcher', false,        'has', 'pkg', false);
 $package->addDependency('Log',              '1.7.0',      'ge',  'pkg', true);
 $package->addDependency('DB',               '1.6.0',      'ge',  'pkg', true);
 $package->addDependency('MDB',              '1.1.4',      'ge',  'pkg', true);
-$package->addDependency('MDB2',             '2.0.0beta2', 'ge',  'pkg', true);
+$package->addDependency('MDB2',             '2.0.0beta4', 'ge',  'pkg', true);
 $package->addDependency('MDB2_Schema',      false,        'has', 'pkg', true);
 $package->addDependency('XML_Tree',         false,        'has', 'pkg', true);
 $package->addDependency('Crypt_RC4',        false,        'has', 'pkg', true);
