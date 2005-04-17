@@ -103,7 +103,7 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
             if (isset($storageConf['options'])) {
                 $options = $storageConf['options'];
             }
-            $options['portability'] = MDB_PORTABILITY_ALL;
+            $options['optimize'] = 'portability';
             if ($function == 'singleton') {
                 $this->dbc =& MDB::singleton($storageConf['dsn'], $options);
             } else {
