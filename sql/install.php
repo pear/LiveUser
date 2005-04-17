@@ -95,13 +95,13 @@ class LiveUser_Misc_Schema_Install
 
         $dsn = $auth->dbc->dsn;
         if (is_a($auth->dbc, 'DB_Common')) {
-            $options['seqname_col_name'] = 'id';
+            $options['seqcol_name'] = 'id';
         } else {
             $dsn['database'] = $auth->dbc->database_name;
         }
 
-        $variables = array('database' => $dsn['database']);
-
+        // generate xml schema
+        $variables = array();
         $variables['user_table_name'] = $auth->authTable;
         if (isset($auth->authTableCols['required']) &&
             is_array($auth->authTableCols['required'])
@@ -139,13 +139,13 @@ class LiveUser_Misc_Schema_Install
 
         $dsn = $perm->dbc->dsn;
         if (is_a($perm->dbc, 'DB_Common')) {
-            $options['seqname_col_name'] = 'id';
+            $options['seqcol_name'] = 'id';
         } else {
             $dsn['database'] = $perm->dbc->database_name;
         }
 
+        // generate xml schema
         $variables = array(
-            'database' => $dsn['database'],
             'table_prefix' => $perm->prefix,
             'right_max_level' => LIVEUSER_MAX_LEVEL,
         );
@@ -158,6 +158,8 @@ class LiveUser_Misc_Schema_Install
         $manager =& new MDB2_Schema;
 
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
+        $variables['create'] = (int)$create;
+        $variables['database'] = $dsn['database'];
         unset($dsn['database']);
 
         $err = $manager->connect($dsn, $options);
@@ -165,7 +167,6 @@ class LiveUser_Misc_Schema_Install
             return $err;
         }
 
-        $variables['create'] = (int)$create;
         $result = $manager->updateDatabase($file, $file_old, $variables);
 
         $debug = $manager->getOption('debug');
