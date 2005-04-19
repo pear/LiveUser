@@ -121,6 +121,7 @@ class LiveUser_Misc_Schema_Install
                 if ($value['type'] == 'text') {
                     $fields[$value['name']]['length'] = 32;
                 }
+                $fields[$value['name']]['notnull'] = 1;
             }
         }
 
@@ -151,7 +152,15 @@ class LiveUser_Misc_Schema_Install
             'create' => '<variable>create</variable>',
             'tables' => array(
                 $auth->authTable => array(
-                    'fields' => $fields
+                    'fields' => $fields,
+                    'indexes' => array(
+                        $auth->authTableCols['required']['auth_user_id']['name'] => array(
+                            'fields' => array(
+                                $auth->authTableCols['required']['auth_user_id']['name'] => true,
+                            ),
+                           'unique' => true,
+                        ),
+                    ),
                 ),
             ),
             'sequences' => array(
