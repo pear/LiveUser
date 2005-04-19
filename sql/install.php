@@ -42,6 +42,7 @@
 require_once 'LiveUser.php';
 require_once 'MDB2/Schema.php';
 
+/*
 $dsn = 'mysql://root:@localhost/liveuser_test_installer';
 
 $conf = array(
@@ -71,18 +72,28 @@ $conf = array(
     )
 );
 
-$installer =& new LiveUser_Misc_Schema_Install();
-
 $options = array(
     'debug' => true,
     'log_line_break' => '<br>',
     'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
 );
 
-$result = $installer->installAuthSchema($conf['authContainers'][0], 'auth_mdb_schema.xml', true, $options);
+$result = LiveUser_Misc_Schema_Install::installAuthSchema(
+    $conf['authContainers'][0],
+    'auth_mdb_schema.xml',
+    true,
+    $options
+);
+
 var_dump($result);
-$result = $installer->installPermSchema($conf['permContainer']['storage'], 'perm_mdb_schema.xml', false, $options);
+$result = LiveUser_Misc_Schema_Install::installPermSchema(
+    $conf['permContainer']['storage'],
+    'perm_mdb_schema.xml',
+    false,
+    $options
+);
 var_dump($result);
+*/
 
 class LiveUser_Misc_Schema_Install
 {
@@ -101,13 +112,15 @@ class LiveUser_Misc_Schema_Install
         }
 
         // generate xml schema
-        $variables = array();
-        $variables['user_table_name'] = $auth->authTable;
+        $fields = array();
         if (isset($auth->authTableCols['required']) &&
             is_array($auth->authTableCols['required'])
         ) {
             foreach($auth->authTableCols['required'] as $key => $value) {
-                $variables[$key.'_name'] = $value['name']; 
+                $fields[$value['name']] = $value;
+                if ($value['type'] == 'text') {
+                    $fields[$value['name']]['length'] = 32;
+                }
             }
         }
 
@@ -115,7 +128,10 @@ class LiveUser_Misc_Schema_Install
             is_array($auth->authTableCols['optional'])
         ) {
             foreach($auth->authTableCols['optional'] as $key => $value) {
-                $variables[$key.'_name'] = $value['name']; 
+                $fields[$value['name']] = $value;
+                if ($value['type'] == 'text') {
+                    $fields[$value['name']]['length'] = 32;
+                }
             }
         }
 
@@ -123,11 +139,35 @@ class LiveUser_Misc_Schema_Install
             is_array($auth->authTableCols['custom'])
         ) {
             foreach($auth->authTableCols['custom'] as $key => $value) {
-                $variables[$key.'_name'] = $value['name']; 
+                $fields[$value['name']] = $value;
+                if ($value['type'] == 'text') {
+                    $fields[$value['name']]['length'] = 32;
+                }
             }
         }
 
-        return $this->installSchema($dsn, $file, $variables, $create, $options);
+        $definition = array(
+            'name' => '<variable>database</variable>',
+            'create' => '<variable>create</variable>',
+            'tables' => array(
+                $auth->authTable => array(
+                    'fields' => $fields
+                ),
+            ),
+            'sequences' => array(
+                $auth->authTable => array(
+                    'on' => array(
+                        'table' => $auth->authTable,
+                        'field' => $auth->authTableCols['required']['auth_user_id']['name'],
+                    )
+                ),
+            ),
+        );
+
+        if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
+            return false;
+        }
+        return LiveUser_Misc_Schema_Install::installSchema($dsn, $file, $variables, $create, $options);
     }
 
     function installPermSchema($config, $file, $create = true, $options = array())
@@ -150,7 +190,18 @@ class LiveUser_Misc_Schema_Install
             'right_max_level' => LIVEUSER_MAX_LEVEL,
         );
 
-        return $this->installSchema($dsn, $file, $variables, $create, $options);
+        return LiveUser_Misc_Schema_Install::installSchema($dsn, $file, $variables, $create, $options);
+    }
+
+    function writeSchema($definition, $file)
+    {
+        require_once 'MDB2/Schema/Writer.php';
+        $writer =& new MDB2_Schema_Writer();
+        $arguments = array(
+            'output_mode' => 'file',
+            'output' => $file,
+        );
+        return $writer->dumpDatabase($definition, $arguments);
     }
 
     function installSchema($dsn, $file, $variables, $create = true, $options = array())
