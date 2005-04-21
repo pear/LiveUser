@@ -122,6 +122,7 @@ class LiveUser_Misc_Schema_Install
                     $fields[$value['name']]['length'] = 32;
                 }
                 $fields[$value['name']]['notnull'] = 1;
+                $fields[$value['name']]['default'] = '';
             }
         }
 
