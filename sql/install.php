@@ -82,8 +82,18 @@ $result = LiveUser_Misc_Schema_Install::generateAuthSchema(
     $conf['authContainers'][0],
     'auth_schema.xml'
 );
-
 var_dump($result);
+
+$variables = array();
+$result = LiveUser_Misc_Schema_Install::installSchema(
+    $conf['authContainers'][0]['dsn'],
+    'auth_schema.xml',
+    $variables,
+    true,
+    $options
+);
+var_dump($result);
+
 $result = LiveUser_Misc_Schema_Install::generatePermSchema(
     $conf['permContainer']['storage'],
     'perm_schema.xml'
@@ -95,7 +105,7 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     $conf['permContainer']['storage']['MDB2']['dsn'],
     'perm_schema.xml',
     $variables,
-    true,
+    false,
     $options
 );
 var_dump($result);
@@ -129,6 +139,7 @@ class LiveUser_Misc_Schema_Install
                     $fields[$value['name']]['length'] = 32;
                 }
                 $fields[$value['name']]['notnull'] = true;
+                // todo set proper defaults on a per type basis
                 $fields[$value['name']]['default'] = '';
             }
         }
@@ -215,32 +226,30 @@ class LiveUser_Misc_Schema_Install
                 }
 
                 // check if not null
-                if ($required !== false) {
+                if ($required) {
                     $fields[$field_name]['notnull'] = true;
+                    // todo set proper defaults on a per type basis .. especially for '*_level'
                     $fields[$field_name]['default'] = '';
-                }
+                    // Sequences
+                    if ($required == 'seq') {
+                        $sequences[$perm->prefix . $table_name] = array(
+                            'on' => array(
+                                'table' => $perm->prefix . $table_name,
+                                'field' => $perm->alias[$field_name],
+                            )
+                        );
 
-                // Sequences
-                if ($required == 'seq') {
-                    $sequences[$perm->prefix . $table_name] = array(
-                        'on' => array(
-                            'table' => $perm->prefix . $table_name,
-                            'field' => $perm->alias[$field_name],
-                        )
-                    );
-
-                    $table_indexes[$perm->alias[$field_name]] = array(
-                        'fields' => array(
-                            $perm->alias[$field_name] => true,
-                        ),
-                        'unique' => true
-                    );
-                }
-
-                // Generate indexes
-                if ($required && $required != 'seq') {
-                    $table_indexes[$required . '_i']['fields'][$perm->alias[$field_name]] = true;
-                    $table_indexes[$required . '_i']['unique'] = true,
+                        $table_indexes[$perm->alias[$field_name]] = array(
+                            'fields' => array(
+                                $perm->alias[$field_name] => true,
+                            ),
+                            'unique' => true
+                        );
+                    // Generate indexes
+                    } elseif (is_string($required)) {
+                        $table_indexes[$required . '_i']['fields'][$perm->alias[$field_name]] = true;
+                        $table_indexes[$required . '_i']['unique'] = true;
+                    }
                 }
             }
             $tables[$perm->prefix . $table_name]['fields'] = $fields;
