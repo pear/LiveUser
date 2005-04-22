@@ -58,8 +58,8 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
     'perm_users' => array(
         'fields' => array(
             'perm_user_id' => 'seq',
-            'auth_user_id' => true,
-            'auth_container_name' => true,
+            'auth_user_id' => 'auth_id',
+            'auth_container_name' => 'auth_id',
             'perm_type' => false,
          ),
         'joins' => array(
@@ -67,14 +67,11 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
             'groupusers' => 'perm_user_id',
             'area_admin_areas' => 'perm_user_id',
         ),
-        'ids' => array(
-            'perm_user_id'
-        ),
     ),
     'userrights' => array(
         'fields' => array(
-            'perm_user_id' => true,
-            'right_id' => true,
+            'perm_user_id' => 'id',
+            'right_id' => 'id',
             'right_level' => false,
         ),
         'joins' => array(
@@ -85,8 +82,8 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
     'rights' => array(
         'fields' => array(
             'right_id' => 'seq',
-            'area_id' => false,
-            'right_define_name' => false,
+            'area_id' => 'define_name',
+            'right_define_name' => 'define_name',
             'has_implied' => false,
         ),
         'joins' => array(
@@ -102,14 +99,11 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
                 LIVEUSER_SECTION_RIGHT => 'section_type',
             ),
         ),
-        'ids' => array(
-            'right_id'
-        ),
     ),
     'right_implied' => array(
         'fields' => array(
-            'right_id' => true,
-            'implied_right_id' => true,
+            'right_id' => 'id',
+            'implied_right_id' => 'id',
         ),
         'joins' => array(
             'rights' => array(
@@ -121,9 +115,9 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
     'translations' => array(
         'fields' => array(
             'translation_id' => 'seq',
-            'section_id' => true,
-            'section_type' => true,
-            'language_id' => true,
+            'section_id' => 'translation',
+            'section_type' => 'translation',
+            'language_id' => 'translation',
             'name' => false,
             'description' => false,
         ),
@@ -145,18 +139,12 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
                 'section_type' => LIVEUSER_SECTION_GROUP,
             ),
         ),
-        'ids' => array(
-            'translation_id',
-            'section_id',
-            'section_type',
-            'language_id',
-        ),
     ),
     'areas' => array(
         'fields' => array(
             'area_id' => 'seq',
-            'application_id' => false,
-            'area_define_name' => false,
+            'application_id' => 'define_name',
+            'area_define_name' => 'define_name',
         ),
         'joins' => array(
             'rights' => 'area_id',
@@ -167,14 +155,11 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
             ),
             'area_admin_areas' => 'area_id',
         ),
-        'ids' => array(
-            'area_id',
-        ),
     ),
     'area_admin_areas' => array(
         'fields' => array(
-            'area_id' => true,
-            'perm_user_id' => true,
+            'area_id' => 'id',
+            'perm_user_id' => 'id',
         ),
         'joins' => array(
             'perm_users' => 'perm_user_id',
@@ -184,7 +169,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
     'applications' => array(
         'fields' => array(
             'application_id' => 'seq',
-            'application_define_name' => false,
+            'application_define_name' => 'define_name',
         ),
         'joins' => array(
             'areas' => 'application_id',
@@ -193,15 +178,12 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
                 LIVEUSER_SECTION_APPLICATION => 'section_type',
             ),
         ),
-        'ids' => array(
-            'application_id',
-        ),
     ),
     'groups' => array(
         'fields' => array(
             'group_id' => 'seq',
             'group_type' => false,
-            'group_define_name' => false,
+            'group_define_name' => 'define_name',
             'is_active' => false,
             'owner_user_id' => false,
             'owner_group_id' => false,
@@ -215,14 +197,11 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
                 LIVEUSER_SECTION_GROUP => 'section_type',
             ),
         ),
-        'ids' => array(
-            'group_id',
-        ),
     ),
     'groupusers' => array(
         'fields' => array(
-            'perm_user_id' => true,
-            'group_id' => true,
+            'perm_user_id' => 'id',
+            'group_id' => 'id',
         ),
         'joins' => array(
             'groups' => 'group_id',
@@ -231,8 +210,8 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
     ),
     'grouprights' => array(
         'fields' => array(
-            'group_id' => true,
-            'right_id' => true,
+            'group_id' => 'id',
+            'right_id' => 'id',
             'right_level' => false,
         ),
         'joins' => array(
@@ -242,8 +221,8 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
     ),
     'group_subgroups' => array(
         'fields' => array(
-            'group_id' => true,
-            'subgroup_id' => true,
+            'group_id' => 'id',
+            'subgroup_id' => 'id',
         ),
         'joins' => array(
             'groups' => 'group_id',
