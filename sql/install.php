@@ -78,18 +78,22 @@ $options = array(
     'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
 );
 
-$result = LiveUser_Misc_Schema_Install::installAuthSchema(
+$result = LiveUser_Misc_Schema_Install::generateAuthSchema(
     $conf['authContainers'][0],
-    'auth_mdb_schema.xml',
-    true,
-    $options
+    'auth_schema.xml'
 );
 
 var_dump($result);
-$result = LiveUser_Misc_Schema_Install::installPermSchema(
+$result = LiveUser_Misc_Schema_Install::generatePermSchema(
     $conf['permContainer']['storage'],
-    'perm_mdb_schema.xml',
-    false,
+    'perm_schema.xml'
+);
+var_dump($result);
+
+$result = LiveUser_Misc_Schema_Install::installSchema(
+    $conf['permContainer']['storage']['MDB2']['dsn'],
+    'perm_schema.xml',
+    true,
     $options
 );
 var_dump($result);
@@ -97,7 +101,7 @@ var_dump($result);
 
 class LiveUser_Misc_Schema_Install
 {
-    function installAuthSchema($config, $file, $create = true, $options = array())
+    function generateAuthSchema($config, $file)
     {
         $auth =& LiveUser::authFactory($config, 'foo');
         if (!$auth) {
@@ -178,10 +182,10 @@ class LiveUser_Misc_Schema_Install
         if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
             return false;
         }
-        return LiveUser_Misc_Schema_Install::installSchema($dsn, $file, $variables, $create, $options);
+        return true;
     }
 
-    function installPermSchema($config, $file, $create = true, $options = array())
+    function generatePermSchema($config, $file)
     {
         $perm =& LiveUser::storageFactory($config);
         if (!$perm) {
@@ -248,8 +252,10 @@ class LiveUser_Misc_Schema_Install
             'sequences' => $sequences,
         );
 
-
-        return LiveUser_Misc_Schema_Install::installSchema($dsn, $file, $variables, $create, $options);
+        if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
+            return false;
+        }
+        return true;
     }
 
     function writeSchema($definition, $file)
