@@ -90,9 +90,11 @@ $result = LiveUser_Misc_Schema_Install::generatePermSchema(
 );
 var_dump($result);
 
+$variables = array();
 $result = LiveUser_Misc_Schema_Install::installSchema(
     $conf['permContainer']['storage']['MDB2']['dsn'],
     'perm_schema.xml',
+    $variables,
     true,
     $options
 );
