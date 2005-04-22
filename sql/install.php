@@ -113,6 +113,7 @@ class LiveUser_Misc_Schema_Install
 
         // generate xml schema
         $fields = array();
+
         if (isset($auth->authTableCols['required']) &&
             is_array($auth->authTableCols['required'])
         ) {
@@ -121,7 +122,7 @@ class LiveUser_Misc_Schema_Install
                 if ($value['type'] == 'text') {
                     $fields[$value['name']]['length'] = 32;
                 }
-                $fields[$value['name']]['notnull'] = 1;
+                $fields[$value['name']]['notnull'] = true;
                 $fields[$value['name']]['default'] = '';
             }
         }
@@ -195,10 +196,58 @@ class LiveUser_Misc_Schema_Install
         }
 
         // generate xml schema
-        $variables = array(
-            'table_prefix' => $perm->prefix,
-            'right_max_level' => LIVEUSER_MAX_LEVEL,
+        $tables = array();
+        $sequences = array();
+        foreach ($perm->tables as $table_name => $table) {
+            $fields = array();
+            $table_indexes = array();
+            foreach($table['fields'] as $field_name => $required) {
+                $fields[$field_name]['name'] = $perm->alias[$field_name];
+                $fields[$field_name]['type'] = $perm->fields[$field_name];
+                if ($fields[$field_name]['type'] == 'text') {
+                    $fields[$field_name]['length'] = 32;
+                }
+
+                // check if not null
+                if ($required !== false) {
+                    $fields[$field_name]['notnull'] = true;
+                    $fields[$field_name]['default'] = '';
+                }
+
+                // Sequences
+                if ($required == 'seq') {
+                    $sequences[$perm->prefix . $table_name] = array(
+                        'on' => array(
+                            'table' => $perm->prefix . $table_name,
+                            'field' => $perm->alias[$field_name],
+                        )
+                    );
+
+                    $table_indexes[$perm->alias[$field_name]] = array(
+                        'fields' => array(
+                            $perm->alias[$field_name] => true,
+                        ),
+                        'unique' => true
+                    );
+                }
+
+                // Generate indexes
+                if ($required && $required != 'seq') {
+                    $table_indexes[$required . '_i']['fields'][$perm->alias[$field_name]] = true;
+                    $table_indexes[$required . '_i']['unique'] = true,
+                }
+            }
+            $tables[$perm->prefix . $table_name]['fields'] = $fields;
+            $tables[$perm->prefix . $table_name]['indexes'] = $table_indexes;
+        }
+
+        $definition = array(
+            'name' => '<variable>database</variable>',
+            'create' => '<variable>create</variable>',
+            'tables' => $tables,
+            'sequences' => $sequences,
         );
+
 
         return LiveUser_Misc_Schema_Install::installSchema($dsn, $file, $variables, $create, $options);
     }
