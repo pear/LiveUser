@@ -198,7 +198,7 @@ class LiveUser_Misc_Schema_Install
         if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
             return false;
         }
-        return true;
+        return $dsn;
     }
 
     function generatePermSchema($config, $file)
@@ -269,7 +269,7 @@ class LiveUser_Misc_Schema_Install
         if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
             return false;
         }
-        return true;
+        return $dsn;
     }
 
     function writeSchema($definition, $file)
@@ -285,13 +285,13 @@ class LiveUser_Misc_Schema_Install
 
     function installSchema($dsn, $file, $variables, $create = true, $options = array())
     {
-        $manager =& new MDB2_Schema;
         $dsn = MDB2::parseDSN($dsn);
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
         $variables['create'] = (int)$create;
         $variables['database'] = $dsn['database'];
         unset($dsn['database']);
 
+        $manager =& new MDB2_Schema;
         $err = $manager->connect($dsn, $options);
         if (MDB2::isError($err)) {
             return $err;
