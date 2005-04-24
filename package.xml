@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.0a10">
+<package version="1.0" packagerversion="1.4.0a11">
  <name>LiveUser</name>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
@@ -65,7 +65,7 @@
   </maintainers>
  <release>
   <version>0.16.0</version>
-  <date>2005-04-17</date>
+  <date>2005-04-24</date>
   <license>LGPL</license>
   <state>beta</state>
   <notes>- use MDB2_Schema as an optional dependency for the schema installer
@@ -81,6 +81,8 @@
 - options can now be passed to the installer
 - made auth fields dynamic (thx dan)
 - added more infos into the old file names
+- updated MDB2 dependency
+- typo fix (bug #4173)
   </notes>
   <deps>
    <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
@@ -97,6 +99,9 @@
   <filelist>
    <dir name="/" baseinstalldir="/LiveUser">
     <dir name="Auth">
+     <dir name="Storage">
+      <file role="php" name="Globals.php"/>
+     </dir> <!-- /Auth/Storage -->
      <file role="php" name="Common.php"/>
      <file role="php" name="DB.php"/>
      <file role="php" name="MDB.php"/>
@@ -159,10 +164,8 @@
      <file role="php" name="Storage.php"/>
     </dir> <!-- /Perm -->
     <dir name="sql">
-     <file role="data" install-as="misc/schema/auth_mdb_schema.xml" name="auth_mdb_schema.xml"/>
      <file role="data" install-as="misc/Auth_XML.xml" name="Auth_XML.xml"/>
      <file role="data" install-as="misc/schema/install.php" name="install.php"/>
-     <file role="data" install-as="misc/schema/perm_mdb_schema.xml" name="perm_mdb_schema.xml"/>
      <file role="data" install-as="misc/Perm_XML.xml" name="Perm_XML.xml"/>
      <file role="data" install-as="misc/schema/README" name="README"/>
     </dir> <!-- /sql -->
@@ -174,7 +177,7 @@
  <changelog>
    <release>
     <version>0.16.0</version>
-    <date>2005-04-17</date>
+    <date>2005-04-24</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>- use MDB2_Schema as an optional dependency for the schema installer
@@ -190,6 +193,8 @@
 - options can now be passed to the installer
 - made auth fields dynamic (thx dan)
 - added more infos into the old file names
+- updated MDB2 dependency
+- typo fix (bug #4173)
     </notes>
    </release>
    <release>

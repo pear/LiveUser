@@ -25,6 +25,8 @@ $notes = <<<EOT
 - options can now be passed to the installer
 - made auth fields dynamic (thx dan)
 - added more infos into the old file names
+- updated MDB2 dependency
+- typo fix (bug #4173)
 EOT;
 
 $description = <<<EOT
