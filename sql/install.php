@@ -283,7 +283,7 @@ class LiveUser_Misc_Schema_Install
     function installSchema($dsn, $file, $variables, $create = true, $options = array())
     {
         $manager =& new MDB2_Schema;
-
+        $dsn = MDB2::parseDSN($dsn);
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
         $variables['create'] = (int)$create;
         $variables['database'] = $dsn['database'];
