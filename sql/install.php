@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -42,7 +42,7 @@
 require_once 'LiveUser.php';
 require_once 'MDB2/Schema.php';
 
-/*
+
 $dsn = 'mysql://root:@localhost/liveuser_test_installer';
 
 $conf = array(
@@ -68,7 +68,10 @@ $conf = array(
     ),
     'permContainer'  => array(
         'type'  => 'Complex',
-        'storage' => array('MDB2' => array('dsn' => $dsn, 'prefix' => 'liveuser_')),
+        'storage' => array(
+            'MDB2' => array('dsn' => $dsn,
+            'prefix' => 'liveuser_')
+        )
     )
 );
 
@@ -109,7 +112,7 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     $options
 );
 var_dump($result);
-*/
+
 
 class LiveUser_Misc_Schema_Install
 {
