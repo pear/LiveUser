@@ -87,35 +87,6 @@
 
  <table>
 
-  <name>liveuser_languages</name>
-
-  <initialization>
-
-   <insert>
-
-    <field>
-     <name>language_id</name>
-     <value>1</value>
-   </field>
-
-    <field>
-     <name>two_letter_name</name>
-     <value>FR</value>
-   </field>
-
-    <field>
-     <name>native_name</name>
-     <value>french</value>
-   </field>
-
-   </insert>
-
-  </initialization>
-
- </table>
-
- <table>
-
   <name>liveuser_perm_users</name>
 
   <initialization>
