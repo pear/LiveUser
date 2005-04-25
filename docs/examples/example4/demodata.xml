@@ -87,18 +87,6 @@
 
  <table>
 
-  <name>liveuser_groups</name>
-
- </table>
-
- <table>
-
-  <name>liveuser_groupusers</name>
-
- </table>
-
- <table>
-
   <name>liveuser_languages</name>
 
   <initialization>
@@ -181,18 +169,6 @@
    </insert>
 
   </initialization>
-
- </table>
-
- <table>
-
-  <name>liveuser_right_implied</name>
-
- </table>
-
- <table>
-
-  <name>liveuser_right_scopes</name>
 
  </table>
 
