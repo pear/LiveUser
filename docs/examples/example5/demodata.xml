@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<database>
+
+ <name>liveuser_test_installer</name>
+ <create>1</create>
+
+ <table>
+
+  <name>liveuser_applications</name>
+
+  <initialization>
+
+   <insert>
+
+    <field>
+     <name>application_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>application_define_name</name>
+     <value>LIVEUSER</value>
+   </field>
+
+   </insert>
+
+  </initialization>
+
+ </table>
+
+ <table>
+
+  <name>liveuser_area_admin_areas</name>
+
+ </table>
+
+ <table>
+
+  <name>liveuser_areas</name>
+
+  <initialization>
+
+   <insert>
+
+    <field>
+     <name>area_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>application_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>area_define_name</name>
+     <value>ONLY_AREA</value>
+   </field>
+
+   </insert>
+
+  </initialization>
+
+ </table>
+
+ <table>
+
+  <name>liveuser_perm_users</name>
+
+  <initialization>
+
+   <insert>
+
+    <field>
+     <name>perm_user_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>auth_user_id</name>
+     <value>29214857b12575501c5c731353c7217e</value>
+   </field>
+
+    <field>
+     <name>auth_container_name</name>
+     <value>DB</value>
+   </field>
+
+    <field>
+     <name>perm_type</name>
+     <value></value>
+   </field>
+
+   </insert>
+
+   <insert>
+
+    <field>
+     <name>perm_user_id</name>
+     <value>2</value>
+   </field>
+
+    <field>
+     <name>auth_user_id</name>
+     <value>02ec099f2d602cc4968c5267970be132</value>
+   </field>
+
+    <field>
+     <name>auth_container_name</name>
+     <value>DB</value>
+   </field>
+
+    <field>
+     <name>perm_type</name>
+     <value></value>
+   </field>
+
+   </insert>
+
+  </initialization>
+
+ </table>
+
+ <table>
+
+  <name>liveuser_rights</name>
+
+  <initialization>
+
+   <insert>
+
+    <field>
+     <name>right_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>area_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>right_define_name</name>
+     <value>MODIFYNEWS</value>
+   </field>
+
+    <field>
+     <name>has_implied</name>
+     <value>N</value>
+   </field>
+
+   </insert>
+
+   <insert>
+
+    <field>
+     <name>right_id</name>
+     <value>2</value>
+   </field>
+
+    <field>
+     <name>area_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>right_define_name</name>
+     <value>EDITNEWS</value>
+   </field>
+
+    <field>
+     <name>has_implied</name>
+     <value>N</value>
+   </field>
+
+   </insert>
+
+  </initialization>
+
+ </table>
+
+ <table>
+
+  <name>liveuser_userrights</name>
+
+  <initialization>
+
+   <insert>
+
+    <field>
+     <name>perm_user_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>right_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>right_level</name>
+     <value>1</value>
+   </field>
+
+   </insert>
+
+   <insert>
+
+    <field>
+     <name>perm_user_id</name>
+     <value>1</value>
+   </field>
+
+    <field>
+     <name>right_id</name>
+     <value>2</value>
+   </field>
+
+    <field>
+     <name>right_level</name>
+     <value>1</value>
+   </field>
+
+   </insert>
+
+   <insert>
+
+    <field>
+     <name>perm_user_id</name>
+     <value>2</value>
+   </field>
+
+    <field>
+     <name>right_id</name>
+     <value>2</value>
+   </field>
+
+    <field>
+     <name>right_level</name>
+     <value>1</value>
+   </field>
+
+   </insert>
+
+  </initialization>
+
+ </table>
+
+ <table>
+
+  <name>liveuser_users</name>
+
+  <initialization>
+
+   <insert>
+
+    <field>
+     <name>authuserid</name>
+     <value>29214857b12575501c5c731353c7217e</value>
+   </field>
+
+    <field>
+     <name>handle</name>
+     <value>johndoe</value>
+   </field>
+
+    <field>
+     <name>passwd</name>
+     <value>6579e96f76baa00787a28653876c6127</value>
+   </field>
+
+    <field>
+     <name>owner_user_id</name>
+     <value>2003</value>
+   </field>
+
+    <field>
+     <name>owner_group_id</name>
+     <value></value>
+   </field>
+
+    <field>
+     <name>lastlogin</name>
+     <value></value>
+   </field>
+
+    <field>
+     <name>isactive</name>
+     <value>Y</value>
+   </field>
+
+   </insert>
+
+   <insert>
+
+    <field>
+     <name>authuserid</name>
+     <value>02ec099f2d602cc4968c5267970be132</value>
+   </field>
+
+    <field>
+     <name>handle</name>
+     <value>guest</value>
+   </field>
+
+    <field>
+     <name>passwd</name>
+     <value>084e0343a0486ff05530df6c705c8bb4</value>
+   </field>
+
+    <field>
+     <name>owner_user_id</name>
+     <value>2003</value>
+   </field>
+
+    <field>
+     <name>owner_group_id</name>
+     <value></value>
+   </field>
+
+    <field>
+     <name>lastlogin</name>
+     <value></value>
+   </field>
+
+    <field>
+     <name>isactive</name>
+     <value>Y</value>
+   </field>
+
+   </insert>
+
+  </initialization>
+
+ </table>
+
+ <table>
+
+  <name>news</name>
+
+  <initialization>
+
+   <insert>
+
+    <field>
+     <name>news_id</name>
+     <value>0</value>
+   </field>
+
+    <field>
+     <name>news_date</name>
+     <value>2003-11-13 20:42:28</value>
+   </field>
+
+    <field>
+     <name>news_title</name>
+     <value></value>
+   </field>
+
+    <field>
+     <name>news_content</name>
+     <value></value>
+   </field>
+
+    <field>
+     <name>news_category</name>
+     <value></value>
+   </field>
+
+   </insert>
+
+  </initialization>
+
+ </table>
+
+ <sequence>
+  <name>liveuser_applications</name>
+  <start>2</start>
+ </sequence>
+
+ <sequence>
+  <name>liveuser_areas</name>
+  <start>2</start>
+ </sequence>
+
+ <sequence>
+  <name>liveuser_groups</name>
+ </sequence>
+
+ <sequence>
+  <name>liveuser_perm_users</name>
+  <start>3</start>
+ </sequence>
+
+ <sequence>
+  <name>liveuser_rights</name>
+  <start>3</start>
+ </sequence>
+
+ <sequence>
+  <name>liveuser_translations</name>
+ </sequence>
+
+ <sequence>
+  <name>liveuser_users</name>
+ </sequence>
+
+ <sequence>
+  <name>news</name>
+  <start>4</start>
+ </sequence>
+
+</database>
