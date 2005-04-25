@@ -32,7 +32,8 @@ $notes = <<<EOT
 - separated schema generation and schema writing in two methods in the installer
 - updated Globals.php to specify the unique indexes as required values and removed
   'ids' array since this information is no longer used in the admin
-- 
+- example5 was added back
+- demo data for examples 4 and 5 was converted to MDB2_Schema format
 EOT;
 
 $description = <<<EOT
