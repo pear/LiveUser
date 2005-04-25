@@ -27,6 +27,12 @@ $notes = <<<EOT
 - added more infos into the old file names
 - updated MDB2 dependency
 - typo fix (bug #4173)
+- turned installer methods into static methods
+- generate auth and perm schema on the fly (removed pre generated ones from cvs)
+- separated schema generation and schema writing in two methods in the installer
+- updated Globals.php to specify the unique indexes as required values and removed
+  'ids' array since this information is no longer used in the admin
+- 
 EOT;
 
 $description = <<<EOT
