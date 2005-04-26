@@ -338,10 +338,49 @@
 
   <name>news</name>
 
+  <declaration>
+
+   <field>
+    <name>news_id</name>
+    <type>integer</type>
+    <default>0</default>
+   </field>
+
+   <field>
+    <name>news_date</name>
+    <type>date</type>
+   </field>
+
+   <field>
+    <name>news_title</name>
+    <type>text</type>
+    <length>50</length>
+   </field>
+
+   <field>
+     <name>news_content</name>
+     <type>text</type>
+   </field>
+
+    <field>
+     <name>news_category</name>
+     <type>integer</type>
+   </field>
+
+   <index>
+    <name>news_i</name>
+    <unique>1</unique>
+    <field>
+     <name>news_id</name>
+     <sorting>ascending</sorting>
+    </field>
+   </index>
+
+  </declaration>
+
   <initialization>
 
    <insert>
-
     <field>
      <name>news_id</name>
      <value>0</value>
