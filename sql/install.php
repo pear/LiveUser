@@ -124,6 +124,7 @@ class LiveUser_Misc_Schema_Install
         }
 
         $dsn = $auth->dbc->dsn;
+        $options = array();
         if (is_a($auth->dbc, 'DB_Common')) {
             $options['seqcol_name'] = 'id';
         } else {
@@ -198,7 +199,7 @@ class LiveUser_Misc_Schema_Install
         if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
             return false;
         }
-        return $dsn;
+        return array($dsn, $options);
     }
 
     function generatePermSchema($config, $file)
@@ -209,6 +210,7 @@ class LiveUser_Misc_Schema_Install
         }
 
         $dsn = $perm->dbc->dsn;
+        $options = array();
         if (is_a($perm->dbc, 'DB_Common')) {
             $options['seqcol_name'] = 'id';
         } else {
@@ -269,7 +271,7 @@ class LiveUser_Misc_Schema_Install
         if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
             return false;
         }
-        return $dsn;
+        return array($dsn, $options);
     }
 
     function writeSchema($definition, $file)
@@ -283,7 +285,7 @@ class LiveUser_Misc_Schema_Install
         return $writer->dumpDatabase($definition, $arguments);
     }
 
-    function installSchema($dsn, $file, $variables, $create = true, $options = array())
+    function installSchema($dsn, $file, $variables = array(), $create = true, $options = array())
     {
         $dsn = MDB2::parseDSN($dsn);
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
