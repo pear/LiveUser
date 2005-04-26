@@ -1179,7 +1179,7 @@ class LiveUser
 
         $dir = $this->_options['cookie']['savedir'];
         $store_id = md5($handle . $passwd);
-        $file = $dir . '/'.$store_id.'.lu';
+        $file = $dir . '/' . $store_id . '.lu';
 
         if (!is_writable($dir)) {
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
