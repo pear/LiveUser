@@ -17,6 +17,10 @@
  *                       data in MDB2_Schema format.
  * Example: --file=/path/to/output/file.xml
  *
+ * Example usage: php demodata.php -d mysql://root:@localhost/lu_test -f 
+ * example5/demodata.xml
+ *
+ *
  * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
@@ -47,6 +51,7 @@
 
 require_once 'MDB2/Schema.php';
 require_once 'Console/Getopt.php';
+require_once 'System.php';
 
 $argv = Console_Getopt::readPHPArgv();
 
@@ -98,6 +103,35 @@ if (!file_exists($file)) {
 End sanity checks on arguments
 ******************************************************************/
 
+$lu_example_data = System::tmpdir() . DIRECTORY_SEPARATOR . '_lu_example_data.xml';
+
+$fread  = @fopen($file, 'rb');
+$fwrite = @fopen($lu_example_data, 'wb');
+
+if ($fread === false || $fwrite === false) {
+    print "I couldn't not open the file\n";
+    $open_error = ($fread === false) ? "The source file $file cannot be opened" : "The destination file $lu_example_data cannot be created, are the correct permissions set ?";
+    print "$open_error\n";
+    exit();
+}
+
+register_shutdown_function('liveuser_demo_data_cleanup');
+
+$dsninfo = MDB2::parseDSN($dsn);
+
+while (!feof($fread)) {
+    $buffer = fgets($fread, 4096);
+    if (strpos($buffer, '%database%') !== false) {
+        $buffer = str_replace('%database%', $dsninfo['database'], $buffer);
+    }
+    fwrite($fwrite, $buffer);
+}
+
+fclose($fread);
+fclose($fwrite);
+
+print "\n";
+
 $manager =& new MDB2_Schema;
 
 $options = array(
@@ -108,17 +142,17 @@ $options = array(
 
 $err = $manager->connect($dsn, $options);
 
-if (MDB2::isError($err)) {
+if (PEAR::isError($err)) {
    print "I could not connect to the database\n";
    print "  " . $err->getMessage()  . "\n";
    print "  " . $err->getUserInfo() . "\n";
    exit();
 }
 
-$res = $manager->updateDatabase($file);
+$res = $manager->updateDatabase($lu_example_data);
 
 if (PEAR::isError($res)) {
-    print "I could not populate the database, see error below";
+    print "I could not populate the database, see error below\n";
     print "  " . $res->getMessage()  . "\n";
     print "  " . $res->getUserInfo() . "\n";
 } else {
@@ -146,7 +180,18 @@ Example: --dsn=mysql://user:passwd@hostname/databasename
 -f --file (required) : input file containing the structure and
 data in MDB2_Schema format. Example: --file=/path/to/output/file.xml
 
+Example usage: Make sure the database exists beforehand
+
+php demodata.php -d mysql://root:@localhost/lu_test -f example5/demodata.xml
+
 ');
 exit;
+}
+
+function liveuser_demo_data_cleanup() {
+    global $lu_example_data;
+    if (file_exists($lu_example_data)) {
+        System::rm($lu_example_data);
+    }
 }
 ?>
