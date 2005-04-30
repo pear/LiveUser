@@ -34,6 +34,7 @@ $notes = <<<EOT
   'ids' array since this information is no longer used in the admin
 - example5 was added back
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
+- a script to install database based examples can be found under docs/examples/demodata.php. Type php demodata.php -h for usage.
 EOT;
 
 $description = <<<EOT
