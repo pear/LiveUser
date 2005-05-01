@@ -23,6 +23,7 @@ $notes = <<<EOT
 - improved handling of defaults in the installer
 - improved DB seq support in the installer
 - options can now be passed to the installer
+- severely reworked the install API
 - made auth fields dynamic (thx dan)
 - added more infos into the old file names
 - updated MDB2 dependency
@@ -34,7 +35,8 @@ $notes = <<<EOT
   'ids' array since this information is no longer used in the admin
 - example5 was added back
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
-- a script to install database based examples can be found under docs/examples/demodata.php. Type php demodata.php -h for usage.
+- a script to install database based examples can be found under
+  docs/examples/demodata.php. Type php demodata.php -h for usage.
 EOT;
 
 $description = <<<EOT
