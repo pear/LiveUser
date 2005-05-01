@@ -87,15 +87,14 @@ $result = $package->setOptions(array(
         'LiveUser.php'            => '/',
     ),
     'installas'         => array(
-        'sql/Auth_XML.xml'          => 'misc/Auth_XML.xml',
-        'sql/Perm_XML.xml'          => 'misc/Perm_XML.xml',
-        'sql/auth_mdb_schema.xml'   => 'misc/schema/auth_mdb_schema.xml',
-        'sql/perm_mdb_schema.xml'   => 'misc/schema/perm_mdb_schema.xml',
-        'sql/README'                => 'misc/schema/README',
-        'sql/install.php'           => 'misc/schema/install.php',
+        'sql/Auth_XML.xml'           => 'misc/Auth_XML.xml',
+        'sql/Perm_XML.xml'           => 'misc/Perm_XML.xml',
+        'sql/README'                 => 'misc/schema/README',
+        'sql/install.php'            => 'misc/schema/install.php',
+        'docs/examples/demodata.php' => 'misc/demodata.php'
     ),
     'exceptions'         => array(
-        'lgpl.txt' => 'doc',
+        'lgpl.txt' => 'doc'
     ),
     'dir_roles'         => array('sql'               => 'data',
                                  'docs'              => 'doc',
