@@ -81,15 +81,13 @@ $options = array(
     'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
 );
 
-$result = LiveUser_Misc_Schema_Install::generateAuthSchema(
-    $conf['authContainers'][0],
-    'auth_schema.xml'
-);
+$auth =& LiveUser::authFactory($conf['authContainers'][0], 'foo');
+$result = LiveUser_Misc_Schema_Install::generateAuthSchema($auth, 'auth_schema.xml');
 var_dump($result);
 
 $variables = array();
 $result = LiveUser_Misc_Schema_Install::installSchema(
-    $conf['authContainers'][0]['dsn'],
+    $auth,
     'auth_schema.xml',
     $variables,
     true,
@@ -97,15 +95,13 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
 );
 var_dump($result);
 
-$result = LiveUser_Misc_Schema_Install::generatePermSchema(
-    $conf['permContainer']['storage'],
-    'perm_schema.xml'
-);
+$perm =& LiveUser::storageFactory($conf['permContainer']['storage']);
+$result = LiveUser_Misc_Schema_Install::generatePermSchema($perm, 'perm_schema.xml');
 var_dump($result);
 
 $variables = array();
 $result = LiveUser_Misc_Schema_Install::installSchema(
-    $conf['permContainer']['storage']['MDB2']['dsn'],
+    $perm,
     'perm_schema.xml',
     $variables,
     false,
@@ -116,24 +112,14 @@ var_dump($result);
 
 class LiveUser_Misc_Schema_Install
 {
-    function generateAuthSchema($config, $file)
+    function generateAuthSchema($auth, $file)
     {
-        $auth =& LiveUser::authFactory($config, 'foo');
-        if (!$auth) {
+        if (!is_a($auth, 'LiveUser_Auth_Common')) {
             return false;
-        }
-
-        $dsn = $auth->dbc->dsn;
-        $options = array();
-        if (is_a($auth->dbc, 'DB_Common')) {
-            $options['seqcol_name'] = 'id';
-        } else {
-            $dsn['database'] = $auth->dbc->database_name;
         }
 
         // generate xml schema
         $fields = array();
-
         if (isset($auth->authTableCols['required']) &&
             is_array($auth->authTableCols['required'])
         ) {
@@ -199,22 +185,13 @@ class LiveUser_Misc_Schema_Install
         if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
             return false;
         }
-        return array($dsn, $options);
+        return true;
     }
 
-    function generatePermSchema($config, $file)
+    function generatePermSchema($perm, $file)
     {
-        $perm =& LiveUser::storageFactory($config);
-        if (!$perm) {
+        if (!is_a($perm, 'LiveUser_Perm_Storage')) {
             return false;
-        }
-
-        $dsn = $perm->dbc->dsn;
-        $options = array();
-        if (is_a($perm->dbc, 'DB_Common')) {
-            $options['seqcol_name'] = 'id';
-        } else {
-            $dsn['database'] = $perm->dbc->database_name;
         }
 
         // generate xml schema
@@ -271,7 +248,7 @@ class LiveUser_Misc_Schema_Install
         if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
             return false;
         }
-        return array($dsn, $options);
+        return true;
     }
 
     function writeSchema($definition, $file)
@@ -285,18 +262,23 @@ class LiveUser_Misc_Schema_Install
         return $writer->dumpDatabase($definition, $arguments);
     }
 
-    function installSchema($dsn, $file, $variables = array(), $create = true, $options = array())
+    function installSchema($obj, $file, $variables = array(), $create = true, $options = array())
     {
-        $dsn = MDB2::parseDSN($dsn);
+        $dsn = $obj->dbc->dsn;
+        if (is_a($obj->dbc, 'DB_Common')) {
+            $options['seqcol_name'] = 'id';
+        } else {
+            $dsn['database'] = $obj->dbc->database_name;
+        }
+
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
         $variables['create'] = (int)$create;
         $variables['database'] = $dsn['database'];
         unset($dsn['database']);
 
-        $manager =& new MDB2_Schema;
-        $err = $manager->connect($dsn, $options);
-        if (MDB2::isError($err)) {
-            return $err;
+        $manager =& MDB2_Schema::factory($dsn, $options);
+        if (PEAR::isError($manager)) {
+            return $manager;
         }
 
         $result = $manager->updateDatabase($file, $file_old, $variables);
