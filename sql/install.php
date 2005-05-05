@@ -214,9 +214,9 @@ class LiveUser_Misc_Schema_Install
                     $fields[$field_name]['default'] = '';
                     // Sequences
                     if ($required == 'seq') {
-                        $sequences[$perm->prefix . $table_name] = array(
+                        $sequences[$perm->prefix . $perm->alias[$table_name]] = array(
                             'on' => array(
-                                'table' => $perm->prefix . $table_name,
+                                'table' => $perm->prefix . $perm->alias[$table_name],
                                 'field' => $perm->alias[$field_name],
                             )
                         );
@@ -234,8 +234,8 @@ class LiveUser_Misc_Schema_Install
                     }
                 }
             }
-            $tables[$perm->prefix . $table_name]['fields'] = $fields;
-            $tables[$perm->prefix . $table_name]['indexes'] = $table_indexes;
+            $tables[$perm->prefix . $perm->alias[$table_name]]['fields'] = $fields;
+            $tables[$perm->prefix . $perm->alias[$table_name]]['indexes'] = $table_indexes;
         }
 
         $definition = array(
