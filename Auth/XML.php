@@ -246,7 +246,14 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                 $result[$value->name] = $value->content;
             }
 
-            if (isset($result[$this->authTableCols['required']['handle']['name']]) &&
+            if ($authUserId) {
+                if (isset($result[$this->authTableCols['required']['auth_user_id']['name']]) &&
+                    $authUserId === $result[$this->authTableCols['required']['auth_user_id']['name']]
+                ) {
+                    $success = true;
+                    break;
+                }
+            } elseif (isset($result[$this->authTableCols['required']['handle']['name']]) &&
                 $handle === $result[$this->authTableCols['required']['handle']['name']]
             ) {
                 if (isset($this->authTableCols['required']['passwd'])
