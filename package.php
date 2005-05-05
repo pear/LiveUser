@@ -38,6 +38,10 @@ $notes = <<<EOT
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
 - added support for table name aliasing (fairly untested)
+- added updateProperty($auth, $perm) method (fairly untested)
+- reworked _readUserData() in the auth containers to optionally read by auth
+  user id instead of by handle/passwd (fairly untested)
+- made _readUserData() public (and renamed it to readUserData()
 EOT;
 
 $description = <<<EOT
