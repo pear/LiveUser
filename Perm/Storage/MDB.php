@@ -383,7 +383,7 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 TR.' . $this->alias['right_id'] . '
             FROM
                 '.$this->prefix.$this->alias['rights'].' R,
-                '.$this->prefix.$table.'rights TR
+                '.$this->prefix.$this->alias[$table.'rights'].' TR
             WHERE
                 TR.' . $this->alias['right_id'] . ' = R.' . $this->alias['right_id'] . '
             AND
