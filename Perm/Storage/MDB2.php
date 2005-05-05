@@ -135,7 +135,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 ' . $this->alias['perm_user_id'] . ' AS perm_user_id,
                 ' . $this->alias['perm_type'] . '    AS perm_type
             FROM
-                '.$this->prefix.'perm_users
+                '.$this->prefix.$this->alias['perm_users'].'
             WHERE
                 ' . $this->alias['auth_user_id'] . ' = '.
                     $this->dbc->quote($authUserId, $this->fields[$this->alias['auth_user_id']]).'
@@ -177,8 +177,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 R.' . $this->alias['right_id'] . ',
                 U.' . $this->alias['right_level'] . '
             FROM
-                '.$this->prefix.'rights R,
-                '.$this->prefix.'userrights U
+                '.$this->prefix.$this->alias['rights'].' R,
+                '.$this->prefix.$this->alias['userrights'].' U
             WHERE
                 R.' . $this->alias['right_id'] . ' = U.' . $this->alias['right_id'] . '
             AND
@@ -216,8 +216,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 R.' . $this->alias['right_id'] . ' AS right_id,
                 '.LIVEUSER_MAX_LEVEL.'             AS right_level
             FROM
-                '.$this->prefix.'area_admin_areas AAA,
-                '.$this->prefix.'rights R
+                '.$this->prefix.$this->alias['area_admin_areas'].' AAA,
+                '.$this->prefix.$this->alias['rights'].' R
             WHERE
                 AAA.area_id = R.area_id
             AND
@@ -256,8 +256,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             SELECT
                 GU.' . $this->alias['group_id'] . '
             FROM
-                '.$this->prefix.'groupusers GU,
-                '.$this->prefix.'groups G
+                '.$this->prefix.$this->alias['groupusers'].' GU,
+                '.$this->prefix.$this->alias['groups'].' G
             WHERE
                 GU.' . $this->alias['group_id'] . ' = G. ' . $this->alias['group_id'] . '
             AND
@@ -300,7 +300,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 GR.' . $this->alias['right_id'] . ',
                 MAX(GR.' . $this->alias['right_level'] . ')
             FROM
-                '.$this->prefix.'grouprights GR
+                '.$this->prefix.$this->alias['grouprights'].' GR
             WHERE
                 GR.' . $this->alias['group_id'] . ' IN('.
                     $this->dbc->datatype->implodeArray($groupIds, $this->fields[$this->alias['group_id']]).')
@@ -337,8 +337,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             SELECT
                 DISTINCT SG.' . $this->alias['subgroup_id'] . '
             FROM
-                '.$this->prefix.'groups G,
-                '.$this->prefix.'group_subgroups SG
+                '.$this->prefix.$this->alias['groups'].' G,
+                '.$this->prefix.$this->alias['group_subgroups'].' SG
             WHERE
                 SG.' . $this->alias['subgroup_id'] . ' = G.' .
                     $this->alias['group_id'] . '
@@ -383,7 +383,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 TR.' . $this->alias['right_level'] . ',
                 TR.' . $this->alias['right_id'] . '
             FROM
-                '.$this->prefix.'rights R,
+                '.$this->prefix.$this->alias['rights'].' R,
                 '.$this->prefix.$table.'rights TR
             WHERE
                 TR.' . $this->alias['right_id'] . ' = R.' . $this->alias['right_id'] . '
@@ -426,8 +426,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$currentLevel.'                           AS right_level,
                 R.' . $this->alias['has_implied'] . '       AS has_implied
             FROM
-                '.$this->prefix.'rights R,
-                '.$this->prefix.'right_implied RI
+                '.$this->prefix.$this->alias['rights'].' R,
+                '.$this->prefix.$this->alias['right_implied'].' RI
             WHERE
                 RI.' . $this->alias['implied_right_id'] . ' = R.' . $this->alias['right_id'] . '
             AND

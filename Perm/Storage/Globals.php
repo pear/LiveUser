@@ -286,6 +286,18 @@ $GLOBALS['_LiveUser']['perm']['alias'] = array(
     'has_implied' => 'has_implied',
     'implied_right_id' => 'implied_right_id',
     'subgroup_id' => 'subgroup_id',
+    'perm_users' => 'perm_users',
+    'userrights' => 'userrights',
+    'applications' => 'applications',
+    'areas' => 'areas',
+    'area_admin_areas' => 'area_admin_areas',
+    'rights' => 'rights',
+    'groups' => 'groups',
+    'groupusers' => 'groupusers',
+    'grouprights' => '',
+    'right_implied' => 'right_implied',
+    'group_subgroups' => 'group_subgroups',
+    'translations' => 'translations',
 );
 
 ?>
