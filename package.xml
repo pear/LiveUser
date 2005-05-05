@@ -65,7 +65,7 @@
   </maintainers>
  <release>
   <version>0.16.0</version>
-  <date>2005-05-01</date>
+  <date>2005-05-05</date>
   <license>LGPL</license>
   <state>beta</state>
   <notes>- use MDB2_Schema as an optional dependency for the schema installer
@@ -79,6 +79,7 @@
 - improved handling of defaults in the installer
 - improved DB seq support in the installer
 - options can now be passed to the installer
+- severely reworked the install API
 - made auth fields dynamic (thx dan)
 - added more infos into the old file names
 - updated MDB2 dependency
@@ -90,7 +91,9 @@
   'ids' array since this information is no longer used in the admin
 - example5 was added back
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
-- a script to install database based examples can be found under docs/examples/demodata.php. Type php demodata.php -h for usage.
+- a script to install database based examples can be found under
+  docs/examples/demodata.php. Type php demodata.php -h for usage.
+- added support for table name aliasing (fairly untested)
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -200,7 +203,7 @@
  <changelog>
    <release>
     <version>0.16.0</version>
-    <date>2005-05-01</date>
+    <date>2005-05-05</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>- use MDB2_Schema as an optional dependency for the schema installer
@@ -214,6 +217,7 @@
 - improved handling of defaults in the installer
 - improved DB seq support in the installer
 - options can now be passed to the installer
+- severely reworked the install API
 - made auth fields dynamic (thx dan)
 - added more infos into the old file names
 - updated MDB2 dependency
@@ -225,7 +229,9 @@
   'ids' array since this information is no longer used in the admin
 - example5 was added back
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
-- a script to install database based examples can be found under docs/examples/demodata.php. Type php demodata.php -h for usage.
+- a script to install database based examples can be found under
+  docs/examples/demodata.php. Type php demodata.php -h for usage.
+- added support for table name aliasing (fairly untested)
     </notes>
    </release>
  </changelog>
