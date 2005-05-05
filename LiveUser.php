@@ -195,6 +195,7 @@ class LiveUser
         'session'  => array(
             'name'    => 'PHPSESSID',
             'varname' => 'ludata',
+            'force_start' => true,
         ),
         'session_save_handler'  => false,
         'session_cookie_params' => false,
@@ -886,22 +887,13 @@ class LiveUser
     }
 
     /**
-     * Tries to retrieve auth object from session.
-     * If this fails, the class attempts a login based on cookie or form
-     * information (depends on class settings).
-     * Returns true if a auth object was successfully retrieved or created.
-     * Otherwise, false is returned.
+     * Sets the session handler and name and starts the session
      *
-     * @param  string   handle of the user trying to authenticate
-     * @param  string   password of the user trying to authenticate
-     * @param  boolean  set to true if user wants to logout
-     * @param  boolean  set if remember me is set
-     * @return boolean  true if init process well, false if something
-     *                  went wrong.
+     * @return void
      *
-     * @access public
+     * @access private
      */
-    function init($handle = '', $passwd = '', $logout = false, $remember = false)
+    function _startSession()
     {
         // set session save handler if needed
         if ($this->_options['session_save_handler']) {
@@ -925,6 +917,29 @@ class LiveUser
         session_name($this->_options['session']['name']);
         // If there's no session yet, start it now
         @session_start();
+    }
+
+    /**
+     * Tries to retrieve auth object from session.
+     * If this fails, the class attempts a login based on cookie or form
+     * information (depends on class settings).
+     * Returns true if a auth object was successfully retrieved or created.
+     * Otherwise, false is returned.
+     *
+     * @param  string   handle of the user trying to authenticate
+     * @param  string   password of the user trying to authenticate
+     * @param  boolean  set to true if user wants to logout
+     * @param  boolean  set if remember me is set
+     * @return boolean  true if init process well, false if something
+     *                  went wrong.
+     *
+     * @access public
+     */
+    function init($handle = '', $passwd = '', $logout = false, $remember = false)
+    {
+        if ($this->_options['session']['force_start']) {
+            $this->_startSession();
+        }
 
         // Try to fetch auth object from session
         $isReturningUser = $this->unfreeze();
@@ -958,8 +973,6 @@ class LiveUser
             }
         }
 
-        $_SESSION[$this->_options['session']['varname']]['idle'] = $now;
-
         if (!$this->isLoggedIn()) {
             $this->login($handle, $passwd, $remember);
         }
@@ -967,6 +980,7 @@ class LiveUser
         // Return boolean that indicates whether a auth object has been created
         // or retrieved from session
         if ($this->isLoggedIn()) {
+            $_SESSION[$this->_options['session']['varname']]['idle'] = $now;
             $this->status = LIVEUSER_STATUS_OK;
             return true;
         // Force user login.
@@ -1047,6 +1061,10 @@ class LiveUser
             return false;
         }
 
+        if (!$this->_options['session']['force_start']) {
+            $this->_startSession();
+        }
+
         // user has just logged in
         $this->dispatcher->post($this, 'onLogin');
         if ($this->_options['login']['regenid']) {
@@ -1066,6 +1084,13 @@ class LiveUser
      */
     function unfreeze()
     {
+        if (!$this->_options['session']['force_start']) {
+            if (!isset($_REQUEST[$this->_options['session']['name']])) {
+                return false;
+            }
+            $this->_startSession();
+        }
+
         if (isset($_SESSION[$this->_options['session']['varname']]['auth'])
             && is_array($_SESSION[$this->_options['session']['varname']]['auth'])
             && isset($_SESSION[$this->_options['session']['varname']]['auth_name'])
@@ -1111,7 +1136,7 @@ class LiveUser
      */
     function freeze()
     {
-        if (is_a($this->_auth, 'LiveUser_Auth_Common') && $this->_auth->loggedIn) {
+        if (is_a($this->_auth, 'LiveUser_Auth_Common') && $this->isLoggedIn()) {
             // Bind objects to session
             $_SESSION[$this->_options['session']['varname']] = array();
             $_SESSION[$this->_options['session']['varname']]['auth'] = $this->_auth->freeze();
@@ -1354,30 +1379,10 @@ class LiveUser
         if ($this->_options['logout']['destroy']) {
             session_unset();
             session_destroy();
-            // set session save handler if needed
-            if ($this->_options['session_save_handler']) {
-                session_set_save_handler(
-                    $this->_options['session_save_handler']['open'],
-                    $this->_options['session_save_handler']['close'],
-                    $this->_options['session_save_handler']['read'],
-                    $this->_options['session_save_handler']['write'],
-                    $this->_options['session_save_handler']['destroy'],
-                    $this->_options['session_save_handler']['gc']
-                );
+            if ($this->_options['session']['force_start']) {
+                $this->_startSession();
             }
-
-            if ($this->_options['session_cookie_params']) {
-                session_set_cookie_params(
-                    (time() + (86400 * $this->_options['session_cookie_params']['lifetime'])),
-                    $this->_options['session_cookie_params']['path'],
-                    $this->_options['session_cookie_params']['domain'],
-                    $this->_options['session_cookie_params']['secure']);
-            }
-            // Set the name of the current session
-            session_name($this->_options['session']['name']);
-            // If there's no session yet, start it now
-            @session_start();
-        } else {
+        } elseif(isset($_SESSION[$this->_options['session']['varname']])) {
             unset($_SESSION[$this->_options['session']['varname']]);
         }
 
