@@ -1531,16 +1531,48 @@ class LiveUser
     function getProperty($what, $container = 'auth')
     {
         $that = null;
-        if ($container == 'auth' && is_object($this->_auth) &&
+        if ($container == 'auth' && is_a($this->_auth, 'LiveUser_Auth_Common') &&
             !is_null($this->_auth->getProperty($what))
         ) {
             $that = $this->_auth->getProperty($what);
-        } elseif (is_object($this->_perm) &&
+        } elseif (is_a($this->_perm, 'LiveUser_Perm_Simple') &&
             !is_null($this->_perm->getProperty($what))
         ) {
             $that = $this->_perm->getProperty($what);
         }
         return $that;
+    }
+
+    /**
+     * updates the properties of the containers from the original source
+     *
+     * @param  boolean $auth if the auth container should be updated
+     * @param  boolean $perm if the perm container should be updated
+     * @return boolean 
+     *
+     * @access public
+     */
+    function updateProperty($auth, $perm)
+    {
+        if (!is_a($this->_auth, 'LiveUser_Auth_Common')) {
+            $this->_stack->push(LIVEUSER_ERROR, 'error',
+                'Cannot update container if no auth container instance is available');
+            return false;
+        }
+        if ($auth && !$this->_auth->readUserData('', '', true)) {
+            return false;
+        }
+        if ($perm) {
+            if (!is_a($this->_perm, 'LiveUser_Perm_Complex')) {
+                $this->_stack->push(LIVEUSER_ERROR, 'error',
+                    'Cannot update container if no perm container instance is available');
+                return false;
+            }
+            if ($this->_perm->mapUser($this->_auth->authUserId, $this->_auth->backendArrayIndex)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

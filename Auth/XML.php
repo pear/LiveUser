@@ -230,11 +230,12 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      * @param string $handle   Handle of the current user.
      * @param mixed $passwd    Can be a string with an
      *                  unencrypted pwd or false.
+     * @param string $authUserId auth user id
      * @return boolean true on success or false on failure
      *
      * @access private
      */
-    function _readUserData($handle, $passwd = '')
+    function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
         $success = false;
         $index = 0;

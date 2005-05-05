@@ -203,11 +203,12 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
      *
      * @param  string $handle  user handle
      * @param  boolean $passwd user password
+     * @param string $authUserId auth user id
      * @return boolean  true upon success or false on failure
      *
      * @access private
      */
-    function _readUserData($handle, $passwd = '')
+    function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
         $fields = array();
         foreach ($this->authTableCols as $value) {
@@ -222,6 +223,24 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         // Setting the default query.
         $sql    = 'SELECT ' . implode(',', $fields) . '
                    FROM '   . $this->authTable . '
+                   WHERE  ';
+        if ($authUserId) {
+            $sql .= $this->authTableCols['required']['auth_user_id']['name'] . '='
+                . $this->dbc->getValue($this->authTableCols['required']['auth_user_id']['type'], $this->authUserId);
+        } else {
+            $sql .= $this->authTableCols['required']['handle']['name'] . '='
+                . $this->dbc->getValue($this->authTableCols['required']['handle']['type'], $handle);
+
+            if (isset($this->authTableCols['required']['passwd'])
+                && $this->authTableCols['required']['passwd']
+            ) {
+                // If $passwd is set, try to find the first user with the given
+                // handle and password.
+                $sql .= ' AND   ' . $this->authTableCols['required']['passwd']['name'] . '='
+                    . $this->dbc->getValue($this->authTableCols['required']['passwd']['type'], $this->encryptPW($passwd));
+            }
+        }
+
                    WHERE '  . $this->authTableCols['required']['handle']['name'] . '=' .
                     $this->dbc->getValue($this->authTableCols['required']['handle']['type'], $handle);
 

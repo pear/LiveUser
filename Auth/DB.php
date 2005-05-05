@@ -194,11 +194,12 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      *
      * @param  string $handle  user handle
      * @param  boolean $passwd  user password
+     * @param string $authUserId auth user id
      * @return boolean  true upon success or false on failure
      *
-     * @access private
+     * @access public
      */
-    function _readUserData($handle, $passwd = '')
+    function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
         $fields = array();
         foreach ($this->authTableCols as $value) {
@@ -212,16 +213,22 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         // Setting the default sql query.
         $sql    = 'SELECT ' . implode(',', $fields) . '
                    FROM   ' . $this->authTable.'
-                   WHERE  ' . $this->authTableCols['required']['handle']['name'] . '='
-                    . $this->dbc->quoteSmart($handle);
+                   WHERE  ';
+        if ($authUserId) {
+            $sql .= $this->authTableCols['required']['auth_user_id']['name'] . '='
+                . $this->dbc->quoteSmart($this->authUserId);
+        } else {
+            $sql .= $this->authTableCols['required']['handle']['name'] . '='
+                . $this->dbc->quoteSmart($handle);
 
-        if (isset($this->authTableCols['required']['passwd'])
-            && $this->authTableCols['required']['passwd']
-        ) {
-            // If $passwd is set, try to find the first user with the given
-            // handle and password.
-            $sql .= ' AND   ' . $this->authTableCols['required']['passwd']['name'] . '='
-                . $this->dbc->quoteSmart($this->encryptPW($passwd));
+            if (isset($this->authTableCols['required']['passwd'])
+                && $this->authTableCols['required']['passwd']
+            ) {
+                // If $passwd is set, try to find the first user with the given
+                // handle and password.
+                $sql .= ' AND   ' . $this->authTableCols['required']['passwd']['name'] . '='
+                    . $this->dbc->quoteSmart($this->encryptPW($passwd));
+            }
         }
 
         // Query database

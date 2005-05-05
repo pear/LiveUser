@@ -119,19 +119,24 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      
      * @param  string $handle  user handle
      * @param  boolean $passwd user password
+     * @param string $authUserId auth user id
      * @return boolean true on success or false on failure
      *
      * @access private
      */
-    function _readUserData($handle, $passwd = '')
+    function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
-        if (isset($this->authTableCols['required']['passwd'])
-            && $this->authTableCols['required']['passwd']
-        ) {
-            if (!isset($_SESSION[$this->authTableCols['required']['passwd']['name']]) ||
-                $_SESSION[$this->authTableCols['required']['passwd']['name']] !== $passwd
+        if ($authUserId) {
+            // where can we get the handle and passwd from?
+        } else {
+            if (isset($this->authTableCols['required']['passwd'])
+                && $this->authTableCols['required']['passwd']
             ) {
-                return false;
+                if (!isset($_SESSION[$this->authTableCols['required']['passwd']['name']]) ||
+                    $_SESSION[$this->authTableCols['required']['passwd']['name']] !== $passwd
+                ) {
+                    return false;
+                }
             }
         }
 

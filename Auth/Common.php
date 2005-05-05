@@ -481,7 +481,7 @@ class LiveUser_Auth_Common
         // Init value: Is user logged in?
         $this->loggedIn = false;
         // Read user data from database
-        $success = $this->_readUserData($handle, $passwd);
+        $success = $this->readUserData($handle, $passwd);
 
         // If login is successful (user data has been read)
         if ($success == true) {
@@ -537,11 +537,12 @@ class LiveUser_Auth_Common
      *
      * @param  string $handle user handle
      * @param  boolean $passwd user password
+     * @param string $authUserId auth user id
      * @return void
      *
-     * @access private
+     * @access public
      */
-    function _readUserData($handle, $passwd = '')
+    function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
         $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
             array('feature' => '_readUserData'));
