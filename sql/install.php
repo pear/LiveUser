@@ -112,7 +112,7 @@ var_dump($result);
 
 class LiveUser_Misc_Schema_Install
 {
-    function generateAuthSchema($auth, $file)
+    function generateAuthSchema($auth, $file, $lengths = array())
     {
         if (!is_a($auth, 'LiveUser_Auth_Common')) {
             return false;
@@ -126,7 +126,8 @@ class LiveUser_Misc_Schema_Install
             foreach($auth->authTableCols['required'] as $key => $value) {
                 $fields[$value['name']] = $value;
                 if ($value['type'] == 'text') {
-                    $fields[$value['name']]['length'] = 32;
+                    $length = isset($lengths[$value['name']]) ? $lengths[$value['name']] : 32;
+                    $fields[$value['name']]['length'] = $length;
                 }
                 $fields[$value['name']]['notnull'] = true;
                 // todo set proper defaults on a per type basis
@@ -140,7 +141,8 @@ class LiveUser_Misc_Schema_Install
             foreach($auth->authTableCols['optional'] as $key => $value) {
                 $fields[$value['name']] = $value;
                 if ($value['type'] == 'text') {
-                    $fields[$value['name']]['length'] = 32;
+                    $length = isset($lengths[$value['name']]) ? $lengths[$value['name']] : 32;
+                    $fields[$value['name']]['length'] = $length;
                 }
             }
         }
@@ -151,7 +153,8 @@ class LiveUser_Misc_Schema_Install
             foreach($auth->authTableCols['custom'] as $key => $value) {
                 $fields[$value['name']] = $value;
                 if ($value['type'] == 'text') {
-                    $fields[$value['name']]['length'] = 32;
+                    $length = isset($lengths[$value['name']]) ? $lengths[$value['name']] : 32;
+                    $fields[$value['name']]['length'] = $length;
                 }
             }
         }
@@ -188,7 +191,7 @@ class LiveUser_Misc_Schema_Install
         return true;
     }
 
-    function generatePermSchema($perm, $file)
+    function generatePermSchema($perm, $file, $lengths = array())
     {
         if (!is_a($perm, 'LiveUser_Perm_Storage')) {
             return false;
@@ -204,7 +207,8 @@ class LiveUser_Misc_Schema_Install
                 $fields[$field_name]['name'] = $perm->alias[$field_name];
                 $fields[$field_name]['type'] = $perm->fields[$field_name];
                 if ($fields[$field_name]['type'] == 'text') {
-                    $fields[$field_name]['length'] = 32;
+                    $length = isset($lengths[$field_name]) ? $lengths[$field_name] : 32;
+                    $fields[$field_name]['length'] = $length;
                 }
 
                 // check if not null
