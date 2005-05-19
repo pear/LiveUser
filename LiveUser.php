@@ -500,7 +500,7 @@ class LiveUser
      * @see    LiveUser::factory
      * @see    LiveUser::getErrors
      */
-    function &singleton($conf, $handle = '', $passwd = '', $logout = false,
+    function &singleton($conf = array(), $handle = '', $passwd = '', $logout = false,
         $remember = false, $confName = 'liveuserConfig')
     {
         static $instances;
@@ -508,12 +508,19 @@ class LiveUser
             $instances = array();
         }
 
-        $signature = serialize(array($handle, $passwd, $confName));
-        if (!isset($instances[$signature])) {
-            $obj = &LiveUser::factory(
-                $conf, $handle, $passwd, $logout, $remember, $confName
-            );
-            $instances[$signature] =& $obj;
+        if (!empty($conf)) {
+            if (empty($instances)) {
+                return false;
+            }
+            $signature = key($instances);
+        } else {
+            $signature = serialize(array($handle, $passwd, $confName));
+            if (!isset($instances[$signature])) {
+                $obj = &LiveUser::factory(
+                    $conf, $handle, $passwd, $logout, $remember, $confName
+                );
+                $instances[$signature] =& $obj;
+            }
         }
 
         return $instances[$signature];
