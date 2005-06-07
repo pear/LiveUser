@@ -78,37 +78,29 @@ MDB::loadFile('Date');
 class LiveUser_Auth_MDB extends LiveUser_Auth_Common
 {
     /**
-     * dsn to connect to
+     * dsn that was connected to
      *
-     * @var    string
+     * @var object
      * @access private
      */
     var $dsn = null;
 
     /**
-     * disconnect
+     * Database connection object.
      *
-     * @var    boolean
-     * @access private
-     */
-    var $disconnect = false;
-
-    /**
-     * PEAR::MDB connection object
-     *
-     * @var    MDB
+     * @var    object
      * @access private
      */
     var $dbc = null;
 
     /**
-     * Auth table
-     * Table where the auth data is stored.
+     * Table prefix
+     * Prefix for all db tables the container has.
      *
      * @var    string
      * @access public
      */
-    var $authTable = 'liveuser_users';
+    var $prefix = 'liveuser_';
 
     /**
      * Load the storage container
@@ -123,26 +115,26 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (is_array($conf)) {
-            if (isset($conf['connection']) &&
-                MDB::isConnection($conf['connection'])
+        if (is_array($conf['storage'])) {
+            if (isset($conf['storage']['connection'])
+                && MDB::isConnection($conf['storage']['connection'])
             ) {
-                $this->dbc     = &$conf['connection'];
-            } elseif (isset($conf['dsn'])) {
-                $this->dsn = $conf['dsn'];
+                $this->dbc = &$conf['storage']['connection'];
+            } elseif (isset($conf['storage']['dsn'])) {
+                $this->dsn = $conf['storage']['dsn'];
                 $function = null;
-                if (isset($conf['function'])) {
-                    $function = $conf['function'];
+                if (isset($conf['storage']['function'])) {
+                    $function = $conf['storage']['function'];
                 }
                 $options = null;
-                if (isset($conf['options'])) {
-                    $options = $conf['options'];
+                if (isset($conf['storage']['options'])) {
+                    $options = $conf['storage']['options'];
                 }
                 $options['optimize'] = 'portability';
                 if ($function == 'singleton') {
-                    $this->dbc =& MDB::singleton($conf['dsn'], $options);
+                    $this->dbc =& MDB::singleton($conf['storage']['dsn'], $options);
                 } else {
-                    $this->dbc =& MDB::connect($conf['dsn'], $options);
+                    $this->dbc =& MDB::connect($conf['storage']['dsn'], $options);
                 }
                 if (PEAR::isError($this->dbc)) {
                     $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
@@ -165,15 +157,15 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        if (!isset($this->authTableCols['optional']['lastlogin'])) {
+        if (!isset($this->tables['users']['fields']['lastlogin'])) {
             return true;
         }
 
-        $sql  = 'UPDATE ' . $this->authTable.'
-                 SET '    . $this->authTableCols['optional']['lastlogin']['name']
-                    .'='  . $this->dbc->getValue($this->authTableCols['optional']['lastlogin']['type'], MDB_Date::unix2Mdbstamp($this->currentLogin)) . '
-                 WHERE '  . $this->authTableCols['required']['auth_user_id']['name']
-                    .'='  . $this->dbc->getValue($this->authTableCols['required']['auth_user_id']['type'], $this->authUserId);
+        $sql  = 'UPDATE ' . $this->prefix . $this->alias['users'].'
+                 SET '    . $this->alias['lastlogin']
+                    .'='  . $this->dbc->getValue($this->field['lastlogin'], MDB_Date::unix2Mdbstamp($this->currentLogin)) . '
+                 WHERE '  . $this->alias['auth_user_id']
+                    .'='  . $this->dbc->getValue($this->field['auth_user_id'], $this->authUserId);
 
         $result = $this->dbc->query($sql);
 
@@ -211,33 +203,26 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
         $fields = array();
-        foreach ($this->authTableCols as $value) {
-            if (sizeof($value) > 0) {
-                foreach ($value as $alias => $field_data) {
-                    $fields[] = $field_data['name'] . ' AS ' . $alias;
-                    $types[]  = $field_data['type'];
-                }
-            }
+        foreach ($this->tables['users']['fields'] as $field => $req) {
+            $fields[] = $this->alias[$field] . ' AS ' . $field;
         }
 
         // Setting the default query.
         $sql    = 'SELECT ' . implode(',', $fields) . '
-                   FROM '   . $this->authTable . '
+                   FROM '   . $this->prefix . $this->alias['users'] . '
                    WHERE  ';
         if ($authUserId) {
-            $sql .= $this->authTableCols['required']['auth_user_id']['name'] . '='
-                . $this->dbc->getValue($this->authTableCols['required']['auth_user_id']['type'], $this->authUserId);
+            $sql .= $this->alias['auth_user_id'] . '='
+                . $this->dbc->getValue($this->field['auth_user_id'], $this->authUserId);
         } else {
-            $sql .= $this->authTableCols['required']['handle']['name'] . '='
-                . $this->dbc->getValue($this->authTableCols['required']['handle']['type'], $handle);
+            $sql .= $this->alias['handle'] . '='
+                . $this->dbc->getValue($this->field['handle'], $handle);
 
-            if (isset($this->authTableCols['required']['passwd'])
-                && $this->authTableCols['required']['passwd']
-            ) {
+            if ($this->tables['users']['fields']['passwd']) {
                 // If $passwd is set, try to find the first user with the given
                 // handle and password.
-                $sql .= ' AND   ' . $this->authTableCols['required']['passwd']['name'] . '='
-                    . $this->dbc->getValue($this->authTableCols['required']['passwd']['type'], $this->encryptPW($passwd));
+                $sql .= ' AND   ' . $this->alias['passwd'] . '='
+                    . $this->dbc->getValue($this->field['passwd'], $this->encryptPW($passwd));
             }
         }
 
@@ -258,18 +243,31 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
             return false;
         }
 
-        $this->handle       = $result['handle'];
-        $this->passwd       = $this->decryptPW($result['passwd']);
-        $this->authUserId   = $result['auth_user_id'];
-        $this->isActive     = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
-        $this->lastLogin    = isset($result['lastlogin'])?
-                                MDB_Date::mdbstamp2Unix($result['lastlogin']):'';
+        $this->handle = $result['handle'];
+        unset($result['handle']);
+        $this->passwd = $this->decryptPW($result['passwd']);
+        unset($result['passwd']);
+        $this->authUserId = $result['auth_user_id'];
+        unset($result['auth_user_id']);
+        $this->isActive = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
+        if (isset($result['is_active'])) {
+            unset($result['is_active']);
+        }
+        $this->lastLogin = isset($result['lastlogin']) ? MDB_Date::mdbstamp2Unix($result['lastlogin']) : '';
+        if (isset($result['lastlogin'])) {
+            unset($result['lastlogin']);
+        }
         $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
+        if (isset($result['owner_user_id'])) {
+            unset($result['owner_user_id']);
+        }
         $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
-        if (isset($this->authTableCols['custom'])) {
-            foreach ($this->authTableCols['custom'] as $alias => $value) {
-                $alias = strtolower($alias);
-                $this->propertyValues['custom'][$alias] = $result[$alias];
+        if (isset($result['owner_group_id'])) {
+            unset($result['owner_group_id']);
+        }
+        if (!empty($result)) {
+            foreach ($result as $name => $value) {
+                $this->{$name} = $value;
             }
         }
 
@@ -285,7 +283,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
      */
     function disconnect()
     {
-        if ($this->disconnect) {
+        if ($this->dsn) {
             $result = $this->dbc->disconnect();
             if (PEAR::isError($result)) {
                 $this->_stack->push(

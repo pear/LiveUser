@@ -129,20 +129,18 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
         $this->pearAuth->start();
         $this->pearAuth->login();
 
-        $success = false;
-
         // If a user was found, read data into class variables and set
         // return value to true
-        if ($this->pearAuth->getAuth()) {
-            $this->handle       = $this->pearAuth->getUsername();
-            $this->passwd       = $this->encryptPW($this->pearAuth->password);
-            $this->isActive     = true;
-            $this->authUserId   = $this->pearAuth->getUsername();
-            $this->lastLogin    = '';
-
-            $success = true;
+        if (!$this->pearAuth->getAuth()) {
+            return false
         }
-        return $success;
+
+        $this->handle       = $this->pearAuth->getUsername();
+        $this->passwd       = $this->encryptPW($this->pearAuth->password);
+        $this->isActive     = true;
+        $this->authUserId   = $this->pearAuth->getUsername();
+        $this->lastLogin    = '';
+        return true;
     }
 
 }

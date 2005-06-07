@@ -91,31 +91,6 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     var $userObj = null;
 
     /**
-     * Columns of the auth table.
-     * Associative array with the names of the auth table columns.
-     * The 'auth_user_id', 'handle' and 'passwd' fields have to be set.
-     * 'lastlogin' and 'is_active' are optional.
-     * It doesn't make sense to set only one of the time columns without the
-     * other.
-     *
-     * The type attribute is only useful when using MDB or CAPTCHA.
-     *
-     * @access public
-     * @var    array
-     */
-    var $authTableCols = array(
-        'required' => array(
-            'auth_user_id' => array('name' => 'userId', 'type' => 'text'),
-            'handle'       => array('name' => 'handle',       'type' => 'text'),
-            'passwd'       => array('name' => 'password',       'type' => 'text'),
-        ),
-        'optional' => array(
-            'lastlogin'    => array('name' => 'lastLogin',    'type' => 'timestamp'),
-            'is_active'    => array('name' => 'isActive',    'type' => 'boolean')
-        )
-    );
-
-    /**
      * Load the storage container
      *
      * @param  mixed &$conf   Name of array containing the configuration.
@@ -128,7 +103,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (is_array($conf)) {
+        if (is_array($conf['storage'])) {
             if (!is_file($this->file)) {
                 if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
                     $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
@@ -242,25 +217,24 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
 
         foreach ($this->tree->root->children as $user) {
             $result = array();
+            $names = array_flip($this->alias);
             foreach ($user->children as $value) {
-                $result[$value->name] = $value->content;
+                if (isset($names[$value->name])) {
+                    $result[$names[$value->name]] = $value->content;
+                }
             }
 
             if ($authUserId) {
-                if (isset($result[$this->authTableCols['required']['auth_user_id']['name']]) &&
-                    $authUserId === $result[$this->authTableCols['required']['auth_user_id']['name']]
+                if (isset($result['auth_user_id']) &&
+                    $authUserId === $result['auth_user_id']
                 ) {
                     $success = true;
                     break;
                 }
-            } elseif (isset($result[$this->authTableCols['required']['handle']['name']]) &&
-                $handle === $result[$this->authTableCols['required']['handle']['name']]
-            ) {
-                if (isset($this->authTableCols['required']['passwd'])
-                    && $this->authTableCols['required']['passwd']
-                ) {
-                    if (isset($result[$this->authTableCols['required']['passwd']['name']]) &&
-                        $this->encryptPW($passwd) === $result[$this->authTableCols['required']['passwd']['name']]
+            } elseif (isset($result['handle']) && $handle === $result['handle']) {
+                if ($this->tables['users']['fields']['passwd']) {
+                    if (isset($result['passwd']) &&
+                        $this->encryptPW($passwd) === $result['passwd']
                     ) {
                         $success = true;
                         break;
@@ -281,23 +255,34 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
             return false;
         }
 
-        // If a user was found, read data into class variables and save
-        // the tree object for faster access in the other functions.
-        $this->handle       = $result[$this->authTableCols['required']['handle']['name']];
-        $this->passwd       = $this->decryptPW($result[$this->authTableCols['required']['passwd']['name']]);
-        $this->authUserId   = $result[$this->authTableCols['required']['auth_user_id']['name']];
-        $this->isActive     = ((isset($this->authTableCols['optional']['is_active']) && isset($result[$this->authTableCols['optional']['is_active']['name']]))
-            ? (bool)$result[$this->authTableCols['optional']['is_active']['name']] : false);
-        $this->lastLogin     = ((isset($this->authTableCols['optional']['lastlogin']) && isset($result[$this->authTableCols['optional']['lastlogin']['name']]))
-            ? $result[$this->authTableCols['optional']['lastlogin']['name']] : null);
-        $this->ownerUserId  = isset($result['ownerUserId']) ? $result['ownerUserId'] : null;
-        $this->ownerGroupid = isset($result['ownerGroupId']) ? $result['ownerGroupId'] : null;
-        if (isset($this->authTableCols['custom'])) {
-            foreach ($this->authTableCols['custom'] as $alias => $value) {
-                $alias = strtolower($alias);
-                $this->propertyValues['custom'][$alias] = $result[$alias];
+        $this->handle = $result['handle'];
+        unset($result['handle']);
+        $this->passwd = $this->decryptPW($result['passwd']);
+        unset($result['passwd']);
+        $this->authUserId = $result['auth_user_id'];
+        unset($result['auth_user_id']);
+        $this->isActive = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
+        if (isset($result['is_active'])) {
+            unset($result['is_active']);
+        }
+        $this->lastLogin = isset($result['lastlogin']) ? $result['lastlogin'] : '';
+        if (isset($result['lastlogin'])) {
+            unset($result['lastlogin']);
+        }
+        $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
+        if (isset($result['owner_user_id'])) {
+            unset($result['owner_user_id']);
+        }
+        $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
+        if (isset($result['owner_group_id'])) {
+            unset($result['owner_group_id']);
+        }
+        if (!empty($result)) {
+            foreach ($result as $name => $value) {
+                $this->{$name} = $value;
             }
         }
+
         $this->userObj      =& $this->tree->root->getElement(array($index));
 
         return true;

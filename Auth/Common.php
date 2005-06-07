@@ -258,25 +258,25 @@ class LiveUser_Auth_Common
     var $externalValues = array();
 
     /**
-     * Columns of the auth table.
-     * Associative array with the names of the auth table columns.
-     * The 'auth_user_id', 'handle' and 'passwd' fields have to be set.
-     * 'lastlogin' and 'is_active' are optional.
-     * It doesn't make sense to set only one of the time columns without the
-     * other.
      *
-     * The type attribute is only useful when using MDB or CAPTCHA.
-     *
-     * @var    array
      * @access public
+     * @var    array
      */
-    var $authTableCols = array(
-        'required' => array(
-            'auth_user_id' => array('name' => 'auth_user_id', 'type' => 'text'),
-            'handle'       => array('name' => 'handle',       'type' => 'text'),
-            'passwd'       => array('name' => 'passwd',       'type' => 'text'),
-        ),
-    );
+    var $tables = array();
+
+    /**
+     *
+     * @access public
+     * @var    array
+     */
+    var $fields = array();
+
+    /**
+     *
+     * @access public
+     * @var    array
+     */
+    var $alias = array();
 
     /**
      * Class constructor. Feel free to override in backend subclasses.
@@ -311,6 +311,32 @@ class LiveUser_Auth_Common
                 }
             }
         }
+
+        if (isset($conf['storage']) && is_array($conf['storage'])) {
+            $keys = array_keys($conf['storage']);
+            foreach ($keys as $key) {
+                if (isset($this->$key)) {
+                    $this->$key =& $conf['storage'][$key];
+                }
+            }
+        }
+
+        require_once 'LiveUser/Auth/Storage/Globals.php';
+        if (empty($this->tables)) {
+            $this->tables = $GLOBALS['_LiveUser']['auth']['tables'];
+        } else {
+            $this->tables = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['auth']['tables'], $this->tables);
+        }
+        if (empty($this->fields)) {
+            $this->fields = $GLOBALS['_LiveUser']['auth']['fields'];
+        } else {
+            $this->fields = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['auth']['fields'], $this->fields);
+        }
+        if (empty($this->alias)) {
+            $this->alias = $GLOBALS['_LiveUser']['auth']['alias'];
+        } else {
+            $this->alias = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['auth']['alias'], $this->alias);
+        }
     }
 
     /**
@@ -344,9 +370,6 @@ class LiveUser_Auth_Common
             $propertyValues['storedExternalValues'] = $this->propertyValues['storedExternalValues'];
         }
 
-        $propertyValues['custom'] = isset($this->propertyValues['custom'])
-            ? $this->propertyValues['custom'] : null;
-
         return $propertyValues;
     }
 
@@ -361,11 +384,7 @@ class LiveUser_Auth_Common
     function unfreeze($propertyValues)
     {
         foreach ($propertyValues as $key => $value) {
-            if (is_array($value)) {
-                $this->propertyValues[$key] = $value;
-            } else {
-                $this->{$key} = $value;
-            }
+            $this->{$key} = $value;
         }
 
         return $this->externalValuesMatch();
@@ -557,8 +576,6 @@ class LiveUser_Auth_Common
         $lwhat = strtolower($what);
         if (isset($this->$what)) {
             $that = $this->$what;
-        } elseif (isset($this->propertyValues['custom'][$lwhat])) {
-            $that = $this->propertyValues['custom'][$lwhat];
         }
         return $that;
     }
