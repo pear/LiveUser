@@ -61,10 +61,6 @@ $GLOBALS['_LiveUser']['auth']['tables'] = array(
             'auth_user_id' => 'seq',
             'handle' => 'unique',
             'passwd' => true,
-            'last_login' => true,
-            'is_active' => true,
-            'owner_user_id' => false,
-            'owner_group_id' => false,
         ),
     ),
 );
@@ -73,20 +69,13 @@ $GLOBALS['_LiveUser']['auth']['fields'] = array(
     'auth_user_id' => 'text',
     'handle' => 'text',
     'passwd' => 'text',
-    'last_login' => 'timestamp',
-    'is_active' => 'boolean',
-    'owner_user_id' => 'integer',
-    'owner_group_id' => 'integer',
 );
 
 $GLOBALS['_LiveUser']['auth']['alias'] = array(
     'auth_user_id' => 'auth_user_id',
     'handle' => 'handle',
     'passwd' => 'passwd',
-    'last_login' => 'last_login',
-    'is_active' => 'is_active',
-    'owner_user_id' => 'owner_user_id',
-    'owner_group_id' => 'owner_group_id',
+    'users' => 'users',
 );
 
 ?>
