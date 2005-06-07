@@ -622,10 +622,10 @@ class LiveUser
      *
      * @access protected
      */
-    function &storageFactory(&$confArray, $classprefix = 'LiveUser_')
+    function &storageFactory(&$confArray, $classprefix = 'LiveUser_Perm_')
     {
         end($confArray);
-        $storageName = $classprefix.'Perm_Storage_' . key($confArray);
+        $storageName = $classprefix.'Storage_' . key($confArray);
         if (!LiveUser::loadClass($storageName) && count($confArray) <= 1) {
             return false;
         // if the storage container does not exist try the next one in the stack
