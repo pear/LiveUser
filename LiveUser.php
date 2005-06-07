@@ -1063,7 +1063,6 @@ class LiveUser
         }
 
         if (!$this->isLoggedIn()) {
-            $this->_stack->push(LIVEUSER_ERROR_WRONG_CREDENTIALS, 'error');
             $this->dispatcher->post($this, 'onFailedLogin');
             return false;
         }
@@ -1559,7 +1558,7 @@ class LiveUser
      *
      * @access public
      */
-    function updateProperty($auth, $perm)
+    function updateProperty($auth, $perm = null)
     {
         if (!is_a($this->_auth, 'LiveUser_Auth_Common')) {
             $this->_stack->push(LIVEUSER_ERROR, 'error',
@@ -1569,13 +1568,16 @@ class LiveUser
         if ($auth && !$this->_auth->readUserData('', '', true)) {
             return false;
         }
+        if (is_null($perm)) {
+            $perm = is_a($this->_perm, 'LiveUser_Perm_Simple');
+        }
         if ($perm) {
-            if (!is_a($this->_perm, 'LiveUser_Perm_Complex')) {
+            if (!is_a($this->_perm, 'LiveUser_Perm_Simple')) {
                 $this->_stack->push(LIVEUSER_ERROR, 'error',
                     'Cannot update container if no perm container instance is available');
                 return false;
             }
-            if ($this->_perm->mapUser($this->_auth->authUserId, $this->_auth->backendArrayIndex)) {
+            if (!$this->_perm->mapUser($this->_auth->authUserId, $this->_auth->backendArrayIndex)) {
                 return false;
             }
         }
