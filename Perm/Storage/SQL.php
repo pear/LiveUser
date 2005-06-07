@@ -48,7 +48,6 @@
  * Require parent class definition.
  */
 require_once 'LiveUser/Perm/Storage.php';
-require_once 'LiveUser/Perm/Storage/Globals.php';
 
 /**
  * SQL container for permission handling
@@ -89,54 +88,26 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     var $prefix = 'liveuser_';
 
     /**
+     * Properly disconnect from database
      *
-     * @access public
-     * @var    array
-     */
-    var $tables = array();
-
-    /**
-     *
-     * @access public
-     * @var    array
-     */
-    var $fields = array();
-
-    /**
-     *
-     * @access public
-     * @var    array
-     */
-    var $alias = array();
-
-    /**
-     *
-     *
-     *
-     * @param array &$storageConf Array with the storage configuration
-     * @return boolean true on success, false on failure.
+     * @return void
      *
      * @access public
      */
-    function init(&$storageConf)
+    function disconnect()
     {
-        parent::init($storageConf);
-
-        if (empty($this->tables)) {
-            $this->tables = $GLOBALS['_LiveUser']['perm']['tables'];
-        } else {
-            $this->tables = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['perm']['tables'], $this->tables);
+        if ($this->dsn) {
+            $result = $this->dbc->disconnect();
+            if (PEAR::isError($result)) {
+                $this->_stack->push(
+                    LIVEUSER_ERROR, 'exception',
+                    array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
+                );
+                return false;
+            }
+            $this->dbc = null;
         }
-        if (empty($this->fields)) {
-            $this->fields = $GLOBALS['_LiveUser']['perm']['fields'];
-        } else {
-            $this->fields = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['perm']['fields'], $this->fields);
-        }
-        if (empty($this->alias)) {
-            $this->alias = $GLOBALS['_LiveUser']['perm']['alias'];
-        } else {
-            $this->alias = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['perm']['alias'], $this->alias);
-        }
+        return true;
     }
 }
 ?>
