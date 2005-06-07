@@ -276,12 +276,6 @@ class LiveUser_Auth_Common
             'handle'       => array('name' => 'handle',       'type' => 'text'),
             'passwd'       => array('name' => 'passwd',       'type' => 'text'),
         ),
-        'optional' => array(
-            'owner_user_id'  => array('name' => 'owner_user_id',  'type' => 'integer'),
-            'owner_group_id' => array('name' => 'owner_group_id', 'type' => 'integer'),
-            'lastlogin'      => array('name' => 'lastlogin',      'type' => 'timestamp'),
-            'is_active'      => array('name' => 'is_active',      'type' => 'boolean'),
-        )
     );
 
     /**
