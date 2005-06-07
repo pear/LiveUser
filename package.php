@@ -19,17 +19,21 @@ $notes = <<<EOT
 - added support for table name aliasing
 - added updateProperty() method (fairly untested)
 - dont raise an error when login() was not able to authenticate the user
+- storageFactory() is no longer permission specific
 
 authentication
 - reworked _readUserData() in the auth containers to optionally read by auth
   user id instead of by handle/passwd (fairly untested)
 - made _readUserData() public (and renamed it to readUserData()
-- updated authTableCols in the database drivers (removed optional fields and added types)
 - made auth fields dynamic (thx dan)
+- updated to use the new auth config layout due to using admin storage
+- tweaked disconnect to only disconnect when a new connection was made
+- updated Globals.php file (removed all optional fields, added users table alias)
 
 permission
 - cleaned up _readImpliedRights()
 - fixed bug in readUserRights() that would lead to overwriting the proper right keys
+- tweaked disconnect to only disconnect when a new connection was made
 
 installer
 - generate auth and perm schema on the fly (removed pre generated ones from cvs)
@@ -47,6 +51,7 @@ examples
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
+- updated examples to use the new auth config layout due to using admin storage
 EOT;
 
 $description = <<<EOT
