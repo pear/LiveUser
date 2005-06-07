@@ -44,18 +44,22 @@ $conf =
                 'loginTimeout'  => 0,
                 'expireTime'    => 3600,
                 'idleTime'      => 1800,
-                'dsn'           => $dsn,
                 'allowDuplicateHandles' => 0,
-                'authTable'     => 'liveuser_users',
-                'authTableCols' => array(
-                    'required' => array(
-                        'auth_user_id' => array('name' => 'auth_user_id', 'type' => ''),
-                        'handle'       => array('name' => 'handle',       'type' => ''),
-                        'passwd'       => array('name' => 'passwd',       'type' => ''),
+                'storage' => array(
+                    'dsn' => $dsn,
+                    'alias' => array(
+                        'lastlogin' => 'lastlogin',
+                        'is_active' => 'is_active',
                     ),
-                    'optional' => array(
-                        'lastlogin'    => array('name' => 'lastlogin',    'type' => ''),
-                        'is_active'    => array('name' => 'is_active',    'type' => '')
+                    'fields' => array(
+                        'lastlogin' => 'timestamp',
+                        'is_active' => 'boolean',
+                    ),
+                    'tables' => array(
+                        'users' => array(
+                            'lastlogin' => false,
+                            'is_active' => false,
+                        ),
                     )
                 )
             )

@@ -19,16 +19,25 @@ $xml_is_writable = is_writable('Auth_XML.xml');
 
 if ($xml_is_readable && $xml_is_writable) {
     $liveuserConfig = array(
-        'authContainers'    => array(0 => array(
-                                            'type' => 'XML',
-                                            'file' => 'Auth_XML.xml',
-                                            'loginTimeout' => 0,
-                                            'expireTime'   => 3600,
-                                            'idleTime'     => 1800,
-                                            'allowDuplicateHandles'  => false,
-                                            'passwordEncryptionMode' => 'MD5'
-                                           )
-        )
+        'authContainers'    => array(
+            0 => array(
+                'type' => 'XML',
+                'loginTimeout' => 0,
+                'expireTime'   => 3600,
+                'idleTime'     => 1800,
+                'allowDuplicateHandles'  => false,
+                'passwordEncryptionMode' => 'MD5',
+                'storage' => array(
+                    'file' => 'Auth_XML.xml',
+                    'alias' => array(
+                        'auth_user_id' => 'userId',
+                        'passwd' => 'password',
+                        'lastlogin' => 'lastLogin',
+                        'is_active' => 'isActive',
+                    ),
+                ),
+           ),
+        ),
     );
     // Get LiveUser class definition
     require_once 'LiveUser.php';

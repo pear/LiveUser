@@ -52,41 +52,60 @@ $LUOptions = array(
         'destroy'  => true,
      ),
     'authContainers' => array(
-                            array(
-                                'type'          => 'DB',
-                                'dsn'           => $dsn,
-                                'loginTimeout'  => 0,
-                                'expireTime'    => 3600,
-                                'idleTime'      => 1800,
-                                'allowDuplicateHandles' => 0,
-                                'authTable'     => 'liveuser_users',
-                                'authTableCols' => array(
-                                    'required'  => array(
-                                        'auth_user_id' => array('name' => 'authUserId', 'type' => 'text'),
-                                        'handle'       => array('name' => 'handle',       'type' => 'text'),
-                                        'passwd'       => array('name' => 'passwd',       'type' => 'text'),
-                                    ),
-                                    'optional' => array(
-                                        'lastlogin'    => array('name' => 'lastLogin',    'type' => 'timestamp'),
-                                        'is_active'    => array('name' => 'isActive',    'type' => 'boolean')
-                                    ),
-                                ),
-                            ),
-                            array(
-                                'type' => 'XML',
-                                'file' => 'Auth_XML.xml',
-                                'loginTimeout' => 0,
-                                'expireTime'   => 3600,
-                                'idleTime'     => 1800,
-                                'allowDuplicateHandles'  => false,
-                                'passwordEncryptionMode' => 'MD5'
-                            ),
-                        ),
+        array(
+            'type'         => 'DB',
+            'loginTimeout' => 0,
+            'expireTime'   => 3600,
+            'idleTime'     => 1800,
+            'allowDuplicateHandles' => 0,
+            'storage' => array(
+                'dsn' => $dsn,
+                'alias' => array(
+                    'auth_user_id' => 'authUserId',
+                    'lastlogin' => 'lastLogin',
+                    'is_active' => 'isActive',
+                    'owner_user_id' => 'owner_user_id',
+                    'owner_group_id' => 'owner_group_id',
+                ),
+                'fields' => array(
+                    'lastlogin' => 'timestamp',
+                    'is_active' => 'boolean',
+                    'owner_user_id' => 'integer',
+                    'owner_group_id' => 'integer',
+                ),
+                'tables' => array(
+                    'users' => array(
+                        'lastlogin' => false,
+                        'is_active' => false,
+                        'owner_user_id' => false,
+                        'owner_group_id' => false,
+                    ),
+                )
+            ),
+        ),
+        array(
+            'type' => 'XML',
+            'loginTimeout' => 0,
+            'expireTime'   => 3600,
+            'idleTime'     => 1800,
+            'allowDuplicateHandles'  => false,
+            'passwordEncryptionMode' => 'MD5',
+            'storage' => array(
+                'file' => 'Auth_XML.xml',
+                'alias' => array(
+                    'auth_user_id' => 'userId',
+                    'passwd' => 'password',
+                    'lastlogin' => 'lastLogin',
+                    'is_active' => 'isActive',
+                ),
+            ),
+        ),
+    ),
     'permContainer'  => array(
-                            'type'  => 'Complex',
-                            'storage' => array('DB' => array('dsn' => $dsn, 'prefix'     => 'liveuser_')),
-                        )
-    );
+        'type'  => 'Complex',
+        'storage' => array('DB' => array('dsn' => $dsn, 'prefix'     => 'liveuser_')),
+    ),
+);
 
 require_once 'LiveUser.php';
 

@@ -30,31 +30,28 @@ $xml_is_writable = is_writable('Auth_XML.xml');
 
 if ($xml_is_readable != false && $xml_is_writable != false) {
     $liveuserConfig = array(
-        'cookie'            => array(
-            'name' => 'loginInfo',
-            'path' => '',
-            'domain' => '',
-            'lifetime' => 30,
-            'savedir' => '.',
-            'secure' => false,
-        ),
         'authContainers'    => array(
-                                0 => array(
-                                            'type' => 'XML',
-                                            'file' => 'Auth_XML.xml',
-                                            'loginTimeout' => 0,
-                                            'expireTime'   => 3600,
-                                            'idleTime'     => 1800,
-                                            'allowDuplicateHandles'  => false,
-                                            'passwordEncryptionMode' => 'MD5',
-                                            'externalValues' => array(
-                                                'values'      => &$_SERVER,
-                                                'keysToCheck' => array('HTTP_USER_AGENT')
-                                            ),
-                                        ),
+            0 => array(
+                'type' => 'XML',
+                'loginTimeout' => 0,
+                'expireTime'   => 3600,
+                'idleTime'     => 1800,
+                'allowDuplicateHandles'  => false,
+                'passwordEncryptionMode' => 'MD5',
+                'storage' => array(
+                    'file' => 'Auth_XML.xml',
+                    'alias' => array(
+                        'auth_user_id' => 'userId',
+                        'passwd' => 'password',
+                        'lastlogin' => 'lastLogin',
+                        'is_active' => 'isActive',
+                    ),
+                ),
+           ),
         ),
-        'permContainer'     => array('type'  => 'Simple',
-                                     'storage' => array('XML' => array('file' => 'Perm_XML.xml')),
+        'permContainer'     => array(
+            'type'  => 'Simple',
+            'storage' => array('XML' => array('file' => 'Perm_XML.xml')),
         ),
     );
     // Get LiveUser class definition
