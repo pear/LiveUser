@@ -12,36 +12,40 @@ require_once 'Console/Getopt.php';
 $version = '0.16.0';
 
 $notes = <<<EOT
-- use MDB2_Schema as an optional dependency for the schema installer
-- forgot to pass 'create' param to installSchema() in installPermSchema()
-- cleaned up _readImpliedRights()
-- fixed bug in readUserRights() that would lead to overwriting the proper right keys
-- fixed typo (bug #4109)
-- updated authTableCols in the database drivers
+- updated MDB2 dependency
 - made readConfig() public
 - use LIVEUSER_STATUS_AUTHINITERROR and LIVEUSER_STATUS_PERMINITERROR
+- removed 'ids' from GLOBALS.php array since this is no longer used in the admin
+- added support for table name aliasing
+- added updateProperty() method (fairly untested)
+
+authentication
+- reworked _readUserData() in the auth containers to optionally read by auth
+  user id instead of by handle/passwd (fairly untested)
+- made _readUserData() public (and renamed it to readUserData()
+- updated authTableCols in the database drivers
+- made auth fields dynamic (thx dan)
+
+permission
+- cleaned up _readImpliedRights()
+- fixed bug in readUserRights() that would lead to overwriting the proper right keys
+
+installer
+- generate auth and perm schema on the fly (removed pre generated ones from cvs)
+- separated schema generation and schema writing in two methods in the installer
+- forgot to pass 'create' param to installSchema() in installPermSchema()
+- use MDB2_Schema as an optional dependency for the schema installer
 - improved handling of defaults in the installer
 - improved DB seq support in the installer
 - options can now be passed to the installer
 - severely reworked the install API
-- made auth fields dynamic (thx dan)
 - added more infos into the old file names
-- updated MDB2 dependency
-- typo fix (bug #4173)
-- turned installer methods into static methods
-- generate auth and perm schema on the fly (removed pre generated ones from cvs)
-- separated schema generation and schema writing in two methods in the installer
-- updated Globals.php to specify the unique indexes as required values and removed
-  'ids' array since this information is no longer used in the admin
+
+examples
 - example5 was added back
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
-- added support for table name aliasing (fairly untested)
-- added updateProperty() method (fairly untested)
-- reworked _readUserData() in the auth containers to optionally read by auth
-  user id instead of by handle/passwd (fairly untested)
-- made _readUserData() public (and renamed it to readUserData()
 EOT;
 
 $description = <<<EOT
