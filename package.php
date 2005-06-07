@@ -18,12 +18,13 @@ $notes = <<<EOT
 - removed 'ids' from GLOBALS.php array since this is no longer used in the admin
 - added support for table name aliasing
 - added updateProperty() method (fairly untested)
+- dont raise an error when login() was not able to authenticate the user
 
 authentication
 - reworked _readUserData() in the auth containers to optionally read by auth
   user id instead of by handle/passwd (fairly untested)
 - made _readUserData() public (and renamed it to readUserData()
-- updated authTableCols in the database drivers
+- updated authTableCols in the database drivers (removed optional fields and added types)
 - made auth fields dynamic (thx dan)
 
 permission
