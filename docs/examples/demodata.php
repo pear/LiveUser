@@ -73,19 +73,19 @@ if (PEAR::isError($options)) {
 $options = $options[0];
 foreach ($options as $opt) {
     switch ($opt[0]) {
-        case 'd':
-        case '--dsn':
+    case 'd':
+    case '--dsn':
         $dsn = $opt[1];
         break;
-        case 'f':
-        case '--file':
+    case 'f':
+    case '--file':
         $file = $opt[1];
         break;
-        case 'h':
-        case '--help':
+    case 'h':
+    case '--help':
         printHelp();
         break;
-}
+    }
 }
 
 /******************************************************************
@@ -110,7 +110,9 @@ $fwrite = @fopen($lu_example_data, 'wb');
 
 if ($fread === false || $fwrite === false) {
     print "I couldn't not open the file\n";
-    $open_error = ($fread === false) ? "The source file $file cannot be opened" : "The destination file $lu_example_data cannot be created, are the correct permissions set ?";
+    $open_error = ($fread === false)
+        ? "The source file $file cannot be opened"
+        : "The destination file $lu_example_data cannot be created, are the correct permissions set ?";
     print "$open_error\n";
     exit();
 }
@@ -188,7 +190,8 @@ php demodata.php -d mysql://root:@localhost/lu_test -f example5/demodata.xml
 exit;
 }
 
-function liveuser_demo_data_cleanup() {
+function liveuser_demo_data_cleanup()
+{
     global $lu_example_data;
     if (file_exists($lu_example_data)) {
         System::rm($lu_example_data);
