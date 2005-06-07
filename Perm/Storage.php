@@ -59,6 +59,27 @@
 class LiveUser_Perm_Storage
 {
     /**
+     *
+     * @access public
+     * @var    array
+     */
+    var $tables = array();
+
+    /**
+     *
+     * @access public
+     * @var    array
+     */
+    var $fields = array();
+
+    /**
+     *
+     * @access public
+     * @var    array
+     */
+    var $alias = array();
+
+    /**
      * Constructor
      *
      * @access protected
@@ -88,6 +109,23 @@ class LiveUser_Perm_Storage
                     $this->$key =& $storageConf[$key];
                 }
             }
+        }
+
+        require_once 'LiveUser/Perm/Storage/Globals.php';
+        if (empty($this->tables)) {
+            $this->tables = $GLOBALS['_LiveUser']['perm']['tables'];
+        } else {
+            $this->tables = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['perm']['tables'], $this->tables);
+        }
+        if (empty($this->fields)) {
+            $this->fields = $GLOBALS['_LiveUser']['perm']['fields'];
+        } else {
+            $this->fields = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['perm']['fields'], $this->fields);
+        }
+        if (empty($this->alias)) {
+            $this->alias = $GLOBALS['_LiveUser']['perm']['alias'];
+        } else {
+            $this->alias = LiveUser::arrayMergeClobber($GLOBALS['_LiveUser']['perm']['alias'], $this->alias);
         }
 
         return true;
