@@ -95,7 +95,7 @@ function showLoginForm(&$notification)
     $tpl = new HTML_Template_IT();
     $tpl->loadTemplatefile('loginform.tpl.php');
 
-    $tpl->setVariable('form_action', $_SERVER['PHP_SELF']);
+    $tpl->setVariable('form_action', $_SERVER['SCRIPT_NAME']);
 
     $liveUserObj =& $notification->getNotificationObject();
     if (is_object($liveUserObj)) {
