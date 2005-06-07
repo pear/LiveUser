@@ -38,8 +38,8 @@ $conf =
             'method' => 'get',
             'function' => ''
         ),
-        'authContainers' => array('DB' =>
-            array(
+        'authContainers' => array(
+            'DB' => array(
                 'type'          => 'DB',
                 'loginTimeout'  => 0,
                 'expireTime'    => 3600,
