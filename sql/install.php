@@ -42,26 +42,42 @@
 require_once 'LiveUser.php';
 require_once 'MDB2/Schema.php';
 
-/*
+echo '<pre>';
+
 $dsn = 'mysql://root:@localhost/liveuser_test_installer';
 
 $conf = array(
     'authContainers' => array(
         array(
-            'type'          => 'MDB2',
-            'dsn'           => $dsn,
-            'authTable'     => 'liveuser_users',
-            'authTableCols' => array(
-                'required'  => array(
-                    'auth_user_id' => array('name' => 'authUserId', 'type' => 'text'),
-                    'handle'       => array('name' => 'handle',     'type' => 'text'),
-                    'passwd'       => array('name' => 'passwd',     'type' => 'text'),
+            'type'         => 'MDB2',
+            'loginTimeout' => 0,
+            'expireTime'   => 3600,
+            'idleTime'     => 1800,
+            'allowDuplicateHandles' => 0,
+            'storage' => array(
+                'dsn' => $dsn,
+                'alias' => array(
+                    'auth_user_id' => 'authUserId',
+                    'lastlogin' => 'lastLogin',
+                    'is_active' => 'isActive',
+                    'owner_user_id' => 'owner_user_id',
+                    'owner_group_id' => 'owner_group_id',
                 ),
-                'optional' => array(
-                    'owner_user_id'  => array('name' => 'owner_user_id',    'type' => 'integer'),
-                    'owner_group_id' => array('name' => 'owner_group_id',   'type' => 'integer'),
-                    'lastlogin'      => array('name' => 'lastLogin',        'type' => 'timestamp'),
-                    'is_active'      => array('name' => 'isActive',         'type' => 'boolean')
+                'fields' => array(
+                    'lastlogin' => 'timestamp',
+                    'is_active' => 'boolean',
+                    'owner_user_id' => 'integer',
+                    'owner_group_id' => 'integer',
+                ),
+                'tables' => array(
+                    'users' => array(
+                        'fields' => array(
+                            'lastlogin' => false,
+                            'is_active' => false,
+                            'owner_user_id' => false,
+                            'owner_group_id' => false,
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -82,7 +98,7 @@ $options = array(
 );
 
 $auth =& LiveUser::authFactory($conf['authContainers'][0], 'foo');
-$result = LiveUser_Misc_Schema_Install::generateAuthSchema($auth, 'auth_schema.xml');
+$result = LiveUser_Misc_Schema_Install::generateSchema($auth, 'auth_schema.xml');
 var_dump($result);
 
 $variables = array();
@@ -90,13 +106,13 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     $auth,
     'auth_schema.xml',
     $variables,
-    true,
+    false,
     $options
 );
 var_dump($result);
 
 $perm =& LiveUser::storageFactory($conf['permContainer']['storage']);
-$result = LiveUser_Misc_Schema_Install::generatePermSchema($perm, 'perm_schema.xml');
+$result = LiveUser_Misc_Schema_Install::generateSchema($perm, 'perm_schema.xml');
 var_dump($result);
 
 $variables = array();
@@ -108,104 +124,26 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     $options
 );
 var_dump($result);
-*/
 
 class LiveUser_Misc_Schema_Install
 {
-    function generateAuthSchema($auth, $file, $lengths = array())
+    function generateSchema($instance, $file, $lengths = array())
     {
-        if (!is_a($auth, 'LiveUser_Auth_Common')) {
-            return false;
-        }
-
-        // generate xml schema
-        $fields = array();
-        if (isset($auth->authTableCols['required']) &&
-            is_array($auth->authTableCols['required'])
-        ) {
-            foreach($auth->authTableCols['required'] as $key => $value) {
-                $fields[$value['name']] = $value;
-                if ($value['type'] == 'text') {
-                    $length = isset($lengths[$value['name']]) ? $lengths[$value['name']] : 32;
-                    $fields[$value['name']]['length'] = $length;
-                }
-                $fields[$value['name']]['notnull'] = true;
-                // todo set proper defaults on a per type basis
-                $fields[$value['name']]['default'] = '';
-            }
-        }
-
-        if (isset($auth->authTableCols['optional']) &&
-            is_array($auth->authTableCols['optional'])
-        ) {
-            foreach($auth->authTableCols['optional'] as $key => $value) {
-                $fields[$value['name']] = $value;
-                if ($value['type'] == 'text') {
-                    $length = isset($lengths[$value['name']]) ? $lengths[$value['name']] : 32;
-                    $fields[$value['name']]['length'] = $length;
-                }
-            }
-        }
-
-        if (isset($auth->authTableCols['custom']) &&
-            is_array($auth->authTableCols['custom'])
-        ) {
-            foreach($auth->authTableCols['custom'] as $key => $value) {
-                $fields[$value['name']] = $value;
-                if ($value['type'] == 'text') {
-                    $length = isset($lengths[$value['name']]) ? $lengths[$value['name']] : 32;
-                    $fields[$value['name']]['length'] = $length;
-                }
-            }
-        }
-
-        $definition = array(
-            'name' => '<variable>database</variable>',
-            'create' => '<variable>create</variable>',
-            'tables' => array(
-                $auth->authTable => array(
-                    'fields' => $fields,
-                    'indexes' => array(
-                        $auth->authTableCols['required']['auth_user_id']['name'] => array(
-                            'fields' => array(
-                                $auth->authTableCols['required']['auth_user_id']['name'] => true,
-                            ),
-                           'unique' => true,
-                        ),
-                    ),
-                ),
-            ),
-            'sequences' => array(
-                $auth->authTable => array(
-                    'on' => array(
-                        'table' => $auth->authTable,
-                        'field' => $auth->authTableCols['required']['auth_user_id']['name'],
-                    )
-                ),
-            ),
-        );
-
-        if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
-            return false;
-        }
-        return true;
-    }
-
-    function generatePermSchema($perm, $file, $lengths = array())
-    {
-        if (!is_a($perm, 'LiveUser_Perm_Storage')) {
+        if (!is_object($instance)) {
             return false;
         }
 
         // generate xml schema
         $tables = array();
         $sequences = array();
-        foreach ($perm->tables as $table_name => $table) {
+        foreach ($instance->tables as $table_name => $table) {
             $fields = array();
             $table_indexes = array();
             foreach($table['fields'] as $field_name => $required) {
-                $fields[$field_name]['name'] = $perm->alias[$field_name];
-                $fields[$field_name]['type'] = $perm->fields[$field_name];
+                $type = $instance->fields[$field_name];
+                $field_name = $instance->alias[$field_name];
+                $fields[$field_name]['name'] = $field_name;
+                $fields[$field_name]['type'] = $type;
                 if ($fields[$field_name]['type'] == 'text') {
                     $length = isset($lengths[$field_name]) ? $lengths[$field_name] : 32;
                     $fields[$field_name]['length'] = $length;
@@ -218,28 +156,28 @@ class LiveUser_Misc_Schema_Install
                     $fields[$field_name]['default'] = '';
                     // Sequences
                     if ($required == 'seq') {
-                        $sequences[$perm->prefix . $perm->alias[$table_name]] = array(
+                        $sequences[$instance->prefix . $instance->alias[$table_name]] = array(
                             'on' => array(
-                                'table' => $perm->prefix . $perm->alias[$table_name],
-                                'field' => $perm->alias[$field_name],
+                                'table' => $instance->prefix . $instance->alias[$table_name],
+                                'field' => $field_name,
                             )
                         );
 
-                        $table_indexes[$perm->alias[$field_name]] = array(
+                        $table_indexes[$field_name] = array(
                             'fields' => array(
-                                $perm->alias[$field_name] => true,
+                                $field_name => true,
                             ),
                             'unique' => true
                         );
                     // Generate indexes
                     } elseif (is_string($required)) {
-                        $table_indexes[$required . '_i']['fields'][$perm->alias[$field_name]] = true;
+                        $table_indexes[$required . '_i']['fields'][$field_name] = true;
                         $table_indexes[$required . '_i']['unique'] = true;
                     }
                 }
             }
-            $tables[$perm->prefix . $perm->alias[$table_name]]['fields'] = $fields;
-            $tables[$perm->prefix . $perm->alias[$table_name]]['indexes'] = $table_indexes;
+            $tables[$instance->prefix . $instance->alias[$table_name]]['fields'] = $fields;
+            $tables[$instance->prefix . $instance->alias[$table_name]]['indexes'] = $table_indexes;
         }
 
         $definition = array(
