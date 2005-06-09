@@ -20,6 +20,8 @@
  * Example usage: php demodata.php -d mysql://root:@localhost/lu_test -f 
  * example5/demodata.xml
  *
+ * Alternativly you can also call the script from the web using GET
+ * demodata.php?help=1&dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
  *
  * PHP version 4 and 5
  *
@@ -50,48 +52,59 @@
  */
 
 require_once 'MDB2/Schema.php';
-require_once 'Console/Getopt.php';
-require_once 'System.php';
-
-$argv = Console_Getopt::readPHPArgv();
-
-$shortoptions = "h?d:f:";
-
-$longoptions = array('file=', 'dsn=');
 
 $dsn = $file = '';
 
-$con = new Console_Getopt;
-$args = $con->readPHPArgv();
-array_shift($args);
-$options = $con->getopt($args, $shortoptions, $longoptions);
-
-if (PEAR::isError($options)) {
-    printHelp($options);
-}
-
-$options = $options[0];
-foreach ($options as $opt) {
-    switch ($opt[0]) {
-    case 'd':
-    case '--dsn':
-        $dsn = $opt[1];
-        break;
-    case 'f':
-    case '--file':
-        $file = $opt[1];
-        break;
-    case 'h':
-    case '--help':
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    echo '<pre>';
+    if (isset($_GET['help'])) {
         printHelp();
-        break;
+    }
+    if (isset($_GET['file'])) {
+        $file = $_GET['file'];
+    }
+    if (isset($_GET['dsn'])) {
+        $dsn = $_GET['dsn'];
+    }
+} else {
+    require_once 'Console/Getopt.php';
+    $argv = Console_Getopt::readPHPArgv();
+
+    $shortoptions = "h?d:f:";
+    $longoptions = array('file=', 'dsn=');
+
+    $con = new Console_Getopt;
+    $args = $con->readPHPArgv();
+    array_shift($args);
+    $options = $con->getopt($args, $shortoptions, $longoptions);
+
+    if (PEAR::isError($options)) {
+        printHelp($options);
+    }
+
+    $options = $options[0];
+    foreach ($options as $opt) {
+        switch ($opt[0]) {
+        case 'd':
+        case '--dsn':
+            $dsn = $opt[1];
+            break;
+        case 'f':
+        case '--file':
+            $file = $opt[1];
+            break;
+        case 'h':
+        case '--help':
+            printHelp();
+            break;
+        }
     }
 }
 
 /******************************************************************
 Begin sanity checks on arguments
 ******************************************************************/
-if ($dsn == '' && $file == '') {
+if ($dsn == '' || $file == '') {
     printHelp();
 }
 
@@ -115,7 +128,7 @@ if (PEAR::isError($manager)) {
    exit();
 }
 
-$res = $manager->updateDatabase($lu_example_data, false, array('database' => $dsninfo['database']));
+$res = $manager->updateDatabase($file, false, array('database' => $manager->db->getDatabase()));
 
 if (PEAR::isError($res)) {
     print "I could not populate the database, see error below\n";
@@ -150,6 +163,9 @@ Example usage: Make sure the database exists beforehand
 
 php demodata.php -d mysql://root:@localhost/lu_test -f example5/demodata.xml
 
+Alternativly you can also call the script from the web using GET
+
+demodata.php?help=1&dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
 ');
 exit;
 }
