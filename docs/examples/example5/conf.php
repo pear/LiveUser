@@ -4,8 +4,7 @@ require_once 'LiveUser.php';
 // Plase configure the following file according to your environment
 
 //$dsn = '{dbtype}://{user}:{passwd}@{dbhost}/{dbname}';
-
-$dsn = 'mysql://root:@localhost/pear_test';
+$dsn = 'mysql://root:@localhost/liveuser_test_example5';
 
 $db = DB::connect($dsn);
 
@@ -24,19 +23,10 @@ $conf =
             'varname'  => 'ludata'
         ),
         'login' => array(
-            'method'   => 'post',
-            'username' => 'handle',
-            'password' => 'passwd',
             'force'    => false,
-            'function' => '',
-            'remember' => 'rememberMe'
         ),
         'logout' => array(
-            'trigger'  => 'logout',
-            'redirect' => 'home.php',
             'destroy'  => true,
-            'method' => 'get',
-            'function' => ''
         ),
         'authContainers' => array(
             'DB' => array(
@@ -66,30 +56,23 @@ $conf =
                 )
             )
         ),
-        'permContainer' => array(
-            'dsn'        => $dsn,
-            'type'       => 'DB_Medium',
-            'prefix'     => 'liveuser_'
-        )
-    );
-
-function logOut()
-{
-}
-
-function logIn()
-{
-}
+    'permContainer' => array(
+        'type' => 'Medium',
+        'storage' => array('DB' => array('dsn' => $dsn, 'prefix' => 'liveuser_')),
+    ),
+);
 
 PEAR::setErrorHandling(PEAR_ERROR_RETURN);
 
 $usr = LiveUser::singleton($conf);
-$usr->setLoginFunction('logIn');
-$usr->setLogOutFunction('logOut');
 
-$e = $usr->init();
+$username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : null;
+$password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : null;
+$logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
+$remember = (isset($_REQUEST['rememberMe'])) ? $_REQUEST['rememberMe'] : false;
 
-if (PEAR::isError($e)) {
-//var_dump($usr);
-    die($e->getMessage() . ' ' . $e->getUserinfo());
+if (!$usr->init($username, $password, $logout, $remember)
+    && $usr->getErrors()
+) {
+    var_dump($usr->getErrors());
 }
