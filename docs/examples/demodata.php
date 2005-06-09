@@ -105,20 +105,13 @@ End sanity checks on arguments
 
 print "\n";
 
-$manager =& new MDB2_Schema;
+$options = array('portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL));
+$manager =& MDB2_Schema::factory($dsn, $options);
 
-$options = array(
-    'debug'          => true,
-    'log_line_break' => '<br>',
-    'portability'    => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
-);
-
-$err = $manager->connect($dsn, $options);
-
-if (PEAR::isError($err)) {
+if (PEAR::isError($manager)) {
    print "I could not connect to the database\n";
-   print "  " . $err->getMessage()  . "\n";
-   print "  " . $err->getUserInfo() . "\n";
+   print "  " . $manager->getMessage()  . "\n";
+   print "  " . $manager->getUserInfo() . "\n";
    exit();
 }
 
