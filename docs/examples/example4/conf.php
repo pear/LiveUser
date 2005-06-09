@@ -75,12 +75,14 @@ $LUOptions = array(
                 ),
                 'tables' => array(
                     'users' => array(
-                        'lastlogin' => false,
-                        'is_active' => false,
-                        'owner_user_id' => false,
-                        'owner_group_id' => false,
+                        'fields' => array(
+                            'lastlogin' => false,
+                            'is_active' => false,
+                            'owner_user_id' => false,
+                            'owner_group_id' => false,
+                        ),
                     ),
-                )
+                ),
             ),
         ),
         array(
