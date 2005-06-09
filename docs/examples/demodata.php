@@ -103,35 +103,6 @@ if (!file_exists($file)) {
 End sanity checks on arguments
 ******************************************************************/
 
-$lu_example_data = System::tmpdir() . DIRECTORY_SEPARATOR . '_lu_example_data.xml';
-
-$fread  = @fopen($file, 'rb');
-$fwrite = @fopen($lu_example_data, 'wb');
-
-if ($fread === false || $fwrite === false) {
-    print "I couldn't not open the file\n";
-    $open_error = ($fread === false)
-        ? "The source file $file cannot be opened"
-        : "The destination file $lu_example_data cannot be created, are the correct permissions set ?";
-    print "$open_error\n";
-    exit();
-}
-
-register_shutdown_function('liveuser_demo_data_cleanup');
-
-$dsninfo = MDB2::parseDSN($dsn);
-
-while (!feof($fread)) {
-    $buffer = fgets($fread, 4096);
-    if (strpos($buffer, '%database%') !== false) {
-        $buffer = str_replace('%database%', $dsninfo['database'], $buffer);
-    }
-    fwrite($fwrite, $buffer);
-}
-
-fclose($fread);
-fclose($fwrite);
-
 print "\n";
 
 $manager =& new MDB2_Schema;
@@ -151,7 +122,7 @@ if (PEAR::isError($err)) {
    exit();
 }
 
-$res = $manager->updateDatabase($lu_example_data);
+$res = $manager->updateDatabase($lu_example_data, false, array('database' => $dsninfo['database']));
 
 if (PEAR::isError($res)) {
     print "I could not populate the database, see error below\n";
@@ -188,13 +159,5 @@ php demodata.php -d mysql://root:@localhost/lu_test -f example5/demodata.xml
 
 ');
 exit;
-}
-
-function liveuser_demo_data_cleanup()
-{
-    global $lu_example_data;
-    if (file_exists($lu_example_data)) {
-        System::rm($lu_example_data);
-    }
 }
 ?>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <database>
 
- <name>%database%</name>
+ <name><variable>database</variable></name>
  <create>1</create>
 
  <table>
