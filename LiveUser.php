@@ -508,7 +508,7 @@ class LiveUser
             $instances = array();
         }
 
-        if (!empty($conf)) {
+        if (empty($conf)) {
             if (empty($instances)) {
                 return false;
             }
