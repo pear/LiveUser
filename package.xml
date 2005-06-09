@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.0a11">
+<package version="1.0" packagerversion="1.4.0a12">
  <name>LiveUser</name>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
@@ -65,35 +65,51 @@
   </maintainers>
  <release>
   <version>0.16.0</version>
-  <date>2005-05-05</date>
+  <date>2005-06-09</date>
   <license>LGPL</license>
   <state>beta</state>
-  <notes>- use MDB2_Schema as an optional dependency for the schema installer
-- forgot to pass 'create' param to installSchema() in installPermSchema()
-- cleaned up _readImpliedRights()
-- fixed bug in readUserRights() that would lead to overwriting the proper right keys
-- fixed typo (bug #4109)
-- updated authTableCols in the database drivers
+  <notes>- updated MDB2 dependency
 - made readConfig() public
 - use LIVEUSER_STATUS_AUTHINITERROR and LIVEUSER_STATUS_PERMINITERROR
+- removed 'ids' from GLOBALS.php array since this is no longer used in the admin
+- added support for table name aliasing
+- added updateProperty() method (fairly untested)
+- dont raise an error when login() was not able to authenticate the user
+- storageFactory() is no longer permission specific
+
+authentication
+- reworked _readUserData() in the auth containers to optionally read by auth
+  user id instead of by handle/passwd (fairly untested)
+- made _readUserData() public (and renamed it to readUserData()
+- made auth fields dynamic (thx dan)
+- updated to use the new auth config layout due to using admin storage
+- tweaked disconnect to only disconnect when a new connection was made
+- updated Globals.php file (removed all optional fields, added users table alias)
+
+permission
+- cleaned up _readImpliedRights()
+- fixed bug in readUserRights() that would lead to overwriting the proper right keys
+- tweaked disconnect to only disconnect when a new connection was made
+
+installer
+- generate auth and perm schema on the fly (removed pre generated ones from cvs)
+- separated schema generation and schema writing in two methods in the installer
+- forgot to pass 'create' param to installSchema() in installPermSchema()
+- use MDB2_Schema as an optional dependency for the schema installer
 - improved handling of defaults in the installer
 - improved DB seq support in the installer
 - options can now be passed to the installer
 - severely reworked the install API
-- made auth fields dynamic (thx dan)
 - added more infos into the old file names
-- updated MDB2 dependency
-- typo fix (bug #4173)
-- turned installer methods into static methods
-- generate auth and perm schema on the fly (removed pre generated ones from cvs)
-- separated schema generation and schema writing in two methods in the installer
-- updated Globals.php to specify the unique indexes as required values and removed
-  'ids' array since this information is no longer used in the admin
+- updated code with the new auth config layout and as a result removed
+  generateAuthSchema() and renamed generatePermSchema() to generateSchema()
+
+examples
 - example5 was added back
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
-- added support for table name aliasing (fairly untested)
+- updated examples to use the new auth config layout due to using admin storage
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -203,35 +219,51 @@
  <changelog>
    <release>
     <version>0.16.0</version>
-    <date>2005-05-05</date>
+    <date>2005-06-09</date>
     <license>LGPL</license>
     <state>beta</state>
-    <notes>- use MDB2_Schema as an optional dependency for the schema installer
-- forgot to pass 'create' param to installSchema() in installPermSchema()
-- cleaned up _readImpliedRights()
-- fixed bug in readUserRights() that would lead to overwriting the proper right keys
-- fixed typo (bug #4109)
-- updated authTableCols in the database drivers
+    <notes>- updated MDB2 dependency
 - made readConfig() public
 - use LIVEUSER_STATUS_AUTHINITERROR and LIVEUSER_STATUS_PERMINITERROR
+- removed 'ids' from GLOBALS.php array since this is no longer used in the admin
+- added support for table name aliasing
+- added updateProperty() method (fairly untested)
+- dont raise an error when login() was not able to authenticate the user
+- storageFactory() is no longer permission specific
+
+authentication
+- reworked _readUserData() in the auth containers to optionally read by auth
+  user id instead of by handle/passwd (fairly untested)
+- made _readUserData() public (and renamed it to readUserData()
+- made auth fields dynamic (thx dan)
+- updated to use the new auth config layout due to using admin storage
+- tweaked disconnect to only disconnect when a new connection was made
+- updated Globals.php file (removed all optional fields, added users table alias)
+
+permission
+- cleaned up _readImpliedRights()
+- fixed bug in readUserRights() that would lead to overwriting the proper right keys
+- tweaked disconnect to only disconnect when a new connection was made
+
+installer
+- generate auth and perm schema on the fly (removed pre generated ones from cvs)
+- separated schema generation and schema writing in two methods in the installer
+- forgot to pass 'create' param to installSchema() in installPermSchema()
+- use MDB2_Schema as an optional dependency for the schema installer
 - improved handling of defaults in the installer
 - improved DB seq support in the installer
 - options can now be passed to the installer
 - severely reworked the install API
-- made auth fields dynamic (thx dan)
 - added more infos into the old file names
-- updated MDB2 dependency
-- typo fix (bug #4173)
-- turned installer methods into static methods
-- generate auth and perm schema on the fly (removed pre generated ones from cvs)
-- separated schema generation and schema writing in two methods in the installer
-- updated Globals.php to specify the unique indexes as required values and removed
-  'ids' array since this information is no longer used in the admin
+- updated code with the new auth config layout and as a result removed
+  generateAuthSchema() and renamed generatePermSchema() to generateSchema()
+
+examples
 - example5 was added back
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
-- added support for table name aliasing (fairly untested)
+- updated examples to use the new auth config layout due to using admin storage
     </notes>
    </release>
  </changelog>

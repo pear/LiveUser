@@ -45,6 +45,8 @@ installer
 - options can now be passed to the installer
 - severely reworked the install API
 - added more infos into the old file names
+- updated code with the new auth config layout and as a result removed
+  generateAuthSchema() and renamed generatePermSchema() to generateSchema()
 
 examples
 - example5 was added back
