@@ -103,9 +103,9 @@ $LUOptions = array(
             ),
         ),
     ),
-    'permContainer'  => array(
-        'type'  => 'Complex',
-        'storage' => array('DB' => array('dsn' => $dsn, 'prefix'     => 'liveuser_')),
+    'permContainer' => array(
+        'type' => 'Complex',
+        'storage' => array('DB' => array('dsn' => $dsn, 'prefix' => 'liveuser_')),
     ),
 );
 
