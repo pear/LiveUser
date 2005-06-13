@@ -44,6 +44,7 @@ require_once 'MDB2/Schema.php';
 
 echo '<pre>';
 
+/*
 $dsn = 'mysql://root:@localhost/liveuser_test_installer';
 
 $conf = array(
@@ -106,7 +107,7 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     $auth,
     'auth_schema.xml',
     $variables,
-    false,
+    true,
     $options
 );
 var_dump($result);
@@ -124,6 +125,7 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     $options
 );
 var_dump($result);
+*/
 
 class LiveUser_Misc_Schema_Install
 {
@@ -225,7 +227,7 @@ class LiveUser_Misc_Schema_Install
 
         $result = $manager->updateDatabase($file, $file_old, $variables);
 
-        $debug = $manager->getOption('debug');
+        $debug = $manager->db->getOption('debug');
         if ($debug && !PEAR::isError($debug)) {
             echo('Debug messages<br>');
             echo($manager->db->debugOutput().'<br>');
