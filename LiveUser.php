@@ -398,30 +398,15 @@ class LiveUser
      *  'authContainers' => array(
      *      'name' => array(
      *            'type'            => 'DB',
-     *            'connection'      => 'db connection object, use this or dsn',
-     *            'dsn'             => 'database dsn, use this or connection',
      *            'loginTimeout'    => 0,
      *            'expireTime'      => 3600,
      *            'idleTime'        => 1800,
      *            'updateLastLogin' => true,
      *            'allowDuplicateHandles' => false,
      *            'allowEmptyPasswords'   => false,
-     *            'authTable'     => 'liveuser_users',
-     *            'authTableCols' => array(
-     *                'required' => array(
-     *                    'auth_user_id' => array('type' => 'text', 'name' => 'user_id'),
-     *                    'handle'       => array('type' => 'text', 'name' => 'handle'),
-     *                    'passwd'       => array('type' => 'text', 'name' => 'passwd')
-     *                ),
-     *                'optional' => array(
-     *                    'owner_user_id'  => array('type' => 'integer', 'name' => 'owner_user_id'),
-     *                    'owner_group_id' => array('type' => 'integer', 'name' => 'owner_group_id')
-     *                    'lastlogin'      => array('type' => 'timestamp', 'name' => 'lastlogin'),
-     *                    'is_active'      => array('type' => 'boolean', 'name' => 'is_active')
-     *                ),
-     *                'custom' => array(
-     *                    'myaliasforfield1' => array('type' => 'text', 'name' => 'myfield1')
-     *                )
+     *            'storage' => array(
+     *                'connection'      => 'db connection object, use this or dsn',
+     *                'dsn'             => 'database dsn, use this or connection',
      *           ),
      *           'externalValues' => array(
      *                  'values'      => &$_SERVER,
