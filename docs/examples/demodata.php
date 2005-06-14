@@ -21,7 +21,7 @@
  * example5/demodata.xml
  *
  * Alternativly you can also call the script from the web using GET
- * demodata.php?help=1&dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
+ * demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
  *
  * PHP version 4 and 5
  *
@@ -165,7 +165,7 @@ php demodata.php -d mysql://root:@localhost/lu_test -f example5/demodata.xml
 
 Alternativly you can also call the script from the web using GET
 
-demodata.php?help=1&dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
+demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
 ');
 exit;
 }
