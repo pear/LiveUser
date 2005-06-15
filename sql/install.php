@@ -165,7 +165,7 @@ class LiveUser_Misc_Schema_Install
                             )
                         );
 
-                        $table_indexes[$field_name] = array(
+                        $table_indexes[$table_name.'_'.$field_name] = array(
                             'fields' => array(
                                 $field_name => true,
                             ),
@@ -173,8 +173,8 @@ class LiveUser_Misc_Schema_Install
                         );
                     // Generate indexes
                     } elseif (is_string($required)) {
-                        $table_indexes[$required . '_i']['fields'][$field_name] = true;
-                        $table_indexes[$required . '_i']['unique'] = true;
+                        $table_indexes[$table_name.'_'.$required . '_i']['fields'][$field_name] = true;
+                        $table_indexes[$table_name.'_'.$required . '_i']['unique'] = true;
                     }
                 }
             }
