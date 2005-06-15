@@ -47,6 +47,8 @@ installer
 - added more infos into the old file names
 - updated code with the new auth config layout and as a result removed
   generateAuthSchema() and renamed generatePermSchema() to generateSchema()
+- added table name prefix to all indexes, since some rdbms (notably pgsql)
+  dont like it if the same index name is used (bug #4593)
 
 examples
 - example5 was added back
