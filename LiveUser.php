@@ -966,21 +966,23 @@ class LiveUser
         }
 
         if (!$this->isLoggedIn()) {
-            $this->login($handle, $passwd, $remember);
+            if ($this->login($handle, $passwd, $remember) &&
+                $this->status != LIVEUSER_STATUS_AUTHFAILED
+            ) {
+                return false;
+            }
         }
 
-        // Return boolean that indicates whether a auth object has been created
-        // or retrieved from session
+        // set idle time and status
         if ($this->isLoggedIn()) {
             $_SESSION[$this->_options['session']['varname']]['idle'] = $now;
             $this->status = LIVEUSER_STATUS_OK;
-            return true;
         // Force user login.
         } elseif ($this->_options['login']['force']) {
             $this->dispatcher->post($this, 'forceLogin');
         }
 
-        return false;
+        return true;
     }
 
     /**
