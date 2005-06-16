@@ -966,8 +966,8 @@ class LiveUser
         }
 
         if (!$this->isLoggedIn()) {
-            if ($this->login($handle, $passwd, $remember) &&
-                $this->status != LIVEUSER_STATUS_AUTHFAILED
+            if (!$this->login($handle, $passwd, $remember) &&
+                $this->getErrors()
             ) {
                 return false;
             }
@@ -1001,6 +1001,9 @@ class LiveUser
         if (empty($handle)) {
             $result = $this->readRememberCookie();
             if (!is_array($result)) {
+                if ($this->status == LIVEUSER_STATUS_UNKNOWN) {
+                    $this->status = LIVEUSER_STATUS_AUTHFAILED;
+                }
                 return false;
             }
             $handle = $result['handle'];
@@ -1612,14 +1615,14 @@ class LiveUser
         // define the varies error messages
         if (!isset($statusMessages)) {
             $statusMessages = array(
-                LIVEUSER_STATUS_OK              => 'No authentication problems detected',
+                LIVEUSER_STATUS_OK              => 'Authentication OK',
                 LIVEUSER_STATUS_IDLED           => 'Maximum idle time is reached',
                 LIVEUSER_STATUS_EXPIRED         => 'User session has expired',
                 LIVEUSER_STATUS_ISINACTIVE      => 'User is set to inactive',
                 LIVEUSER_STATUS_PERMINITERROR   => 'Cannot instantiate permission container',
                 LIVEUSER_STATUS_AUTHINITERROR   => 'Cannot instantiate authentication configuration',
                 LIVEUSER_STATUS_AUTHNOTFOUND    => 'Cannot retrieve Auth object from session',
-                LIVEUSER_STATUS_UNKNOWN         => 'An undefined error occurred',
+                LIVEUSER_STATUS_UNKNOWN         => 'An undefined error occurred or init() was not called',
                 LIVEUSER_STATUS_LOGGEDOUT       => 'User was logged out correctly',
                 LIVEUSER_STATUS_AUTHFAILED      => 'Cannot authenticate, username/password is probably wrong',
                 LIVEUSER_STATUS_UNFROZEN        => 'Object fetched from the session, the user was already logged in'
