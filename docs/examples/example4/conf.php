@@ -150,7 +150,10 @@ $LU->dispatcher->addObserver('showLoginForm', 'forceLogin');
 $username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : null;
 $password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : null;
 $logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
-$LU->init($username, $password, $logout);
+if (!$LU->init($username, $password, $logout)) {
+    var_dump($LU->getErrors());
+    die();
+}
 
 define('AREA_NEWS',          1);
 define('RIGHT_NEWS_NEW',     1);

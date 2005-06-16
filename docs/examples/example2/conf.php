@@ -73,7 +73,12 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
     $password = isset($_REQUEST['password']) ? $_REQUEST['password'] : null;
     $logout = isset($_REQUEST['logout']) ? $_REQUEST['logout'] : null;
     $remember = isset($_REQUEST['remember']) ? $_REQUEST['remember'] : null;
-    $LU->init($handle, $password, $logout, $remember);
+    if (!$LU->init($handle, $password, $logout, $remember)) {
+        var_dump($LU->getErrors());
+        die();
+    }
+
+    var_dump($LU->statusMessage($LU->getStatus()));
 }
 
 ?>

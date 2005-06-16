@@ -71,7 +71,10 @@ $LU->dispatcher->addObserver(array(&$obs, 'notify'));
 $username = (isset($_REQUEST['handle'])) ? $_REQUEST['handle'] : NULL;
 $password = (isset($_REQUEST['passwd'])) ? $_REQUEST['passwd'] : NULL;
 $logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
-$LU->init($username, $password, $logout);
+if (!$LU->init($username, $password, $logout)) {
+    var_dump($LU->getErrors());
+    die();
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

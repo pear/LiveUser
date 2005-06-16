@@ -71,8 +71,7 @@ $password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : null;
 $logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
 $remember = (isset($_REQUEST['rememberMe'])) ? $_REQUEST['rememberMe'] : false;
 
-if (!$usr->init($username, $password, $logout, $remember)
-    && $usr->getErrors()
-) {
+if (!$usr->init($username, $password, $logout, $remember)) {
     var_dump($usr->getErrors());
+    die();
 }
