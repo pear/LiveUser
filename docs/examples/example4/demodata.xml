@@ -934,6 +934,7 @@
 
  </table>
 
+
  <table>
 
   <name>liveuser_translations</name>
@@ -941,27 +942,38 @@
   <declaration>
 
    <field>
+    <name>translation_id</name>
+    <type>integer</type>
+    <notnull>1</notnull>
+    <default></default>
+   </field>
+
+   <field>
     <name>section_id</name>
     <type>integer</type>
-    <default>0</default>
+    <notnull>1</notnull>
+    <default></default>
    </field>
 
    <field>
     <name>section_type</name>
     <type>integer</type>
-    <default>0</default>
+    <notnull>1</notnull>
+    <default></default>
    </field>
 
    <field>
     <name>language_id</name>
     <type>text</type>
-    <length>2</length>
+    <length>32</length>
+    <notnull>1</notnull>
+    <default></default>
    </field>
 
    <field>
     <name>name</name>
     <type>text</type>
-    <length>50</length>
+    <length>32</length>
    </field>
 
    <field>
@@ -971,24 +983,22 @@
    </field>
 
    <index>
-    <name>section_id</name>
+    <name>translations_translation_id</name>
+    <unique>1</unique>
+    <field>
+     <name>translation_id</name>
+    </field>
+   </index>
+
+   <index>
+    <name>translations_translation_i</name>
     <unique>1</unique>
     <field>
      <name>section_id</name>
     </field>
-   </index>
-
-   <index>
-    <name>section_type</name>
-    <unique>1</unique>
     <field>
      <name>section_type</name>
     </field>
-   </index>
-
-   <index>
-    <name>language_id</name>
-    <unique>1</unique>
     <field>
      <name>language_id</name>
     </field>
@@ -999,6 +1009,11 @@
   <initialization>
 
    <insert>
+
+    <field>
+     <name>translation_id</name>
+     <value>1</value>
+   </field>
 
     <field>
      <name>section_id</name>
@@ -1030,6 +1045,11 @@
    <insert>
 
     <field>
+     <name>translation_id</name>
+     <value>2</value>
+   </field>
+
+    <field>
      <name>section_id</name>
      <value>1</value>
    </field>
@@ -1057,6 +1077,11 @@
    </insert>
 
    <insert>
+
+    <field>
+     <name>translation_id</name>
+     <value>3</value>
+   </field>
 
     <field>
      <name>section_id</name>
@@ -1088,6 +1113,11 @@
    <insert>
 
     <field>
+     <name>translation_id</name>
+     <value>4</value>
+   </field>
+
+    <field>
      <name>section_id</name>
      <value>2</value>
    </field>
@@ -1115,6 +1145,11 @@
    </insert>
 
    <insert>
+
+    <field>
+     <name>translation_id</name>
+     <value>5</value>
+   </field>
 
     <field>
      <name>section_id</name>
@@ -1146,6 +1181,11 @@
    <insert>
 
     <field>
+     <name>translation_id</name>
+     <value>6</value>
+   </field>
+
+    <field>
      <name>section_id</name>
      <value>1</value>
    </field>
@@ -1173,6 +1213,11 @@
    </insert>
 
    <insert>
+
+    <field>
+     <name>translation_id</name>
+     <value>7</value>
+   </field>
 
     <field>
      <name>section_id</name>
@@ -1204,6 +1249,11 @@
    <insert>
 
     <field>
+     <name>translation_id</name>
+     <value>8</value>
+   </field>
+
+    <field>
      <name>section_id</name>
      <value>3</value>
    </field>
@@ -1231,6 +1281,7 @@
    </insert>
 
   </initialization>
+
 
  </table>
 
@@ -1670,34 +1721,65 @@
 
  <sequence>
   <name>liveuser_applications</name>
+  <on>
+   <table>liveuser_applications</table>
+   <field>application_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_areas</name>
+  <on>
+   <table>liveuser_areas</table>
+   <field>area_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_groups</name>
+  <on>
+   <table>liveuser_groups</table>
+   <field>group_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_perm_users</name>
+  <on>
+   <table>liveuser_perm_users</table>
+   <field>perm_user_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_rights</name>
+  <on>
+   <table>liveuser_rights</table>
+   <field>right_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_translations</name>
+  <on>
+   <table>liveuser_translations</table>
+   <field>translation_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_users</name>
+  <on>
+   <table>liveuser_users</table>
+   <field>authuserid</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>news</name>
-  <start>3</start>
+  <on>
+   <table>news</table>
+   <field>news_id</field>
+  </on>
  </sequence>
 </database>
