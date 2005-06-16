@@ -13,15 +13,18 @@
  * Example: --dsn=mysql://user:passwd@hostname/databasename
  * or -d "mysql://user:passwd@hostname/databasename"
  *
+ * -c --create (optional): Defines if the database needs to be created or not.
+ * Example: --create=1 or -c "1"
+ *
  * -f --file (required): input file containing the structure and
  *                       data in MDB2_Schema format.
  * Example: --file=/path/to/output/file.xml
  *
- * Example usage: php demodata.php -d mysql://root:@localhost/lu_test -f 
+ * Example usage: php demodata.php -d mysql://root:@localhost/lu_test -f
  * example5/demodata.xml
  *
  * Alternativly you can also call the script from the web using GET
- * demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
+ * demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml&create=1
  *
  * PHP version 4 and 5
  *
@@ -54,6 +57,7 @@
 require_once 'MDB2/Schema.php';
 
 $dsn = $file = '';
+$create = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     echo '<pre>';
@@ -65,6 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
     if (isset($_GET['dsn'])) {
         $dsn = $_GET['dsn'];
+    }
+    if (isset($_GET['create'])) {
+        $create = (bool)$_GET['create'];
     }
 } else {
     require_once 'Console/Getopt.php';
@@ -85,6 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $options = $options[0];
     foreach ($options as $opt) {
         switch ($opt[0]) {
+        case 'c':
+        case '--create':
+            $create = (bool)$opt[1];
+            break;
         case 'd':
         case '--dsn':
             $dsn = $opt[1];
@@ -119,6 +130,9 @@ End sanity checks on arguments
 print "\n";
 
 $options = array('portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL));
+$dsn = MDB2::parseDSN($dsn);
+$database = $dsn['database'];
+unset($dsn['database']);
 $manager =& MDB2_Schema::factory($dsn, $options);
 
 if (PEAR::isError($manager)) {
@@ -128,7 +142,11 @@ if (PEAR::isError($manager)) {
    exit();
 }
 
-$res = $manager->updateDatabase($file, false, array('database' => $manager->db->getDatabase()));
+$variables = array(
+    'database' => $database,
+    'create' => (int)$create,
+);
+$res = $manager->updateDatabase($file, false, $variables);
 
 if (PEAR::isError($res)) {
     print "I could not populate the database, see error below\n";
@@ -156,6 +174,9 @@ DefineGenerator [options]
 -d --dsn (required) : Defines the PEAR::DB DSN to connect to the database.
 Example: --dsn=mysql://user:passwd@hostname/databasename
 
+-c --create (optional): Defines if the database needs to be created or not.
+Example: --create=1 or -c "1"
+
 -f --file (required) : input file containing the structure and
 data in MDB2_Schema format. Example: --file=/path/to/output/file.xml
 
@@ -165,7 +186,7 @@ php demodata.php -d mysql://root:@localhost/lu_test -f example5/demodata.xml
 
 Alternativly you can also call the script from the web using GET
 
-demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml
+demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml&create=1
 ');
 exit;
 }
