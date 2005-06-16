@@ -913,10 +913,8 @@ class LiveUser
 
     /**
      * Tries to retrieve auth object from session.
-     * If this fails, the class attempts a login based on cookie or form
-     * information (depends on class settings).
-     * Returns true if a auth object was successfully retrieved or created.
-     * Otherwise, false is returned.
+     * If this fails, the method attempts a login based on the
+     * parameters or cookie data
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
