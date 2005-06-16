@@ -20,6 +20,9 @@ $notes = <<<EOT
 - added updateProperty() method (fairly untested)
 - dont raise an error when login() was not able to authenticate the user
 - storageFactory() is no longer permission specific
+- only return false in init() method if an error occured
+- always overwrite status with auth failed in login() when the current status is UNKNOWN
+- updated a few status message with clearer messages
 
 authentication
 - reworked _readUserData() in the auth containers to optionally read by auth
@@ -56,6 +59,7 @@ examples
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
 - updated examples to use the new auth config layout due to using admin storage
+- tweaked error handling on init() call
 EOT;
 
 $description = <<<EOT
