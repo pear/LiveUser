@@ -18,5 +18,6 @@
 <body>
     <p><b>Sorry, you are not allowed to write or change news.</b></p>
     <p><b>Please contact the <a href="mailto:krausbn@php.net">Admin</a>.</b></p>
+    <a href="?logout=1">Logout</a>
 </body>
 </html>
