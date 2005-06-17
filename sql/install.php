@@ -44,7 +44,7 @@ require_once 'MDB2/Schema.php';
 
 echo '<pre>';
 
-/*
+
 $dsn = 'mysql://root:@localhost/liveuser_test_installer';
 
 $conf = array(
@@ -101,7 +101,7 @@ $options = array(
 $auth =& LiveUser::authFactory($conf['authContainers'][0], 'foo');
 $result = LiveUser_Misc_Schema_Install::generateSchema($auth, 'auth_schema.xml');
 var_dump($result);
-
+/*
 $variables = array();
 $result = LiveUser_Misc_Schema_Install::installSchema(
     $auth,
@@ -157,7 +157,7 @@ class LiveUser_Misc_Schema_Install
                     // todo set proper defaults on a per type basis .. especially for '*_level'
                     $fields[$field_name]['default'] = '';
                     // Sequences
-                    if ($required == 'seq') {
+                    if ($required === 'seq') {
                         $sequences[$instance->prefix . $instance->alias[$table_name]] = array(
                             'on' => array(
                                 'table' => $instance->prefix . $instance->alias[$table_name],
