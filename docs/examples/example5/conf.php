@@ -1,14 +1,14 @@
 <?php
-require_once 'DB.php';
+require_once 'MDB2.php';
 require_once 'LiveUser.php';
 // Plase configure the following file according to your environment
 
 //$dsn = '{dbtype}://{user}:{passwd}@{dbhost}/{dbname}';
 $dsn = 'mysql://root:@localhost/liveuser_test_example5';
 
-$db = DB::connect($dsn);
+$db = MDB2::connect($dsn);
 
-if (DB::isError($db)) {
+if (PEAR::isError($db)) {
     echo $db->getMessage() . ' ' . $db->getUserInfo();
 }
 
@@ -30,7 +30,7 @@ $conf =
         ),
         'authContainers' => array(
             'DB' => array(
-                'type'          => 'DB',
+                'type'          => 'MDB2',
                 'loginTimeout'  => 0,
                 'expireTime'    => 3600,
                 'idleTime'      => 1800,
@@ -58,7 +58,7 @@ $conf =
         ),
     'permContainer' => array(
         'type' => 'Medium',
-        'storage' => array('DB' => array('dsn' => $dsn, 'prefix' => 'liveuser_')),
+        'storage' => array('MDB2' => array('dsn' => $dsn, 'prefix' => 'liveuser_')),
     ),
 );
 

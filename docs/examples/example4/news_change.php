@@ -4,7 +4,7 @@
 
   // If the user hasn't the right to change news -> access denied.
   if (!$LU->checkRight(RIGHT_NEWS_CHANGE)) {
-      $tpl->loadTemplatefile('news_notallowed.tpl.php');
+      $tpl->loadTemplatefile('news_notallowed.tpl.php', false, false);
       include_once 'finish.inc.php';
       exit();
   }
@@ -20,7 +20,7 @@
    */
   if ($action == 'change' AND $news_id != 0) {
 
-      $newsRow = $db->getRow('SELECT
+      $newsRow = $db->queryRow('SELECT
                                   news_id,
                                   ROUND((TO_DAYS(valid_to)-TO_DAYS(created_at))/7) AS weeks,
                                   UNIX_TIMESTAMP(created_at) AS created_at,
@@ -102,7 +102,7 @@
    */
   if ($action == 'delete' AND $news_id != 0) {
 
-      $rightInfo = $db->getRow('SELECT
+      $rightInfo = $db->queryRow('SELECT
                                     owner_user_id,
                                     owner_group_id
                                 FROM

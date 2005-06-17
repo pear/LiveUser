@@ -30,8 +30,9 @@ if (!empty($news)) {
     // Form seems to be correct. Write data into the db.
     $news = str_replace("\r\n",'<br />',$news);
 
-        $db->query('INSERT INTO
+    $result = $db->query('INSERT INTO
                   news (
+                      news_id,
                       created_at,
                       valid_to,
                       news,
@@ -39,10 +40,11 @@ if (!empty($news)) {
                       owner_group_id
                   )
                   VALUES (
+                      ' . $db->nextId('news') . ',
                       NOW(),
-                      ' . $db->quoteSmart( date('Y.m.d H:i:s', time()+60*60*24*7*$valid_to) ) . ',
-                      ' . $db->quoteSmart( addslashes( $news ) ).',
-                      ' . $db->quoteSmart( $LU->getProperty('permUserId') ) . ',
+                      ' . $db->quote( date('Y.m.d H:i:s', time()+60*60*24*7*$valid_to), 'timestamp' ) . ',
+                      ' . $db->quote( addslashes( $news ), 'text' ).',
+                      ' . $db->quote( $LU->getProperty('permUserId'), 'integer' ) . ',
                       ' . $group . ')');
 
         $tpl->setVariable('script_msg', '<p><b>News has been added.</b></p>');

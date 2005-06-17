@@ -23,7 +23,7 @@ $tpl->setVariable('LOGIN',       $login);
 
 $tpl->show();
 
-// This function is to fetch news from the DB
+// This function is to fetch news from the MDB2
 function getNews(&$db, $newsCategory)
 {
     $query = "
@@ -41,9 +41,9 @@ function getNews(&$db, $newsCategory)
         ORDER BY
             date ASC";
 
-    $news = $db->getAssoc($query);
+    $news = $db->queryAll($query, null, MDB2_FETCHMODE_ASSOC, true);
 
-    if (DB::isError($news)) {
+    if (PEAR::isError($news)) {
         die($news->getMessage() . ' ' . $news->getUserinfo());
     } else {
         $tpl =& new HTML_Template_IT('./');

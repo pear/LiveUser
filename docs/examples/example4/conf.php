@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 
 require_once 'PEAR.php';
 include_once 'HTML/Template/IT.php';
-require_once 'DB.php';
+require_once 'MDB2.php';
 
 function php_error_handler($errno, $errstr, $errfile, $errline)
 {
@@ -38,8 +38,8 @@ PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'pear_error_handler');
 //$dsn = '{dbtype}://{user}:{passwd}@{dbhost}/{dbname}';
 $dsn = 'mysql://root:@localhost/liveuser_test_example4';
 
-$db =& DB::connect($dsn, true);
-$db->setFetchMode(DB_FETCHMODE_ASSOC);
+$db =& MDB2::connect($dsn, true);
+$db->setFetchMode(MDB2_FETCHMODE_ASSOC);
 
 
 $tpl = new HTML_Template_IT();
@@ -53,7 +53,7 @@ $LUOptions = array(
      ),
     'authContainers' => array(
         array(
-            'type'         => 'DB',
+            'type'         => 'MDB2',
             'loginTimeout' => 0,
             'expireTime'   => 3600,
             'idleTime'     => 1800,
@@ -107,7 +107,7 @@ $LUOptions = array(
     'permContainer' => array(
         'type' => 'Complex',
         'storage' => array(
-            'DB' => array(
+            'MDB2' => array(
                 'dsn' => $dsn,
                 'prefix' => 'liveuser_',
                 'alias' => array(

@@ -72,7 +72,7 @@ function getNewsList(&$db, $category)
 
     $news = $db->getAssoc($query);
 
-    if (DB::isError($news)) {
+    if (PEAR::isError($news)) {
         die($news->getMessage() . ' ' . $news->getUserinfo());
     } else {
         $tpl =& new HTML_Template_IT('./');
@@ -122,7 +122,7 @@ function getNewsContent(&$db, $id)
 
     $news = $db->getRow( $query );
 
-    if  (DB::isError($news)) {
+    if  (PEAR::isError($news)) {
         die($news->getMessage() . ' ' . $news->getUserinfo());
     } else {
         $tpl =& new HTML_Template_IT('./');
