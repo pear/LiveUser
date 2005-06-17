@@ -6,7 +6,7 @@ require_once 'conf.php';
 
 // If the user hasn't the right to write news -> access denied.
 if (!$LU->checkRight(RIGHT_NEWS_NEW)) {
-    $tpl->loadTemplatefile('news_notallowed.tpl.php');
+    $tpl->loadTemplatefile('news_notallowed.tpl.php', false, false);
     include_once 'finish.inc.php';
     exit();
 }

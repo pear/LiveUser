@@ -583,7 +583,7 @@
 
  <table>
 
-  <name>liveuser_perm_users</name>
+  <name>liveuser_perm_peoples</name>
 
   <declaration>
 
@@ -1350,7 +1350,7 @@
 
  <table>
 
-  <name>liveuser_users</name>
+  <name>liveuser_peoples</name>
 
   <declaration>
 
@@ -1744,9 +1744,9 @@
  </sequence>
 
  <sequence>
-  <name>liveuser_perm_users</name>
+  <name>liveuser_perm_peoples</name>
   <on>
-   <table>liveuser_perm_users</table>
+   <table>liveuser_perm_peoples</table>
    <field>perm_user_id</field>
   </on>
  </sequence>
@@ -1768,9 +1768,9 @@
  </sequence>
 
  <sequence>
-  <name>liveuser_users</name>
+  <name>liveuser_peoples</name>
   <on>
-   <table>liveuser_users</table>
+   <table>liveuser_peoples</table>
    <field>authuserid</field>
   </on>
  </sequence>

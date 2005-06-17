@@ -147,11 +147,11 @@
                          FROM
                              news AS N
                          INNER JOIN
-                             liveuser_perm_users AS PU
+                             liveuser_perm_peoples AS PU
                          ON
                              N.owner_user_id = PU.perm_user_id
                          INNER JOIN
-                             liveuser_users AS U
+                             liveuser_peoples AS U
                          ON
                              PU.auth_user_id = U.authUserId
                          ORDER BY

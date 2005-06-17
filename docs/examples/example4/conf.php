@@ -66,6 +66,7 @@ $LUOptions = array(
                     'is_active' => 'isActive',
                     'owner_user_id' => 'owner_user_id',
                     'owner_group_id' => 'owner_group_id',
+                    'users' => 'peoples',
                 ),
                 'fields' => array(
                     'lastlogin' => 'timestamp',
@@ -105,7 +106,15 @@ $LUOptions = array(
     ),
     'permContainer' => array(
         'type' => 'Complex',
-        'storage' => array('DB' => array('dsn' => $dsn, 'prefix' => 'liveuser_')),
+        'storage' => array(
+            'DB' => array(
+                'dsn' => $dsn,
+                'prefix' => 'liveuser_',
+                'alias' => array(
+                    'perm_users' => 'perm_peoples',
+                ),
+            )
+         ),
     ),
 );
 

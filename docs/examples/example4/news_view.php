@@ -7,17 +7,17 @@ $tpl->loadTemplatefile('news_view.tpl.php');
 $res = $db->query('SELECT
                        DATE_FORMAT(news.created_at,"%d.%m.%Y - %H:%i") AS date,
                        news.news,
-                       liveuser_users.handle
+                       liveuser_peoples.handle
                    FROM
                        news
                    INNER JOIN
-                       liveuser_perm_users
+                       liveuser_perm_peoples
                    ON
-                       news.owner_user_id = liveuser_perm_users.perm_user_id
+                       news.owner_user_id = liveuser_perm_peoples.perm_user_id
                    INNER JOIN
-                       liveuser_users
+                       liveuser_peoples
                    ON
-                       liveuser_perm_users.auth_user_id = liveuser_users.authUserId
+                       liveuser_perm_peoples.auth_user_id = liveuser_peoples.authUserId
                    ORDER BY
                      news.created_at DESC');
 
