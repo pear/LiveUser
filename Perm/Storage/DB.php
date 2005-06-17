@@ -247,7 +247,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
-                    $this->dbc->quoteSmart('Y');
+                    $this->dbc->quoteSmart(true);
         }
 
         $result = $this->dbc->getCol($query);
@@ -328,7 +328,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
-                    $this->dbc->quoteSmart('Y');
+                    $this->dbc->quoteSmart(true);
         }
 
         $result = $this->dbc->getCol($query);
@@ -353,6 +353,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      */
     function readImplyingRights($rightIds, $table)
     {
+
         $query = '
             SELECT
             DISTINCT
@@ -368,7 +369,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                     implode(', ', array_keys($rightIds)).')
             AND
                 R.' . $this->alias['has_implied'] . '='.
-                    $this->dbc->quoteSmart('Y');
+                    $this->dbc->quoteSmart(true);
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED, true);
 
@@ -412,10 +413,6 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage . '-' . $result->getUserInfo());
             return false;
-        }
-
-        for ($i = 0, $j = count($result); $i < $j; ++$i) {
-            $result[$i]['has_implied'] = ($result[$i]['has_implied'] == 'Y');
         }
 
         return $result;
