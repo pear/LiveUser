@@ -165,7 +165,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                  SET '    . $this->alias['lastlogin']
                     .'='  . $this->dbc->quote(MDB2_Date::unix2Mdbstamp($this->currentLogin), $this->fields['lastlogin']) . '
                  WHERE '  . $this->alias['auth_user_id']
-                    .'='  . $this->dbc->quote($this->authUserId, $this->field['auth_user_id']);
+                    .'='  . $this->dbc->quote($this->authUserId, $this->fields['auth_user_id']);
 
         $result = $this->dbc->query($sql);
 
@@ -203,9 +203,10 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      */
     function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
-        $fields = array();
-         foreach ($this->tables['users']['fields'] as $field => $req) {
+        $fields = $types = array();
+        foreach ($this->tables['users']['fields'] as $field => $req) {
             $fields[] = $this->alias[$field] . ' AS ' . $field;
+            $types[] = $this->fields[$field];
         }
 
         // Setting the default query.
@@ -214,16 +215,16 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                    WHERE  ';
         if ($authUserId) {
             $sql .= $this->alias['auth_user_id'] . '='
-                . $this->dbc->quote($this->authUserId, $this->field['auth_user_id']);
+                . $this->dbc->quote($this->authUserId, $this->fields['auth_user_id']);
         } else {
             $sql .= $this->alias['handle'] . '='
-                . $this->dbc->quote($handle, $this->field['handle']);
+                . $this->dbc->quote($handle, $this->fields['handle']);
 
             if ($this->tables['users']['fields']['passwd']) {
                 // If $passwd is set, try to find the first user with the given
                 // handle and password.
                 $sql .= ' AND   ' . $this->alias['passwd'] . '='
-                    . $this->dbc->quote($this->encryptPW($passwd), $this->field['passwd']);
+                    . $this->dbc->quote($this->encryptPW($passwd), $this->fields['passwd']);
             }
         }
 

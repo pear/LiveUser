@@ -163,9 +163,9 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
 
         $sql  = 'UPDATE ' . $this->prefix . $this->alias['users'].'
                  SET '    . $this->alias['lastlogin']
-                    .'='  . $this->dbc->getValue($this->field['lastlogin'], MDB_Date::unix2Mdbstamp($this->currentLogin)) . '
+                    .'='  . $this->dbc->getValue($this->fields['lastlogin'], MDB_Date::unix2Mdbstamp($this->currentLogin)) . '
                  WHERE '  . $this->alias['auth_user_id']
-                    .'='  . $this->dbc->getValue($this->field['auth_user_id'], $this->authUserId);
+                    .'='  . $this->dbc->getValue($this->fields['auth_user_id'], $this->authUserId);
 
         $result = $this->dbc->query($sql);
 
@@ -202,9 +202,10 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
      */
     function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
-        $fields = array();
+        $fields = $types = array();
         foreach ($this->tables['users']['fields'] as $field => $req) {
             $fields[] = $this->alias[$field] . ' AS ' . $field;
+            $types[] = $this->fields[$field];
         }
 
         // Setting the default query.
@@ -213,16 +214,16 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
                    WHERE  ';
         if ($authUserId) {
             $sql .= $this->alias['auth_user_id'] . '='
-                . $this->dbc->getValue($this->field['auth_user_id'], $this->authUserId);
+                . $this->dbc->getValue($this->fields['auth_user_id'], $this->authUserId);
         } else {
             $sql .= $this->alias['handle'] . '='
-                . $this->dbc->getValue($this->field['handle'], $handle);
+                . $this->dbc->getValue($this->fields['handle'], $handle);
 
             if ($this->tables['users']['fields']['passwd']) {
                 // If $passwd is set, try to find the first user with the given
                 // handle and password.
                 $sql .= ' AND   ' . $this->alias['passwd'] . '='
-                    . $this->dbc->getValue($this->field['passwd'], $this->encryptPW($passwd));
+                    . $this->dbc->getValue($this->fields['passwd'], $this->encryptPW($passwd));
             }
         }
 
