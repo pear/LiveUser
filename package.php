@@ -17,7 +17,7 @@ $notes = <<<EOT
 - use LIVEUSER_STATUS_AUTHINITERROR and LIVEUSER_STATUS_PERMINITERROR
 - removed 'ids' from GLOBALS.php array since this is no longer used in the admin
 - added support for table name aliasing
-- added updateProperty() method (fairly untested)
+- added updateProperty() method
 - dont raise an error when login() was not able to authenticate the user
 - storageFactory() is no longer permission specific
 - only return false in init() method if an error occured
@@ -54,12 +54,13 @@ installer
   dont like it if the same index name is used (bug #4593)
 
 examples
-- example5 was added back
+- example5 was added back (not fully tested)
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
 - updated examples to use the new auth config layout due to using admin storage
 - tweaked error handling on init() call
+- use MDB2 in the examples instead of DB
 EOT;
 
 $description = <<<EOT
