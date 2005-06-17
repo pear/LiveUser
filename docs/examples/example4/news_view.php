@@ -14,7 +14,7 @@ $res = $db->query('SELECT
                        liveuser_perm_peoples
                    ON
                        news.owner_user_id = liveuser_perm_peoples.perm_user_id
-                   INNER JOIN
+                   LEFT JOIN
                        liveuser_peoples
                    ON
                        liveuser_perm_peoples.auth_user_id = liveuser_peoples.authUserId
