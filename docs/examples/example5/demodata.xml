@@ -769,7 +769,7 @@
   <declaration>
 
    <field>
-    <name>authuserid</name>
+    <name>auth_user_id</name>
     <type>text</type>
     <length>32</length>
    </field>
@@ -802,15 +802,15 @@
    </field>
 
    <field>
-    <name>isactive</name>
+    <name>is_active</name>
     <type>boolean</type>
    </field>
 
    <index>
-    <name>authuserid</name>
+    <name>auth_user_id</name>
     <unique>1</unique>
     <field>
-     <name>authuserid</name>
+     <name>auth_user_id</name>
      <sorting>ascending</sorting>
     </field>
    </index>
@@ -822,7 +822,7 @@
    <insert>
 
     <field>
-     <name>authuserid</name>
+     <name>auth_user_id</name>
      <value>29214857b12575501c5c731353c7217e</value>
    </field>
 
@@ -852,7 +852,7 @@
    </field>
 
     <field>
-     <name>isactive</name>
+     <name>is_active</name>
      <value>Y</value>
    </field>
 
@@ -861,7 +861,7 @@
    <insert>
 
     <field>
-     <name>authuserid</name>
+     <name>auth_user_id</name>
      <value>02ec099f2d602cc4968c5267970be132</value>
    </field>
 
@@ -891,7 +891,7 @@
    </field>
 
     <field>
-     <name>isactive</name>
+     <name>is_active</name>
      <value>Y</value>
    </field>
 
