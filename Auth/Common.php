@@ -493,28 +493,29 @@ class LiveUser_Auth_Common
     {
         // Init value: Is user logged in?
         $this->loggedIn = false;
+
         // Read user data from database
-        $success = $this->readUserData($handle, $passwd);
-
-        // If login is successful (user data has been read)
-        if ($success == true) {
-            // ...we still need to check if this user is declared active
-            if ($this->isActive !== false) {
-                // ...and if so, we have a successful login (hooray)!
-                $this->loggedIn = true;
-                $this->currentLogin = time();
-            }
-
-            // In case Login was successful, check if this can be counted
-            // as a _new_ login by definition...
-            if ($this->updateLastLogin == true &&
-                $this->isNewLogin() == true && $this->loggedIn == true
-            ) {
-                $this->_updateUserData();
-            }
+        if (!$this->readUserData($handle, $passwd)) {
+            return false;
         }
 
-        return $success;
+        // If login is successful (user data has been read)
+        // ...we still need to check if this user is declared active
+        if ($this->isActive !== false) {
+            // ...and if so, we have a successful login (hooray)!
+            $this->loggedIn = true;
+            $this->currentLogin = time();
+        }
+
+        // In case Login was successful, check if this can be counted
+        // as a _new_ login by definition...
+        if ($this->updateLastLogin == true &&
+            $this->isNewLogin() == true && $this->loggedIn == true
+        ) {
+            $this->_updateUserData();
+        }
+
+        return true;
     }
 
     /**
