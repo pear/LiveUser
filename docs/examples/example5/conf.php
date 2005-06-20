@@ -12,7 +12,7 @@ if (PEAR::isError($db)) {
     echo $db->getMessage() . ' ' . $db->getUserInfo();
 }
 
-$db->setFetchMode(DB_FETCHMODE_ASSOC);
+$db->setFetchMode(MDB2_FETCHMODE_ASSOC);
 
 
 $conf =
@@ -66,12 +66,12 @@ PEAR::setErrorHandling(PEAR_ERROR_RETURN);
 
 $usr = LiveUser::singleton($conf);
 
-$username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : null;
-$password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : null;
+$handle = (isset($_REQUEST['handle'])) ? $_REQUEST['handle'] : null;
+$passwd = (isset($_REQUEST['passwd'])) ? $_REQUEST['passwd'] : null;
 $logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
 $remember = (isset($_REQUEST['rememberMe'])) ? $_REQUEST['rememberMe'] : false;
 
-if (!$usr->init($username, $password, $logout, $remember)) {
+if (!$usr->init($handle, $passwd, $logout, $remember)) {
     var_dump($usr->getErrors());
     die();
 }
