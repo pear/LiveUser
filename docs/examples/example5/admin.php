@@ -70,7 +70,7 @@ function getNewsList(&$db, $category)
         AND
             news_id<>0";
 
-    $news = $db->getAssoc($query);
+    $news = $db->queryAll($query, null, MDB2_FETCHMODE_ASSOC, true);
 
     if (PEAR::isError($news)) {
         die($news->getMessage() . ' ' . $news->getUserinfo());
@@ -120,7 +120,7 @@ function getNewsContent(&$db, $id)
         WHERE
             news_id = $id";
 
-    $news = $db->getRow( $query );
+    $news = $db->queryRow( $query );
 
     if  (PEAR::isError($news)) {
         die($news->getMessage() . ' ' . $news->getUserinfo());
@@ -154,8 +154,8 @@ function updateNewsContent(&$db, &$id, $title, $content, $user)
         UPDATE
             news
         SET
-            news_content = ' . $db->quoteSmart($content) . ',
-            news_title = ' . $db->quoteSmart($title) . '
+            news_content = ' . $db->quote($content, 'text') . ',
+            news_title = ' . $db->quote($title, 'text') . '
         WHERE
             news_id = "' . $id . '"';
 
@@ -180,7 +180,7 @@ function insertNews(&$db, $title, $content, $user)
         news_title, news_content)
         VALUES
         ("' . $db->nextId('news') . '", "' . date('Y-m-d H:i:s') . '",
-        ' . $db->quoteSmart($title) . ', ' . $db->quoteSmart($content) . ')';
+        ' . $db->quote($title, 'text') . ', ' . $db->quote($content, 'text') . ')';
 
     $db->query($query);
 }
