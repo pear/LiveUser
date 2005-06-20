@@ -58,7 +58,7 @@ installer
   dont like it if the same index name is used (bug #4593)
 
 examples
-- example5 was added back (not fully tested)
+- example5 was added again
 - demo data for examples 4 and 5 was converted to MDB2_Schema format
 - a script to install database based examples can be found under
   docs/examples/demodata.php. Type php demodata.php -h for usage.
