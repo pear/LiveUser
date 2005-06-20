@@ -377,6 +377,7 @@ class LiveUser
      *      'domain'   => 'Cookie domain',
      *      'secure'   => 'Cookie send only over secure connections',
      *  ),
+     * 'cache_perm' => if the permission data should be cached inside the session
      *  'login' => array(
      *      'force'    => 'Should the user be forced to login'
      *      'regenid'  => 'Should the session be regenerated on login'
