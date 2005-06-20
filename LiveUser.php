@@ -1009,6 +1009,7 @@ class LiveUser
         }
 
         $this->status = LIVEUSER_STATUS_AUTHFAILED;
+        $this->_auth = $this->_perm = null;
 
         //loop into auth containers
         $indexes = array_keys($this->authContainers);
@@ -1025,8 +1026,6 @@ class LiveUser
             }
             $auth->login($handle, $passwd);
             if ($auth->loggedIn) {
-                $this->_auth = $auth;
-                $this->_auth->backendArrayIndex = $index;
                 // Create permission object
                 if (is_array($this->permContainer)) {
                     $perm =& $this->permFactory($this->permContainer);
@@ -1035,11 +1034,10 @@ class LiveUser
                         return false;
                     }
                     $this->_perm =& $perm;
-                    $this->_perm->mapUser(
-                        $this->_auth->authUserId,
-                        $this->_auth->backendArrayIndex
-                    );
+                    $this->_perm->mapUser($auth->authUserId, $index);
                 }
+                $this->_auth = $auth;
+                $this->_auth->backendArrayIndex = $index;
                 $this->freeze();
                 $this->setRememberCookie($handle, $passwd, $remember);
                 $this->status = LIVEUSER_STATUS_OK;
