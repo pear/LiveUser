@@ -1034,7 +1034,9 @@ class LiveUser
                         return false;
                     }
                     $this->_perm =& $perm;
-                    $this->_perm->mapUser($auth->authUserId, $index);
+                    if (!$this->_perm->mapUser($auth->authUserId, $index)) {
+                        $this->dispatcher->post($this, 'onFailedMapping');
+                    }
                 }
                 $this->_auth = $auth;
                 $this->_auth->backendArrayIndex = $index;
