@@ -23,8 +23,10 @@ $notes = <<<EOT
 - only return false in init() method if an error occured
 - always overwrite status with auth failed in login() when the current status is UNKNOWN
 - updated a few status message with clearer messages
-- delay storing of the auth container instance in a property until its clear that the perm container will not produce errors
+- delay storing of the auth container instance in a property until its clear that
+  the perm container will not produce errors
 - kill _auth and _perm property values at the beginning of login()
+- added new event "onFailedMapping" when an auth user cannot be mapped to a perm user
 
 authentication
 - reworked _readUserData() in the auth containers to optionally read by auth
