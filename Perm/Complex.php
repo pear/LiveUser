@@ -84,7 +84,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         }
 
         $result = $this->_storage->readImplyingRights($rightIds, $table);
-        if (!is_array($result)) {
+        if ($result === false) {
             return false;
         }
 
