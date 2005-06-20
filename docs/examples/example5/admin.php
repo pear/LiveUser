@@ -27,20 +27,20 @@ if (isset($_POST['news'])) {
 
 $category = 'general';
 
-if (isset( $_GET['mode']) && $_GET['mode'] == 'edit') {
+if (isset($_GET['mode']) && $_GET['mode'] == 'edit') {
     if (!isset($_GET['id']) && !is_numeric($_GET['id'])) {
         die('Missing news id');
     }
 
     $news = getNewsContent($db, $_GET['id']);
 } elseif (isset($_GET['mode']) && $_GET['mode'] == 'insert') {
-    $news = getNewsContent($db, 0);
+    $news = getNewsContent($db);
 } else {
     $news = getNewsList($db, $category);
 }
 
 $tpl =& new HTML_Template_IT('./');
-$tpl->loadTemplatefile('admin.tpl', true, true);
+$tpl->loadTemplatefile('admin.tpl');
 
 // assign the content to the vars
 $tpl->setVariable('USER', $usr->getProperty('handle'));
@@ -66,9 +66,7 @@ function getNewsList(&$db, $category)
         FROM
             news
         WHERE
-            news_category = '$category'
-        AND
-            news_id<>0";
+            news_category = ". $db->quote($category, 'text');
 
     $news = $db->queryAll($query, null, MDB2_FETCHMODE_ASSOC, true);
 
@@ -77,7 +75,7 @@ function getNewsList(&$db, $category)
     } else {
         $tpl =& new HTML_Template_IT('./');
 
-        $tpl->loadTemplatefile('news_list.tpl', true, true);
+        $tpl->loadTemplatefile('news_list.tpl', false, false);
 
         $tpl->setVariable('CATEGORY', ucfirst($category));
 
@@ -107,27 +105,29 @@ function getNewsList(&$db, $category)
  * @param  string  $content the new content
  * @return mixed   content as a string or error
  */
-function getNewsContent(&$db, $id)
+function getNewsContent(&$db, $news = null)
 {
-    $query = "
-        SELECT
-            news_id      AS id,
-            news_title   AS title,
-            DATE_FORMAT(news_date, '%D %b %Y at %H:%I:%S') AS date,
-            news_content AS content
-        FROM
-            news
-        WHERE
-            news_id = $id";
-
-    $news = $db->queryRow( $query );
+    if (!is_null($news)) {
+        $query = "
+            SELECT
+                news_id      AS id,
+                news_title   AS title,
+                DATE_FORMAT(news_date, '%D %b %Y at %H:%I:%S') AS date,
+                news_content AS content
+            FROM
+                news
+            WHERE
+                news_id = $news";
+    
+        $news = $db->queryRow( $query );
+    }
 
     if  (PEAR::isError($news)) {
         die($news->getMessage() . ' ' . $news->getUserinfo());
     } else {
         $tpl =& new HTML_Template_IT('./');
 
-        $tpl->loadTemplatefile('news_edit.tpl', true, true);
+        $tpl->loadTemplatefile('news_edit.tpl', false, false);
 
         $tpl->setVariable('ID',      $news['id']);
         $tpl->setVariable('TITLE',   $news['title']);
