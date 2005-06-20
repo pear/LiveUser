@@ -27,7 +27,7 @@
 
     <div id="navBeta">
         <h2>Logged in as {USER}</h2>
-        <p><a href="?logout=1">Log Out</a></p>
+        <p><a href="home.php?logout=1">Log Out</a></p>
     </div>
 
 <!-- BlueRobot was here. -->
