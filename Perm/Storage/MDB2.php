@@ -197,7 +197,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        return $result;
+        return (array)$result;
     }
 
     /**
@@ -236,7 +236,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        return $result;
+        return (array)$result;
     }
 
     /**
@@ -319,7 +319,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        return $result;
+        return (array)$result;
     } // end func readGroupRights
 
     /**
@@ -406,7 +406,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        return $result;
+        return (array)$result;
     }
 
     /**
@@ -447,7 +447,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        return $result;
+        return (array)$result;
     }
 }
 ?>
