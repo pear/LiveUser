@@ -121,7 +121,6 @@ $result = $package->setOptions(array(
         'sql/Perm_XML.xml'           => 'misc/Perm_XML.xml',
         'sql/README'                 => 'misc/schema/README',
         'sql/install.php'            => 'misc/schema/install.php',
-        'docs/examples/demodata.php' => 'misc/demodata.php'
     ),
     'exceptions'         => array(
         'lgpl.txt' => 'doc'
