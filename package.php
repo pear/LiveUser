@@ -12,7 +12,7 @@ require_once 'Console/Getopt.php';
 $version = '0.16.1';
 
 $notes = <<<EOT
-- fixed typo in cookie lifetime computation
+- fixed typo in cookie lifetime computation (and introduced LIVEUSER_DAY_SECONDS)
 EOT;
 
 $description = <<<EOT
