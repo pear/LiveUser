@@ -264,8 +264,6 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      */
     function readAreaAdminAreas($permUserId)
     {
-        $this->userRights = array();
-
         $result = $this->_storage->readAreaAdminAreas($permUserId);
         if ($result === false) {
             return false;
