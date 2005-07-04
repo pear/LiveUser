@@ -310,7 +310,7 @@ class LiveUser
         LIVEUSER_ERROR_FAILED_INSTANTIATION   => 'Cannot instantiate class %class%',
         LIVEUSER_ERROR_INIT_ERROR             => 'Container %container% was not initialized properly',
         LIVEUSER_ERROR_MISSING_CLASS          => 'Class %class% does not exist in file %file%',
-        LIVEUSER_ERROR_WRONG_CREDENTIALS      => 'The username and/or password you submitted are not known',
+        LIVEUSER_ERROR_WRONG_CREDENTIALS      => 'The handle and/or password you submitted are not known',
         LIVEUSER_ERROR_UNKNOWN_EVENT          => 'The event %event% is not known',
         LIVEUSER_ERROR_NOT_CALLABLE           => 'Callback %callback% is not callable'
     );
@@ -1294,11 +1294,7 @@ class LiveUser
         }
 
         $serverData = @unserialize(
-            $this->cryptRC4(
-                $fields,
-                $this->_options['cookie']['secret'],
-                false
-            )
+            $this->cryptRC4($fields, $this->_options['cookie']['secret'], false)
         );
 
         if (!is_array($serverData) || count($serverData) != 2) {
@@ -1625,7 +1621,7 @@ class LiveUser
                 LIVEUSER_STATUS_AUTHNOTFOUND    => 'Cannot retrieve Auth object from session',
                 LIVEUSER_STATUS_UNKNOWN         => 'An undefined error occurred or init() was not called',
                 LIVEUSER_STATUS_LOGGEDOUT       => 'User was logged out correctly',
-                LIVEUSER_STATUS_AUTHFAILED      => 'Cannot authenticate, username/password is probably wrong',
+                LIVEUSER_STATUS_AUTHFAILED      => 'Cannot authenticate, handle/password is probably wrong',
                 LIVEUSER_STATUS_UNFROZEN        => 'Object fetched from the session, the user was already logged in'
             );
         }
