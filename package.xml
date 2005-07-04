@@ -64,63 +64,13 @@
   </maintainer>
   </maintainers>
  <release>
-  <version>0.16.0</version>
-  <date>2005-06-21</date>
+  <version>0.16.1</version>
+  <date>2005-07-04</date>
   <license>LGPL</license>
   <state>beta</state>
-  <notes>- updated MDB2 dependency
-- made readConfig() public
-- use LIVEUSER_STATUS_AUTHINITERROR and LIVEUSER_STATUS_PERMINITERROR
-- removed 'ids' from GLOBALS.php array since this is no longer used in the admin
-- added support for table name aliasing
-- added updateProperty() method
-- dont raise an error when login() was not able to authenticate the user
-- storageFactory() is no longer permission specific
-- only return false in init() method if an error occured
-- always overwrite status with auth failed in login() when the current status is UNKNOWN
-- updated a few status message with clearer messages
-- delay storing of the auth container instance in a property until its clear that
-  the perm container will not produce errors
-- kill _auth and _perm property values at the beginning of login()
-- added new event &quot;onFailedMapping&quot; when an auth user cannot be mapped to a perm user
-
-authentication
-- reworked _readUserData() in the auth containers to optionally read by auth
-  user id instead of by handle/passwd (fairly untested)
-- made _readUserData() public (and renamed it to readUserData()
-- made auth fields dynamic (thx dan)
-- updated to use the new auth config layout due to using admin storage
-- tweaked disconnect to only disconnect when a new connection was made
-- updated Globals.php file (removed all optional fields, added users table alias)
-
-permission
-- cleaned up _readImpliedRights()
-- fixed bug in readUserRights() that would lead to overwriting the proper right keys
-- tweaked disconnect to only disconnect when a new connection was made
-
-installer
-- generate auth and perm schema on the fly (removed pre generated ones from cvs)
-- separated schema generation and schema writing in two methods in the installer
-- forgot to pass 'create' param to installSchema() in installPermSchema()
-- use MDB2_Schema as an optional dependency for the schema installer
-- improved handling of defaults in the installer
-- improved DB seq support in the installer
-- options can now be passed to the installer
-- severely reworked the install API
-- added more infos into the old file names
-- updated code with the new auth config layout and as a result removed
-  generateAuthSchema() and renamed generatePermSchema() to generateSchema()
-- added table name prefix to all indexes, since some rdbms (notably pgsql)
-  dont like it if the same index name is used (bug #4593)
-
-examples
-- example5 was added again
-- demo data for examples 4 and 5 was converted to MDB2_Schema format
-- a script to install database based examples can be found under
-  docs/examples/demodata.php. Type php demodata.php -h for usage.
-- updated examples to use the new auth config layout due to using admin storage
-- tweaked error handling on init() call
-- use MDB2 in the examples instead of DB
+  <notes>- fixed typo in cookie lifetime computation (and introduced LIVEUSER_DAY_SECONDS)
+- fixed bug that would lead to dropping all user assigned rigts for area admins
+- cosmetic fixes to error messages (username =&gt; handle)
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -228,6 +178,16 @@ examples
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>0.16.1</version>
+    <date>2005-07-04</date>
+    <license>LGPL</license>
+    <state>beta</state>
+    <notes>- fixed typo in cookie lifetime computation (and introduced LIVEUSER_DAY_SECONDS)
+- fixed bug that would lead to dropping all user assigned rigts for area admins
+- cosmetic fixes to error messages (username =&gt; handle)
+    </notes>
+   </release>
    <release>
     <version>0.16.0</version>
     <date>2005-06-21</date>
