@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -112,7 +112,8 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     *
+     * Returns the perm userid from an auth userid
+     * and a container name.
      *
      * @param int $authUserId
      * @param string $containerName
@@ -185,7 +186,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     *
+     * Fetch all the rights for every area where the user is an area admin.
      *
      * @param int $permUserId
      * @return mixed array or false on failure
@@ -223,7 +224,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-    
+     *
      * @param int $permUserId
      * @return mixed array or false on failure
      *
@@ -383,14 +384,17 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-    *
-    *
-    * @param array $currentRights
-    * @param string $currentLevel
-    * @return mixed array or false on failure
-    *
-    * @access public
-    */
+     * Fetch rights implied by other rights.
+     *
+     * For instance you may have "write" implies "read" so whenever you affect "write"
+     * the user will also have the "read" right.
+     *
+     * @param array $currentRights
+     * @param string $currentLevel
+     * @return mixed array or false on failure
+     *
+     * @access public
+     */
     function readImpliedRights($currentRights, $currentLevel)
     {
         $query = '
