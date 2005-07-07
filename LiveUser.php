@@ -1233,7 +1233,7 @@ class LiveUser
         $setcookie = setcookie(
             $this->_options['cookie']['name'],
             serialize(array($store_id, $handle, $passwd_id)),
-            (time() + (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime'])),
+            (time() + (86400 * $this->_options['cookie']['lifetime'])),
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
             $this->_options['cookie']['secure']
@@ -1338,7 +1338,7 @@ class LiveUser
         }
         setcookie($this->_options['cookie']['name'],
             '',
-            (time() - LIVEUSER_DAY_SECONDS),
+            (time() - 86400),
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
             $this->_options['cookie']['secure']
