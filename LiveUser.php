@@ -133,6 +133,7 @@ define('LIVEUSER_SECTION_GROUP',        3);
 define('LIVEUSER_SECTION_RIGHT',        4);
 /**#@-*/
 
+define('LIVEUSER_DAY_SECONDS', 86400);
 /**
  * Debug global. When set to true the
  * error stack will be printed to
@@ -901,7 +902,7 @@ class LiveUser
         }
         if ($this->_options['session_cookie_params']) {
             session_set_cookie_params((
-                time() + (86400 * $this->_options['session_cookie_params']['lifetime'])),
+                (LIVEUSER_DAY_SECONDS * $this->_options['session_cookie_params']['lifetime'])),
                 $this->_options['session_cookie_params']['path'],
                 $this->_options['session_cookie_params']['domain'],
                 $this->_options['session_cookie_params']['secure']);
