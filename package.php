@@ -15,6 +15,7 @@ $notes = <<<EOT
 - fixed typo in cookie lifetime computation (and introduced LIVEUSER_DAY_SECONDS)
 - fixed bug that would lead to dropping all user assigned rigts for area admins
 - cosmetic fixes to error messages (username => handle)
+- removed LIVEUSER_DAY_SECONDS constant, hardcode day length in cookie lifetime
 EOT;
 
 $description = <<<EOT
