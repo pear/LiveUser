@@ -134,6 +134,7 @@ define('LIVEUSER_SECTION_RIGHT',        4);
 /**#@-*/
 
 define('LIVEUSER_DAY_SECONDS', 86400);
+
 /**
  * Debug global. When set to true the
  * error stack will be printed to
@@ -1233,7 +1234,7 @@ class LiveUser
         $setcookie = setcookie(
             $this->_options['cookie']['name'],
             serialize(array($store_id, $handle, $passwd_id)),
-            (time() + (86400 * $this->_options['cookie']['lifetime'])),
+            (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime']),
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
             $this->_options['cookie']['secure']
@@ -1338,7 +1339,7 @@ class LiveUser
         }
         setcookie($this->_options['cookie']['name'],
             '',
-            (time() - 86400),
+            LIVEUSER_DAY_SECONDS,
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
             $this->_options['cookie']['secure']
