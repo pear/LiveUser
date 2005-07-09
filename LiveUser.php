@@ -133,7 +133,11 @@ define('LIVEUSER_SECTION_GROUP',        3);
 define('LIVEUSER_SECTION_RIGHT',        4);
 /**#@-*/
 
+// 60 * 60 * 24 == number of seconds in a day
 define('LIVEUSER_DAY_SECONDS', 86400);
+
+// 60 * 60 * 24 * 365 * 30 == number of seconds between 1970 and about 2000
+define('LIVEUSER_COOKIE_DELETE_TIME', 946080000);
 
 /**
  * Debug global. When set to true the
@@ -1234,7 +1238,7 @@ class LiveUser
         $setcookie = setcookie(
             $this->_options['cookie']['name'],
             serialize(array($store_id, $handle, $passwd_id)),
-            (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime']),
+            (time() + (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime'])),
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
             $this->_options['cookie']['secure']
@@ -1338,8 +1342,8 @@ class LiveUser
             @unlink($dir . '/'.$cookieData[0].'.lu');
         }
         setcookie($this->_options['cookie']['name'],
-            '',
-            LIVEUSER_DAY_SECONDS,
+            false,
+            LIVEUSER_COOKIE_DELETE_TIME,
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
             $this->_options['cookie']['secure']
