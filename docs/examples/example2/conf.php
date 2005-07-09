@@ -30,6 +30,14 @@ $xml_is_writable = is_writable('Auth_XML.xml');
 
 if ($xml_is_readable != false && $xml_is_writable != false) {
     $liveuserConfig = array(
+        'cookie'            => array(
+            'name' => 'loginInfo',
+            'path' => '',
+            'domain' => '',
+            'lifetime' => 30,
+            'savedir' => '.',
+            'secure' => false,
+        ),
         'authContainers'    => array(
             0 => array(
                 'type' => 'XML',
