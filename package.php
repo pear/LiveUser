@@ -9,12 +9,9 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.1';
+$version = '0.16.2';
 
 $notes = <<<EOT
-- fixed typo in cookie lifetime computation (and introduced LIVEUSER_DAY_SECONDS)
-- fixed bug that would lead to dropping all user assigned rigts for area admins
-- cosmetic fixes to error messages (username => handle)
 - time() call prevented the rememberMe cookie from being set under IE
 EOT;
 
