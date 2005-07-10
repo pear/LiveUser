@@ -6,7 +6,7 @@ require_once 'conf.php';
 require_once 'liveuser_rights.php';
 require_once 'HTML/Template/IT.php';
 
-if (!$usr->isLoggedin() || !$usr->checkRight(EDITNEWS)) {
+if (!$usr->isLoggedIn() || !$usr->checkRight(EDITNEWS)) {
     echo 'Sorry but you cannot access this page';
     exit;
 }
@@ -16,11 +16,14 @@ if (isset($_POST['news'])) {
         echo 'You are trying to modify a news but do not have the right to do so !';
         exit;
     }
-    if (isset( $_POST['id'])) {
-        if ($_POST['id'] == 0) {
-            insertNews($db, $_POST['title'], $_POST['newscontent'], $usr->getProperty('user_id'));
+    if (isset($_POST['id'])) {
+        $id = (int)$_POST['id'];
+        $title = htmlspecialchars(strip_tags($_POST['title']));
+        $newscontent = htmlspecialchars(strip_tags($_POST['newscontent']));
+        if ($id == 0) {
+            insertNews($db, $title, $newscontent, $usr->getProperty('user_id'));
         } else {
-            updateNewsContent($db, $_POST['id'], $_POST['title'], $_POST['newscontent'], $usr->getProperty('user_id'));
+            updateNewsContent($db, $id, $title, $newscontent, $usr->getProperty('user_id'));
         }
     }
 }
@@ -32,7 +35,8 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'edit') {
         die('Missing news id');
     }
 
-    $news = getNewsContent($db, $_GET['id']);
+    $id = (int)$_GET['id'];
+    $news = getNewsContent($db, $id);
 } elseif (isset($_GET['mode']) && $_GET['mode'] == 'insert') {
     $news = getNewsContent($db);
 } else {

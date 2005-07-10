@@ -14,7 +14,7 @@ if (!$LU->checkRight(RIGHT_NEWS_NEW)) {
 $tpl->loadTemplatefile('news_new.tpl.php');
 
 // Read form data.
-$news     = isset($_POST['news'])     ? $_POST['news'] : '';
+$news     = isset($_POST['news'])     ? htmlspecialchars(strip_tags($_POST['news'])) : '';
 $valid_to = isset($_POST['valid_to']) ? (int)$_POST['valid_to'] : '';
 $group    = isset($_POST['group_id']) ? (int)$_POST['group_id'] : '';
 
