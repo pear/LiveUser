@@ -1270,6 +1270,7 @@ class LiveUser
             return false;
         }
 
+        // TODO: scan for objects inside the serialized string
         $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
         if (!is_array($cookieData) || count($cookieData) != 3) {
             // Delete cookie if it's not valid, keeping it messes up the
@@ -1336,6 +1337,7 @@ class LiveUser
             return false;
         }
 
+        // TODO: scan for objects inside the serialized string
         $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
         if (isset($cookieData[0])) {
             $dir = $this->_options['cookie']['savedir'];
