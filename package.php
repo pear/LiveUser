@@ -14,6 +14,7 @@ $version = '0.16.2';
 $notes = <<<EOT
 - time() call prevented the rememberMe cookie from being set under IE
 - dont use serialize() for the cookie data due to security concerns
+  Note: this breaks all remember me cookies currently set!
 EOT;
 
 $description = <<<EOT
