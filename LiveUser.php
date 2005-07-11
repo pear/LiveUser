@@ -1203,8 +1203,9 @@ class LiveUser
             return false;
         }
 
-        $dir = $this->_options['cookie']['savedir'];
         $store_id = md5($handle . $passwd);
+
+        $dir = $this->_options['cookie']['savedir'];
         $file = $dir . '/' . $store_id . '.lu';
 
         if (!is_writable($dir)) {
@@ -1237,7 +1238,7 @@ class LiveUser
 
         $setcookie = setcookie(
             $this->_options['cookie']['name'],
-            serialize(array($store_id, $handle, $passwd_id)),
+            $store_id . $passwd_id . $handle,
             (time() + (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime'])),
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
@@ -1245,6 +1246,7 @@ class LiveUser
         );
 
         if (!$setcookie) {
+            @unlink($file);
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Unable to set cookie');
             return false;
@@ -1270,20 +1272,26 @@ class LiveUser
             return false;
         }
 
-        // TODO: scan for objects inside the serialized string
-        $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
-        if (!is_array($cookieData) || count($cookieData) != 3) {
+        $cookieData = $_COOKIE[$this->_options['cookie']['name']];
+        if (strlen($cookieData) < 65
+            // kill all old style remember me cookies
+            || (strpos($cookieData, ':') && strpos($cookieData, ':') < 64)
+        ) {
             // Delete cookie if it's not valid, keeping it messes up the
             // authentication process
             $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
-                'Wrong data in cookie store in LiveUser::_readRememberMeCookie()');
+                'Wrong data in cookie store in LiveUser::readRememberMeCookie()');
             return false;
         }
 
+        $store_id = substr($cookieData, 0, 32);
+        $passwd_id = substr($cookieData, 32, 32);
+        $handle = substr($cookieData, 64);
+
         $dir = $this->_options['cookie']['savedir'];
 
-        $fh = @fopen($dir . '/' . $cookieData[0] . '.lu', 'rb');
+        $fh = @fopen($dir . '/' . $store_id . '.lu', 'rb');
         if (!$fh) {
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
                 array(), 'Cannot open file for reading');
@@ -1308,16 +1316,16 @@ class LiveUser
             return false;
         }
 
-        if ($serverData[0] != $cookieData[2]) {
+        if ($serverData[0] != $passwd_id) {
             // Delete cookie if it's not valid, keeping it messes up the
             // authentication process
             $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
-                'Passwords hashes do not match in cookie in LiveUser::_readRememberMeCookie()');
+                'Passwords hashes do not match in cookie in LiveUser::readRememberMeCookie()');
             return false;
         }
 
-        return array('handle' => $cookieData[1], 'passwd' => $serverData[1]);
+        return array('handle' => $handle, 'passwd' => $serverData[1]);
     }
 
     /**
@@ -1337,12 +1345,17 @@ class LiveUser
             return false;
         }
 
-        // TODO: scan for objects inside the serialized string
-        $cookieData = @unserialize($_COOKIE[$this->_options['cookie']['name']]);
-        if (isset($cookieData[0])) {
-            $dir = $this->_options['cookie']['savedir'];
-            @unlink($dir . '/'.$cookieData[0].'.lu');
+        $cookieData = $_COOKIE[$this->_options['cookie']['name']];
+        if (strlen($cookieData) < 65) {
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
+                'Wrong data in cookie store in LiveUser::deleteRememberCookie()');
+            return false;
         }
+
+        $store_id = substr($cookieData, 0, 32);
+        @unlink($this->_options['cookie']['savedir'] . '/'.$store_id.'.lu');
+
+        unset($_COOKIE[$this->_options['cookie']['name']]);
         setcookie($this->_options['cookie']['name'],
             false,
             LIVEUSER_COOKIE_DELETE_TIME,
@@ -1350,7 +1363,6 @@ class LiveUser
             $this->_options['cookie']['domain'],
             $this->_options['cookie']['secure']
         );
-        unset($_COOKIE[$this->_options['cookie']['name']]);
 
         return true;
     }
