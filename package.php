@@ -15,6 +15,7 @@ $notes = <<<EOT
 - time() call prevented the rememberMe cookie from being set under IE
 - dont use serialize() for the cookie data due to security concerns
   Note: this breaks all remember me cookies currently set!
+- fixed parse error in PEARAuth container (bug #4797)
 EOT;
 
 $description = <<<EOT
