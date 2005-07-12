@@ -132,7 +132,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
         // If a user was found, read data into class variables and set
         // return value to true
         if (!$this->pearAuth->getAuth()) {
-            return false
+            return false;
         }
 
         $this->handle       = $this->pearAuth->getUsername();
