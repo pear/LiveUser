@@ -16,6 +16,7 @@ $notes = <<<EOT
 - dont use serialize() for the cookie data due to security concerns
   Note: this breaks all remember me cookies currently set!
 - fixed parse error in PEARAuth container (bug #4797)
+- cleaned up lastlogin handling (bug #4843)
 EOT;
 
 $description = <<<EOT
