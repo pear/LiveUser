@@ -265,7 +265,8 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
         if (isset($result['is_active'])) {
             unset($result['is_active']);
         }
-        $this->lastLogin = isset($result['lastlogin']) ? $result['lastlogin'] : '';
+        $this->lastLogin = (isset($result['lastlogin']) && !empty($result['lastlogin']))
+            ? $result['lastlogin'] : '';
         if (isset($result['lastlogin'])) {
             unset($result['lastlogin']);
         }

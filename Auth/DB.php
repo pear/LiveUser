@@ -244,7 +244,8 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         if (isset($result['is_active'])) {
             unset($result['is_active']);
         }
-        $this->lastLogin = isset($result['lastlogin']) ? strtotime($result['lastlogin']) : '';
+        $this->lastLogin = (isset($result['lastlogin']) && !empty($result['lastlogin']))
+            ? strtotime($result['lastlogin']) : '';
         if (isset($result['lastlogin'])) {
             unset($result['lastlogin']);
         }

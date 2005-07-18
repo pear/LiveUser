@@ -254,7 +254,8 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         if (isset($result['is_active'])) {
             unset($result['is_active']);
         }
-        $this->lastLogin = isset($result['lastlogin']) ? MDB_Date::mdbstamp2Unix($result['lastlogin']) : '';
+        $this->lastLogin = (isset($result['lastlogin']) && !empty($result['lastlogin']))
+            ? MDB_Date::mdbstamp2Unix($result['lastlogin']) : '';
         if (isset($result['lastlogin'])) {
             unset($result['lastlogin']);
         }
