@@ -570,13 +570,13 @@ class LiveUser
      */
     function &authFactory(&$conf, $containerName, $classprefix = 'LiveUser_')
     {
+        $auth = false;
         $classname = $classprefix.'Auth_' . $conf['type'];
-        if (!LiveUser::loadClass($classname)) {
-            return false;
-        }
-        $auth = &new $classname();
-        if ($auth->init($conf, $containerName) === false) {
-            return false;
+        if (LiveUser::loadClass($classname)) {
+            $auth = &new $classname();
+            if ($auth->init($conf, $containerName) === false) {
+                $auth = false;
+            }
         }
         return $auth;
     }
@@ -593,13 +593,13 @@ class LiveUser
      */
     function &permFactory(&$conf, $classprefix = 'LiveUser_')
     {
+        $perm = false;
         $classname = $classprefix.'Perm_' . $conf['type'];
-        if (!LiveUser::loadClass($classname)) {
-            return false;
-        }
-        $perm = &new $classname();
-        if ($perm->init($conf) === false) {
-            return false;
+        if (LiveUser::loadClass($classname)) {
+            $perm = &new $classname();
+            if ($perm->init($conf) === false) {
+                $perm = false;
+            }
         }
         return $perm;
     }
@@ -617,18 +617,23 @@ class LiveUser
     function &storageFactory(&$confArray, $classprefix = 'LiveUser_Perm_')
     {
         end($confArray);
-        $storageName = $classprefix.'Storage_' . key($confArray);
-        if (!LiveUser::loadClass($storageName) && count($confArray) <= 1) {
-            return false;
+        $key = key($confArray);
+        $count = count($confArray);
+        $storageName = $classprefix.'Storage_' . $key;
+        if (!LiveUser::loadClass($storageName) && $count <= 1) {
+            $storage = false;
+            return $storage;
         // if the storage container does not exist try the next one in the stack
-        } elseif (count($confArray) > 1) {
+        } elseif ($count > 1) {
             array_pop($confArray);
-            return LiveUser::storageFactory($confArray, $classprefix);
+            $storage =& LiveUser::storageFactory($confArray, $classprefix);
+            return $storage;
         }
-        $storageConf =& array_pop($confArray);
+        $storageConf =& $confArray[$key];
+        unset($confArray[$key]);
         $storage = &new $storageName();
         if ($storage->init($storageConf, $confArray) === false) {
-            return false;
+            $storage = false;
         }
         return $storage;
     }
@@ -796,10 +801,10 @@ class LiveUser
      */
     function &cryptRC4Factory($secret)
     {
-        if (!LiveUser::loadClass('Crypt_Rc4')) {
-            return false;
+        $rc4 = false;
+        if (LiveUser::loadClass('Crypt_Rc4')) {
+            $rc4 =& new Crypt_Rc4($secret);
         }
-        $rc4 =& new Crypt_Rc4($secret);
         return $rc4;
     }
 
