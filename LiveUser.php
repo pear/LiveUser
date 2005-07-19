@@ -1397,8 +1397,10 @@ class LiveUser
             unset($_SESSION[$this->_options['session']['varname']]);
         }
 
-        // Delete the container objects
-        $this->disconnect();
+        // disable this call for now, since logout() does not necessarily mean
+        // we dont intend to ever call the container again and only the
+        // MDB/MDB2 containers are able to reconnect on demand
+        #$this->disconnect();
 
         if ($direct) {
             // trigger event 'postLogout', can be used to do a redirect
