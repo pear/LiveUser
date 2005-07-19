@@ -17,6 +17,7 @@ $notes = <<<EOT
   Note: this breaks all remember me cookies currently set!
 - fixed parse error in PEARAuth container (bug #4797)
 - cleaned up lastlogin handling (bug #4843)
+- nuke error due to disconnecting on logout()
 EOT;
 
 $description = <<<EOT
