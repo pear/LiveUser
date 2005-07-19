@@ -64,13 +64,17 @@
   </maintainer>
   </maintainers>
  <release>
-  <version>0.16.1</version>
-  <date>2005-07-04</date>
+  <version>0.16.2</version>
+  <date>2005-07-19</date>
   <license>LGPL</license>
   <state>beta</state>
-  <notes>- fixed typo in cookie lifetime computation (and introduced LIVEUSER_DAY_SECONDS)
-- fixed bug that would lead to dropping all user assigned rigts for area admins
-- cosmetic fixes to error messages (username =&gt; handle)
+  <notes>- time() call prevented the rememberMe cookie from being set under IE
+- dont use serialize() for the cookie data due to security concerns
+  Note: this breaks all remember me cookies currently set!
+- fixed parse error in PEARAuth container (bug #4797)
+- cleaned up lastlogin handling (bug #4843)
+- nuke error due to disconnecting on logout()
+- php 4.4 reference assignment fixes
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -178,6 +182,20 @@
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>0.16.2</version>
+    <date>2005-07-19</date>
+    <license>LGPL</license>
+    <state>beta</state>
+    <notes>- time() call prevented the rememberMe cookie from being set under IE
+- dont use serialize() for the cookie data due to security concerns
+  Note: this breaks all remember me cookies currently set!
+- fixed parse error in PEARAuth container (bug #4797)
+- cleaned up lastlogin handling (bug #4843)
+- nuke error due to disconnecting on logout()
+- php 4.4 reference assignment fixes
+    </notes>
+   </release>
    <release>
     <version>0.16.1</version>
     <date>2005-07-04</date>
