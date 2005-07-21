@@ -559,7 +559,7 @@ class LiveUser_Auth_Common
     function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
         $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
-            array('feature' => '_readUserData'));
+            array('feature' => 'readUserData'));
         return false;
     }
 

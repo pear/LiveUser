@@ -86,7 +86,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      *
      * @var    XML_Tree
      * @access private
-     * @see    _readUserData()
+     * @see    readUserData()
      */
     var $userObj = null;
 

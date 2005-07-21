@@ -124,7 +124,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      *
      * @access private
      */
-    function _readUserData()
+    function readUserData()
     {
         $this->pearAuth->start();
         $this->pearAuth->login();
