@@ -620,14 +620,16 @@ class LiveUser
         $key = key($confArray);
         $count = count($confArray);
         $storageName = $classprefix.'Storage_' . $key;
-        if (!LiveUser::loadClass($storageName) && $count <= 1) {
-            $storage = false;
-            return $storage;
-        // if the storage container does not exist try the next one in the stack
-        } elseif ($count > 1) {
-            array_pop($confArray);
-            $storage =& LiveUser::storageFactory($confArray, $classprefix);
-            return $storage;
+        if (!LiveUser::loadClass($storageName)) {
+            if ($count <= 1) {
+                $storage = false;
+                return $storage;
+            // if the storage container does not exist try the next one in the stack
+            } elseif ($count > 1) {
+                array_pop($confArray);
+                $storage =& LiveUser::storageFactory($confArray, $classprefix);
+                return $storage;
+            }
         }
         $storageConf =& $confArray[$key];
         unset($confArray[$key]);
@@ -953,20 +955,20 @@ class LiveUser
             $this->logout(true);
         } elseif ($this->isLoggedIn()) {
             // Check if user authenticated with new credentials
-            if ($handle && $this->_auth->handle != $handle) {
+            if ($handle && $this->getProperty('handle') !== $handle) {
                 $this->logout(false);
             } elseif ($isReturningUser) {
                 // Check if authentication session is expired.
-                if ($this->_auth->expireTime > 0 &&
-                    ($this->_auth->currentLogin + $this->_auth->expireTime) < $now
+                if ($this->getProperty('expireTime') > 0 &&
+                    ($this->getProperty('currentLogin') + $this->getProperty('expireTime')) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_EXPIRED;
                     $this->dispatcher->post($this,'onExpired');
                     $this->logout(false);
                 // Check if maximum idle time is reached.
-                } elseif ($this->_auth->idleTime > 0 &&
+                } elseif ($this->getProperty('idleTime') > 0 &&
                     isset($_SESSION[$this->_options['session']['varname']]['idle']) &&
-                    ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->_auth->idleTime) < $now
+                    ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->getProperty('idleTime')) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_IDLED;
                     $this->dispatcher->post($this,'onIdled');
@@ -1031,7 +1033,7 @@ class LiveUser
             ) {
                 continue;
             }
-            $auth = &$this->authFactory($this->authContainers[$index], $index);
+            $auth =& LiveUser::authFactory($this->authContainers[$index], $index);
             if ($auth === false) {
                 $this->status = LIVEUSER_STATUS_AUTHINITERROR;
                 return false;
@@ -1040,7 +1042,7 @@ class LiveUser
             if ($auth->loggedIn) {
                 // Create permission object
                 if (is_array($this->permContainer)) {
-                    $perm =& $this->permFactory($this->permContainer);
+                    $perm =& LiveUser::permFactory($this->permContainer);
                     if ($perm === false) {
                         $this->status = LIVEUSER_STATUS_PERMINITERROR;
                         return false;
@@ -1103,7 +1105,7 @@ class LiveUser
             && strlen($_SESSION[$this->_options['session']['varname']]['auth_name']) > 0)
         {
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
-            $auth = &$this->authFactory($this->authContainers[$containerName], $containerName);
+            $auth =& LiveUser::authFactory($this->authContainers[$containerName], $containerName);
             if ($auth === false) {
                 return false;
             }
@@ -1113,7 +1115,7 @@ class LiveUser
                 if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
                     && $_SESSION[$this->_options['session']['varname']]['perm']
                 ) {
-                    $perm = &$this->permFactory($this->permContainer);
+                    $perm =& LiveUser::permFactory($this->permContainer);
                     if ($perm === false) {
                         return $perm;
                     }
@@ -1402,10 +1404,7 @@ class LiveUser
             unset($_SESSION[$this->_options['session']['varname']]);
         }
 
-        // disable this call for now, since logout() does not necessarily mean
-        // we dont intend to ever call the container again and only the
-        // MDB/MDB2 containers are able to reconnect on demand
-        #$this->disconnect();
+        $this->disconnect();
 
         if ($direct) {
             // trigger event 'postLogout', can be used to do a redirect
