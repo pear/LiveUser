@@ -151,24 +151,24 @@ class LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array of false on failure
      *
      * @access public
      */
-    function readUserRights($permUserId)
+    function readUserRights($perm_user_id)
     {
     }
 
     /**
      *
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readAreaAdminAreas($permUserId)
+    function readAreaAdminAreas($perm_user_id)
     {
     }
 
@@ -176,13 +176,13 @@ class LiveUser_Perm_Storage
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return void
      *
      * @see    readRights()
      * @access private
      */
-    function readGroups($permUserId)
+    function readGroups($perm_user_id)
     {
     } // end func readGroups
 
@@ -192,25 +192,25 @@ class LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @param array $groupIds
+     * @param array $group_ids
      * @return  mixed   MDB2_Error on failure or nothing
      *
      * @access  public
      */
-    function readGroupRights($groupIds)
+    function readGroupRights($group_ids)
     {
     } // end func readGroupRights
 
     /**
      *
      *
-     * @param array $groupIds
+     * @param array $group_ids
      * @param array $newGroupIds
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readSubGroups($groupIds, $newGroupIds)
+    function readSubGroups($group_ids, $newGroupIds)
     {
     }
 

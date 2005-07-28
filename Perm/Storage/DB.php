@@ -154,12 +154,12 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array of false on failure
      *
      * @access public
      */
-    function readUserRights($permUserId)
+    function readUserRights($perm_user_id)
     {
         $query = '
             SELECT
@@ -172,7 +172,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 R.' . $this->alias['right_id'] . ' = U.' . $this->alias['right_id'] . '
             AND
                 U.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->quoteSmart($permUserId);
+                    $this->dbc->quoteSmart($perm_user_id);
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
@@ -188,12 +188,12 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     /**
      * Fetch all the rights for every area where the user is an area admin.
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readAreaAdminAreas($permUserId)
+    function readAreaAdminAreas($perm_user_id)
     {
         // get all areas in which the user is area admin
         $query = '
@@ -207,7 +207,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 AAA.area_id = R.area_id
             AND
                 AAA.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->quoteSmart($permUserId);
+                    $this->dbc->quoteSmart($perm_user_id);
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
@@ -225,13 +225,13 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * (all groups that are subgroups of these are also added recursively)
      *
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array or false on failure
      *
      * @access private
      * @see    readRights()
      */
-    function readGroups($permUserId)
+    function readGroups($perm_user_id)
     {
         $query = '
             SELECT
@@ -243,7 +243,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 GU.' . $this->alias['group_id'] . ' = G. ' . $this->alias['group_id'] . '
             AND
                 GU.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->quoteSmart($permUserId);
+                    $this->dbc->quoteSmart($perm_user_id);
 
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
@@ -268,13 +268,13 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      * right => 1
      *
-     * @param   array $groupIds array with id's for the groups
+     * @param   array $group_ids array with id's for the groups
      *                          that rights will be read from
      * @return  mixed   array or false on failure
      *
      * @access  public
      */
-    function readGroupRights($groupIds)
+    function readGroupRights($group_ids)
     {
         $query = '
             SELECT
@@ -284,7 +284,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.$this->alias['grouprights'].' GR
             WHERE
                 GR.' . $this->alias['group_id'] . ' IN('.
-                    implode(', ', $groupIds).')
+                    implode(', ', $group_ids).')
             GROUP BY
                 GR.' . $this->alias['right_id'] . '';
 
@@ -302,13 +302,13 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     /**
      *
      *
-     * @param array $groupIds
+     * @param array $group_ids
      * @param array $newGroupIds
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readSubGroups($groupIds, $newGroupIds)
+    function readSubGroups($group_ids, $newGroupIds)
     {
         $query = '
             SELECT
@@ -324,7 +324,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                     implode(', ', $newGroupIds).')
             AND
                 SG.' . $this->alias['subgroup_id'] . ' NOT IN ('.
-                    implode(', ', $groupIds).')';
+                    implode(', ', $group_ids).')';
 
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND

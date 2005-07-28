@@ -177,12 +177,12 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array of false on failure
      *
      * @access public
      */
-    function readUserRights()
+    function readUserRights($perm_user_id)
     {
         $result = array();
 

@@ -117,17 +117,17 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array of false on failure
      *
      * @access public
      */
-    function readUserRights($permUserId)
+    function readUserRights($perm_user_id)
     {
         if (in_cache) {
             return cache;
         }
-        $result = $this->_storage->readUserRights($permUserId);
+        $result = $this->_storage->readUserRights($perm_user_id);
         if ($result === false) {
             return false;
         }
@@ -135,12 +135,12 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         return $result;
     }
 
-    function readAreaAdminAreas($permUserId)
+    function readAreaAdminAreas($perm_user_id)
     {
         if (in_cache) {
             return cache;
         }
-        $result = $this->_storage->readAreaAdminAreas($permUserId);
+        $result = $this->_storage->readAreaAdminAreas($perm_user_id);
         if ($result === false) {
             return false;
         }
@@ -152,18 +152,18 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return void
      *
      * @access private
      * @see    readRights()
      */
-    function readGroups($permUserId)
+    function readGroups($perm_user_id)
     {
         if (in_cache) {
             return cache;
         }
-        $result = $this->_storage->readGroups($permUserId);
+        $result = $this->_storage->readGroups($perm_user_id);
         if ($result === false) {
             return false;
         }
@@ -177,17 +177,17 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @param array $groupRights
+     * @param array $group_rights
      * @return  boolean
      *
      * @access  public
      */
-    function readGroupRights($groupIds)
+    function readGroupRights($group_ids)
     {
         if (in_cache) {
             return cache;
         }
-        $result = $this->_storage->readGroupRights($groupIds);
+        $result = $this->_storage->readGroupRights($group_ids);
         if ($result === false) {
             return false;
         }
@@ -198,18 +198,18 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     /**
      *
      *
-     * @param array $groupIds
+     * @param array $group_ids
      * @param array $newGroupIds
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readSubGroups($groupIds, $newGroupIds)
+    function readSubGroups($group_ids, $newGroupIds)
     {
         if (in_cache) {
             return cache;
         }
-        $result = $this->_storage->readSubGroups($groupIds, $newGroupIds);
+        $result = $this->_storage->readSubGroups($group_ids, $newGroupIds);
         if ($result === false) {
             return false;
         }
