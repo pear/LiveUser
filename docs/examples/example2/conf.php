@@ -49,10 +49,26 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
                 'storage' => array(
                     'file' => 'Auth_XML.xml',
                     'alias' => array(
-                        'auth_user_id' => 'userId',
-                        'passwd' => 'password',
-                        'lastlogin' => 'lastLogin',
-                        'is_active' => 'isActive',
+                        'auth_user_id' =>   'userId',
+                        'passwd' =>         'password',
+                        'lastlogin' =>      'lastLogin',
+                        'is_active' =>      'isActive',
+                    ),
+                    'tables' => array(
+                        'users' => array(
+                            'fields' => array(
+                                'lastlogin'         => false,
+                                'is_active'         => false,
+                                'owner_user_id'     => false,
+                                'owner_group_id'    => false,
+                            ),
+                        ),
+                    ),
+                    'fields' => array(
+                        'lastlogin'         => 'timestamp',
+                        'is_active'         => 'boolean',
+                        'owner_user_id'     => 'integer',
+                        'owner_group_id'    => 'integer',
                     ),
                 ),
            ),
