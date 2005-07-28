@@ -198,8 +198,8 @@ if (!$LU->isLoggedIn()) {
 // Just some more debug output with no further relevance
 echo '<hr />Handle:';
 print_r($LU->getProperty('handle'));
-echo '<br />User Type:';
-print_r($LU->getProperty('userType'));
+echo '<hr />Name:';
+print_r($LU->getProperty('name'));
 
 echo '<hr /><pre>';
 print_r($LU);

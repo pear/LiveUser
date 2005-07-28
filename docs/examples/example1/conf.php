@@ -19,7 +19,7 @@ $xml_is_writable = is_writable('Auth_XML.xml');
 
 if ($xml_is_readable && $xml_is_writable) {
     $liveuserConfig = array(
-        'authContainers'    => array(
+        'authContainers' => array(
             0 => array(
                 'type' => 'XML',
                 'loginTimeout' => 0,
@@ -30,13 +30,32 @@ if ($xml_is_readable && $xml_is_writable) {
                 'storage' => array(
                     'file' => 'Auth_XML.xml',
                     'alias' => array(
-                        'auth_user_id' => 'userId',
-                        'passwd' => 'password',
-                        'lastlogin' => 'lastLogin',
-                        'is_active' => 'isActive',
+                        'auth_user_id' =>   'userId',
+                        'passwd' =>         'password',
+                        'lastlogin' =>      'lastLogin',
+                        'is_active' =>      'isActive',
+                        'name' =>           'name'
+                    ),
+                    'tables' => array(
+                        'users' => array(
+                            'fields' => array(
+                                'lastlogin'         => false,
+                                'is_active'         => false,
+                                'owner_user_id'     => false,
+                                'owner_group_id'    => false,
+                                'name'              => false,
+                            ),
+                        ),
+                    ),
+                    'fields' => array(
+                        'lastlogin'         => 'timestamp',
+                        'is_active'         => 'boolean',
+                        'owner_user_id'     => 'integer',
+                        'owner_group_id'    => 'integer',
+                        'name'              => 'text',
                     ),
                 ),
-           ),
+            ),
         ),
     );
     // Get LiveUser class definition
