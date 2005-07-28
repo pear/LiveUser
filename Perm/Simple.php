@@ -68,7 +68,7 @@ class LiveUser_Perm_Simple
      * @var string
      * @access public
      */
-    var $permUserId = '';
+    var $perm_user_id = '';
 
     /**
      * One-dimensional array containing current user's rights.
@@ -91,7 +91,7 @@ class LiveUser_Perm_Simple
      * @var array
      * @access public
      */
-    var $userRights = array();
+    var $user_rights = array();
 
     /**
      * Defines the user type.
@@ -99,7 +99,7 @@ class LiveUser_Perm_Simple
      * @var integer
      * @access public
      */
-    var $userType = LIVEUSER_ANONYMOUS_TYPE_ID;
+    var $perm_type = LIVEUSER_ANONYMOUS_TYPE_ID;
 
     /**
      * Error stack
@@ -150,7 +150,8 @@ class LiveUser_Perm_Simple
             }
         }
 
-        $this->_storage = LiveUser::storageFactory($conf['storage']);
+        $storageConf = $conf['storage'];
+        $this->_storage = LiveUser::storageFactory($storageConf);
         if ($this->_storage === false) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Could not instanciate storage container'));
@@ -181,8 +182,8 @@ class LiveUser_Perm_Simple
             return false;
         }
 
-        $this->permUserId = $result['perm_user_id'];
-        $this->userType   = $result['perm_type'];
+        $this->perm_user_id = $result['perm_user_id'];
+        $this->perm_type   = $result['perm_type'];
 
         $this->readRights();
 
@@ -203,7 +204,7 @@ class LiveUser_Perm_Simple
     function readRights()
     {
         $this->rights = array();
-        $result = $this->readUserRights($this->permUserId);
+        $result = $this->readUserRights($this->perm_user_id);
         if ($result === false) {
             return false;
         }
@@ -214,20 +215,20 @@ class LiveUser_Perm_Simple
     /**
      *
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readUserRights($permUserId)
+    function readUserRights($perm_user_id)
     {
-        $this->userRights = array();
-        $result = $this->_storage->readUserRights($permUserId);
+        $this->user_rights = array();
+        $result = $this->_storage->readUserRights($perm_user_id);
         if ($result === false) {
             return false;
         }
-        $this->userRights = $result;
-        return $this->userRights;
+        $this->user_rights = $result;
+        return $this->user_rights;
     }
 
     /**
@@ -244,7 +245,7 @@ class LiveUser_Perm_Simple
     function checkRight($right_id)
     {
         // check if the user is above areaadmin
-        if (!$right_id || $this->userType > LIVEUSER_AREAADMIN_TYPE_ID) {
+        if (!$right_id || $this->perm_type > LIVEUSER_AREAADMIN_TYPE_ID) {
             return LIVEUSER_MAX_LEVEL;
         // If he does, look for the right in question.
         } elseif (is_array($this->rights) && isset($this->rights[$right_id])) {
@@ -282,12 +283,12 @@ class LiveUser_Perm_Simple
     function freeze($sessionName)
     {
         $propertyValues = array(
-            'permUserId'  => $this->permUserId,
+            'perm_user_id'  => $this->perm_user_id,
             'rights'      => $this->rights,
-            'userRights'  => $this->userRights,
-            'groupRights' => $this->groupRights,
-            'userType'    => $this->userType,
-            'groupIds'    => $this->groupIds,
+            'user_rights'  => $this->user_rights,
+            'group_rights' => $this->group_rights,
+            'perm_type'    => $this->perm_type,
+            'group_ids'    => $this->group_ids,
         );
         return $this->_storage->freeze($sessionName, $propertyValues);
     } // end func freeze
