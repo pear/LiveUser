@@ -138,10 +138,10 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
             }
         }
 
-        $this->handle       = $handle;
-        $this->passwd       = $passwd;
-        $this->isActive     = true;
-        $this->lastLogin    = time();
+        $this->propertyValues['handle']    = $handle;
+        $this->propertyValues['passwd']    = $passwd;
+        $this->propertyValues['is_active'] = true;
+        $this->propertyValues['lastlogin'] = time();
 
         return true;
     }

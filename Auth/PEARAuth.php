@@ -135,11 +135,11 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
             return false;
         }
 
-        $this->handle       = $this->pearAuth->getUsername();
-        $this->passwd       = $this->encryptPW($this->pearAuth->password);
-        $this->isActive     = true;
-        $this->authUserId   = $this->pearAuth->getUsername();
-        $this->lastLogin    = '';
+        $this->propertyValues['handle']       = $this->pearAuth->getUsername();
+        $this->propertyValues['passwd']       = $this->encryptPW($this->pearAuth->password);
+        $this->propertyValues['is_active']    = true;
+        $this->propertyValues['auth_user_id'] = $this->pearAuth->getUsername();
+        $this->propertyValues['lastlogin']    = '';
         return true;
     }
 
