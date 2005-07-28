@@ -21,9 +21,9 @@ if (isset($_POST['news'])) {
         $title = htmlspecialchars(strip_tags($_POST['title']));
         $newscontent = htmlspecialchars(strip_tags($_POST['newscontent']));
         if ($id == 0) {
-            insertNews($db, $title, $newscontent, $usr->getProperty('user_id'));
+            insertNews($db, $title, $newscontent, $usr->getProperty('perm_user_id'));
         } else {
-            updateNewsContent($db, $id, $title, $newscontent, $usr->getProperty('user_id'));
+            updateNewsContent($db, $id, $title, $newscontent, $usr->getProperty('perm_user_id'));
         }
     }
 }
