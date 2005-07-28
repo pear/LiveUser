@@ -80,7 +80,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * @var array
      * @access public
      */
-    var $groupIds = array();
+    var $group_ids = array();
 
     /**
      * One-dimensional array containing only the group
@@ -91,7 +91,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * @var array
      * @access public
      */
-    var $groupRights = array();
+    var $group_rights = array();
 
     /**
      * Reads all rights of current user into an
@@ -107,42 +107,42 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
     {
         $this->rights = array();
 
-        $result = $this->readUserRights($this->permUserId);
+        $result = $this->readUserRights($this->perm_user_id);
         if ($result === false) {
             return false;
         }
 
-        if ($this->userType == LIVEUSER_AREAADMIN_TYPE_ID) {
-            $result = $this->readAreaAdminAreas($this->permUserId);
+        if ($this->perm_type == LIVEUSER_AREAADMIN_TYPE_ID) {
+            $result = $this->readAreaAdminAreas($this->perm_user_id);
             if ($result === false) {
                return false;
             }
 
             if (is_array($this->areaAdminAreas)) {
-                if (is_array($this->userRights)) {
-                    $this->userRights = $this->areaAdminAreas + $this->userRights;
+                if (is_array($this->user_rights)) {
+                    $this->user_rights = $this->areaAdminAreas + $this->user_rights;
                 } else {
-                    $this->userRights = $this->areaAdminAreas;
+                    $this->user_rights = $this->areaAdminAreas;
                 }
             }
         }
 
-        $result = $this->readGroups($this->permUserId);
+        $result = $this->readGroups($this->perm_user_id);
         if ($result === false) {
             return false;
         }
 
-        $result = $this->readGroupRights($this->groupIds);
+        $result = $this->readGroupRights($this->group_ids);
         if ($result === false) {
             return false;
         }
 
-        $tmpRights = $this->groupRights;
+        $tmpRights = $this->group_rights;
 
         // Check if user has individual rights...
-        if (is_array($this->userRights)) {
+        if (is_array($this->user_rights)) {
             // Overwrite values from temporary array with values from userrights
-            foreach ($this->userRights as $right => $level) {
+            foreach ($this->user_rights as $right => $level) {
                 if (isset($tmpRights[$right])) {
                     if ($level < 0) {
                         // Revoking rights: A negative value indicates that the
@@ -173,47 +173,47 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
     /**
      *
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readGroups($permUserId)
+    function readGroups($perm_user_id)
     {
-        $this->groupIds = array();
+        $this->group_ids = array();
 
-        $result = $this->_storage->readGroups($permUserId);
+        $result = $this->_storage->readGroups($perm_user_id);
         if ($result === false) {
             return false;
         }
 
-        $this->groupIds = $result;
-        return $this->groupIds;
+        $this->group_ids = $result;
+        return $this->group_ids;
     }
 
     /**
      *
      *
-     * @param array $groupIds
+     * @param array $group_ids
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readGroupRights($groupIds)
+    function readGroupRights($group_ids)
     {
-        $this->groupRights = array();
+        $this->group_rights = array();
 
-        if (!is_array($groupIds) || !count($groupIds)) {
+        if (!is_array($group_ids) || !count($group_ids)) {
             return null;
         }
 
-        $result = $this->_storage->readGroupRights($groupIds);
+        $result = $this->_storage->readGroupRights($group_ids);
         if ($result === false) {
             return false;
         }
 
-        $this->groupRights = $result;
-        return $this->groupRights;
+        $this->group_rights = $result;
+        return $this->group_rights;
     }
 
     /**
@@ -223,15 +223,15 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      *
      * @param   integer $group_id  Id of the group to check for.
      * @param   boolean $ondemand  allow ondemand reading of groups
-     * @return  boolean. If groupIds isn't populated then false, 
-                         if the group_id exists in groupIds then true else false.
+     * @return  boolean. If group_ids isn't populated then false, 
+                         if the group_id exists in group_ids then true else false.
      *
      * @access  public
      */
     function checkGroup($group_id)
     {
-        if (is_array($this->groupIds)) {
-            return in_array($group_id, $this->groupIds);
+        if (is_array($this->group_ids)) {
+            return in_array($group_id, $this->group_ids);
         }
         return false;
     } // end func checkGroup

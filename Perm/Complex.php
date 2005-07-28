@@ -119,56 +119,56 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * an array of this format:
      * RightName -> Value
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @see    readRights()
      * @return void
      *
      * @access private
      */
-    function readUserRights($permUserId)
+    function readUserRights($perm_user_id)
     {
-        $userRights = parent::readUserRights($permUserId);
-        $this->userRights = $this->_readImpliedRights($userRights, 'user');
+        $user_rights = parent::readUserRights($perm_user_id);
+        $this->user_rights = $this->_readImpliedRights($user_rights, 'user');
 
-        return $this->userRights;
+        return $this->user_rights;
     } // end func readUserRights
 
     /**
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @see    readRights()
      * @return void
      *
      * @access private
      */
-    function readGroups($permUserId)
+    function readGroups($perm_user_id)
     {
-        $result = parent::readGroups($permUserId);
+        $result = parent::readGroups($perm_user_id);
 
         // get all subgroups recursively
         while (count($result)) {
-            $result = $this->readSubGroups($this->groupIds, $result);
+            $result = $this->readSubGroups($this->group_ids, $result);
             if (is_array($result)) {
-                $this->groupIds = array_merge($result, $this->groupIds);
+                $this->group_ids = array_merge($result, $this->group_ids);
             }
         }
-        return $this->groupIds;
+        return $this->group_ids;
     } // end func readGroups
 
     /**
      *
      *
-     * @param array $groupIds
+     * @param array $group_ids
      * @param array $newGroupIds
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readSubGroups($groupIds, $newGroupIds)
+    function readSubGroups($group_ids, $newGroupIds)
     {
-        $result = $this->_storage->readSubGroups($groupIds, $newGroupIds);
+        $result = $this->_storage->readSubGroups($group_ids, $newGroupIds);
         if ($result === false) {
             return false;
         }
@@ -180,30 +180,30 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * a two-dimensional array of this format:
      * "GroupName" => "RightName" -> "Level"
      *
-     * @param   array $groupIds array with id's for the groups
+     * @param   array $group_ids array with id's for the groups
      *                          that rights will be read from
      * @see    readRights()
      * @return void
      *
       * @access private
      */
-    function readGroupRights($groupIds)
+    function readGroupRights($group_ids)
     {
-        $groupRights = parent::readGroupRights($groupIds);
-        $this->groupRights = $this->_readImpliedRights($groupRights, 'group');
+        $group_rights = parent::readGroupRights($group_ids);
+        $this->group_rights = $this->_readImpliedRights($group_rights, 'group');
 
-        return $this->groupRights;
+        return $this->group_rights;
     } // end func readGroupRights
 
     /**
      * Checks if the current user has a certain right in a
      * given area at the necessary level.
      *
-     * Level 1: requires that owner_user_id matches $this->permUserId
+     * Level 1: requires that owner_user_id matches $this->perm_user_id
      * Level 2: requires that the $owner_group_id matches the id one of
-     *          the (sub)groups that $this->permUserId is a memember of
+     *          the (sub)groups that $this->perm_user_id is a memember of
      *          or requires that the $owner_user_id matches a perm_user_id of
-     *          a memeber of one of $this->permUserId's (sub)groups
+     *          a memeber of one of $this->perm_user_id's (sub)groups
      * Level 3: no requirements
      *
      * Important note:
@@ -234,8 +234,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             return $level;
         }
         // level 1 or higher
-        if ((!is_array($owner_user_id) && $this->permUserId == $owner_user_id) ||
-            is_array($owner_user_id) && in_array($this->permUserId, $owner_user_id))
+        if ((!is_array($owner_user_id) && $this->perm_user_id == $owner_user_id) ||
+            is_array($owner_user_id) && in_array($this->perm_user_id, $owner_user_id))
         {
             return $level;
         // level 2 or higher
@@ -244,10 +244,10 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             // check if the ressource is owned by a (sub)group
             // that the user is part of
             if (is_array($owner_group_id)) {
-                if (count(array_intersect($owner_group_id, $this->groupIds))) {
+                if (count(array_intersect($owner_group_id, $this->group_ids))) {
                     return $level;
                 }
-            } elseif (in_array($owner_group_id, $this->groupIds)) {
+            } elseif (in_array($owner_group_id, $this->group_ids)) {
                 return $level;
             }
         }
@@ -257,14 +257,14 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
     /**
      *
      *
-     * @param int $permUserId
+     * @param int $perm_user_id
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function readAreaAdminAreas($permUserId)
+    function readAreaAdminAreas($perm_user_id)
     {
-        $result = $this->_storage->readAreaAdminAreas($permUserId);
+        $result = $this->_storage->readAreaAdminAreas($perm_user_id);
         if ($result === false) {
             return false;
         }
