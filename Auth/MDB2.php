@@ -165,7 +165,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                  SET '    . $this->alias['lastlogin']
                     .'='  . $this->dbc->quote(MDB2_Date::unix2Mdbstamp($this->currentLogin), $this->fields['lastlogin']) . '
                  WHERE '  . $this->alias['auth_user_id']
-                    .'='  . $this->dbc->quote($this->authUserId, $this->fields['auth_user_id']);
+                    .'='  . $this->dbc->quote($this->propertyValues['auth_user_id'], $this->fields['auth_user_id']);
 
         $result = $this->dbc->query($sql);
 
@@ -215,7 +215,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                    WHERE  ';
         if ($authUserId) {
             $sql .= $this->alias['auth_user_id'] . '='
-                . $this->dbc->quote($this->authUserId, $this->fields['auth_user_id']);
+                . $this->dbc->quote($this->propertyValues['auth_user_id'], $this->fields['auth_user_id']);
         } else {
             $sql .= $this->alias['handle'] . '='
                 . $this->dbc->quote($handle, $this->fields['handle']);
@@ -245,34 +245,11 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
             return false;
         }
 
-        $this->handle = $result['handle'];
-        unset($result['handle']);
-        $this->passwd = $this->decryptPW($result['passwd']);
-        unset($result['passwd']);
-        $this->authUserId = $result['auth_user_id'];
-        unset($result['auth_user_id']);
-        $this->isActive = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
-        if (isset($result['is_active'])) {
-            unset($result['is_active']);
+        if (array_key_exists('lastlogin', $result) && !empty($result['lastlogin'])) {
+            $result['lastlogin'] = MDB_Date::mdbstamp2Unix($result['lastlogin']);
         }
-        $this->lastLogin = (isset($result['lastlogin']) && !empty($result['lastlogin']))
-            ? MDB2_Date::mdbstamp2Unix($result['lastlogin']) : '';
-        if (isset($result['lastlogin'])) {
-            unset($result['lastlogin']);
-        }
-        $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
-        if (isset($result['owner_user_id'])) {
-            unset($result['owner_user_id']);
-        }
-        $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
-        if (isset($result['owner_group_id'])) {
-            unset($result['owner_group_id']);
-        }
-        if (!empty($result)) {
-            foreach ($result as $name => $value) {
-                $this->{$name} = $value;
-            }
-        }
+        $this->propertyValues = $result;
+
         return true;
     }
 

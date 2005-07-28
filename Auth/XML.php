@@ -148,13 +148,11 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        $data = array('lastLogin' => $this->currentLogin);
-
         $index = 0;
         foreach ($this->userObj->children as $value) {
-            if (in_array($value->name, array_keys($data))) {
+            if ($value->name == $this->alias['lastlogin']) {
                 $el =& $this->userObj->getElement(array($index));
-                $el->setContent($data[$value->name]);
+                $el->setContent($this->currentLogin);
             }
             $index++;
         }
@@ -255,34 +253,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
             return false;
         }
 
-        $this->handle = $result['handle'];
-        unset($result['handle']);
-        $this->passwd = $this->decryptPW($result['passwd']);
-        unset($result['passwd']);
-        $this->authUserId = $result['auth_user_id'];
-        unset($result['auth_user_id']);
-        $this->isActive = ((!isset($result['is_active']) || $result['is_active']) ? true : false);
-        if (isset($result['is_active'])) {
-            unset($result['is_active']);
-        }
-        $this->lastLogin = (isset($result['lastlogin']) && !empty($result['lastlogin']))
-            ? $result['lastlogin'] : '';
-        if (isset($result['lastlogin'])) {
-            unset($result['lastlogin']);
-        }
-        $this->ownerUserId  = isset($result['owner_user_id']) ? $result['owner_user_id'] : null;
-        if (isset($result['owner_user_id'])) {
-            unset($result['owner_user_id']);
-        }
-        $this->ownerGroupid = isset($result['owner_group_id']) ? $result['owner_group_id'] : null;
-        if (isset($result['owner_group_id'])) {
-            unset($result['owner_group_id']);
-        }
-        if (!empty($result)) {
-            foreach ($result as $name => $value) {
-                $this->{$name} = $value;
-            }
-        }
+        $this->propertyValues = $result;
 
         $this->userObj      =& $this->tree->root->getElement(array($index));
 
