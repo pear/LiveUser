@@ -352,25 +352,7 @@ class LiveUser_Auth_Common
         // store them into $this->propertyValues['storedExternalValues']
         $this->setExternalValues();
 
-        $propertyValues = array(
-            'handle'       => $this->handle,
-            'authUserId'   => $this->authUserId,
-            'isActive'     => $this->isActive,
-            'loggedIn'     => $this->loggedIn,
-            'lastLogin'    => $this->lastLogin,
-            'currentLogin' => $this->currentLogin,
-            'ownerGroupId' => $this->ownerGroupId,
-            'ownerUserId'  => $this->ownerUserId
-        );
-
-        $propertyValues['storedExternalValues'] = null;
-        if (isset($this->propertyValues['storedExternalValues']) &&
-            !empty($this->propertyValues['storedExternalValues'])
-        ) {
-            $propertyValues['storedExternalValues'] = $this->propertyValues['storedExternalValues'];
-        }
-
-        return $propertyValues;
+        return $this->propertyValues;
     }
 
     /**
@@ -383,9 +365,7 @@ class LiveUser_Auth_Common
      */
     function unfreeze($propertyValues)
     {
-        foreach ($propertyValues as $key => $value) {
-            $this->{$key} = $value;
-        }
+        $this->propertyValues = $propertyValues;
 
         return $this->externalValuesMatch();
     } // end func unfreeze
@@ -575,7 +555,9 @@ class LiveUser_Auth_Common
     {
         $that = null;
         $lwhat = strtolower($what);
-        if (isset($this->$what)) {
+        if (array_key_exists($what, $this->propertyValues)) {
+            $that = $this->propertyValues[$what];
+        } elseif (isset($this->$what)) {
             $that = $this->$what;
         }
         return $that;
