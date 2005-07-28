@@ -24,7 +24,7 @@ if (!empty($news)) {
 
     if (!ereg('^[1-9][0-9]?$', $valid_to)) {
         $tpl->setVariable('script_msg', '<p style="color: red;">Only numbers between 1 and 99 are allowed here.</p>');
-    } elseif (!$LU->checkRightLevel(RIGHT_NEWS_NEW, $LU->getProperty('permUserId'), $group)) {
+    } elseif (!$LU->checkRightLevel(RIGHT_NEWS_NEW, $LU->getProperty('perm_user_id'), $group)) {
         $tpl->setVariable('script_msg', '<p style="color: red;">You don\'t have the right to post news for this group.</p>');
     } else {
     // Form seems to be correct. Write data into the db.
@@ -44,7 +44,7 @@ if (!empty($news)) {
                       NOW(),
                       ' . $db->quote( date('Y.m.d H:i:s', time()+60*60*24*7*$valid_to), 'timestamp' ) . ',
                       ' . $db->quote( addslashes( $news ), 'text' ).',
-                      ' . $db->quote( $LU->getProperty('permUserId'), 'integer' ) . ',
+                      ' . $db->quote( $LU->getProperty('perm_user_id'), 'integer' ) . ',
                       ' . $group . ')');
 
         $tpl->setVariable('script_msg', '<p><b>News has been added.</b></p>');
@@ -69,7 +69,7 @@ if (!empty($valid_to)) {
 }
 
 // If the user is member in more than one group, show them.
-if (count($LU->getProperty('groupIds')) > 1) {
+if (count($LU->getProperty('group_ids')) > 1) {
     $res = $db->query('SELECT
                          section_id AS group_id,
                          description AS group_comment
@@ -77,7 +77,7 @@ if (count($LU->getProperty('groupIds')) > 1) {
                          liveuser_translations
                      WHERE
                          section_type = 3
-                         AND section_id IN (' . implode(', ', $LU->getProperty('groupIds')) . ')
+                         AND section_id IN (' . implode(', ', $LU->getProperty('group_ids')) . ')
                      ORDER BY
                          group_id');
 
@@ -93,7 +93,7 @@ if (count($LU->getProperty('groupIds')) > 1) {
 
 } else {
     $tpl->setCurrentBlock('set_group');
-    $tpl->setVariable('group_id', current($LU->getProperty('groupIds')));
+    $tpl->setVariable('group_id', current($LU->getProperty('group_ids')));
     $tpl->parseCurrentBlock();
 }
 
