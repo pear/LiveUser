@@ -274,7 +274,7 @@ if (!$LU->isLoggedIn()) {
 echo '<hr />Handle:';
 print_r($LU->getProperty('handle'));
 echo '<br />User Type:';
-print_r($LU->getProperty('userType'));
+print_r($LU->getProperty('perm_type'));
 
 echo '<hr /><pre>';
 print_r($LU);
