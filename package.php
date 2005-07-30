@@ -9,16 +9,21 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.2';
+$version = '0.16.3';
 
 $notes = <<<EOT
-- time() call prevented the rememberMe cookie from being set under IE
-- dont use serialize() for the cookie data due to security concerns
-  Note: this breaks all remember me cookies currently set!
-- fixed parse error in PEARAuth container (bug #4797)
-- cleaned up lastlogin handling (bug #4843)
-- nuke error due to disconnecting on logout()
-- php 4.4 reference assignment fixes
+- added new custom user field "name" to example1
+- added missing config entries to example1 and example2
+- all user related container properties now use lower case with underscores
+  instead of lower bumby camel to better match the storage layer naming.
+  this allows for a much simplified readUserData() method (BC break!)
+- copy storage config before passing it to the storageFactory() since this
+  method messes with the values which causes the original to be modified due to
+  using pass by reference
+- use getProperty() to read properties of the auth container
+- use static calls for all factory method calls
+- disconnect on logout() (bug #4928)
+- fixed bugs in storageFactory()
 EOT;
 
 $description = <<<EOT
