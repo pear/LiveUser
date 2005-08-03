@@ -744,8 +744,8 @@ class LiveUser
             return $this->readConfig(${$confName}, $confName);
         }
         $this->_stack->push(
-            LIVEUSER_ERROR_CONFIG, 'exception',
-            array(), 'Configuration array not found in LiveUser::readConfig()'
+            LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Configuration array not found in LiveUser::readConfig()'
         );
         return false;
     }
@@ -869,8 +869,8 @@ class LiveUser
             $this->_options[$option] = $value;
             return true;
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
-            array(), "unknown option $option");
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            "unknown option $option");
         return false;
     }
 
@@ -887,8 +887,8 @@ class LiveUser
         if (isset($this->_options[$option])) {
             return $this->_options[$option];
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
-            array(), "unknown option $option");
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 
+           "unknown option $option");
         return false;
     }
 
@@ -1157,8 +1157,8 @@ class LiveUser
             }
             return true;
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
-            array(), 'No data available to store inside session');
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            'No data available to store inside session');
         return false;
     }
 
@@ -1287,7 +1287,7 @@ class LiveUser
             // Delete cookie if it's not valid, keeping it messes up the
             // authentication process
             $this->deleteRememberCookie();
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
                 'Wrong data in cookie store in LiveUser::readRememberMeCookie()');
             return false;
         }
@@ -1300,16 +1300,16 @@ class LiveUser
 
         $fh = @fopen($dir . '/' . $store_id . '.lu', 'rb');
         if (!$fh) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
-                array(), 'Cannot open file for reading');
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Cannot open file for reading');
             return false;
         }
 
         $fields = fread($fh, 4096);
         fclose($fh);
         if (!$fields) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception',
-                array(), 'Cannot read file');
+            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Cannot read file');
             return false;
         }
 
@@ -1318,8 +1318,8 @@ class LiveUser
         );
 
         if (!is_array($serverData) || count($serverData) != 2) {
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'exception',
-                array(), 'Incorrect array structure');
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'exception', array(),
+                'Incorrect array structure');
             return false;
         }
 
@@ -1327,7 +1327,7 @@ class LiveUser
             // Delete cookie if it's not valid, keeping it messes up the
             // authentication process
             $this->deleteRememberCookie();
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
                 'Passwords hashes do not match in cookie in LiveUser::readRememberMeCookie()');
             return false;
         }
@@ -1354,7 +1354,7 @@ class LiveUser
 
         $cookieData = $_COOKIE[$this->_options['cookie']['name']];
         if (strlen($cookieData) < 65) {
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error',
+            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
                 'Wrong data in cookie store in LiveUser::deleteRememberCookie()');
             return false;
         }
@@ -1572,7 +1572,7 @@ class LiveUser
     function updateProperty($auth, $perm = null)
     {
         if (!is_a($this->_auth, 'LiveUser_Auth_Common')) {
-            $this->_stack->push(LIVEUSER_ERROR, 'error',
+            $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
                 'Cannot update container if no auth container instance is available');
             return false;
         }
@@ -1584,7 +1584,7 @@ class LiveUser
         }
         if ($perm) {
             if (!is_a($this->_perm, 'LiveUser_Perm_Simple')) {
-                $this->_stack->push(LIVEUSER_ERROR, 'error',
+                $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
                     'Cannot update container if no perm container instance is available');
                 return false;
             }
