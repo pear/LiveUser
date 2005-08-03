@@ -430,8 +430,8 @@ class LiveUser_Auth_Common
             break;
         case 'SHA1':
             if (!function_exists('sha1')) {
-                $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED,
-                    'exception', array(), 'SHA1 function doesn\'t exist. Upgrade your PHP version');
+                $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception', array(),
+                    'SHA1 function doesn\'t exist. Upgrade your PHP version');
                 return false;
             }
             $encryptedPW = sha1($plainPW);
@@ -509,7 +509,9 @@ class LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception');
+        $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
+            array('feature' => '_updateUserData'));
+        );
     }
 
     /**
