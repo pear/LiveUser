@@ -246,7 +246,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
         }
 
         if (array_key_exists('lastlogin', $result) && !empty($result['lastlogin'])) {
-            $result['lastlogin'] = MDB_Date::mdbstamp2Unix($result['lastlogin']);
+            $result['lastlogin'] = MDB2_Date::mdbstamp2Unix($result['lastlogin']);
         }
         $this->propertyValues = $result;
 
