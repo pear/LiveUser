@@ -1048,7 +1048,7 @@ class LiveUser
                         return false;
                     }
                     $this->_perm =& $perm;
-                    if (!$this->_perm->mapUser($auth->authUserId, $index)) {
+                    if (!$this->_perm->mapUser($auth->getProperty('auth_user_id'), $index)) {
                         $this->dispatcher->post($this, 'onFailedMapping');
                     }
                 }
@@ -1058,7 +1058,7 @@ class LiveUser
                 $this->setRememberCookie($handle, $passwd, $remember);
                 $this->status = LIVEUSER_STATUS_OK;
                 break;
-            } elseif ($auth->isActive === false) {
+            } elseif ($auth->getProperty('is_active') === false) {
                 $this->status = LIVEUSER_STATUS_ISINACTIVE;
                 break;
             }
@@ -1123,7 +1123,7 @@ class LiveUser
                     if ($this->_options['cache_perm']) {
                         $this->_perm->unfreeze($this->_options['session']['varname']);
                     } else {
-                        $this->_perm->mapUser($auth->authUserId, $auth->backendArrayIndex);
+                        $this->_perm->mapUser($auth->getProperty('auth_user_id'), $auth->backendArrayIndex);
                     }
                 }
                 $this->status = LIVEUSER_STATUS_UNFROZEN;
@@ -1588,7 +1588,7 @@ class LiveUser
                     'Cannot update container if no perm container instance is available');
                 return false;
             }
-            if (!$this->_perm->mapUser($this->_auth->authUserId, $this->_auth->backendArrayIndex)) {
+            if (!$this->_perm->mapUser($this->_auth->getProperty('auth_user_id'), $this->_auth->backendArrayIndex)) {
                 return false;
             }
         }
