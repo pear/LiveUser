@@ -65,58 +65,6 @@
  */
 class LiveUser_Auth_Common
 {
-/**#@+
- * @access protected
- */
-    /**
-     * The handle (username) of the current user
-     *
-     * @var    string
-     */
-    var $handle = '';
-
-    /**
-     * The password of the current user as given to the
-     * login() method.
-     *
-     * @var    string
-     */
-    var $passwd = '';
-
-    /**
-     * Current user's database record id
-     *
-     * @var    integer
-     */
-    var $authUserId = 0;
-
-    /**
-     * Is the current user allowed to login at all? If false,
-     * a call to login() will not set $logged_in to true, even
-     * if handle and password were submitted correctly. This is
-     * useful when you want your users to be activated by an
-     * administrator before they can actually use your application.
-     * Default: false
-     *
-     * @var    boolean
-     * @see    LiveUser_Auth_Common::loggedIn
-     */
-    var $isActive = null;
-
-    /**
-     * Owner User Id
-     *
-     * @var int
-     */
-    var $ownerUserId = null;
-
-    /**
-     * Owner User Id
-     *
-     * @var int
-     */
-    var $ownerGroupId = null;
-
     /**
      * Has the current user successfully logged in?
      * Default: false
@@ -127,11 +75,11 @@ class LiveUser_Auth_Common
     var $loggedIn = null;
 
     /**
-     * Timestamp of last login (previous to currentLogin)
+     * Timestamp of current login (last to be written)
      *
      * @var    integer
      */
-    var $lastLogin = 0;
+    var $currentLogin = 0;
 
     /**
      * Update the last login time or not
@@ -139,13 +87,6 @@ class LiveUser_Auth_Common
      * @var    boolean
      */
     var $updateLastLogin = true;
-
-    /**
-     * Timestamp of current login (last to be written)
-     *
-     * @var    integer
-     */
-    var $currentLogin = 0;
 
     /**
      * Number of hours that must pass between two logins
@@ -352,7 +293,13 @@ class LiveUser_Auth_Common
         // store them into $this->propertyValues['storedExternalValues']
         $this->setExternalValues();
 
-        return $this->propertyValues;
+        $propertyValues = array(
+            'propertyValues'    => $this->propertyValues,
+            'loggedIn'          => $this->loggedIn,
+            'currentLogin'      => $this->currentLogin,
+        );
+
+        return $propertyValues;
     }
 
     /**
@@ -365,7 +312,9 @@ class LiveUser_Auth_Common
      */
     function unfreeze($propertyValues)
     {
-        $this->propertyValues = $propertyValues;
+         foreach ($propertyValues as $key => $value) {
+             $this->{$key} = $value;
+         }
 
         return $this->externalValuesMatch();
     } // end func unfreeze
@@ -451,8 +400,11 @@ class LiveUser_Auth_Common
      */
     function isNewLogin()
     {
+        if (!array_key_exists('lastlogin', $this->propertyValues)) {
+            return true;
+        }
         $meantime = $this->loginTimeout * 3600;
-        if (time() >= $this->lastLogin + $meantime) {
+        if (time() >= $this->propertyValues['lastlogin'] + $meantime) {
             return true;
         } else {
             return false;
@@ -481,7 +433,9 @@ class LiveUser_Auth_Common
 
         // If login is successful (user data has been read)
         // ...we still need to check if this user is declared active
-        if ($this->isActive !== false) {
+        if (array_key_exists('is_active', $this->propertyValues)
+            && $this->propertyValues['is_active'] !== false
+        ) {
             // ...and if so, we have a successful login (hooray)!
             $this->loggedIn = true;
             $this->currentLogin = time();
@@ -510,8 +464,9 @@ class LiveUser_Auth_Common
     function _updateUserData()
     {
         $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
-            array('feature' => '_updateUserData'));
+            array('feature' => '_updateUserData')
         );
+        return false;
     }
 
     /**
@@ -541,7 +496,8 @@ class LiveUser_Auth_Common
     function readUserData($handle = '', $passwd = '', $authUserId = false)
     {
         $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
-            array('feature' => 'readUserData'));
+            array('feature' => 'readUserData')
+        );
         return false;
     }
 
@@ -556,7 +512,7 @@ class LiveUser_Auth_Common
     function getProperty($what)
     {
         $that = null;
-        $lwhat = strtolower($what);
+        $what = strtolower($what);
         if (array_key_exists($what, $this->propertyValues)) {
             $that = $this->propertyValues[$what];
         } elseif (isset($this->$what)) {
