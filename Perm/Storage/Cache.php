@@ -65,6 +65,15 @@ require_once 'LiveUser/Perm/Storage.php';
  */
 class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
 {
+
+    /**
+     * Storage Container
+     *
+     * @var object
+     * @access public
+     */
+    var $_storage = null;
+
     /**
      *
      *
@@ -76,9 +85,11 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      */
     function init(&$storageConf, &$confArray)
     {
-        parent::init($storageConf);
+        if (!parent::init($storageConf)) {
+            return false;
+        }
 
-        $this->_storage = LiveUser::storageFactory($confArray);
+        $this->_storage =& LiveUser::storageFactory($confArray);
         if ($this->_storage === false) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Could not instanciate storage container'));
