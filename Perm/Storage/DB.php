@@ -88,7 +88,9 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      */
     function init(&$storageConf)
     {
-        parent::init($storageConf);
+        if (!parent::init($storageConf)) {
+            return false;
+        }
 
         if (isset($storageConf['connection']) &&
             DB::isConnection($storageConf['connection'])

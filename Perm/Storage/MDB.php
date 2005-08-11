@@ -87,7 +87,9 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      */
     function init($storageConf)
     {
-        parent::init($storageConf);
+        if (!parent::init($storageConf)) {
+            return false;
+        }
 
         if (isset($storageConf['connection']) &&
             MDB::isConnection($storageConf['connection'])

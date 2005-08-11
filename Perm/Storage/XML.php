@@ -107,7 +107,9 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      */
     function init(&$storageConf)
     {
-        parent::init($storageConf);
+        if (!parent::init($storageConf)) {
+            return false;
+        }
 
         if (!is_file($this->file)) {
             if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
