@@ -151,7 +151,7 @@ class LiveUser_Perm_Simple
         }
 
         $storageConf = $conf['storage'];
-        $this->_storage = LiveUser::storageFactory($storageConf);
+        $this->_storage =& LiveUser::storageFactory($storageConf);
         if ($this->_storage === false) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Could not instanciate storage container'));
