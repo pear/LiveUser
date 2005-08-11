@@ -189,10 +189,7 @@ class LiveUser_Misc_Schema_Install
             'sequences' => $sequences,
         );
 
-        if (!LiveUser_Misc_Schema_Install::writeSchema($definition, $file)) {
-            return false;
-        }
-        return true;
+        return LiveUser_Misc_Schema_Install::writeSchema($definition, $file);
     }
 
     function writeSchema($definition, $file)
