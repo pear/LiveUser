@@ -127,8 +127,27 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      */
     function readUserRights($perm_user_id)
     {
-        $user_rights = parent::readUserRights($perm_user_id);
-        $this->user_rights = $this->_readImpliedRights($user_rights, 'user');
+        $result = parent::readUserRights($perm_user_id);
+         if ($result === false) {
+            return false;
+         }
+
+        if ($this->perm_type == LIVEUSER_AREAADMIN_TYPE_ID) {
+            $result = $this->readAreaAdminAreas($this->perm_user_id);
+            if ($result === false) {
+               return false;
+            }
+
+            if (is_array($this->area_admin_areas)) {
+                if (is_array($this->user_rights)) {
+                    $this->user_rights = $this->area_admin_areas + $this->user_rights;
+                } else {
+                    $this->user_rights = $this->area_admin_areas;
+                }
+            }
+        }
+
+        $this->user_rights = $this->_readImpliedRights($this->user_rights, 'user');
 
         return $this->user_rights;
     } // end func readUserRights
@@ -269,8 +288,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             return false;
         }
 
-        $this->areaAdminAreas = $result;
-        return $this->areaAdminAreas;
+        $this->area_admin_areas = $result;
+        return $this->area_admin_areas;
     }
 }
 ?>
