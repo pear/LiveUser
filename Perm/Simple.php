@@ -183,7 +183,7 @@ class LiveUser_Perm_Simple
         }
 
         $this->perm_user_id = $result['perm_user_id'];
-        $this->perm_type   = $result['perm_type'];
+        $this->perm_type    = $result['perm_type'];
 
         $this->readRights();
 
@@ -283,8 +283,8 @@ class LiveUser_Perm_Simple
     function freeze($sessionName)
     {
         $propertyValues = array(
-            'perm_user_id'  => $this->perm_user_id,
-            'rights'      => $this->rights,
+            'perm_user_id' => $this->perm_user_id,
+            'rights'       => $this->rights,
             'user_rights'  => $this->user_rights,
             'group_rights' => $this->group_rights,
             'perm_type'    => $this->perm_type,
