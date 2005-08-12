@@ -112,21 +112,6 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             return false;
         }
 
-        if ($this->perm_type == LIVEUSER_AREAADMIN_TYPE_ID) {
-            $result = $this->readAreaAdminAreas($this->perm_user_id);
-            if ($result === false) {
-               return false;
-            }
-
-            if (is_array($this->areaAdminAreas)) {
-                if (is_array($this->user_rights)) {
-                    $this->user_rights = $this->areaAdminAreas + $this->user_rights;
-                } else {
-                    $this->user_rights = $this->areaAdminAreas;
-                }
-            }
-        }
-
         $result = $this->readGroups($this->perm_user_id);
         if ($result === false) {
             return false;
