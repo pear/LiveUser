@@ -34,7 +34,7 @@
  * @package  LiveUser
  * @author  Markus Wolff <wolff@21st.de>
  * @author Helgi Þormar Þorbjörnsson <dufuz@php.net>
- * @author  Lukas Smith <smith@backendmedia.com>
+ * @author  Lukas Smith <smith@pooteeweet.org>
  * @author Arnaud Limbourg <arnaud@php.net>
  * @author   Pierre-Alain Joye  <pajoye@php.net>
  * @author  Bjoern Kraus <krausbn@php.net>
@@ -180,7 +180,7 @@ $GLOBALS['_LIVEUSER_DEBUG'] = false;
  * @package  LiveUser
  * @author   Markus Wolff       <wolff@21st.de>
  * @author   Bjoern Kraus       <krausbn@php.net>
- * @author   Lukas Smith        <smith@backendmedia.com>
+ * @author   Lukas Smith        <smith@pooteeweet.org>
  * @author   Pierre-Alain Joye  <pajoye@php.net>
  * @author   Arnaud Limbourg    <arnaud@php.net>
  * @copyright 2002-2005 Markus Wolff

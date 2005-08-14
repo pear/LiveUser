@@ -46,7 +46,7 @@
  *
  * @category  authentication
  * @package   LiveUser
- * @author    Lukas Smith <smith@backendmedia.com>
+ * @author    Lukas Smith <smith@pooteeweet.org>
  * @author    Arnaud Limbourg <arnaud@limbourg.com>
  * @copyright 2002-2005 Markus Wolff
  * @license   http://www.gnu.org/licenses/lgpl.txt
