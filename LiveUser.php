@@ -1034,7 +1034,7 @@ class LiveUser
                 continue;
             }
             $auth =& LiveUser::authFactory($this->authContainers[$index], $index);
-            if ($auth === false || $auth->login($handle, $passwd)) === false) {
+            if ($auth === false || $auth->login($handle, $passwd) === false) {
                 $this->status = LIVEUSER_STATUS_AUTHINITERROR;
                 return false;
             }
@@ -1046,9 +1046,10 @@ class LiveUser
                         $this->status = LIVEUSER_STATUS_PERMINITERROR;
                         return false;
                     }
-                    $this->_perm =& $perm;
-                    if (!$this->_perm->mapUser($auth->getProperty('auth_user_id'), $index)) {
+                    if (!$perm->mapUser($auth->getProperty('auth_user_id'), $index)) {
                         $this->dispatcher->post($this, 'onFailedMapping');
+                    } else {
+                        $this->_perm =& $perm;
                     }
                 }
                 $this->_auth = $auth;
@@ -1118,11 +1119,13 @@ class LiveUser
                     if ($perm === false) {
                         return $perm;
                     }
-                    $this->_perm = &$perm;
                     if ($this->_options['cache_perm']) {
-                        $this->_perm->unfreeze($this->_options['session']['varname']);
+                        $result = $perm->unfreeze($this->_options['session']['varname']);
                     } else {
-                        $this->_perm->mapUser($auth->getProperty('auth_user_id'), $auth->backendArrayIndex);
+                        $result = $perm->mapUser($auth->getProperty('auth_user_id'), $auth->backendArrayIndex);
+                    }
+                    if ($result) {
+                        $this->_perm = &$perm;
                     }
                 }
                 $this->status = LIVEUSER_STATUS_UNFROZEN;
