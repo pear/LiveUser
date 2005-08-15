@@ -138,13 +138,13 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      *
      *
-     * @param int $authUserId
+     * @param int $auth_user_id
      * @param string $containerName
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function mapUser($authUserId, $containerName)
+    function mapUser($auth_user_id, $containerName)
     {
         $nodeIndex = 0;
         $userIndex = 0;
@@ -154,7 +154,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
                 if ($node->name == 'users') {
                     foreach ($node->children as $user) {
                         if ($user->name == 'user' &&
-                            $authUserId == $user->attributes['authUserId'] &&
+                            $auth_user_id == $user->attributes['authUserId'] &&
                             $containerName == $user->attributes['authContainerName']
                         ) {
                             $result['perm_user_id'] = $user->attributes['userId'];

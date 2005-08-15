@@ -124,13 +124,13 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
     /**
      *
      *
-     * @param int $authUserId
+     * @param int $auth_user_id
      * @param string $containerName
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function mapUser($authUserId, $containerName)
+    function mapUser($auth_user_id, $containerName)
     {
         $query = '
             SELECT
@@ -140,7 +140,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.$this->alias['perm_users'].'
             WHERE
                 ' . $this->alias['auth_user_id'] . ' = '.
-                    $this->dbc->quote($authUserId, $this->fields[$this->alias['auth_user_id']]).'
+                    $this->dbc->quote($auth_user_id, $this->fields[$this->alias['auth_user_id']]).'
             AND
                 ' . $this->alias['auth_container_name'] . ' = '.
                     $this->dbc->quote($containerName, $this->fields[$this->alias['auth_container_name']]);

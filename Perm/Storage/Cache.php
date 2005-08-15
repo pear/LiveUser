@@ -102,18 +102,18 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     /**
      *
      *
-     * @param int $authUserId
+     * @param int $auth_user_id
      * @param string $containerName
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function mapUser($authUserId, $containerName)
+    function mapUser($auth_user_id, $containerName)
     {
         if (in_cache) {
             return cache;
         }
-        $result = $this->_storage->mapUser($authUserId, $containerName);
+        $result = $this->_storage->mapUser($auth_user_id, $containerName);
         if ($result === false) {
             return false;
         }

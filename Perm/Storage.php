@@ -134,13 +134,13 @@ class LiveUser_Perm_Storage
     /**
      *
      *
-     * @param int $authUserId
+     * @param int $auth_user_id
      * @param string $containerName
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function mapUser($authUserId, $containerName)
+    function mapUser($auth_user_id, $containerName)
     {
     }
 

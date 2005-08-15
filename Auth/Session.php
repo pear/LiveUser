@@ -119,14 +119,14 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      
      * @param  string $handle  user handle
      * @param  boolean $passwd user password
-     * @param string $authUserId auth user id
+     * @param string $auth_user_id auth user id
      * @return boolean true on success or false on failure
      *
      * @access private
      */
-    function readUserData($handle = '', $passwd = '', $authUserId = false)
+    function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
-        if ($authUserId) {
+        if ($auth_user_id) {
             // where can we get the handle and passwd from?
         } else {
             if ($this->tables['users']['fields']['passwd']) {

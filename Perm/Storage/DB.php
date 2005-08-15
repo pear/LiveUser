@@ -117,13 +117,13 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Returns the perm userid from an auth userid
      * and a container name.
      *
-     * @param int $authUserId
+     * @param int $auth_user_id
      * @param string $containerName
      * @return mixed array or false on failure
      *
      * @access public
      */
-    function mapUser($authUserId, $containerName)
+    function mapUser($auth_user_id, $containerName)
     {
         $query = '
             SELECT
@@ -133,7 +133,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.$this->alias['perm_users'].'
             WHERE
                 ' . $this->alias['auth_user_id'] . ' = '.
-                    $this->dbc->quoteSmart($authUserId).'
+                    $this->dbc->quoteSmart($auth_user_id).'
             AND
                 ' . $this->alias['auth_container_name'] . ' = '.
                     $this->dbc->quoteSmart((string)$containerName);

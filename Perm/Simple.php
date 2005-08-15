@@ -165,15 +165,15 @@ class LiveUser_Perm_Simple
      * Tries to find the user with the given user ID in the permissions
      * container. Will read all permission data and return true on success.
      *
-     * @param   string $authUserId  user identifier
+     * @param   string $auth_user_id  user identifier
      * @param   string $containerName  name of the auth container
      * @return  boolean true on success or false on failure
      *
      * @access  public
      */
-    function mapUser($authUserId = null, $containerName = null)
+    function mapUser($auth_user_id = null, $containerName = null)
     {
-        $result = $this->_storage->mapUser($authUserId, $containerName);
+        $result = $this->_storage->mapUser($auth_user_id, $containerName);
         if ($result === false) {
             return false;
         }
