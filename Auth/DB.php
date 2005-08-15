@@ -152,13 +152,13 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
             return true;
         }
 
-        $sql  = 'UPDATE ' . $this->prefix . $this->alias['users'].'
+        $query  = 'UPDATE ' . $this->prefix . $this->alias['users'].'
                  SET '    . $this->alias['lastlogin'] . '=' .
                     $this->dbc->quoteSmart(date('Y-m-d H:i:s', $this->currentLogin)) . '
                  WHERE '  . $this->alias['auth_user_id']   . '=' .
                     $this->dbc->quoteSmart($this->propertyValues['auth_user_id']);
 
-        $result = $this->dbc->query($sql);
+        $result = $this->dbc->query($query);
 
         if (PEAR::isError($result)) {
             $this->_stack->push(
@@ -199,26 +199,26 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         }
 
         // Setting the default sql query.
-        $sql    = 'SELECT ' . implode(',', $fields) . '
+        $query = 'SELECT ' . implode(',', $fields) . '
                    FROM   ' . $this->prefix . $this->alias['users'].'
                    WHERE  ';
         if ($auth_user_id) {
-            $sql .= $this->alias['auth_user_id'] . '='
+            $query .= $this->alias['auth_user_id'] . '='
                 . $this->dbc->quoteSmart($this->propertyValues['auth_user_id']);
         } else {
-            $sql .= $this->alias['handle'] . '='
+            $query .= $this->alias['handle'] . '='
                 . $this->dbc->quoteSmart($handle);
 
             if ($this->tables['users']['fields']['passwd']) {
                 // If $passwd is set, try to find the first user with the given
                 // handle and password.
-                $sql .= ' AND   ' . $this->alias['passwd'] . '='
+                $query .= ' AND   ' . $this->alias['passwd'] . '='
                     . $this->dbc->quoteSmart($this->encryptPW($passwd));
             }
         }
 
         // Query database
-        $result = $this->dbc->getRow($sql, null, DB_FETCHMODE_ASSOC);
+        $result = $this->dbc->getRow($query, null, DB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
         // If a user was found, read data into class variables and set

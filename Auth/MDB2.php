@@ -161,13 +161,13 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
             return true;
         }
 
-        $sql  = 'UPDATE ' . $this->prefix . $this->alias['users'].'
+        $query  = 'UPDATE ' . $this->prefix . $this->alias['users'].'
                  SET '    . $this->alias['lastlogin']
                     .'='  . $this->dbc->quote(MDB2_Date::unix2Mdbstamp($this->currentLogin), $this->fields['lastlogin']) . '
                  WHERE '  . $this->alias['auth_user_id']
                     .'='  . $this->dbc->quote($this->propertyValues['auth_user_id'], $this->fields['auth_user_id']);
 
-        $result = $this->dbc->query($sql);
+        $result = $this->dbc->query($query);
 
         if (PEAR::isError($result)) {
             $this->_stack->push(
@@ -210,26 +210,26 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
         }
 
         // Setting the default query.
-        $sql    = 'SELECT ' . implode(',', $fields) . '
+        $query = 'SELECT ' . implode(',', $fields) . '
                    FROM '   . $this->prefix . $this->alias['users'] . '
                    WHERE  ';
         if ($auth_user_id) {
-            $sql .= $this->alias['auth_user_id'] . '='
+            $query .= $this->alias['auth_user_id'] . '='
                 . $this->dbc->quote($this->propertyValues['auth_user_id'], $this->fields['auth_user_id']);
         } else {
-            $sql .= $this->alias['handle'] . '='
+            $query .= $this->alias['handle'] . '='
                 . $this->dbc->quote($handle, $this->fields['handle']);
 
             if ($this->tables['users']['fields']['passwd']) {
                 // If $passwd is set, try to find the first user with the given
                 // handle and password.
-                $sql .= ' AND   ' . $this->alias['passwd'] . '='
+                $query .= ' AND   ' . $this->alias['passwd'] . '='
                     . $this->dbc->quote($this->encryptPW($passwd), $this->fields['passwd']);
             }
         }
 
         // Query database
-        $result = $this->dbc->queryRow($sql, $types, MDB2_FETCHMODE_ASSOC);
+        $result = $this->dbc->queryRow($query, $types, MDB2_FETCHMODE_ASSOC);
 
         // If a user was found, read data into class variables and set
         // return value to true
