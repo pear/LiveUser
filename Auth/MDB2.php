@@ -196,12 +196,12 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      
      * @param  string $handle  user handle
      * @param  boolean $passwd user password
-     * @param string $authUserId auth user id
+     * @param string $auth_user_id auth user id
      * @return boolean true on success or false on failure
      *
      * @access private
      */
-    function readUserData($handle = '', $passwd = '', $authUserId = false)
+    function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
         $fields = $types = array();
         foreach ($this->tables['users']['fields'] as $field => $req) {
@@ -213,7 +213,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
         $sql    = 'SELECT ' . implode(',', $fields) . '
                    FROM '   . $this->prefix . $this->alias['users'] . '
                    WHERE  ';
-        if ($authUserId) {
+        if ($auth_user_id) {
             $sql .= $this->alias['auth_user_id'] . '='
                 . $this->dbc->quote($this->propertyValues['auth_user_id'], $this->fields['auth_user_id']);
         } else {
@@ -242,7 +242,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
         }
 
         if (!is_array($result)) {
-            return false;
+            return null;
         }
 
         if (array_key_exists('lastlogin', $result) && !empty($result['lastlogin'])) {

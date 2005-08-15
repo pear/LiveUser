@@ -203,12 +203,12 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      * @param string $handle   Handle of the current user.
      * @param mixed $passwd    Can be a string with an
      *                  unencrypted pwd or false.
-     * @param string $authUserId auth user id
+     * @param string $auth_user_id auth user id
      * @return boolean true on success or false on failure
      *
      * @access private
      */
-    function readUserData($handle = '', $passwd = '', $authUserId = false)
+    function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
         $success = false;
         $index = 0;
@@ -222,9 +222,9 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                 }
             }
 
-            if ($authUserId) {
+            if ($auth_user_id) {
                 if (isset($result['auth_user_id']) &&
-                    $authUserId === $result['auth_user_id']
+                    $auth_user_id === $result['auth_user_id']
                 ) {
                     $success = true;
                     break;
@@ -250,7 +250,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
         }
 
         if (!$success) {
-            return false;
+            return null;
         }
 
         $this->propertyValues = $result;
