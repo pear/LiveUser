@@ -140,14 +140,14 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.$this->alias['perm_users'].'
             WHERE
                 ' . $this->alias['auth_user_id'] . ' = '.
-                    $this->dbc->quote($auth_user_id, $this->fields[$this->alias['auth_user_id']]).'
+                    $this->dbc->quote($auth_user_id, $this->fields['auth_user_id']).'
             AND
                 ' . $this->alias['auth_container_name'] . ' = '.
-                    $this->dbc->quote($containerName, $this->fields[$this->alias['auth_container_name']]);
+                    $this->dbc->quote($containerName, $this->fields['auth_container_name']);
 
         $types = array(
-            $this->fields[$this->alias['perm_user_id']],
-            $this->fields[$this->alias['perm_type']]
+            $this->fields['perm_user_id'],
+            $this->fields['perm_type']
         );
         $result = $this->dbc->queryRow($query, $types, MDB2_FETCHMODE_ASSOC);
 
@@ -185,11 +185,11 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 R.' . $this->alias['right_id'] . ' = U.' . $this->alias['right_id'] . '
             AND
                 U.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->quote($perm_user_id, $this->fields[$this->alias['perm_user_id']]);
+                    $this->dbc->quote($perm_user_id, $this->fields['perm_user_id']);
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']]
+            $this->fields['right_id'],
+            $this->fields['right_level']
         );
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
 
@@ -224,11 +224,11 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 AAA.area_id = R.area_id
             AND
                 AAA.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->quote($perm_user_id, $this->fields[$this->alias['perm_user_id']]);
+                    $this->dbc->quote($perm_user_id, $this->fields['perm_user_id']);
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']]
+            $this->fields['right_id'],
+            $this->fields['right_level']
         );
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
 
@@ -264,15 +264,15 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 GU.' . $this->alias['group_id'] . ' = G. ' . $this->alias['group_id'] . '
             AND
                 GU.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->quote($perm_user_id, $this->fields[$this->alias['perm_user_id']]);
+                    $this->dbc->quote($perm_user_id, $this->fields['perm_user_id']);
 
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
-                    $this->dbc->quote(true, $this->fields[$this->alias['is_active']]);
+                    $this->dbc->quote(true, $this->fields['is_active']);
         }
 
-        $result = $this->dbc->queryCol($query, $this->fields[$this->alias['group_id']]);
+        $result = $this->dbc->queryCol($query, $this->fields['group_id']);
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
@@ -305,13 +305,13 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.$this->alias['grouprights'].' GR
             WHERE
                 GR.' . $this->alias['group_id'] . ' IN('.
-                    $this->dbc->datatype->implodeArray($group_ids, $this->fields[$this->alias['group_id']]).')
+                    $this->dbc->datatype->implodeArray($group_ids, $this->fields['group_id']).')
             GROUP BY
                 GR.' . $this->alias['right_id'] . '';
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']]
+            $this->fields['right_id'],
+            $this->fields['right_level']
         );
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
 
@@ -346,18 +346,18 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                     $this->alias['group_id'] . '
             AND
                 SG.' . $this->alias['group_id'] . ' IN ('.
-                    $this->dbc->datatype->implodeArray($newGroupIds, $this->fields[$this->alias['group_id']]).')
+                    $this->dbc->datatype->implodeArray($newGroupIds, $this->fields['group_id']).')
             AND
                 SG.' . $this->alias['subgroup_id'] . ' NOT IN ('.
-                    $this->dbc->datatype->implodeArray($group_ids, $this->fields[$this->alias['subgroup_id']]).')';
+                    $this->dbc->datatype->implodeArray($group_ids, $this->fields['subgroup_id']).')';
 
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
-                    $this->dbc->quote(true, $this->fields[$this->alias['is_active']]);
+                    $this->dbc->quote(true, $this->fields['is_active']);
         }
 
-        $result = $this->dbc->queryCol($query, $this->fields[$this->alias['group_id']]);
+        $result = $this->dbc->queryCol($query, $this->fields['group_id']);
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
@@ -391,14 +391,14 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 TR.' . $this->alias['right_id'] . ' = R.' . $this->alias['right_id'] . '
             AND
                 R.' . $this->alias['right_id'] . ' IN ('.
-                    $this->dbc->datatype->implodeArray(array_keys($rightIds), $this->fields[$this->alias['right_id']]).')
+                    $this->dbc->datatype->implodeArray(array_keys($rightIds), $this->fields['right_id']).')
             AND
                 R.' . $this->alias['has_implied'] . '='.
-                    $this->dbc->quote(true, $this->fields[$this->alias['has_implied']]);
+                    $this->dbc->quote(true, $this->fields['has_implied']);
 
         $types = array(
-            $this->fields[$this->alias['right_level']],
-            $this->fields[$this->alias['right_id']],
+            $this->fields['right_level'],
+            $this->fields['right_id'],
         );
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true, false, true);
 
@@ -434,12 +434,12 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 RI.' . $this->alias['implied_right_id'] . ' = R.' . $this->alias['right_id'] . '
             AND
                 RI.' . $this->alias['right_id'] . ' IN ('.
-                    $this->dbc->datatype->implodeArray($currentRights, $this->fields[$this->alias['right_id']]).')';
+                    $this->dbc->datatype->implodeArray($currentRights, $this->fields['right_id']).')';
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']],
-            $this->fields[$this->alias['has_implied']]
+            $this->fields['right_id'],
+            $this->fields['right_level'],
+            $this->fields['has_implied']
         );
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ASSOC);
 

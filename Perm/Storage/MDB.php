@@ -139,14 +139,14 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 '.$this->prefix.$this->alias['perm_users'].'
             WHERE
                 ' . $this->alias['auth_user_id'] . ' = '.
-                    $this->dbc->getValue($this->fields[$this->alias['auth_user_id']], $auth_user_id).'
+                    $this->dbc->getValue($this->fields['auth_user_id'], $auth_user_id).'
             AND
                 ' . $this->alias['auth_container_name'] . ' = '.
-                    $this->dbc->getValue($this->fields[$this->alias['auth_container_name']], $containerName);
+                    $this->dbc->getValue($this->fields['auth_container_name'], $containerName);
 
         $types = array(
-            $this->fields[$this->alias['perm_user_id']],
-            $this->fields[$this->alias['perm_type']]
+            $this->fields['perm_user_id'],
+            $this->fields['perm_type']
         );
         $result = $this->dbc->queryRow($query, $types, MDB_FETCHMODE_ASSOC);
 
@@ -184,11 +184,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 R.' . $this->alias['right_id'] . ' = U.' . $this->alias['right_id'] . '
             AND
                 U.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->getValue($this->fields[$this->alias['perm_user_id']], $perm_user_id);
+                    $this->dbc->getValue($this->fields['perm_user_id'], $perm_user_id);
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']]
+            $this->fields['right_id'],
+            $this->fields['right_level']
         );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true);
 
@@ -223,11 +223,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 AAA.area_id = R.area_id
             AND
                 AAA.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->getValue($this->fields[$this->alias['perm_user_id']], $perm_user_id);
+                    $this->dbc->getValue($this->fields['perm_user_id'], $perm_user_id);
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']]
+            $this->fields['right_id'],
+            $this->fields['right_level']
         );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true);
 
@@ -263,15 +263,15 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 GU.' . $this->alias['group_id'] . ' = G. ' . $this->alias['group_id'] . '
             AND
                 GU.' . $this->alias['perm_user_id'] . ' = '.
-                    $this->dbc->getValue($this->fields[$this->alias['perm_user_id']], $perm_user_id);
+                    $this->dbc->getValue($this->fields['perm_user_id'], $perm_user_id);
 
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
-                    $this->dbc->getValue($this->fields[$this->alias['is_active']], true);
+                    $this->dbc->getValue($this->fields['is_active'], true);
         }
 
-        $result = $this->dbc->queryCol($query, $this->fields[$this->alias['group_id']]);
+        $result = $this->dbc->queryCol($query, $this->fields['group_id']);
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
@@ -309,8 +309,8 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 GR.' . $this->alias['right_id'] . '';
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']]
+            $this->fields['right_id'],
+            $this->fields['right_level']
         );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true);
 
@@ -353,10 +353,10 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
         if (isset($this->tables['groups']['fields']['is_active'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
-                    $this->dbc->getValue($this->fields[$this->alias['is_active']], true);
+                    $this->dbc->getValue($this->fields['is_active'], true);
         }
 
-        $result = $this->dbc->queryCol($query, $this->fields[$this->alias['group_id']]);
+        $result = $this->dbc->queryCol($query, $this->fields['group_id']);
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
@@ -393,11 +393,11 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                     implode(', ', array_keys($rightIds)).')
             AND
                 R.' . $this->alias['has_implied'] . '='.
-                    $this->dbc->getValue($this->fields[$this->alias['has_implied']], true);
+                    $this->dbc->getValue($this->fields['has_implied'], true);
 
         $types = array(
-            $this->fields[$this->alias['right_level']],
-            $this->fields[$this->alias['right_id']],
+            $this->fields['right_level'],
+            $this->fields['right_id'],
         );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ORDERED, true, false, true);
 
@@ -436,9 +436,9 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                     implode(', ', $currentRights).')';
 
         $types = array(
-            $this->fields[$this->alias['right_id']],
-            $this->fields[$this->alias['right_level']],
-            $this->fields[$this->alias['has_implied']]
+            $this->fields['right_id'],
+            $this->fields['right_level'],
+            $this->fields['has_implied']
         );
         $result = $this->dbc->queryAll($query, $types, MDB_FETCHMODE_ASSOC);
 
