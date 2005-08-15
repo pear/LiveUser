@@ -16,6 +16,12 @@ $notes = <<<EOT
 - added error handling around call to parent::init()
 - assign _storage property by ref in the permission container
 - moved area admin code from the medium into the complex container
+- tweaked error handling in login()/readUserData()
+- only assign the perm instance to _perm if mapUser/unfreeze succeeded
+- fixed bug in the auth container common class that made is_active a required
+  and not optional feature as intended
+- fixed bug in MDB/MDB2 perm storage layer that could lead to incorrect
+  datatype being used when the alias feature is used
 EOT;
 
 $description = <<<EOT
