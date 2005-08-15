@@ -1034,11 +1034,10 @@ class LiveUser
                 continue;
             }
             $auth =& LiveUser::authFactory($this->authContainers[$index], $index);
-            if ($auth === false) {
+            if ($auth === false || $auth->login($handle, $passwd)) === false) {
                 $this->status = LIVEUSER_STATUS_AUTHINITERROR;
                 return false;
             }
-            $auth->login($handle, $passwd);
             if ($auth->loggedIn) {
                 // Create permission object
                 if (is_array($this->permContainer)) {
