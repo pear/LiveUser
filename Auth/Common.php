@@ -434,8 +434,8 @@ class LiveUser_Auth_Common
 
         // If login is successful (user data has been read)
         // ...we still need to check if this user is declared active
-        if (array_key_exists('is_active', $this->propertyValues)
-            && $this->propertyValues['is_active'] !== false
+        if (!array_key_exists('is_active', $this->propertyValues)
+            || $this->propertyValues['is_active'] !== false
         ) {
             // ...and if so, we have a successful login (hooray)!
             $this->loggedIn = true;
