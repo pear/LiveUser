@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -208,7 +208,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      *
      * @param   integer $group_id  Id of the group to check for.
      * @param   boolean $ondemand  allow ondemand reading of groups
-     * @return  boolean. If group_ids isn't populated then false, 
+     * @return  boolean. If group_ids isn't populated then false,
                          if the group_id exists in group_ids then true else false.
      *
      * @access  public
