@@ -963,7 +963,7 @@ class LiveUser
                     ($this->getProperty('currentLogin') + $this->getProperty('expireTime')) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_EXPIRED;
-                    $this->dispatcher->post($this,'onExpired');
+                    $this->dispatcher->post($this, 'onExpired');
                     $this->logout(false);
                 // Check if maximum idle time is reached.
                 } elseif ($this->getProperty('idleTime') > 0 &&
@@ -971,7 +971,7 @@ class LiveUser
                     ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->getProperty('idleTime')) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_IDLED;
-                    $this->dispatcher->post($this,'onIdled');
+                    $this->dispatcher->post($this, 'onIdled');
                     $this->logout(false);
                 }
             }
@@ -1390,7 +1390,7 @@ class LiveUser
 
         if ($direct) {
             // trigger event 'onLogout' as replacement for logout callback function
-            $this->dispatcher->post($this,'onLogout');
+            $this->dispatcher->post($this, 'onLogout');
             // If there's a cookie and the session hasn't idled or expired, kill that one too...
             $this->deleteRememberCookie();
         }
@@ -1410,7 +1410,7 @@ class LiveUser
 
         if ($direct) {
             // trigger event 'postLogout', can be used to do a redirect
-            $this->dispatcher->post($this,'postLogout');
+            $this->dispatcher->post($this, 'postLogout');
         }
 
         return true;
