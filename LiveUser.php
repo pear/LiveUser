@@ -1053,7 +1053,7 @@ class LiveUser
                 $this->setRememberCookie($handle, $passwd, $remember);
                 $this->status = LIVEUSER_STATUS_OK;
                 break;
-            } elseif ($auth->getProperty('is_active') === false) {
+            } elseif (isset($auth->getProperty('is_active'))) {
                 $this->status = LIVEUSER_STATUS_ISINACTIVE;
                 break;
             }
