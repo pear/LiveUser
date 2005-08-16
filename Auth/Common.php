@@ -511,7 +511,6 @@ class LiveUser_Auth_Common
     function getProperty($what)
     {
         $that = null;
-        $what = strtolower($what);
         if (array_key_exists($what, $this->propertyValues)) {
             $that = $this->propertyValues[$what];
         } elseif (isset($this->$what)) {
