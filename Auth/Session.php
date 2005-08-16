@@ -130,8 +130,8 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
             // where can we get the handle and passwd from?
         } else {
             if ($this->tables['users']['fields']['passwd']) {
-                if (!isset($_SESSION[$this->alias['passwd']]) ||
-                    $_SESSION[$this->alias['passwd']] !== $passwd
+                if (!isset($_SESSION[$this->alias['passwd']])
+                    || $_SESSION[$this->alias['passwd']] !== $passwd
                 ) {
                     return false;
                 }

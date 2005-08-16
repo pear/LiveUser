@@ -153,9 +153,9 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
             foreach ($this->tree->root->children as $node) {
                 if ($node->name == 'users') {
                     foreach ($node->children as $user) {
-                        if ($user->name == 'user' &&
-                            $auth_user_id == $user->attributes['authUserId'] &&
-                            $containerName == $user->attributes['authContainerName']
+                        if ($user->name == 'user'
+                            && $auth_user_id == $user->attributes['authUserId']
+                            && $containerName == $user->attributes['authContainerName']
                         ) {
                             $result['perm_user_id'] = $user->attributes['userId'];
                             $result['perm_type'] = $user->attributes['type'];

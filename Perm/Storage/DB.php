@@ -92,8 +92,8 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        if (isset($storageConf['connection']) &&
-            DB::isConnection($storageConf['connection'])
+        if (isset($storageConf['connection'])
+            && DB::isConnection($storageConf['connection'])
         ) {
             $this->dbc = &$storageConf['connection'];
         } elseif (isset($storageConf['dsn'])) {

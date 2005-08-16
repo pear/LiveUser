@@ -444,9 +444,7 @@ class LiveUser_Auth_Common
 
         // In case Login was successful, check if this can be counted
         // as a _new_ login by definition...
-        if ($this->updateLastLogin == true &&
-            $this->isNewLogin() == true && $this->loggedIn == true
-        ) {
+        if ($this->updateLastLogin && $this->isNewLogin() && $this->loggedIn) {
             $this->_updateUserData();
         }
 
@@ -531,8 +529,8 @@ class LiveUser_Auth_Common
      */
     function setExternalValues()
     {
-        if (isset($this->externalValues['keysToCheck']) &&
-            is_array($this->externalValues['keysToCheck'])
+        if (isset($this->externalValues['keysToCheck'])
+            && is_array($this->externalValues['keysToCheck'])
         ) {
             foreach ($this->externalValues['keysToCheck'] as $keyToCheck) {
                 if (isset($this->externalValues['values'][$keyToCheck])) {
@@ -552,13 +550,13 @@ class LiveUser_Auth_Common
      */
     function externalValuesMatch()
     {
-        if (isset($this->propertyValues['storedExternalValues']) &&
-            is_array($this->propertyValues['storedExternalValues'])
+        if (isset($this->propertyValues['storedExternalValues'])
+            && is_array($this->propertyValues['storedExternalValues'])
         ) {
             foreach ($this->propertyValues['storedExternalValues'] as $keyToCheck => $storedValue) {
                 // return false if any one of the stored values does not match the current value
-                if (!isset($this->externalValues['values'][$keyToCheck]) ||
-                    md5($this->externalValues['values'][$keyToCheck]) != $storedValue
+                if (!isset($this->externalValues['values'][$keyToCheck])
+                    || md5($this->externalValues['values'][$keyToCheck]) != $storedValue
                 ) {
                     return false;
                 }

@@ -660,10 +660,7 @@ class LiveUser
             return false;
         }
         foreach ($a2 as $key => $val) {
-            if (is_array($val) &&
-                isset($a1[$key]) &&
-                is_array($a1[$key]))
-            {
+            if (is_array($val) && array_key_exists($key, $a1) && is_array($a1[$key])) {
                 $a1[$key] = LiveUser::arrayMergeClobber($a1[$key], $val);
             } else {
                 $a1[$key] = $val;
@@ -959,16 +956,16 @@ class LiveUser
                 $this->logout(false);
             } elseif ($isReturningUser) {
                 // Check if authentication session is expired.
-                if ($this->getProperty('expireTime') > 0 &&
-                    ($this->getProperty('currentLogin') + $this->getProperty('expireTime')) < $now
+                if ($this->getProperty('expireTime') > 0
+                    && ($this->getProperty('currentLogin') + $this->getProperty('expireTime')) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_EXPIRED;
                     $this->dispatcher->post($this, 'onExpired');
                     $this->logout(false);
                 // Check if maximum idle time is reached.
-                } elseif ($this->getProperty('idleTime') > 0 &&
-                    isset($_SESSION[$this->_options['session']['varname']]['idle']) &&
-                    ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->getProperty('idleTime')) < $now
+                } elseif ($this->getProperty('idleTime') > 0
+                    && isset($_SESSION[$this->_options['session']['varname']]['idle'])
+                    && ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->getProperty('idleTime')) < $now
                 ) {
                     $this->status = LIVEUSER_STATUS_IDLED;
                     $this->dispatcher->post($this, 'onIdled');
@@ -978,9 +975,7 @@ class LiveUser
         }
 
         if (!$this->isLoggedIn()) {
-            if (!$this->login($handle, $passwd, $remember) &&
-                $this->getErrors()
-            ) {
+            if (!$this->login($handle, $passwd, $remember) && $this->getErrors()) {
                 return false;
             }
         }
@@ -1102,8 +1097,8 @@ class LiveUser
         if (isset($_SESSION[$this->_options['session']['varname']]['auth'])
             && is_array($_SESSION[$this->_options['session']['varname']]['auth'])
             && isset($_SESSION[$this->_options['session']['varname']]['auth_name'])
-            && strlen($_SESSION[$this->_options['session']['varname']]['auth_name']) > 0)
-        {
+            && strlen($_SESSION[$this->_options['session']['varname']]['auth_name']) > 0
+        ) {
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $auth =& LiveUser::authFactory($this->authContainers[$containerName], $containerName);
             if ($auth === false) {
@@ -1550,12 +1545,12 @@ class LiveUser
     function getProperty($what, $container = 'auth')
     {
         $that = null;
-        if ($container == 'auth' && is_a($this->_auth, 'LiveUser_Auth_Common') &&
-            !is_null($this->_auth->getProperty($what))
+        if ($container == 'auth' && is_a($this->_auth, 'LiveUser_Auth_Common')
+            && !is_null($this->_auth->getProperty($what))
         ) {
             $that = $this->_auth->getProperty($what);
-        } elseif (is_a($this->_perm, 'LiveUser_Perm_Simple') &&
-            !is_null($this->_perm->getProperty($what))
+        } elseif (is_a($this->_perm, 'LiveUser_Perm_Simple')
+            && !is_null($this->_perm->getProperty($what))
         ) {
             $that = $this->_perm->getProperty($what);
         }

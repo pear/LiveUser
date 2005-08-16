@@ -223,16 +223,16 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
             }
 
             if ($auth_user_id) {
-                if (isset($result['auth_user_id']) &&
-                    $auth_user_id === $result['auth_user_id']
+                if (isset($result['auth_user_id'])
+                    && $auth_user_id === $result['auth_user_id']
                 ) {
                     $success = true;
                     break;
                 }
             } elseif (isset($result['handle']) && $handle === $result['handle']) {
                 if ($this->tables['users']['fields']['passwd']) {
-                    if (isset($result['passwd']) &&
-                        $this->encryptPW($passwd) === $result['passwd']
+                    if (array_key_exists('passwd', $result)
+                        && $this->encryptPW($passwd) === $result['passwd']
                     ) {
                         $success = true;
                         break;

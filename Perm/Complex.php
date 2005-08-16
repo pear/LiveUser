@@ -101,8 +101,8 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             foreach ($result as $val) {
                 // only store the implied right if the right wasn't stored before
                 // or if the level is higher
-                if (!isset($rightIds[$val['right_id']]) ||
-                    $rightIds[$val['right_id']] < $val['right_level']
+                if (!isset($rightIds[$val['right_id']])
+                    || $rightIds[$val['right_id']] < $val['right_level']
                 ) {
                     $rightIds[$val['right_id']] = $val['right_level'];
                     if ($val['has_implied']) {
@@ -253,9 +253,9 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             return $level;
         }
         // level 1 or higher
-        if ((!is_array($owner_user_id) && $this->perm_user_id == $owner_user_id) ||
-            is_array($owner_user_id) && in_array($this->perm_user_id, $owner_user_id))
-        {
+        if ((!is_array($owner_user_id) && $this->perm_user_id == $owner_user_id)
+            || is_array($owner_user_id) && in_array($this->perm_user_id, $owner_user_id)
+        ) {
             return $level;
         // level 2 or higher
         }

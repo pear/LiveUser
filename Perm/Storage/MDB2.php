@@ -91,8 +91,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        if (isset($storageConf['connection']) &&
-            MDB2::isConnection($storageConf['connection'])
+        if (isset($storageConf['connection'])
+            && MDB2::isConnection($storageConf['connection'])
         ) {
             $this->dbc = &$storageConf['connection'];
         } elseif (isset($storageConf['dsn'])) {
