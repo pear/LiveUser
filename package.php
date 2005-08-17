@@ -16,6 +16,7 @@ $notes = <<<EOT
   login that are set to in active!) *SECURITY ISSUE*
 - fixed bug in getProperty() that would make it impossible to fetch the values
   of internal config properties (bug #5110)
+- pass the storage config array by ref after all
 EOT;
 
 $description = <<<EOT
