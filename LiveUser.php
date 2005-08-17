@@ -626,8 +626,14 @@ class LiveUser
                 return $storage;
             // if the storage container does not exist try the next one in the stack
             } elseif ($count > 1) {
-                array_pop($confArray);
-                $storage =& LiveUser::storageFactory($confArray, $classprefix);
+                // since we are using pass by ref we cannot pop from the original array
+                $keys = array_keys($confArray);
+                array_pop($keys);
+                $newConfArray = array();
+                foreach ($keys as $key) {
+                    $newConfArray[$key] =& $confArray[$key];
+                }
+                $storage =& LiveUser::storageFactory($newConfArray, $classprefix);
                 return $storage;
             }
         }
