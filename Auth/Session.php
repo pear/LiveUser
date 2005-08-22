@@ -126,9 +126,7 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      */
     function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
-        if ($auth_user_id) {
-            // where can we get the handle and passwd from?
-        } else {
+        if (!$auth_user_id) {
             if ($this->tables['users']['fields']['passwd']) {
                 if (!isset($_SESSION[$this->alias['passwd']])
                     || $_SESSION[$this->alias['passwd']] !== $passwd
@@ -136,12 +134,11 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
                     return false;
                 }
             }
+            $this->propertyValues['handle']    = $handle;
+            $this->propertyValues['passwd']    = $passwd;
+            $this->propertyValues['is_active'] = true;
+            $this->propertyValues['lastlogin'] = time();
         }
-
-        $this->propertyValues['handle']    = $handle;
-        $this->propertyValues['passwd']    = $passwd;
-        $this->propertyValues['is_active'] = true;
-        $this->propertyValues['lastlogin'] = time();
 
         return true;
     }
