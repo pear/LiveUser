@@ -134,6 +134,7 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
                     return false;
                 }
             }
+            $this->propertyValues = $this->tables['users']['fields'];
             $this->propertyValues['handle']    = $handle;
             $this->propertyValues['passwd']    = $passwd;
             $this->propertyValues['is_active'] = true;
