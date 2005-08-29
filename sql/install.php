@@ -42,11 +42,23 @@
 require_once 'LiveUser.php';
 require_once 'MDB2/Schema.php';
 
+/* ATTENTION: uncommented the following lines as needed
+
+// error handler
+function handleError($err)
+{
+   var_dump($err);
+   return PEAR_ERRORSTACK_PUSH;
+}
+
+PEAR_ErrorStack::setDefaultCallback('handleError');
+
 echo '<pre>';
 
-
+// customize DSN as needed
 $dsn = 'mysql://root:@localhost/liveuser_test_installer';
 
+// customize config array as needed
 $conf = array(
     'authContainers' => array(
         array(
@@ -92,16 +104,21 @@ $conf = array(
     )
 );
 
+// customize MDB2_SCHEMA configuration options as needed
 $options = array(
     'debug' => true,
     'log_line_break' => '<br>',
     'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
 );
 
+// create instance of the auth container
 $auth =& LiveUser::authFactory($conf['authContainers'][0], 'foo');
+// generate xml schema file for auth container
 $result = LiveUser_Misc_Schema_Install::generateSchema($auth, 'auth_schema.xml');
 var_dump($result);
-/*
+
+// install the auth xml schema .. notice the 4th parameter controls if the
+// database needs to be created or not
 $variables = array();
 $result = LiveUser_Misc_Schema_Install::installSchema(
     $auth,
@@ -112,10 +129,14 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
 );
 var_dump($result);
 
+// create instance of the perm container
 $perm =& LiveUser::storageFactory($conf['permContainer']['storage']);
+// generate xml schema file for perm container
 $result = LiveUser_Misc_Schema_Install::generateSchema($perm, 'perm_schema.xml');
 var_dump($result);
 
+// install the perm xml schema .. notice the 4th parameter controls if the
+// database needs to be created or not
 $variables = array();
 $result = LiveUser_Misc_Schema_Install::installSchema(
     $perm,
@@ -125,6 +146,7 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     $options
 );
 var_dump($result);
+
 */
 
 class LiveUser_Misc_Schema_Install
