@@ -85,7 +85,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      * @var    Auth
      * @access private
      */
-    var $pearAuth = null;
+    var $pearAuth = false;
 
     /**
      * Load the storage container
@@ -118,6 +118,20 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     }
 
     /**
+     * Writes current values for user back to the database.
+     * This method does nothing in the base class and is supposed to
+     * be overridden in subclasses according to the supported backend.
+     *
+     * @return void
+     *
+     * @access private
+     */
+    function _updateUserData()
+    {
+        return true;
+    }
+
+    /**
      * Starts and verifies the PEAR::Auth login process
      *
      * @return boolean  true upon success or false on failure
@@ -127,7 +141,6 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     function readUserData()
     {
         $this->pearAuth->start();
-        $this->pearAuth->login();
 
         // If a user was found, read data into class variables and set
         // return value to true
