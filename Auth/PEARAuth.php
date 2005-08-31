@@ -53,12 +53,6 @@ require_once 'Auth/Auth.php';
 /**
  * PEAR_Auth container for Authentication
  *
- * ==================== !!! WARNING !!! ========================================
- *
- *      THIS CONTAINER IS UNDER HEAVY DEVELOPMENT. IT'S STILL IN EXPERIMENTAL
- *      STAGE. USE IT AT YOUR OWN RISK.
- *
- * =============================================================================
  * This is a PEAR::Auth backend driver for the LiveUser class.
  * The general options to setup the PEAR::Auth class can be passed to the constructor.
  * To choose the right auth container, you have to add the 'pearAuthContainer' var to
