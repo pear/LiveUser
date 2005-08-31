@@ -82,13 +82,6 @@ class LiveUser_Auth_Common
     var $currentLogin = 0;
 
     /**
-     * Update the last login time or not
-     *
-     * @var    boolean
-     */
-    var $updateLastLogin = true;
-
-    /**
      * Number of hours that must pass between two logins
      * to be counted as a new login. Comes in handy in
      * some situations. Default: 12
@@ -394,7 +387,7 @@ class LiveUser_Auth_Common
      * Checks if there's enough time between lastLogin
      * and current login (now) to count as a new login.
      *
-     * @return boolean  true if it is a new login, false if not
+     * @return boolean true if it is a new login, false if not
      *
      * @access public
      */
@@ -417,7 +410,7 @@ class LiveUser_Auth_Common
      *
      * @param string   user handle
      * @param string   user password
-     * @return boolean
+     * @return boolean true on success or false on failure
      *
      * @access public
      */
@@ -444,7 +437,7 @@ class LiveUser_Auth_Common
 
         // In case Login was successful, check if this can be counted
         // as a _new_ login by definition...
-        if ($this->updateLastLogin && $this->isNewLogin() && $this->loggedIn) {
+        if ($this->isNewLogin() && $this->loggedIn) {
             $this->_updateUserData();
         }
 
@@ -456,7 +449,7 @@ class LiveUser_Auth_Common
      * This method does nothing in the base class and is supposed to
      * be overridden in subclasses according to the supported backend.
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access private
      */
@@ -488,7 +481,7 @@ class LiveUser_Auth_Common
      * @param  string $handle user handle
      * @param  boolean $passwd user password
      * @param string $auth_user_id auth user id
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access public
      */
@@ -543,7 +536,7 @@ class LiveUser_Auth_Common
     /**
      * Check if the stored external values match the current external values
      *
-     * @return boolean
+     * @return boolean true on success or false on failure
      *
      * @access  public
      */
