@@ -187,7 +187,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      * @param  string $handle  user handle
      * @param  boolean $passwd  user password
      * @param string $auth_user_id auth user id
-     * @return boolean  true upon success or false on failure
+     * @return boolean true upon success or false on failure
      *
      * @access public
      */
@@ -245,7 +245,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
     /**
      * Properly disconnect from database
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access public
      */

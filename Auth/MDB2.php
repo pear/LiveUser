@@ -256,7 +256,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
     /**
      * properly disconnect from database
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access public
      */

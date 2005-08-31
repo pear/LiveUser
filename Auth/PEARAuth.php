@@ -122,7 +122,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      * This method does nothing in the base class and is supposed to
      * be overridden in subclasses according to the supported backend.
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access private
      */
@@ -134,7 +134,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     /**
      * Starts and verifies the PEAR::Auth login process
      *
-     * @return boolean  true upon success or false on failure
+     * @return boolean true upon success or false on failure
      *
      * @access private
      */

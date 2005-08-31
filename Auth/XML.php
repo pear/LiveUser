@@ -263,7 +263,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     /**
      * Properly disconnect from resources
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access public
      */
@@ -271,6 +271,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     {
         $this->tree = null;
         $this->userObj = null;
+        return true;
     }
 }
 ?>
