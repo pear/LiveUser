@@ -99,7 +99,6 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        $this->lastLogin    = $this->currentLogin;
         return true;
     }
 
