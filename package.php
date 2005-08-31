@@ -12,11 +12,10 @@ require_once 'Console/Getopt.php';
 $version = '0.16.5';
 
 $notes = <<<EOT
-- fixed bugs related to is_active handling (resulting in users being able to
-  login that are set to in active!) *SECURITY ISSUE*
-- fixed bug in getProperty() that would make it impossible to fetch the values
-  of internal config properties (bug #5110)
-- pass the storage config array by ref after all
+- various fixes to the Session auth container
+- various fixes to the PEARAuth auth container
+- added error handler and more comments to the install.php
+- removed updateLastLogin option
 EOT;
 
 $description = <<<EOT
