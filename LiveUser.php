@@ -87,6 +87,7 @@ define('LIVEUSER_STATUS_AUTHNOTFOUND',   -7);
 define('LIVEUSER_STATUS_LOGGEDOUT',      -8);
 define('LIVEUSER_STATUS_AUTHFAILED',     -9);
 define('LIVEUSER_STATUS_UNFROZEN',      -10);
+define('LIVEUSER_STATUS_EMPTY_HANDLE',  -11);
 /**#@-*/
 
 /**
@@ -408,7 +409,6 @@ class LiveUser
      *            'loginTimeout'    => 0,
      *            'expireTime'      => 3600,
      *            'idleTime'        => 1800,
-     *            'updateLastLogin' => true,
      *            'allowDuplicateHandles' => false,
      *            'allowEmptyPasswords'   => false,
      *            'storage' => array(
@@ -687,7 +687,7 @@ class LiveUser
     {
         $dirs = split(PATH_SEPARATOR, ini_get('include_path'));
         foreach ($dirs as $dir) {
-            if (file_exists($dir . DIRECTORY_SEPARATOR . $file)) {
+            if (is_readable($dir . DIRECTORY_SEPARATOR . $file)) {
                 return true;
             }
         }
@@ -1015,7 +1015,7 @@ class LiveUser
             $result = $this->readRememberCookie();
             if (!is_array($result)) {
                 if ($this->status == LIVEUSER_STATUS_UNKNOWN) {
-                    $this->status = LIVEUSER_STATUS_AUTHFAILED;
+                    $this->status = LIVEUSER_STATUS_EMPTY_HANDLE;
                 }
                 return false;
             }
@@ -1449,6 +1449,8 @@ class LiveUser
             } else {
                 return $this->_perm->checkRight($rights);
             }
+        } elseif ($rights === 0 && is_a($this->_auth, 'LiveUser_Auth_Common')) {
+            return LIVEUSER_MAX_LEVEL;
         }
 
         return false;
@@ -1652,7 +1654,8 @@ class LiveUser
                 LIVEUSER_STATUS_UNKNOWN         => 'An undefined error occurred or init() was not called',
                 LIVEUSER_STATUS_LOGGEDOUT       => 'User was logged out correctly',
                 LIVEUSER_STATUS_AUTHFAILED      => 'Cannot authenticate, handle/password is probably wrong',
-                LIVEUSER_STATUS_UNFROZEN        => 'Object fetched from the session, the user was already logged in'
+                LIVEUSER_STATUS_UNFROZEN        => 'Object fetched from the session, the user was already logged in',
+                LIVEUSER_STATUS_EMPTY_HANDLE    => 'No handle was passed to LiveUser directly or indirectly',
             );
         }
 
