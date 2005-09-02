@@ -16,6 +16,7 @@ $notes = <<<EOT
 - various fixes to the PEARAuth auth container
 - added error handler and more comments to the install.php
 - removed updateLastLogin option
+- delete remember me cookie in all error cases while reading the remember me cookie
 EOT;
 
 $description = <<<EOT
