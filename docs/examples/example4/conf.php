@@ -20,7 +20,6 @@ function php_error_handler($errno, $errstr, $errfile, $errline)
 
         $tpl->setVariable('error_msg', "<b>$errfile ($errline)</b><br />$errstr");
         $tpl->show();
-        exit();
     }
 }
 
