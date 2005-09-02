@@ -142,7 +142,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -180,7 +180,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -215,7 +215,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -257,7 +257,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -294,7 +294,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -338,7 +338,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -378,7 +378,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
@@ -417,7 +417,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 
         if (PEAR::isError($result)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
-                'error in query' . $result->getMessage . '-' . $result->getUserInfo());
+                'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
 
