@@ -20,11 +20,11 @@
  *                       data in MDB2_Schema format.
  * Example: --file=/path/to/output/file.xml
  *
- * Example usage: php demodata.php -d mysql://root:@localhost/lu_test -f
+ * Example usage: php demodata.php -d mysql://root:@localhost/liveuser_test_example5 -f
  * example5/demodata.xml
  *
  * Alternativly you can also call the script from the web using GET
- * demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml&create=1
+ * demodata.php?dsn=mysql://root:@localhost/liveuser_test_example5&file=example5/demodata.xml&create=1
  *
  * PHP version 4 and 5
  *
@@ -182,11 +182,11 @@ data in MDB2_Schema format. Example: --file=/path/to/output/file.xml
 
 Example usage: Make sure the database exists beforehand
 
-php demodata.php -d mysql://root:@localhost/lu_test -f example5/demodata.xml
+php demodata.php -d mysql://root:@localhost/liveuser_test_exampleX -f exampleX/demodata.xml
 
 Alternativly you can also call the script from the web using GET
 
-demodata.php?dsn=mysql://root:@localhost/lu_test&file=example5/demodata.xml&create=1
+demodata.php?dsn=mysql://root:@localhost/liveuser_test_exampleX&file=exampleX/demodata.xml&create=1
 ');
 exit;
 }
