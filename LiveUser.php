@@ -1306,6 +1306,7 @@ class LiveUser
 
         $fh = @fopen($dir . '/' . $store_id . '.lu', 'rb');
         if (!$fh) {
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot open file for reading');
             return false;
@@ -1314,6 +1315,7 @@ class LiveUser
         $fields = fread($fh, 4096);
         fclose($fh);
         if (!$fields) {
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot read file');
             return false;
@@ -1324,6 +1326,7 @@ class LiveUser
         );
 
         if (!is_array($serverData) || count($serverData) != 2) {
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'exception', array(),
                 'Incorrect array structure');
             return false;
