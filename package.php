@@ -9,7 +9,7 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.5';
+$version = '0.16.6';
 
 $notes = <<<EOT
 - various fixes to the Session auth container

@@ -63,7 +63,7 @@
     </maintainer>
   </maintainers>
   <release>
-    <version>0.16.5</version>
+    <version>0.16.6</version>
     <date>2005-09-02</date>
     <license>LGPL</license>
     <state>beta</state>
@@ -180,6 +180,19 @@
     </filelist>
   </release>
   <changelog>
+    <release>
+      <version>0.16.6</version>
+      <date>2005-09-02</date>
+      <license>LGPL</license>
+      <state>beta</state>
+      <notes>- various fixes to the Session auth container
+- various fixes to the PEARAuth auth container
+- added error handler and more comments to the install.php
+- removed updateLastLogin option
+- delete remember me cookie in all error cases while reading the remember me cookie
+- cosmetic fixes to the examples in demodata.php
+- (re-)added example5 (more or less the same as example4)</notes>
+    </release>
     <release>
       <version>0.16.5</version>
       <date>2005-09-02</date>
