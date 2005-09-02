@@ -1621,7 +1621,7 @@ class LiveUser
      *
      * @return  string  returns a string representation of the class
      *
-     * @access  public
+     * @access private
      */
     function __toString()
     {
