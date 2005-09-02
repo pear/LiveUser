@@ -17,6 +17,8 @@ $notes = <<<EOT
 - added error handler and more comments to the install.php
 - removed updateLastLogin option
 - delete remember me cookie in all error cases while reading the remember me cookie
+- cosmetic fixes to the examples in demodata.php
+- (re-)added example5 (more or less the same as example4)
 EOT;
 
 $description = <<<EOT
