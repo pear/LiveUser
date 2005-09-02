@@ -64,14 +64,16 @@
   </maintainers>
   <release>
     <version>0.16.5</version>
-    <date>2005-08-17</date>
+    <date>2005-09-02</date>
     <license>LGPL</license>
     <state>beta</state>
-    <notes>- fixed bugs related to is_active handling (resulting in users being able to
-  login that are set to in active!) *SECURITY ISSUE*
-- fixed bug in getProperty() that would make it impossible to fetch the values
-  of internal config properties (bug #5110)
-- pass the storage config array by ref after all</notes>
+    <notes>- various fixes to the Session auth container
+- various fixes to the PEARAuth auth container
+- added error handler and more comments to the install.php
+- removed updateLastLogin option
+- delete remember me cookie in all error cases while reading the remember me cookie
+- cosmetic fixes to the examples in demodata.php
+- (re-)added example5 (more or less the same as example4)</notes>
     <deps>
       <dep type="php" rel="ge" version="4.2.0" optional="no"/>
       <dep type="pkg" rel="ge" version="1.3.3" optional="no">PEAR</dep>
@@ -135,6 +137,20 @@
           <file role="doc" name="news_view.tpl.php"/>
           <file role="doc" name="style.css"/>
          </dir> <!-- docs/examples/example4 -->
+         <dir name="example5">
+          <file role="doc" name="admin.php"/>
+          <file role="doc" name="admin.tpl"/>
+          <file role="doc" name="conf.php"/>
+          <file role="doc" name="demodata.xml"/>
+          <file role="doc" name="home.php"/>
+          <file role="doc" name="home.tpl"/>
+          <file role="doc" name="index.php"/>
+          <file role="doc" name="liveuser_rights.php"/>
+          <file role="doc" name="login_form.tpl"/>
+          <file role="doc" name="news.tpl"/>
+          <file role="doc" name="news_edit.tpl"/>
+          <file role="doc" name="news_list.tpl"/>
+         </dir> <!-- docs/examples/example5 -->
         </dir> <!-- docs/examples -->
        </dir> <!-- docs -->
        <dir name="Perm">
@@ -166,14 +182,16 @@
   <changelog>
     <release>
       <version>0.16.5</version>
-      <date>2005-08-17</date>
+      <date>2005-09-02</date>
       <license>LGPL</license>
       <state>beta</state>
-      <notes>- fixed bugs related to is_active handling (resulting in users being able to
-  login that are set to in active!) *SECURITY ISSUE*
-- fixed bug in getProperty() that would make it impossible to fetch the values
-  of internal config properties (bug #5110)
-- pass the storage config array by ref after all</notes>
+      <notes>- various fixes to the Session auth container
+- various fixes to the PEARAuth auth container
+- added error handler and more comments to the install.php
+- removed updateLastLogin option
+- delete remember me cookie in all error cases while reading the remember me cookie
+- cosmetic fixes to the examples in demodata.php
+- (re-)added example5 (more or less the same as example4)</notes>
     </release>
     <release>
       <version>0.16.4</version>
