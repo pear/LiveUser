@@ -324,7 +324,7 @@ class LiveUser
      * Stores the event dispatcher which
      * handles notifications
      *
-     * @var    array
+     * @var    object
      * @access protected
      */
     var $dispatcher = null;
@@ -343,7 +343,7 @@ class LiveUser
             if (!is_object($this->_log)) {
                 $this->loadPEARLog();
             }
-            $winlog = &Log::factory('win', 'LiveUser');
+            $winlog = &Log::factory('win', 'LiveUser')s->dispatcher =& Event_Di0;
             $this->_log->addChild($winlog);
         }
 
