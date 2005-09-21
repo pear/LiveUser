@@ -343,7 +343,7 @@ class LiveUser
             if (!is_object($this->_log)) {
                 $this->loadPEARLog();
             }
-            $winlog = &Log::factory('win', 'LiveUser')s->dispatcher =& Event_Di0;
+            $winlog = &Log::factory('win', 'LiveUser');
             $this->_log->addChild($winlog);
         }
 
