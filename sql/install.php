@@ -147,7 +147,7 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
 );
 var_dump($result);
 
-*/
+/* */
 
 class LiveUser_Misc_Schema_Install
 {
@@ -195,8 +195,9 @@ class LiveUser_Misc_Schema_Install
                         );
                     // Generate indexes
                     } elseif (is_string($required)) {
-                        $table_indexes[$table_name.'_'.$required . '_i']['fields'][$field_name] = true;
-                        $table_indexes[$table_name.'_'.$required . '_i']['unique'] = true;
+                        $index_name = $table_name.'_'.$required . '_i';
+                        $table_indexes[$index_name]['fields'][$field_name] = true;
+                        $table_indexes[$index_name]['unique'] = true;
                     }
                 }
             }
@@ -225,7 +226,8 @@ class LiveUser_Misc_Schema_Install
         return $writer->dumpDatabase($definition, $arguments);
     }
 
-    function installSchema($obj, $file, $variables = array(), $create = true, $options = array())
+    function installSchema($obj, $file, $variables = array(), $create = true,
+        $options = array(), $unlink = false)
     {
         $dsn = $obj->dbc->dsn;
         if (is_a($obj->dbc, 'DB_Common')) {
@@ -241,9 +243,12 @@ class LiveUser_Misc_Schema_Install
 
         $manager =& MDB2_Schema::factory($dsn, $options);
         if (PEAR::isError($manager)) {
-            return $manager;
+        return $manager;
         }
 
+        if ($unlink) {
+            unlink($file_old);
+        }
         $result = $manager->updateDatabase($file, $file_old, $variables);
 
         $debug = $manager->db->getOption('debug');
