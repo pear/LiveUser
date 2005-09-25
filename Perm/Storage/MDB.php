@@ -175,15 +175,12 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                R.' . $this->alias['right_id'] . ',
-                U.' . $this->alias['right_level'] . '
+                ' . $this->alias['right_id'] . ',
+                ' . $this->alias['right_level'] . '
             FROM
-                '.$this->prefix.$this->alias['rights'].' R,
-                '.$this->prefix.$this->alias['userrights'].' U
+                '.$this->prefix.$this->alias['userrights'].'
             WHERE
-                R.' . $this->alias['right_id'] . ' = U.' . $this->alias['right_id'] . '
-            AND
-                U.' . $this->alias['perm_user_id'] . ' = '.
+                ' . $this->alias['perm_user_id'] . ' = '.
                     $this->dbc->getValue($this->fields['perm_user_id'], $perm_user_id);
 
         $types = array(

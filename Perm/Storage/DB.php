@@ -165,15 +165,12 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     {
         $query = '
             SELECT
-                R.' . $this->alias['right_id'] . ',
-                U.' . $this->alias['right_level'] . '
+                ' . $this->alias['right_id'] . ',
+                ' . $this->alias['right_level'] . '
             FROM
-                '.$this->prefix.$this->alias['rights'].' R,
-                '.$this->prefix.$this->alias['userrights'].' U
+                '.$this->prefix.$this->alias['userrights'].'
             WHERE
-                R.' . $this->alias['right_id'] . ' = U.' . $this->alias['right_id'] . '
-            AND
-                U.' . $this->alias['perm_user_id'] . ' = '.
+                ' . $this->alias['perm_user_id'] . ' = '.
                     $this->dbc->quoteSmart($perm_user_id);
 
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
@@ -356,7 +353,6 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      */
     function readImplyingRights($rightIds, $table)
     {
-
         $query = '
             SELECT
             DISTINCT
