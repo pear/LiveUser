@@ -92,7 +92,6 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
             'grouprights' => 'right_id',
             'right_implied' => array(
                 'right_id' => 'right_id',
-                'right_id' => 'implied_right_id',
             ),
             'translations' => array(
                 'right_id' => 'section_id',
