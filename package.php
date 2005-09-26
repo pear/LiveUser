@@ -9,16 +9,13 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.6';
+$version = '0.16.7';
 
 $notes = <<<EOT
-- various fixes to the Session auth container
-- various fixes to the PEARAuth auth container
-- added error handler and more comments to the install.php
-- removed updateLastLogin option
-- delete remember me cookie in all error cases while reading the remember me cookie
-- cosmetic fixes to the examples in demodata.php
-- (re-)added example5 (more or less the same as example4)
+- typo fix getMessage => getMessage() (bug #5283)
+- added parameter to unlink backup file to force new creation in installSchema()
+- fixed join points in implied_rights table in the perm Globals.php
+- removed unnecessary join in readUserRights() of the database containers
 EOT;
 
 $description = <<<EOT
