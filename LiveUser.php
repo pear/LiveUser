@@ -33,7 +33,7 @@
  * @category authentication
  * @package  LiveUser
  * @author  Markus Wolff <wolff@21st.de>
- * @author Helgi Þormar Þorbjörnsson <dufuz@php.net>
+ * @author Helgi ï¿½rmar ï¿½rbjï¿½nsson <dufuz@php.net>
  * @author  Lukas Smith <smith@pooteeweet.org>
  * @author Arnaud Limbourg <arnaud@php.net>
  * @author   Pierre-Alain Joye  <pajoye@php.net>
@@ -685,7 +685,7 @@ class LiveUser
      */
     function fileExists($file)
     {
-        $dirs = split(PATH_SEPARATOR, ini_get('include_path'));
+        $dirs = explode(PATH_SEPARATOR, ini_get('include_path'));
         foreach ($dirs as $dir) {
             if (is_readable($dir . DIRECTORY_SEPARATOR . $file)) {
                 return true;
@@ -890,7 +890,7 @@ class LiveUser
         if (isset($this->_options[$option])) {
             return $this->_options[$option];
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(), 
+        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
            "unknown option $option");
         return false;
     }
