@@ -33,7 +33,7 @@
  * @category authentication
  * @package  LiveUser
  * @author  Markus Wolff <wolff@21st.de>
- * @author Helgi ï¿½rmar ï¿½rbjï¿½nsson <dufuz@php.net>
+ * @author Helgi Þormar Þorbjörnsson <dufuz@php.net>
  * @author  Lukas Smith <smith@pooteeweet.org>
  * @author Arnaud Limbourg <arnaud@php.net>
  * @author   Pierre-Alain Joye  <pajoye@php.net>
