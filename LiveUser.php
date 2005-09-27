@@ -891,7 +891,7 @@ class LiveUser
             return $this->_options[$option];
         }
         $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
-           "unknown option $option");
+            "unknown option $option");
         return false;
     }
 
@@ -1409,7 +1409,7 @@ class LiveUser
             if ($this->_options['session']['force_start']) {
                 $this->_startSession();
             }
-        } elseif(isset($_SESSION[$this->_options['session']['varname']])) {
+        } elseif (isset($_SESSION[$this->_options['session']['varname']])) {
             unset($_SESSION[$this->_options['session']['varname']]);
         }
 

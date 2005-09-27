@@ -236,7 +236,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                     ) {
                         $success = true;
                         break;
-                    } elseif(!$this->allowDuplicateHandles) {
+                    } elseif (!$this->allowDuplicateHandles) {
                         // dont look for any further matching handles
                         break;
                     }
