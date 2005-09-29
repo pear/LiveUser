@@ -246,7 +246,7 @@ class LiveUser_Auth_Common
             }
         }
 
-        if (isset($conf['storage']) && is_array($conf['storage'])) {
+        if (array_key_exists('storage', $conf) && is_array($conf['storage'])) {
             $keys = array_keys($conf['storage']);
             foreach ($keys as $key) {
                 if (isset($this->$key)) {

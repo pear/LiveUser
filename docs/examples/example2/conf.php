@@ -93,10 +93,10 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
     // We´ll only use the auth container, permissions are not used.
     $LU =& LiveUser::factory($liveuserConfig);
 
-    $handle = isset($_REQUEST['handle']) ? $_REQUEST['handle'] : null;
-    $password = isset($_REQUEST['password']) ? $_REQUEST['password'] : null;
-    $logout = isset($_REQUEST['logout']) ? $_REQUEST['logout'] : null;
-    $remember = isset($_REQUEST['remember']) ? $_REQUEST['remember'] : null;
+    $handle = array_key_exists('handle', $_REQUEST) ? $_REQUEST['handle'] : null;
+    $password = array_key_exists('password', $_REQUEST) ? $_REQUEST['password'] : null;
+    $logout = array_key_exists('logout', $_REQUEST) ? $_REQUEST['logout'] : null;
+    $remember = array_key_exists('remember', $_REQUEST) ? $_REQUEST['remember'] : null;
     if (!$LU->init($handle, $password, $logout, $remember)) {
         var_dump($LU->getErrors());
         die();

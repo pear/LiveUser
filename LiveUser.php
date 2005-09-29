@@ -706,11 +706,11 @@ class LiveUser
     function readConfig($conf, $confName)
     {
         if (is_array($conf)) {
-            if (isset($conf['authContainers'])) {
+            if (array_key_exists('authContainers', $conf)) {
                 $this->authContainers = $conf['authContainers'];
                 unset($conf['authContainers']);
             }
-            if (isset($conf['permContainer'])) {
+            if (array_key_exists('permContainer', $conf)) {
                 $this->permContainer = $conf['permContainer'];
                 unset($conf['permContainer']);
             }

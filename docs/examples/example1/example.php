@@ -68,9 +68,9 @@ $obs = new LU_Default_observer();
 
 $LU->dispatcher->addObserver(array(&$obs, 'notify'));
 
-$username = (isset($_REQUEST['handle'])) ? $_REQUEST['handle'] : NULL;
-$password = (isset($_REQUEST['passwd'])) ? $_REQUEST['passwd'] : NULL;
-$logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
+$username = (array_key_exists('handle', $_REQUEST)) ? $_REQUEST['handle'] : NULL;
+$password = (array_key_exists('passwd', $_REQUEST)) ? $_REQUEST['passwd'] : NULL;
+$logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
 if (!$LU->init($username, $password, $logout)) {
     var_dump($LU->getErrors());
     die();

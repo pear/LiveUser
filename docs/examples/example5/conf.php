@@ -66,10 +66,10 @@ PEAR::setErrorHandling(PEAR_ERROR_RETURN);
 
 $usr = LiveUser::singleton($conf);
 
-$handle = (isset($_REQUEST['handle'])) ? $_REQUEST['handle'] : null;
-$passwd = (isset($_REQUEST['passwd'])) ? $_REQUEST['passwd'] : null;
-$logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
-$remember = (isset($_REQUEST['rememberMe'])) ? $_REQUEST['rememberMe'] : false;
+$handle = (array_key_exists('handle', $_REQUEST)) ? $_REQUEST['handle'] : null;
+$passwd = (array_key_exists('passwd', $_REQUEST)) ? $_REQUEST['passwd'] : null;
+$logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
+$remember = (array_key_exists('rememberMe', $_REQUEST)) ? $_REQUEST['rememberMe'] : false;
 
 if (!$usr->init($handle, $passwd, $logout, $remember)) {
     var_dump($usr->getErrors());

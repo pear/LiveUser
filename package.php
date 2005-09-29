@@ -102,7 +102,7 @@ $package->addDependency('MDB2_Schema',      false,        'has', 'pkg', true);
 $package->addDependency('XML_Tree',         false,        'has', 'pkg', true);
 $package->addDependency('Crypt_RC4',        false,        'has', 'pkg', true);
 
-if (isset($_GET['make']) || (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'make')) {
+if (array_key_exists('make', $_GET) || (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'make')) {
     $result = $package->writePackageFile();
 } else {
     $result = $package->debugPackageFile();

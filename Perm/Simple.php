@@ -135,7 +135,7 @@ class LiveUser_Perm_Simple
      */
     function init(&$conf)
     {
-        if (!isset($conf['storage'])) {
+        if (!array_key_exists('storage', $conf)) {
             $this->_stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Missing storage configuration array'));
             return false;

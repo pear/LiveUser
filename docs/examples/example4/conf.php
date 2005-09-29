@@ -155,9 +155,9 @@ function showLoginForm(&$notification)
 $LU =& LiveUser::factory($LUOptions);
 $LU->dispatcher->addObserver('showLoginForm', 'forceLogin');
 
-$username = (isset($_REQUEST['username'])) ? $_REQUEST['username'] : null;
-$password = (isset($_REQUEST['password'])) ? $_REQUEST['password'] : null;
-$logout = (isset($_REQUEST['logout'])) ? $_REQUEST['logout'] : false;
+$username = (array_key_exists('username', $_REQUEST)) ? $_REQUEST['username'] : null;
+$password = (array_key_exists('password', $_REQUEST)) ? $_REQUEST['password'] : null;
+$logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
 if (!$LU->init($username, $password, $logout)) {
     var_dump($LU->getErrors());
     die();

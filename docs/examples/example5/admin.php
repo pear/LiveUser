@@ -11,12 +11,12 @@ if (!$usr->isLoggedIn() || !$usr->checkRight(EDITNEWS)) {
     exit;
 }
 
-if (isset($_POST['news'])) {
+if (array_key_exists('news', $_POST)) {
     if (!$usr->checkRight(MODIFYNEWS)) {
         echo 'You are trying to modify a news but do not have the right to do so !';
         exit;
     }
-    if (isset($_POST['id'])) {
+    if (array_key_exists('id', $_POST)) {
         $id = (int)$_POST['id'];
         $title = htmlspecialchars(strip_tags($_POST['title']));
         $newscontent = htmlspecialchars(strip_tags($_POST['newscontent']));
@@ -30,14 +30,14 @@ if (isset($_POST['news'])) {
 
 $category = 'general';
 
-if (isset($_GET['mode']) && $_GET['mode'] == 'edit') {
-    if (!isset($_GET['id']) && !is_numeric($_GET['id'])) {
+if (array_key_exists('mode', $_GET) && $_GET['mode'] == 'edit') {
+    if (!array_key_exists('id', $_GET) && !is_numeric($_GET['id'])) {
         die('Missing news id');
     }
 
     $id = (int)$_GET['id'];
     $news = getNewsContent($db, $id);
-} elseif (isset($_GET['mode']) && $_GET['mode'] == 'insert') {
+} elseif (array_key_exists('mode', $_GET) && $_GET['mode'] == 'insert') {
     $news = getNewsContent($db);
 } else {
     $news = getNewsList($db, $category);

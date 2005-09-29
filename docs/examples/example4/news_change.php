@@ -10,10 +10,10 @@
   }
 
   // Read form data.
-  $action  = isset($_GET['action'])   ? $_GET['action']   : '';
-  $action  = isset($_POST['action'])  ? $_POST['action']  : $action;
-  $news_id = isset($_GET['news_id'])  ? (int)$_GET['news_id']  : 0;
-  $news_id = isset($_POST['news_id']) ? (int)$_POST['news_id'] : $news_id;
+  $action  = array_key_exists('action', $_GET)   ? $_GET['action']   : '';
+  $action  = array_key_exists('action', $_POST)  ? $_POST['action']  : $action;
+  $news_id = array_key_exists('news_id', $_GET)  ? (int)$_GET['news_id']  : 0;
+  $news_id = array_key_exists('news_id', $_POST) ? (int)$_POST['news_id'] : $news_id;
 
   /**
    * Page for changing news.
@@ -39,8 +39,8 @@
       } else {
 
           // Read form data.
-          $news     = isset($_POST['news'])     ? $_POST['news'] : '';
-          $valid_to = isset($_POST['valid_to']) ? (int)$_POST['valid_to'] : '';
+          $news     = array_key_exists('news', $_POST)     ? $_POST['news'] : '';
+          $valid_to = array_key_exists('valid_to', $_POST) ? (int)$_POST['valid_to'] : '';
 
           if (!empty($news)) {
 
@@ -114,7 +114,7 @@
       if (!$LU->checkRightLevel(RIGHT_NEWS_DELETE, (int)$rightInfo['owner_user_id'], (int)$rightInfo['owner_group_id'])) {
           header('Location: news_change.php?logout=1');
       } else {
-          $confirmed = isset($_GET['is_js_confirmed']) ? $_GET['is_js_confirmed'] : 0;
+          $confirmed = array_key_exists('is_js_confirmed', $_GET) ? $_GET['is_js_confirmed'] : 0;
 
           if ($confirmed) {
               $db->query('DELETE FROM

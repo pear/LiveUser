@@ -14,9 +14,9 @@ if (!$LU->checkRight(RIGHT_NEWS_NEW)) {
 $tpl->loadTemplatefile('news_new.tpl.php');
 
 // Read form data.
-$news     = isset($_POST['news'])     ? htmlspecialchars(strip_tags($_POST['news'])) : '';
-$valid_to = isset($_POST['valid_to']) ? (int)$_POST['valid_to'] : '';
-$group    = isset($_POST['group_id']) ? (int)$_POST['group_id'] : '';
+$news     = array_key_exists('news', $_POST)     ? htmlspecialchars(strip_tags($_POST['news'])) : '';
+$valid_to = array_key_exists('valid_to', $_POST) ? (int)$_POST['valid_to'] : '';
+$group    = array_key_exists('group_id', $_POST) ? (int)$_POST['group_id'] : '';
 
 
 // If $news is not empty, we have something to work.

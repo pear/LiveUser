@@ -61,16 +61,16 @@ $create = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     echo '<pre>';
-    if (isset($_GET['help'])) {
+    if (array_key_exists('help', $_GET)) {
         printHelp();
     }
-    if (isset($_GET['file'])) {
+    if (array_key_exists('file', $_GET)) {
         $file = $_GET['file'];
     }
-    if (isset($_GET['dsn'])) {
+    if (array_key_exists('dsn', $_GET)) {
         $dsn = $_GET['dsn'];
     }
-    if (isset($_GET['create'])) {
+    if (array_key_exists('create', $_GET)) {
         $create = (bool)$_GET['create'];
     }
 } else {

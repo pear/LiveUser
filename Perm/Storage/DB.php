@@ -92,14 +92,14 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        if (isset($storageConf['connection'])
+        if (array_key_exists('connection', $storageConf)
             && DB::isConnection($storageConf['connection'])
         ) {
             $this->dbc = &$storageConf['connection'];
-        } elseif (isset($storageConf['dsn'])) {
+        } elseif (array_key_exists('dsn', $storageConf)) {
             $this->dsn = $storageConf['dsn'];
             $options = null;
-            if (isset($storageConf['options'])) {
+            if (array_key_exists('options', $storageConf)) {
                 $options = $storageConf['options'];
             }
             $options['portability'] = DB_PORTABILITY_ALL;

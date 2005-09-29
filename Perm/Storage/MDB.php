@@ -91,18 +91,18 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        if (isset($storageConf['connection'])
+        if (array_key_exists('connection', $storageConf)
             && MDB::isConnection($storageConf['connection'])
         ) {
             $this->dbc = &$storageConf['connection'];
-        } elseif (isset($storageConf['dsn'])) {
+        } elseif (array_key_exists('dsn', $storageConf)) {
             $this->dsn = $storageConf['dsn'];
             $function = null;
-            if (isset($storageConf['function'])) {
+            if (array_key_exists('function', $storageConf)) {
                 $function = $storageConf['function'];
             }
             $options = null;
-            if (isset($storageConf['options'])) {
+            if (array_key_exists('options', $storageConf)) {
                 $options = $storageConf['options'];
             }
             $options['optimize'] = 'portability';
