@@ -151,7 +151,7 @@ var_dump($result);
 
 class LiveUser_Misc_Schema_Install
 {
-    function generateSchema($instance, $file, $lengths = array())
+    function generateSchema($instance, $file, $lengths = array(), $defaults = array())
     {
         if (!is_object($instance)) {
             return false;
@@ -169,7 +169,7 @@ class LiveUser_Misc_Schema_Install
                 $fields[$field_name]['name'] = $field_name;
                 $fields[$field_name]['type'] = $type;
                 if ($fields[$field_name]['type'] == 'text') {
-                    $length = isset($lengths[$field_name]) ? $lengths[$field_name] : 32;
+                    $length = array_key_exists($field_name, $lengths) ? $lengths[$field_name] : 32;
                     $fields[$field_name]['length'] = $length;
                 }
 
@@ -177,7 +177,8 @@ class LiveUser_Misc_Schema_Install
                 if ($required) {
                     $fields[$field_name]['notnull'] = true;
                     // todo set proper defaults on a per type basis .. especially for '*_level'
-                    $fields[$field_name]['default'] = '';
+                    $default = array_key_exists($field_name, $defaults) ? $defaults[$field_name] : '';
+                    $fields[$field_name]['default'] = $default;
                     // Sequences
                     if ($required === 'seq') {
                         $sequences[$instance->prefix . $instance->alias[$table_name]] = array(
