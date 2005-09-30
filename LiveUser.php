@@ -141,17 +141,6 @@ define('LIVEUSER_DAY_SECONDS', 86400);
 define('LIVEUSER_COOKIE_DELETE_TIME', 946080000);
 
 /**
- * Debug global. When set to true the
- * error stack will be printed to
- * a separate window using the Win implementation
- * of PEAR::Log (PEAR::ErrorStack has built in
- * support).
- *
- * @var boolean
- */
-$GLOBALS['_LIVEUSER_DEBUG'] = false;
-
-/**
  * This is a manager class for a user login system using the LiveUser
  * class. It creates a LiveUser object, takes care of the whole login
  * process and stores the LiveUser object in a session.
@@ -198,7 +187,7 @@ class LiveUser
      * @access  private
      */
     var $_options = array(
-        'autoInit' => false,
+        'debug' => false,
         'session'  => array(
             'name'    => 'PHPSESSID',
             'varname' => 'ludata',
@@ -294,10 +283,10 @@ class LiveUser
      * PEAR::Log object
      * used for error logging by ErrorStack
      *
-     * @access private
+     * @access public
      * @var    Log
      */
-    var $_log = null;
+    var $log = null;
 
     /**
      * Error codes to message mapping array
@@ -332,19 +321,19 @@ class LiveUser
     /**
      * Constructor
      *
+     * @param  bool|object $debug   Boolean that indicates if a log instance
+     *                              should be created or an instance of a class
+     *                              that implements the PEAR:Log interface.
      * @return void
      * @access protected
      */
-    function LiveUser()
+    function LiveUser(&$debug)
     {
         $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
 
-        if ($GLOBALS['_LIVEUSER_DEBUG']) {
-            if (!is_object($this->_log)) {
-                $this->loadPEARLog();
-            }
-            $winlog = &Log::factory('win', 'LiveUser');
-            $this->_log->addChild($winlog);
+        if ($debug) {
+            $this->log =& LiveUser::PEARLogFactory($debug);
+            $this->_stack->setLogger($this->log);
         }
 
         $this->_stack->setErrorMessageTemplate($this->_errorMessages);
@@ -361,7 +350,7 @@ class LiveUser
      * <code>
      *
      * array(
-     *  'autoInit' => false/true,
+     *  'debug' => false/true or an instance of a class that implements the PEAR:Log interface
      *  'session'  => array(
      *      'name'    => 'liveuser session name',
      *      'varname' => 'liveuser session var name'
@@ -443,29 +432,24 @@ class LiveUser
      * The examples for containers provided are just general
      * do not reflect all the options for all containers.
      *
-     * @param  mixed   $conf      The config file or the config array to configure.
-     * @param  string  $handle    Handle of the user trying to authenticate
-     * @param  string  $passwd    Password of the user trying to authenticate
-     * @param  boolean $logout    set to true if user wants to logout
-     * @param  boolean $remember  set if you want to use the rememberMe feature
-     * @param  mixed   $confName  Name of array containing the configuration.
+     * @param  array $conf      Config array to configure.
      * @return LiveUser|false     Returns an object of either LiveUser or false on error
      *                            if so use LiveUser::getErrors() to get the errors
      *
      * @access public
      * @see    LiveUser::getErrors
      */
-    function &factory($conf, $handle = '', $passwd = '',$logout = false,
-        $remember = false, $confName = 'liveuserConfig')
+    function &factory(&$conf)
     {
-        $obj = &new LiveUser();
+        $debug = false;
+        if (array_key_exists('debug', $conf)) {
+            $debug =& $conf['debug'];
+        }
 
-        if (!empty($conf) || !is_array($conf)) {
-            if ($obj->readConfig($conf, $confName)) {
-                if (isset($obj->_options['autoInit']) && $obj->_options['autoInit']) {
-                    $obj->init($handle, $passwd, $logout, $remember);
-                }
-            }
+        $obj = &new LiveUser($debug);
+
+        if (is_array($conf)) {
+            $obj->readConfig($conf);
         }
 
         return $obj;
@@ -480,39 +464,28 @@ class LiveUser
      * Without the ampersand (&) in front of the method name, you will not get
      * a reference, you will get a copy.</b>
      *
-     * @param  array|file $conf  The config file or the config array to configure.
-     * @param  string  $handle    Handle of the user trying to authenticate
-     * @param  string  $passwd    Password of the user trying to authenticate
-     * @param  boolean $logout    set to true if user wants to logout
-     * @param  boolean $remember  set if remember me is set
-     * @param  string  $confName  Name of array containing the configuration.
-     * @return LiveUser|false     Returns an object of either LiveUser or false on failure
+     * @param  array $conf      Config array to configure.
+     * @param  array $signature Signature by which the given instance can be referenced later
+     * @return LiveUser|false   Returns an object of either LiveUser or false on failure
      *
      * @access public
      * @see    LiveUser::factory
      * @see    LiveUser::getErrors
      */
-    function &singleton($conf = array(), $handle = '', $passwd = '', $logout = false,
-        $remember = false, $confName = 'liveuserConfig')
+    function &singleton(&$conf, $signature = null)
     {
         static $instances;
         if (!isset($instances)) {
             $instances = array();
         }
 
-        if (empty($conf)) {
+        if (is_null($signature)) {
             if (empty($instances)) {
                 return false;
             }
             $signature = key($instances);
-        } else {
-            $signature = serialize(array($handle, $passwd, $confName));
-            if (!isset($instances[$signature])) {
-                $obj = &LiveUser::factory(
-                    $conf, $handle, $passwd, $logout, $remember, $confName
-                );
-                $instances[$signature] =& $obj;
-            }
+        } elseif (!array_key_exists($signature, $instances)) {
+            $instances[$signature] =& LiveUser::factory($conf);
         }
 
         return $instances[$signature];
@@ -703,97 +676,75 @@ class LiveUser
      *
      * @access public
      */
-    function readConfig($conf, $confName)
+    function readConfig(&$conf)
     {
-        if (is_array($conf)) {
-            if (array_key_exists('authContainers', $conf)) {
-                $this->authContainers = $conf['authContainers'];
-                unset($conf['authContainers']);
-            }
-            if (array_key_exists('permContainer', $conf)) {
-                $this->permContainer = $conf['permContainer'];
-                unset($conf['permContainer']);
-            }
+        // probably a futile attempt at working out reference issues in arrays
+        $options = $conf;
 
-            $this->_options = $this->arrayMergeClobber($this->_options, $conf);
-            if (isset($this->_options['cookie'])) {
-                $cookie_default = array(
-                    'name'     => 'ludata',
-                    'lifetime' => '365',
-                    'path'     => '/',
-                    'domain'   => '',
-                    'secret'   => 'secret',
-                );
+        if (array_key_exists('debug', $conf) && is_object($conf['debug'])) {
+            $options['debug'] = true;
+        }
+        if (array_key_exists('authContainers', $conf)) {
+            $this->authContainers = $conf['authContainers'];
+            unset($options['authContainers']);
+        }
+        if (array_key_exists('permContainer', $conf)) {
+            $this->permContainer = $conf['permContainer'];
+            unset($options['permContainer']);
+        }
+
+        $this->_options = LiveUser::arrayMergeClobber($this->_options, $options);
+        if (array_key_exists('cookie', $this->_options) && $this->_options['cookie']) {
+            $cookie_default = array(
+                'name'     => 'ludata',
+                'lifetime' => '365',
+                'path'     => '/',
+                'domain'   => '',
+                'secret'   => 'secret',
+            );
+            if (is_array($this->_options['cookie'])) {
                 $this->_options['cookie'] =
-                    $this->arrayMergeClobber(
-                        $cookie_default, $this->_options['cookie']
-                    );
+                    LiveUser::arrayMergeClobber($cookie_default, $this->_options['cookie']);
+            } else {
+                $this->_options['cookie'] = $cookie_default;
             }
-
-            return true;
         }
 
-        if (!LiveUser::fileExists($conf)) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
-                "Configuration file does not exist in LiveUser::readConfig(): $conf");
-            return false;
-        }
-        if (!include_once($conf)) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
-                "Could not read the configuration file in LiveUser::readConfig(): $conf");
-            return false;
-        }
-        if (isset(${$confName}) && is_array(${$confName})) {
-            return $this->readConfig(${$confName}, $confName);
-        }
-        $this->_stack->push(
-            LIVEUSER_ERROR_CONFIG, 'exception', array(),
-                'Configuration array not found in LiveUser::readConfig()'
-        );
-        return false;
+        return true;
     }
 
     /**
      * This method lazy loads PEAR::Log.
      *
+     * @param  bool|object $log     Boolean that indicates if a log instance
+     *                              should be created or an instance of a class
+     *                              that implements the PEAR:Log interface.
      * @return void
      *
      * @access protected
      */
-    function loadPEARLog()
+    function &PEARLogFactory(&$log)
     {
-        require_once 'Log.php';
-        $this->_log = &Log::factory('composite');
-        $this->_stack->setLogger($this->_log);
-    }
-
-    /**
-     * Adds an error logger to Errorstack.
-     *
-     * Be aware that if you need add a log
-     * at the beginning of your code if you
-     * want it to be effective. A log will only
-     * be taken into account after it's added.
-     *
-     * Sample usage:
-     * <code>
-     * $lu_object = &LiveUser::singleton($conf);
-     * $logger = &Log::factory('mail', 'bug@example.com',
-     *      'myapp_debug_mail_log', array('from' => 'application_bug@example.com'));
-     * $lu_object->addErrorLog($logger);
-     * </code>
-     *
-     * @param  Log      logger instance
-     * @return boolean  true on success or false on failure
-     *
-     * @access public
-     */
-    function addErrorLog(&$log)
-    {
-        if (!is_object($this->_log)) {
-            $this->loadPEARLog();
+        if (!is_object($log)) {
+            require_once 'Log.php';
+            $log =& Log::factory('composite');
+            $conf = array('colors' => 
+                array(
+                    PEAR_LOG_EMERG   => 'red',
+                    PEAR_LOG_ALERT   => 'orange',
+                    PEAR_LOG_CRIT    => 'yellowgreen',
+                    PEAR_LOG_ERR     => 'green',
+                    PEAR_LOG_WARNING => 'blue',
+                    PEAR_LOG_NOTICE  => 'indigo',
+                    PEAR_LOG_INFO    => 'violet',
+                    PEAR_LOG_DEBUG   => 'black',
+                ),
+            );
+            $winlog =& Log::factory('win', 'LiveUser', 'LiveUser', $conf);
+            $log->addChild($winlog);
         }
-        return $this->_log->addChild($log);
+
+        return $log;
     }
 
     /**
