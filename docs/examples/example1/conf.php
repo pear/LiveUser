@@ -14,11 +14,14 @@ if (!defined('PATH_SEPARATOR')) {
 # $path_to_liveuser_dir = 'PEAR/'.PATH_SEPARATOR;
 # ini_set('include_path', $path_to_liveuser_dir.ini_get('include_path') );
 
-$xml_is_readable = is_readable('Auth_XML.xml');
-$xml_is_writable = is_writable('Auth_XML.xml');
+require_once 'LiveUser.php';
+require_once 'Log.php';
 
-if ($xml_is_readable && $xml_is_writable) {
+if (is_readable('Auth_XML.xml') && is_writable('Auth_XML.xml')) {
+    $logger =& Log::factory('liveuserlog');
+
     $liveuserConfig = array(
+        'debug' => &$logger,
         'authContainers' => array(
             0 => array(
                 'type' => 'XML',
@@ -58,7 +61,6 @@ if ($xml_is_readable && $xml_is_writable) {
             ),
         ),
     );
-    // Get LiveUser class definition
-    require_once 'LiveUser.php';
 }
+
 ?>

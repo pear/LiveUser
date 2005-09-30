@@ -18,9 +18,8 @@ error_reporting(E_ALL);
 
 // Get LiveUser configuration array
 require_once 'conf.php';
-require 'Log.php';
 
-if ($xml_is_readable == false || $xml_is_writable == false) {
+if (!isset($liveuserConfig)) {
     die('<p style="color: red; text-align: center;">The XML file isn\'t readable/writable. Add the right permissions to it and then try again.</p>');
 }
 
@@ -61,8 +60,6 @@ class LU_Default_observer
 // Create new LiveUser (LiveUser) object.
 // We´ll only use the auth container, permissions are not used.
 $LU =& LiveUser::factory($liveuserConfig);
-$logger = &Log::factory('liveuserlog');
-$LU->addErrorLog($logger);
 
 $obs = new LU_Default_observer();
 

@@ -17,7 +17,7 @@ $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
 
 $conf =
     array(
-        'autoInit' => false,
+        'debug' => true,
         'session'  => array(
             'name'     => 'PHPSESSION',
             'varname'  => 'ludata'
