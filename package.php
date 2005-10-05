@@ -16,6 +16,14 @@ $notes = <<<EOT
 - added parameter to unlink backup file to force new creation in installSchema()
 - fixed join points in implied_rights table in the perm Globals.php
 - removed unnecessary join in readUserRights() of the database containers
+- removed autoInit (all init() manually instead) *BC BREAK*
+- reworked log/debug handling (there is a new 'debug' conf option which can
+  either be a bool or a log instance)
+- made the log property public which made it possible to remove addErrorLog()
+- renamed loadPEARLog() to PEARLogFactory and reworked it to return a Log
+  instance as a static method
+- added an optional signature parameter to singleton() instead of using the
+  handle/password/confName parameters (which no longer exist) *BC BREAK*
 EOT;
 
 $description = <<<EOT
