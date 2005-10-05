@@ -24,6 +24,9 @@ $notes = <<<EOT
   instance as a static method
 - added an optional signature parameter to singleton() instead of using the
   handle/password/confName parameters (which no longer exist) *BC BREAK*
+- made login() and logout() public
+- made freeze() private
+- prefixed all private properties/methods with an underscore
 EOT;
 
 $description = <<<EOT
