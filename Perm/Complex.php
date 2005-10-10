@@ -220,9 +220,9 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      *
      * Level 1: requires that owner_user_id matches $this->perm_user_id
      * Level 2: requires that the $owner_group_id matches the id one of
-     *          the (sub)groups that $this->perm_user_id is a memember of
+     *          the (sub)groups that $this->perm_user_id is a member of
      *          or requires that the $owner_user_id matches a perm_user_id of
-     *          a memeber of one of $this->perm_user_id's (sub)groups
+     *          a member of one of $this->perm_user_id's (sub)groups
      * Level 3: no requirements
      *
      * Important note:
