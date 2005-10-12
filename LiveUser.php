@@ -465,7 +465,7 @@ class LiveUser
      * a reference, you will get a copy.</b>
      *
      * @param  array $conf      Config array to configure.
-     * @param  array $signature Signature by which the given instance can be referenced later
+     * @param  string $signature Signature by which the given instance can be referenced later
      * @return LiveUser|false   Returns an object of either LiveUser or false on failure
      *
      * @access public
@@ -481,9 +481,10 @@ class LiveUser
 
         if (is_null($signature)) {
             if (empty($instances)) {
-                return false;
+                $signature = uniqid();
+            } else {
+                $signature = key($instances);
             }
-            $signature = key($instances);
         } elseif (!array_key_exists($signature, $instances)) {
             $instances[$signature] =& LiveUser::factory($conf);
         }
@@ -611,9 +612,14 @@ class LiveUser
             }
         }
         $storageConf =& $confArray[$key];
-        unset($confArray[$key]);
+        $newConfArray = array();
+        foreach ($confArray as $keyNew => $foo) {
+            if ($key !== $keyNew) {
+                $newConfArray[$keyNew] =& $confArray[$keyNew];
+            }
+        }
         $storage = &new $storageName();
-        if ($storage->init($storageConf, $confArray) === false) {
+        if ($storage->init($storageConf, $newConfArray) === false) {
             $storage = false;
         }
         return $storage;
