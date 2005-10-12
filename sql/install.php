@@ -228,7 +228,7 @@ class LiveUser_Misc_Schema_Install
     }
 
     function installSchema($obj, $file, $variables = array(), $create = true,
-        $options = array(), $unlink = false)
+        $options = array(), $unlink = false, $disable_query = false)
     {
         $dsn = $obj->dbc->dsn;
         if (is_a($obj->dbc, 'DB_Common')) {
@@ -250,7 +250,7 @@ class LiveUser_Misc_Schema_Install
         if ($unlink) {
             unlink($file_old);
         }
-        $result = $manager->updateDatabase($file, $file_old, $variables);
+        $result = $manager->updateDatabase($file, $file_old, $variables, $disable_query);
 
         $debug = $manager->db->getOption('debug');
         if ($debug && !PEAR::isError($debug)) {
