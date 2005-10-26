@@ -687,7 +687,7 @@ class LiveUser
         // probably a futile attempt at working out reference issues in arrays
         $options = $conf;
 
-        if (array_key_exists('debug', $conf) && is_object($conf['debug'])) {
+        if (array_key_exists('debug', $conf) && !is_object($conf['debug'])) {
             $options['debug'] = true;
         }
         if (array_key_exists('authContainers', $conf)) {
