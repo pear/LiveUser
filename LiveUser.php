@@ -342,7 +342,7 @@ class LiveUser
     }
 
     /**
-     * Returns an instance of the login manager class.
+     * Returns an instance of the LiveUser class
      *
      * This array contains private options defined by
      * the following associative keys:
@@ -350,7 +350,7 @@ class LiveUser
      * <code>
      *
      * array(
-     *  'debug' => false/true or an instance of a class that implements the PEAR:Log interface
+     *  'debug' => false/true or an instance of a class that implements the PEAR::Log interface
      *  'session'  => array(
      *      'name'    => 'liveuser session name',
      *      'varname' => 'liveuser session var name'
@@ -389,7 +389,7 @@ class LiveUser
      *      'path'     => 'Cookie path',
      *      'domain'   => 'Cookie domain',
      *      'secret'   => 'Secret key used for cookie value encryption',
-     *      'savedir'  => '/absolute/path/to/writeable/directory' // No / at the end !
+     *      'savedir'  => '/absolute/path/to/writeable/directory' // No trailing slash (/) !
      *      'secure'   => 'Cookie send only over secure connections',
      *  ),
      *  'authContainers' => array(
@@ -401,8 +401,8 @@ class LiveUser
      *            'allowDuplicateHandles' => false,
      *            'allowEmptyPasswords'   => false,
      *            'storage' => array(
-     *                'connection'      => 'db connection object, use this or dsn',
-     *                'dsn'             => 'database dsn, use this or connection',
+     *                'connection' => 'db connection object, use this or dsn',
+     *                'dsn'        => 'database dsn, use this or connection',
      *           ),
      *           'externalValues' => array(
      *                  'values'      => &$_SERVER,
