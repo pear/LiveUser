@@ -302,7 +302,7 @@ class LiveUser
         LIVEUSER_ERROR_COOKIE                 => 'There was an error processing the Remember Me cookie',
         LIVEUSER_ERROR_MISSING_FILE           => 'The file %file% is missing',
         LIVEUSER_ERROR_FAILED_INSTANTIATION   => 'Cannot instantiate class %class%',
-        LIVEUSER_ERROR_INIT_ERROR             => 'Container %container% was not initialized properly',
+        LIVEUSER_ERROR_INIT_ERROR             => 'Container was not initialized properly: %container%',
         LIVEUSER_ERROR_MISSING_CLASS          => 'Class %class% does not exist in file %file%',
         LIVEUSER_ERROR_WRONG_CREDENTIALS      => 'The handle and/or password you submitted are not known',
         LIVEUSER_ERROR_UNKNOWN_EVENT          => 'The event %event% is not known',
