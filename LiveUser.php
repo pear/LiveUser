@@ -922,17 +922,17 @@ class LiveUser
                 if ($this->getProperty('expireTime') > 0
                     && ($this->getProperty('currentLogin') + $this->getProperty('expireTime')) < $now
                 ) {
-                    $this->_status = LIVEUSER_STATUS_EXPIRED;
                     $this->dispatcher->post($this, 'onExpired');
                     $this->logout(false);
+                    $this->_status = LIVEUSER_STATUS_EXPIRED;
                 // Check if maximum idle time is reached.
                 } elseif ($this->getProperty('idleTime') > 0
                     && isset($_SESSION[$this->_options['session']['varname']]['idle'])
                     && ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->getProperty('idleTime')) < $now
                 ) {
-                    $this->_status = LIVEUSER_STATUS_IDLED;
                     $this->dispatcher->post($this, 'onIdled');
                     $this->logout(false);
+                    $this->_status = LIVEUSER_STATUS_IDLED;
                 }
             }
         }
