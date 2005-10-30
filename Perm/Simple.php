@@ -126,7 +126,7 @@ class LiveUser_Perm_Simple
     }
 
     /**
-     * Load the storage container
+     * Load and initialize the storage container.
      *
      * @param  mixed &$conf   Name of array containing the configuration.
      * @return  boolean true on success or false on failure
@@ -193,8 +193,6 @@ class LiveUser_Perm_Simple
      * Reads all rights of current user into a
      * two-dimensional associative array, having the
      * area names as the key of the 1st dimension.
-     * Group rights and invididual rights are being merged
-     * in the process.
      *
      * @return mixed array or false on failure
      *
@@ -212,7 +210,8 @@ class LiveUser_Perm_Simple
     }
 
     /**
-     *
+     * Read all the user rights from the storage and puts them in a class
+     * member for later retrieval.
      *
      * @param int $perm_user_id
      * @return mixed array or false on failure
@@ -232,6 +231,9 @@ class LiveUser_Perm_Simple
 
     /**
      * Checks if the current user has a certain right.
+     *
+     * If the user is has an "area admin" type he will automatically be
+     * awarded the right.
      *
      * @param   integer $right_id  Id of the right to check for.
      * @return  integer Level of the right.
