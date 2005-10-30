@@ -231,10 +231,7 @@ class LiveUser_Perm_Simple
     }
 
     /**
-     * Checks if the current user has a certain right in a
-     * given area.
-     * If $this->ondemand and $ondemand is true, the rights will be loaded on
-     * the fly.
+     * Checks if the current user has a certain right.
      *
      * @param   integer $right_id  Id of the right to check for.
      * @return  integer Level of the right.
