@@ -994,6 +994,8 @@ class LiveUser
             $auth =& LiveUser::authFactory($this->_authContainers[$index], $index);
             if ($auth === false || $auth->login($handle, $passwd) === false) {
                 $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
+                $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                    array('msg' => 'Could not instanciate auth container: '.$index));
                 return false;
             }
             if ($auth->loggedIn) {
@@ -1002,6 +1004,8 @@ class LiveUser
                     $perm =& LiveUser::permFactory($this->_permContainer);
                     if ($perm === false) {
                         $this->_status = LIVEUSER_STATUS_PERMINITERROR;
+                        $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                            array('msg' => 'Could not instanciate perm container of type: '.$conf['type']));
                         return false;
                     }
                     if (!$perm->mapUser($auth->getProperty('auth_user_id'), $index)) {
@@ -1068,6 +1072,8 @@ class LiveUser
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $auth =& LiveUser::authFactory($this->_authContainers[$containerName], $containerName);
             if ($auth === false) {
+                $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                    array('msg' => 'Could not instanciate auth container: '.$containerName));
                 return false;
             }
             if ($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
@@ -1078,6 +1084,8 @@ class LiveUser
                 ) {
                     $perm =& LiveUser::permFactory($this->_permContainer);
                     if ($perm === false) {
+                        $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                            array('msg' => 'Could not instanciate perm container of type: '.$conf['type']));
                         return $perm;
                     }
                     if ($this->_options['cache_perm']) {

@@ -152,8 +152,10 @@ class LiveUser_Perm_Simple
 
         $this->_storage =& LiveUser::storageFactory($conf['storage']);
         if ($this->_storage === false) {
+            end($conf['storage']);
+            $key = key($conf['storage']);
             $this->_stack->push(LIVEUSER_ERROR, 'exception',
-                array('msg' => 'Could not instanciate storage container'));
+                array('msg' => 'Could not instanciate perm storage container: '.$key));
             return false;
         }
 
