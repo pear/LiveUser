@@ -138,7 +138,8 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
                 }
                 if (PEAR::isError($this->dbc)) {
                     $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                        array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                        array('container' => 'could not connect: '.$this->dbc->getMessage(),
+                        'debug' => $this->dbc->getUserInfo()));
                     return false;
                 }
             }

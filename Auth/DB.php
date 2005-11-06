@@ -129,7 +129,8 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
                 $this->dbc =& DB::connect($conf['storage']['dsn'], $options);
                 if (PEAR::isError($this->dbc)) {
                     $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                        array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                        array('container' => 'could not connect: '.$this->dbc->getMessage(),
+                        'debug' => $this->dbc->getUserInfo()));
                     return false;
                 }
             }
