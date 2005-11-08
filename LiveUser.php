@@ -495,8 +495,8 @@ class LiveUser
     /**
      * Wrapper method to get the Error Stack
      *
-     * @return array  an array of the errors or
-     *                false if there are no errors
+     * @return array|false  an array of the errors or
+     *                      false if there are no errors
      *
      * @access public
      */
@@ -532,9 +532,9 @@ class LiveUser
     }
 
     /**
-     * Creates an instance of an auth object.
+     * Creates an instance of an auth container class.
      *
-     * @param  array|file   Name of array containing the configuration.
+     * @param  array|file   Array or name of file containing the configuration.
      * @param  string       Name of the container we'll be using.
      * @param  string       Prefix of the class that will be used.
      * @return object|false Returns an instance of an auth container
@@ -556,9 +556,9 @@ class LiveUser
     }
 
     /**
-     * Creates an instance of an perm object.
+     * Creates an instance of an perm container class.
      *
-     * @param  array|file    Name of array containing the configuration.
+     * @param  array|file    Array or name of file containing the configuration.
      * @param  string        Prefix of the class that will be used.
      * @return object|false  Returns an instance of a perm container
      *                       class or false on error
@@ -579,7 +579,7 @@ class LiveUser
     }
 
     /**
-     * Returns an instance of a storage Container.
+     * Returns an instance of a storage Container class.
      *
      * @param  array         configuration array to pass to the storage container
      * @param  string        Prefix of the class that will be used.
@@ -720,7 +720,10 @@ class LiveUser
     }
 
     /**
-     * This method lazy loads PEAR::Log.
+     * Determines if loading of PEAR::Log is necessary.
+     *
+     * If an object is passed it is returned, otherwise Log is loaded
+     * and setup properly.
      *
      * @param  bool|object $log     Boolean that indicates if a log instance
      *                              should be created or an instance of a class
@@ -814,7 +817,9 @@ class LiveUser
     }
 
     /**
-     * Sets an option.
+     * Sets an option after the configuration array has been loaded.
+     *
+     * You can override a specific option calling this method.
      *
      * @param  string   option name
      * @param  mixed    value for the option
@@ -835,7 +840,7 @@ class LiveUser
     }
 
     /**
-     * Returns the value of an option
+     * Returns the value of an option from the configuration array.
      *
      * @param  string  option name
      * @return mixed   the option value or false on failure
@@ -853,7 +858,7 @@ class LiveUser
     }
 
     /**
-     * Sets the session handler and name and starts the session
+     * Sets the session handler and name and starts the session.
      *
      * @return void
      *
@@ -888,7 +893,7 @@ class LiveUser
     /**
      * Tries to retrieve auth object from session.
      * If this fails, the method attempts a login based on the
-     * parameters or cookie data
+     * parameters or cookie data.
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
