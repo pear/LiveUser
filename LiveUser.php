@@ -481,11 +481,13 @@ class LiveUser
 
         if (is_null($signature)) {
             if (empty($instances)) {
-                $signature = uniqid();
+                $signature = uniqid('LU');
             } else {
                 $signature = key($instances);
             }
-        } elseif (!array_key_exists($signature, $instances)) {
+        }
+
+        if (!array_key_exists($signature, $instances)) {
             $instances[$signature] =& LiveUser::factory($conf);
         }
 
