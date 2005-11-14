@@ -74,6 +74,7 @@ define('LIVEUSER_ERROR_NOT_CALLABLE',          -14);
 /**#@+
  * Statuses of the current object.
  *
+ * @see LiveUser::getStatus
  * @var integer
  */
 define('LIVEUSER_STATUS_OK',              1);
@@ -91,7 +92,9 @@ define('LIVEUSER_STATUS_EMPTY_HANDLE',  -11);
 /**#@-*/
 
 /**
- * The higest possible right level
+ * The higest possible right level.
+ *
+ * Levels are only used in the complex container.
  *
  * @var integer
  */
@@ -107,9 +110,9 @@ define('LIVEUSER_MAX_LEVEL', 3);
  */
 define('LIVEUSER_ANONYMOUS_TYPE_ID',   0);
 /**
- * lowest user type id
+ * User type id
+ * It is the highest user type id
  */
-// higest user type id
 define('LIVEUSER_USER_TYPE_ID',        1);
 /**
  * lowest admin type id
@@ -238,10 +241,10 @@ class LiveUser
      * - connection: Present only if an existing connection shall be used. This
      *   contains a reference to an already existing connection resource or object.
      * - type: The container type. This option must always be present, otherwise
-     *   the LoginManager can't include the correct container class definition.
+     *   the LiveUser class cannot include the correct container class definition.
      * - name: The name of the auth container. You can freely define this name,
      *   it can be used from within the permission container to see from which
-     *   auth container a specific user was coming from.
+     *   auth container a specific user is coming from.
      *</ul>
      *
      * @var    array
@@ -250,12 +253,12 @@ class LiveUser
     var $_authContainers = array();
 
     /**
-     * Array of settings for the permission container to use for retrieving
-     * user rights.
+     * Array of settings the permission container will use to retrieve
+     * the user rights.
      * If set to false, no permission container will be used.
      * If that is the case, all calls to checkRight() will return false.
-     * The array element 'type' must be present for the LoginManager to be able
-     * to include the correct class definition (example: "DB_Complex").
+     * The array element 'type' must be present so the LiveUser class can
+     * include the correct class definition (example: "DB_Complex").
      *
      * @var    mixed
      * @access private
@@ -281,15 +284,15 @@ class LiveUser
 
     /**
      * PEAR::Log object
-     * used for error logging by ErrorStack
+     * used for error logging by ErrorStack.
      *
-     * @access public
      * @var    Log
+     * @access public
      */
     var $log = null;
 
     /**
-     * Error codes to message mapping array
+     * Error codes to message mapping array.
      *
      * @var    array
      * @access private
@@ -311,21 +314,23 @@ class LiveUser
 
     /**
      * Stores the event dispatcher which
-     * handles notifications
+     * handles notifications.
      *
-     * @var    object
+     * @var    Event_Dispatcher
      * @access protected
      */
     var $dispatcher = null;
 
     /**
-     * Constructor
+     * Constructor. Use the factory or singleton methods.
      *
      * @param  bool|object $debug   Boolean that indicates if a log instance
      *                              should be created or an instance of a class
      *                              that implements the PEAR:Log interface.
      * @return void
      * @access protected
+     * @see    LiveUser::factory
+     * @see    LiveUser::singleton
      */
     function LiveUser(&$debug)
     {
@@ -342,7 +347,7 @@ class LiveUser
     }
 
     /**
-     * Returns an instance of the LiveUser class
+     * Returns an instance of the LiveUser class.
      *
      * This array contains private options defined by
      * the following associative keys:
@@ -433,8 +438,8 @@ class LiveUser
      * do not reflect all the options for all containers.
      *
      * @param  array $conf      Config array to configure.
-     * @return LiveUser|false     Returns an object of either LiveUser or false on error
-     *                            if so use LiveUser::getErrors() to get the errors
+     * @return LiveUser|false   Returns an object of either LiveUser or false on error
+     *                          if so use LiveUser::getErrors() to get the errors
      *
      * @access public
      * @see    LiveUser::getErrors
@@ -495,7 +500,7 @@ class LiveUser
     }
 
     /**
-     * Wrapper method to get the Error Stack
+     * Wrapper method to get errors from the Error Stack.
      *
      * @return array|false  an array of the errors or
      *                      false if there are no errors
@@ -511,7 +516,7 @@ class LiveUser
     }
 
     /**
-     * Loads a PEAR class
+     * Loads a PEAR class.
      *
      * @param  string   classname
      * @return boolean  true success or false on failure
@@ -676,13 +681,14 @@ class LiveUser
     }
 
     /**
-     * Reads the configuration.
+     * Reads the configuration array.
      *
      * @param  array|file  Conf array or file path to configuration
      * @param  string      Name of array containing the configuration
      * @return boolean     true on success or false on failure
      *
      * @access public
+     * @see    LiveUser::factory
      */
     function readConfig(&$conf)
     {
@@ -725,9 +731,9 @@ class LiveUser
      * Determines if loading of PEAR::Log is necessary.
      *
      * If an object is passed it is returned, otherwise Log is loaded
-     * and setup properly.
+     * and instantiated.
      *
-     * @param  bool|object $log     Boolean that indicates if a log instance
+     * @param  bool|Log $log     Boolean that indicates if a log instance
      *                              should be created or an instance of a class
      *                              that implements the PEAR:Log interface.
      * @return void
@@ -1141,7 +1147,7 @@ class LiveUser
     }
 
     /**
-     * Properly disconnect resources in the active container
+     * Properly disconnect resources in the active container.
      *
      * @return  boolean true on success or false on failure
      *
@@ -1356,7 +1362,16 @@ class LiveUser
     }
 
     /**
-     * This destroys the session object.
+     * This logs the user out.
+     *
+     * It destroys the session object if the configuration option
+     * is set.
+     *
+     * <code>
+     *  'logout' => array(
+     *      'destroy'  => 'Whether to destroy the session on logout' false or true
+     *  ),
+     * </code>
      *
      * @param  boolean $direct  set to true if the logout was initiated directly
      * @return void
@@ -1397,6 +1412,8 @@ class LiveUser
 
     /**
      * Wrapper method for the permission object's own checkRight method.
+     * Use this method to determine if a user has a given right or set
+     * of rights.
      *
      * @param  array|int   A right id or an array of rights.
      * @return int|false  level if the user has the right/rights false if not
@@ -1544,7 +1561,7 @@ class LiveUser
     }
 
     /**
-     * updates the properties of the containers from the original source
+     * Updates the properties of the containers from the original source.
      *
      * @param  boolean $auth if the auth container should be updated
      * @param  boolean $perm if the perm container should be updated

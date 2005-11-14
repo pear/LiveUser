@@ -45,19 +45,20 @@
  */
 
 /**
- * Base class for permission handling
+ * Base class for permission handling. Provides the simplest
+ * set of permission handling features.
  *
  * This class provides a set of functions for implementing a user
  * permission management system on live websites. All authorisation
- * backends/containers must be extensions of this base class.
+ * backends/containers must extend this base class.
  *
- * @category authentication
- * @package  LiveUser
- * @author  Markus Wolff <wolff@21st.de>
- * @author  Bjoern Kraus <krausbn@php.net>
+ * @category  authentication
+ * @package   LiveUser
+ * @author    Markus Wolff <wolff@21st.de>
+ * @author    Bjoern Kraus <krausbn@php.net>
  * @copyright 2002-2005 Markus Wolff
- * @license http://www.gnu.org/licenses/lgpl.txt
- * @version Release: @package_version@
+ * @license   http://www.gnu.org/licenses/lgpl.txt
+ * @version   Release: @package_version@
  * @link http://pear.php.net/LiveUser
  */
 class LiveUser_Perm_Simple
@@ -215,7 +216,7 @@ class LiveUser_Perm_Simple
      * Read all the user rights from the storage and puts them in a class
      * member for later retrieval.
      *
-     * @param int $perm_user_id
+     * @param  int   $perm_user_id the perm user id
      * @return mixed array or false on failure
      *
      * @access public
@@ -259,7 +260,7 @@ class LiveUser_Perm_Simple
      * Function returns the inquired value if it exists in the class.
      *
      * @param  string $what  Name of the property to be returned.
-     * @return mixed    null, a value or an array.
+     * @return mixed  null, a value or an array.
      *
      * @access public
      */
@@ -273,7 +274,7 @@ class LiveUser_Perm_Simple
     }
 
     /**
-     * store all properties in an array
+     * Stores all properties in an array.
      *
      * @param string $sessionName name of the session in use.
      * @return  array containing the property values
@@ -294,7 +295,7 @@ class LiveUser_Perm_Simple
     } // end func freeze
 
     /**
-     * Reinitializes properties
+     * Reinitializes properties from the storage container.
      *
      * @param   array  $sessionName name of the session in use.
      * @param boolean always returns true
@@ -313,7 +314,7 @@ class LiveUser_Perm_Simple
     } // end func unfreeze
 
     /**
-     * properly disconnect from resources
+     * Properly disconnect from resources.
      *
      * @return void
      *
