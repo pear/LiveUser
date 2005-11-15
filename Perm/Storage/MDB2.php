@@ -80,7 +80,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      *
      *
      *
-     * @param array &$storageConf Array with the storage configuration
+     * @param array Array with the storage configuration
      * @return boolean true on success, false on failure.
      *
      * @access public
@@ -286,7 +286,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      *
      * right => 1
      *
-     * @param   array $group_ids array with id's for the groups
+     * @param   array array with id's for the groups
      *                          that rights will be read from
      * @return  mixed   array or false on failure
      *

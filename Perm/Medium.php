@@ -206,8 +206,8 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * If $this->ondemand and $ondemand is true, the groups will be loaded on
      * the fly.
      *
-     * @param   integer $group_id  Id of the group to check for.
-     * @param   boolean $ondemand  allow ondemand reading of groups
+     * @param   integer  Id of the group to check for.
+     * @param   boolean  allow ondemand reading of groups
      * @return  boolean. If group_ids isn't populated then false,
                          if the group_id exists in group_ids then true else false.
      *

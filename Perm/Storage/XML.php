@@ -100,7 +100,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      *
      *
      *
-     * @param array &$storageConf Array with the storage configuration
+     * @param array Array with the storage configuration
      * @return boolean true on success, false on failure.
      *
      * @access public

@@ -95,7 +95,7 @@ class LiveUser_Perm_Storage
      *
      *
      *
-     * @param array &$storageConf Array with the storage configuration
+     * @param array Array with the storage configuration
      * @return boolean true on success, false on failure.
      *
      * @access public
@@ -217,7 +217,7 @@ class LiveUser_Perm_Storage
     /**
      * store all properties in an array
      *
-     * @param string $sessionName name of the session in use.
+     * @param string name of the session in use.
      * @param array $propertyValues
      * @return  array containing the property values
      *

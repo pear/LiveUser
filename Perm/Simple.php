@@ -129,7 +129,7 @@ class LiveUser_Perm_Simple
     /**
      * Load and initialize the storage container.
      *
-     * @param  mixed &$conf   Name of array containing the configuration.
+     * @param  mixed   Name of array containing the configuration.
      * @return  boolean true on success or false on failure
      *
      * @access  public
@@ -167,8 +167,8 @@ class LiveUser_Perm_Simple
      * Tries to find the user with the given user ID in the permissions
      * container. Will read all permission data and return true on success.
      *
-     * @param   string $auth_user_id  user identifier
-     * @param   string $containerName  name of the auth container
+     * @param   string  user identifier
+     * @param   string  name of the auth container
      * @return  boolean true on success or false on failure
      *
      * @access  public
@@ -238,7 +238,7 @@ class LiveUser_Perm_Simple
      * If the user is has an "area admin" type he will automatically be
      * awarded the right.
      *
-     * @param   integer $right_id  Id of the right to check for.
+     * @param   integer  Id of the right to check for.
      * @return  integer Level of the right.
      *
      * @access  public
@@ -259,7 +259,7 @@ class LiveUser_Perm_Simple
     /**
      * Function returns the inquired value if it exists in the class.
      *
-     * @param  string $what  Name of the property to be returned.
+     * @param  string  Name of the property to be returned.
      * @return mixed  null, a value or an array.
      *
      * @access public
@@ -276,7 +276,7 @@ class LiveUser_Perm_Simple
     /**
      * Stores all properties in an array.
      *
-     * @param string $sessionName name of the session in use.
+     * @param string name of the session in use.
      * @return  array containing the property values
      *
      * @access  public

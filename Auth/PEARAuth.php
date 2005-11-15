@@ -84,8 +84,8 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     /**
      * Load the storage container
      *
-     * @param  mixed &$conf   Name of array containing the configuration.
-     * @param string $containerName name of the container that should be used
+     * @param  mixed   Name of array containing the configuration.
+     * @param string name of the container that should be used
      * @return  boolean true on success or false on failure
      *
      * @access  public

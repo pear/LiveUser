@@ -199,7 +199,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * a two-dimensional array of this format:
      * "GroupName" => "RightName" -> "Level"
      *
-     * @param   array $group_ids array with id's for the groups
+     * @param   array array with id's for the groups
      *                          that rights will be read from
      * @see    readRights()
      * @return void

@@ -228,8 +228,8 @@ class LiveUser_Auth_Common
     /**
      * Load the storage container
      *
-     * @param  mixed &$conf   Name of array containing the configuration.
-     * @param string $containerName name of the container that should be used
+     * @param  mixed   Name of array containing the configuration.
+     * @param string name of the container that should be used
      * @return  boolean true on success or false on failure
      *
      * @access  public
@@ -478,9 +478,9 @@ class LiveUser_Auth_Common
      * described functionality must be implemented in a
      * subclass overriding this method.
      *
-     * @param  string $handle user handle
-     * @param  boolean $passwd user password
-     * @param string $auth_user_id auth user id
+     * @param  string user handle
+     * @param  boolean user password
+     * @param string auth user id
      * @return boolean true on success or false on failure
      *
      * @access public
@@ -496,7 +496,7 @@ class LiveUser_Auth_Common
     /**
      * Function returns the inquired value if it exists in the class.
      *
-     * @param  string $what  Name of the property to be returned.
+     * @param  string  Name of the property to be returned.
      * @return mixed    null, a value or an array.
      *
      * @access public

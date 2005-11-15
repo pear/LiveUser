@@ -437,7 +437,7 @@ class LiveUser
      * The examples for containers provided are just general
      * do not reflect all the options for all containers.
      *
-     * @param  array $conf      Config array to configure.
+     * @param  array      Config array to configure.
      * @return LiveUser|false   Returns an object of either LiveUser or false on error
      *                          if so use LiveUser::getErrors() to get the errors
      *
@@ -469,8 +469,8 @@ class LiveUser
      * Without the ampersand (&) in front of the method name, you will not get
      * a reference, you will get a copy.</b>
      *
-     * @param  array $conf      Config array to configure.
-     * @param  string $signature Signature by which the given instance can be referenced later
+     * @param  array      Config array to configure.
+     * @param  string Signature by which the given instance can be referenced later
      * @return LiveUser|false   Returns an object of either LiveUser or false on failure
      *
      * @access public
@@ -1373,7 +1373,7 @@ class LiveUser
      *  ),
      * </code>
      *
-     * @param  boolean $direct  set to true if the logout was initiated directly
+     * @param  boolean  set to true if the logout was initiated directly
      * @return void
      *
      * @access public
@@ -1563,8 +1563,8 @@ class LiveUser
     /**
      * Updates the properties of the containers from the original source.
      *
-     * @param  boolean $auth if the auth container should be updated
-     * @param  boolean $perm if the perm container should be updated
+     * @param  boolean if the auth container should be updated
+     * @param  boolean if the perm container should be updated
      * @return boolean
      *
      * @access public
