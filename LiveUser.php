@@ -894,6 +894,14 @@ class LiveUser
         }
         // Set the name of the current session
         session_name($this->_options['session']['name']);
+        // Check if we can safely start the session
+        if (headers_sent()) {
+            $this->_stack->push(
+                LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'The session cannot be started because the output already started'
+            );
+            return;
+        }
         // If there's no session yet, start it now
         @session_start();
     }
