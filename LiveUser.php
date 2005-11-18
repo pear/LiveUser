@@ -399,32 +399,33 @@ class LiveUser
      *  ),
      *  'authContainers' => array(
      *      'name' => array(
-     *            'type'            => 'DB',
-     *            'loginTimeout'    => 0,
-     *            'expireTime'      => 3600,
-     *            'idleTime'        => 1800,
-     *            'allowDuplicateHandles' => false,
-     *            'allowEmptyPasswords'   => false,
+     *            'type'            => 'auth container name',
+     *            'loginTimeout'    => 'number of hours that must pass between two logins to be counted as a new login',
+     *            'expireTime'      => 'maximum lifetime of a session in seconds',
+     *            'idleTime'        => 'maximum amount of time between two request',
+     *            'allowDuplicateHandles' => 'if to allow duplicate handles',
+     *            'allowEmptyPasswords'   => 'if empty passwords are allowed',
      *            'storage' => array(
      *                'connection' => 'db connection object, use this or dsn',
      *                'dsn'        => 'database dsn, use this or connection',
      *           ),
      *           'externalValues' => array(
-     *                  'values'      => &$_SERVER,
-     *                  'keysToCheck' => array('HTTP_USER_AGENT')
+     *                  'values'      => 'reference to an array',
+     *                  'keysToCheck' => 'array of keys to check in the array passed'
      *           ),
      *      ),
      *  ),
      *  'permContainer' => array(
-     *      'type'     => 'Complex',
+     *      'type'     => 'perm container name',
      *      'storage'  => array(
-     *          'MDB2' => array(
-     *              'dsn'       => $dsn,
-     *              'prefix'    => 'liveuser_'
-     *              'tables'    => array(),
-     *              'fields'    => array(),
-     *              'alias'     => array(),
-     *              'force_seq' => true,
+     *          'storage container name' => array(
+     *              'connection' => 'db connection object, use this or dsn',
+     *              'dsn'        => 'database dsn, use this or connection',
+     *              'prefix'    => 'table prefix'
+     *              'tables'    => 'array containing additional tables or fields in existing tables',
+     *              'fields'    => 'array containing any additional or non-default field types',
+     *              'alias'     => 'array containing any additional or non-default field alias',
+     *              'force_seq' => 'if the use of (emulated) sequences should forced instead of using autoincrement where applicable',
      *          ),
      *      ),
      *  ),
