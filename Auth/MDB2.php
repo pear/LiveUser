@@ -148,9 +148,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
     }
 
     /**
-     * Writes current values for user back to the database.
-     * This method does nothing in the base class and is supposed to
-     * be overridden in subclasses according to the supported backend.
+     * Writes current values for the user back to the database.
      *
      * @return boolean true on success or false on failure
      *
@@ -194,10 +192,9 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
      * passwords - yep, some people want this).
      * If no match is found, false is being returned.
      *
-     
      * @param  string  user handle
      * @param  boolean user password
-     * @param string auth user id
+     * @param  string  auth user id
      * @return boolean true on success or false on failure
      *
      * @access private
