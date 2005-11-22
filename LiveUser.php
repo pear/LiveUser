@@ -48,9 +48,9 @@
  * Include PEAR_ErrorStack
  * and Event_Dispatcher classes
  */
+require_once 'PEAR.php';
 require_once 'PEAR/ErrorStack.php';
 require_once 'Event/Dispatcher.php';
-require_once 'PEAR.php';
 
 /**#@+
  * Error related constants definition
@@ -118,7 +118,13 @@ define('LIVEUSER_USER_TYPE_ID',        1);
  * lowest admin type id
  */
 define('LIVEUSER_ADMIN_TYPE_ID',       2);
+/**
+ * look up area admin areas to determine which rights are automatically granted
+ */
 define('LIVEUSER_AREAADMIN_TYPE_ID',   3);
+/**
+ * from this admin level on all rights are automatically granted
+ */
 define('LIVEUSER_SUPERADMIN_TYPE_ID',  4);
 /**
  * higest admin type id
@@ -260,7 +266,7 @@ class LiveUser
      * The array element 'type' must be present so the LiveUser class can
      * include the correct class definition (example: "DB_Complex").
      *
-     * @var    mixed
+     * @var    boolean|array
      * @access private
      */
     var $_permContainer = false;
@@ -439,8 +445,8 @@ class LiveUser
      * do not reflect all the options for all containers.
      *
      * @param  array      Config array to configure.
-     * @return LiveUser|false   Returns an object of either LiveUser or false on error
-     *                          if so use LiveUser::getErrors() to get the errors
+     * @return LiveUser   Returns an object of either LiveUser or false on error
+     *                    if so use LiveUser::getErrors() to get the errors
      *
      * @access public
      * @see    LiveUser::getErrors
@@ -470,9 +476,9 @@ class LiveUser
      * Without the ampersand (&) in front of the method name, you will not get
      * a reference, you will get a copy.</b>
      *
-     * @param  array      Config array to configure.
-     * @param  string Signature by which the given instance can be referenced later
-     * @return LiveUser|false   Returns an object of either LiveUser or false on failure
+     * @param  array    Config array to configure.
+     * @param  string   Signature by which the given instance can be referenced later
+     * @return LiveUser Returns an object of either LiveUser or false on failure
      *
      * @access public
      * @see    LiveUser::factory
@@ -503,8 +509,7 @@ class LiveUser
     /**
      * Wrapper method to get errors from the Error Stack.
      *
-     * @return array|false  an array of the errors or
-     *                      false if there are no errors
+     * @return array|boolean an array of the errors or false if there are no errors
      *
      * @access public
      */
@@ -542,7 +547,7 @@ class LiveUser
     /**
      * Creates an instance of an auth container class.
      *
-     * @param  array|file   Array or name of file containing the configuration.
+     * @param  array        Array containing the configuration.
      * @param  string       Name of the container we'll be using.
      * @param  string       Prefix of the class that will be used.
      * @return object|false Returns an instance of an auth container
@@ -566,7 +571,7 @@ class LiveUser
     /**
      * Creates an instance of an perm container class.
      *
-     * @param  array|file    Array or name of file containing the configuration.
+     * @param  array         Array containing the configuration.
      * @param  string        Prefix of the class that will be used.
      * @return object|false  Returns an instance of a perm container
      *                       class or false on error
@@ -636,9 +641,8 @@ class LiveUser
     /**
      * Clobbers two arrays together.
      *
-     * Function taken from the user notes of array_merge_recursive
-     * used in LiveUser::readConfig()
-     * may be called statically
+     * Function taken from the user notes of array_merge_recursive function
+     * used in LiveUser::readConfig() and may be called statically
      *
      * @param  array        array that should be clobbered
      * @param  array        array that should be clobbered
@@ -665,8 +669,8 @@ class LiveUser
     /**
      * Checks if a file exists in the include path.
      *
-     * @param  string   filename
-     * @return boolean  true success and false on error
+     * @param  string  filename
+     * @return boolean true success and false on error
      *
      * @access public
      */
@@ -734,10 +738,10 @@ class LiveUser
      * If an object is passed it is returned, otherwise Log is loaded
      * and instantiated.
      *
-     * @param  bool|Log $log     Boolean that indicates if a log instance
-     *                              should be created or an instance of a class
-     *                              that implements the PEAR:Log interface.
-     * @return void
+     * @param  bool|Log Boolean that indicates if a log instance
+     *                  should be created or an instance of a class
+     *                  that implements the PEAR:Log interface.
+     * @return log instance of the given log class
      *
      * @access protected
      */
@@ -768,8 +772,8 @@ class LiveUser
     /**
      * Creates an instance of the PEAR::Crypt_Rc4 class.
      *
-     * @param  string  token to use to encrypt data
-     * @return object  returns an instance of the Crypt_RC4 class
+     * @param  string token to use to encrypt data
+     * @return Crypt_RC4 returns an instance of the Crypt_RC4 class
      *
      * @access public
      */
@@ -785,11 +789,11 @@ class LiveUser
     /**
      * Crypts data using mcrypt or userland if not available.
      *
-     * @param  boolean  true to crypt, false to decrypt
-     * @param  string   data to crypt
+     * @param  string   data
+     * @param  string   secret key
      * @param  boolean  true if it should be crypted,
      *                  false if it should be decrypted
-     * @return string   crypted data
+     * @return string   (de-)crypted data
      *
      * @access private
      */
@@ -839,7 +843,7 @@ class LiveUser
      */
     function setOption($option, $value)
     {
-        if (isset($this->_options[$option])) {
+        if (array_key_exists($option, $this->_options)) {
             $this->_options[$option] = $value;
             return true;
         }
@@ -858,7 +862,7 @@ class LiveUser
      */
     function getOption($option)
     {
-        if (isset($this->_options[$option])) {
+        if (array_key_exists($option, $this->_options)) {
             return $this->_options[$option];
         }
         $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
@@ -867,7 +871,8 @@ class LiveUser
     }
 
     /**
-     * Sets the session handler and name and starts the session.
+     * Sets the session handler and name and starts the session if headers have
+     * not been send yet.
      *
      * @return void
      *
@@ -908,16 +913,16 @@ class LiveUser
     }
 
     /**
-     * Tries to retrieve auth object from session.
-     * If this fails, the method attempts a login based on the
-     * parameters or cookie data.
+     * Tries to retrieve the auth object from session and checks possible
+     * timeouts or logout requests.
+     * If afer this the user is not logged in, the method attempts a login based
+     * on the parameters or cookie data.
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
      * @param  boolean  set to true if user wants to logout
-     * @param  boolean  set if remember me is set
-     * @return boolean  true if init process well, false if something
-     *                  went wrong.
+     * @param  boolean  set if remember me is set, requires cookie otion
+     * @return boolean  true if init process well, false if something went wrong.
      *
      * @access public
      */
@@ -979,11 +984,11 @@ class LiveUser
 
     /**
      * Tries to log the user in by trying all the Auth containers defined
-     * in the configuration file until there is a success or failure.
+     * in the configuration file until there is a success or a failure.
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
-     * @param  boolean  set rememberMe cookie
+     * @param  boolean  set if remember me is set, requires cookie otion
      * @return boolean  true on success or false on failure
      *
      * @access public
@@ -1188,7 +1193,7 @@ class LiveUser
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
-     * @param  boolean  set if remember me is set
+     * @param  boolean  set if remember me is set, requires cookie otion
      * @return boolean  true if the cookie can be set, false otherwise
      *
      * @access private
@@ -1256,7 +1261,7 @@ class LiveUser
     }
 
     /**
-     * Handles the rememberMe cookie login.
+     * Handles the retrieval of the login data from the rememberMe cookie.
      *
      * @return boolean true on success or false on failure
      *
@@ -1332,7 +1337,7 @@ class LiveUser
     }
 
     /**
-     * Deletes the rememberMe cookie login.
+     * Deletes the rememberMe cookie.
      *
      * @return boolean true on success or false on failure
      *
@@ -1371,19 +1376,11 @@ class LiveUser
     }
 
     /**
-     * This logs the user out.
+     * This logs the user out and destroys the session object if the
+     * configuration option is set.
      *
-     * It destroys the session object if the configuration option
-     * is set.
-     *
-     * <code>
-     *  'logout' => array(
-     *      'destroy'  => 'Whether to destroy the session on logout' false or true
-     *  ),
-     * </code>
-     *
-     * @param  boolean  set to true if the logout was initiated directly
-     * @return void
+     * @param  boolean  set to false if no events should be fired b yhte logout
+     * @return boolean true on success or false on failure
      *
      * @access public
      */
@@ -1458,7 +1455,7 @@ class LiveUser
     }
 
     /**
-     * Wrapper method for the permission object's own checkRightLevel method.
+     * Wrapper method for the permission object's own checkRight and checkLevel methods
      *
      * @param  array|int  A right id or an array of rights.
      * @param  array|int  Id or array of Ids of the owner of the
@@ -1550,7 +1547,7 @@ class LiveUser
      *
      * @param  string  Name of the property to be returned.
      * @param  string  'auth' or 'perm'
-     * @return mixed   a value or an array.
+     * @return mixed   a scalarvalue, an object or an array.
      *
      * @access public
      */
@@ -1607,7 +1604,7 @@ class LiveUser
     /**
      * Get the current status.
      *
-     * @return integer
+     * @return integer a LIVEUSER_STATUS_* constant
      *
      * @access public
      * @see    LIVEUSER_STATUS_* constants
