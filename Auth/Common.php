@@ -297,7 +297,7 @@ class LiveUser_Auth_Common
      * @param   array  $propertyValues
      * @return  boolean
      *
-     * @access  publi
+     * @access  public
      */
     function unfreeze($propertyValues)
     {
