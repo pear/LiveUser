@@ -31,12 +31,12 @@
  *
  *
  * @category authentication
- * @package  LiveUser
+ * @package LiveUser
  * @author  Markus Wolff <wolff@21st.de>
- * @author Helgi Þormar Þorbjörnsson <dufuz@php.net>
+ * @author  Helgi Þormar Þorbjörnsson <dufuz@php.net>
  * @author  Lukas Smith <smith@pooteeweet.org>
- * @author Arnaud Limbourg <arnaud@php.net>
- * @author   Pierre-Alain Joye  <pajoye@php.net>
+ * @author  Arnaud Limbourg <arnaud@php.net>
+ * @author  Pierre-Alain Joye <pajoye@php.net>
  * @author  Bjoern Kraus <krausbn@php.net>
  * @copyright 2002-2005 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt
@@ -47,7 +47,7 @@
 /**
 
  *
- * @package  LiveUser
+ * @package LiveUser
  * @category authentication
  */
 
@@ -62,7 +62,7 @@ require_once 'LiveUser/Perm/Simple.php';
  * Medium permission complexity driver for LiveUser.
  *
  * @category authentication
- * @package  LiveUser
+ * @package LiveUser
  * @author   Arnaud Limbourg
  * @copyright 2002-2005 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt

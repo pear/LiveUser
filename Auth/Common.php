@@ -31,12 +31,12 @@
  *
  *
  * @category authentication
- * @package  LiveUser
+ * @package LiveUser
  * @author  Markus Wolff <wolff@21st.de>
- * @author Helgi Þormar Þorbjörnsson <dufuz@php.net>
+ * @author  Helgi Þormar Þorbjörnsson <dufuz@php.net>
  * @author  Lukas Smith <smith@pooteeweet.org>
- * @author Arnaud Limbourg <arnaud@php.net>
- * @author   Pierre-Alain Joye  <pajoye@php.net>
+ * @author  Arnaud Limbourg <arnaud@php.net>
+ * @author  Pierre-Alain Joye <pajoye@php.net>
  * @author  Bjoern Kraus <krausbn@php.net>
  * @copyright 2002-2005 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt
@@ -47,16 +47,10 @@
 /**
  * This class provides a set of functions for implementing a user
  * authorisation system on live websites. All authorisation
- * backends/containers must be extensions of this base class.
- *
- * Requirements:
- * - When using "DB" backend:
- *   PEAR::DB database abstraction layer
- * - LiveUser admin GUI for easy user administration and setup of
- *   authorisation areas and rights
+ * backends/containers must be inherited from this base class.
  *
  * @category authentication
- * @package  LiveUser
+ * @package LiveUser
  * @author   Markus Wolff <wolff@21st.de>
  * @copyright 2002-2005 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt
@@ -67,7 +61,6 @@ class LiveUser_Auth_Common
 {
     /**
      * Has the current user successfully logged in?
-     * Default: false
      *
      * @var    boolean
      * @see    LiveUser_Auth_Common::isActive
@@ -84,14 +77,14 @@ class LiveUser_Auth_Common
     /**
      * Number of hours that must pass between two logins
      * to be counted as a new login. Comes in handy in
-     * some situations. Default: 12
+     * some situations.
      *
      * @var    integer
      */
     var $loginTimeout = 12;
 
     /**
-     * Auth lifetime in seconds
+     * Auth maximum lifetime in seconds
      *
      * If this variable is set to 0, auth never expires
      *
@@ -110,33 +103,33 @@ class LiveUser_Auth_Common
     var $idleTime = 0;
 
     /**
-     * Allow multiple users in the database to have the same
-     * login handle. Default: false.
+     * Allow multiple users in the database to have the same login handle.
      *
      * @var    boolean
      */
     var $allowDuplicateHandles = false;
 
     /**
-     * Allow empty passwords to be passed to LiveUser. Default: false.
+     * Allow empty passwords to be passed to LiveUser.
      *
      * @var    boolean
      */
     var $allowEmptyPasswords = false;
 
     /**
-     * Set posible encryption modes.
+     * Possible encryption modes.
      *
      * @var    array
      */
-    var $encryptionModes = array('MD5'   => 'MD5',
-                                 'PLAIN' => 'PLAIN',
-                                 'RC4'   => 'RC4',
-                                 'SHA1'  => 'SHA1');
+    var $encryptionModes = array(
+        'MD5'   => 'MD5',
+        'PLAIN' => 'PLAIN',
+        'RC4'   => 'RC4',
+        'SHA1'  => 'SHA1'
+    );
 
     /**
-     * Defines the algorithm used for encrypting/decrypting
-     * passwords. Default: "MD5".
+     * Defines the algorithm used for encrypting/decrypting passwords.
      *
      * @var    string
      */
@@ -150,7 +143,7 @@ class LiveUser_Auth_Common
     var $secret;
 
     /**
-     * Defines the array index number of the LoginManager?s "backends" property.
+     * Defines the array index number of the LoginManager's "backends" property.
      *
      * @var    integer
      */
@@ -165,7 +158,7 @@ class LiveUser_Auth_Common
 /**#@-*/
 
     /**
-    * Property values
+    * Array of all the user data read from the backend database
     *
     * @var array
     * @access public
@@ -192,30 +185,33 @@ class LiveUser_Auth_Common
     var $externalValues = array();
 
     /**
+     * Table configuration
      *
-     * @access public
      * @var    array
+     * @access public
      */
     var $tables = array();
 
     /**
+     * All fields with their types
      *
-     * @access public
      * @var    array
+     * @access public
      */
     var $fields = array();
 
     /**
+     * All fields with their alias
      *
-     * @access public
      * @var    array
+     * @access public
      */
     var $alias = array();
 
     /**
      * Class constructor. Feel free to override in backend subclasses.
      *
-     * @var    array     configuration options
+     * @var    array configuration options
      * @return void
      *
      * @access protected
@@ -228,8 +224,8 @@ class LiveUser_Auth_Common
     /**
      * Load the storage container
      *
-     * @param  mixed   Name of array containing the configuration.
-     * @param string name of the container that should be used
+     * @param   array  array containing the configuration.
+     * @param   string name of the container that should be used
      * @return  boolean true on success or false on failure
      *
      * @access  public
@@ -310,7 +306,7 @@ class LiveUser_Auth_Common
          }
 
         return $this->externalValuesMatch();
-    } // end func unfreeze
+    }
 
     /**
      * Decrypts a password so that it can be compared with the user
@@ -318,7 +314,7 @@ class LiveUser_Auth_Common
      * property.
      *
      * @param  string the encrypted password
-     * @return string The decrypted password
+     * @return string the decrypted password
      *
      * @access public
      */
@@ -352,7 +348,7 @@ class LiveUser_Auth_Common
      * property.
      *
      * @param string  encryption type
-     * @return string The encrypted password
+     * @return string the encrypted password
      *
      * @access public
      */
@@ -472,6 +468,7 @@ class LiveUser_Auth_Common
      * matching and return true on success (this allows
      * multiple users having the same handle but different
      * passwords - yep, some people want this).
+     * if only an auth_user_id is passed it will try to read the data based on the id
      * If no match is found, false is being returned.
      *
      * Again, this does nothing in the base class. The
@@ -480,7 +477,7 @@ class LiveUser_Auth_Common
      *
      * @param  string user handle
      * @param  boolean user password
-     * @param string auth user id
+     * @param  string auth user id
      * @return boolean true on success or false on failure
      *
      * @access public
@@ -496,8 +493,8 @@ class LiveUser_Auth_Common
     /**
      * Function returns the inquired value if it exists in the class.
      *
-     * @param  string  Name of the property to be returned.
-     * @return mixed    null, a value or an array.
+     * @param  string  name of the property to be returned.
+     * @return mixed   null, a scalar or an array.
      *
      * @access public
      */
