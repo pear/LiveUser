@@ -1011,21 +1011,33 @@ class LiveUser
         $this->_auth = $this->_perm = null;
 
         //loop into auth containers
-        $indexes = array_keys($this->_authContainers);
-        foreach ($indexes as $index) {
-            if (!$passwd && (!isset($this->_authContainers[$index]['allowEmptyPasswords'])
-                || !$this->_authContainers[$index]['allowEmptyPasswords'])
+        $containerNames = array_keys($this->_authContainers);
+        foreach ($containerNames as $containerName) {
+            if ($passwd === ''
+                && (!array_key_exists('allowEmptyPasswords', $this->_authContainers[$containerName])
+                    || !$this->_authContainers[$containerName]['allowEmptyPasswords']
+                )
             ) {
                 continue;
             }
-            $auth =& LiveUser::authFactory($this->_authContainers[$index], $index);
-            if ($auth === false || $auth->login($handle, $passwd) === false) {
+            $auth =& LiveUser::authFactory($this->_authContainers[$containerName], $containerName);
+            if ($auth === false) {
                 $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
                 $this->_stack->push(LIVEUSER_ERROR, 'exception',
-                    array('msg' => 'Could not instanciate auth container: '.$index));
+                    array('msg' => 'Could not instanciate auth container: '.$containerName));
+                return false;
+            }
+            $login = $auth->login($handle, $passwd);
+            if ($login === false) {
+                $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
+                $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                    array('msg' => 'Could not execute login method: '.$containerName));
                 return false;
             }
             if ($auth->loggedIn) {
+                $this->_auth =& $auth;
+                $this->_setRememberCookie($handle, $passwd, $remember);
+                $this->_status = LIVEUSER_STATUS_OK;
                 // Create permission object
                 if (is_array($this->_permContainer)) {
                     $perm =& LiveUser::permFactory($this->_permContainer);
@@ -1035,24 +1047,17 @@ class LiveUser
                             array('msg' => 'Could not instanciate perm container of type: '.$conf['type']));
                         return false;
                     }
-                    if (!$perm->mapUser($auth->getProperty('auth_user_id'), $index)) {
+                    if (!$perm->mapUser($auth->getProperty('auth_user_id'), $containerName)) {
                         $this->dispatcher->post($this, 'onFailedMapping');
                     } else {
                         $this->_perm =& $perm;
                     }
                 }
-                $this->_auth = $auth;
-                $this->_auth->backendArrayIndex = $index;
                 $this->_freeze();
-                $this->_setRememberCookie($handle, $passwd, $remember);
-                $this->_status = LIVEUSER_STATUS_OK;
                 break;
-            } else {
-                $is_active = $auth->getProperty('is_active');
-                if (!is_null($is_active) && !$is_active) {
-                    $this->_status = LIVEUSER_STATUS_ISINACTIVE;
-                    break;
-                }
+            } elseif (!is_null($login) && !$auth->getProperty('is_active')) {
+                $this->_status = LIVEUSER_STATUS_ISINACTIVE;
+                break;
             }
         }
 
@@ -1104,7 +1109,7 @@ class LiveUser
                 return false;
             }
             if ($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
-                $auth->backendArrayIndex = $_SESSION[$this->_options['session']['varname']]['auth_name'];
+                $auth->containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
                 $this->_auth = &$auth;
                 if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
                     && $_SESSION[$this->_options['session']['varname']]['perm']
@@ -1118,7 +1123,7 @@ class LiveUser
                     if ($this->_options['cache_perm']) {
                         $result = $perm->unfreeze($this->_options['session']['varname']);
                     } else {
-                        $result = $perm->mapUser($auth->getProperty('auth_user_id'), $auth->backendArrayIndex);
+                        $result = $perm->mapUser($auth->getProperty('auth_user_id'), $auth->containerName);
                     }
                     if ($result) {
                         $this->_perm = &$perm;
@@ -1146,7 +1151,7 @@ class LiveUser
             // Bind objects to session
             $_SESSION[$this->_options['session']['varname']] = array();
             $_SESSION[$this->_options['session']['varname']]['auth'] = $this->_auth->freeze();
-            $_SESSION[$this->_options['session']['varname']]['auth_name'] = $this->_auth->backendArrayIndex;
+            $_SESSION[$this->_options['session']['varname']]['auth_name'] = $this->_auth->containerName;
             if (is_a($this->_perm, 'LiveUser_Perm_Simple')) {
                 $_SESSION[$this->_options['session']['varname']]['perm'] = true;
                 if ($this->_options['cache_perm']) {
@@ -1594,7 +1599,7 @@ class LiveUser
                     'Cannot update container if no perm container instance is available');
                 return false;
             }
-            if (!$this->_perm->mapUser($this->_auth->getProperty('auth_user_id'), $this->_auth->backendArrayIndex)) {
+            if (!$this->_perm->mapUser($this->_auth->getProperty('auth_user_id'), $this->_auth->containerName)) {
                 return false;
             }
         }
