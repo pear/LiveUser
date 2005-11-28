@@ -75,15 +75,6 @@ class LiveUser_Auth_Common
     var $currentLogin = 0;
 
     /**
-     * Number of hours that must pass between two logins
-     * to be counted as a new login. Comes in handy in
-     * some situations.
-     *
-     * @var    integer
-     */
-    var $loginTimeout = 12;
-
-    /**
      * Auth maximum lifetime in seconds
      *
      * If this variable is set to 0, auth never expires
@@ -373,33 +364,12 @@ class LiveUser_Auth_Common
     }
 
     /**
-     * Checks if there's enough time between lastLogin
-     * and current login (now) to count as a new login.
-     *
-     * @return boolean true if it is a new login, false if not
-     *
-     * @access public
-     */
-    function isNewLogin()
-    {
-        if (!array_key_exists('lastlogin', $this->propertyValues)) {
-            return true;
-        }
-        $meantime = $this->loginTimeout * 3600;
-        if (time() >= $this->propertyValues['lastlogin'] + $meantime) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Tries to make a login with the given handle and password.
      * A user can't login if he's not active.
      *
      * @param string   user handle
      * @param string   user password
-     * @return boolean true on success or false on failure
+     * @return boolean null when user is inactive, true on success or false on failure
      *
      * @access public
      */
@@ -424,9 +394,8 @@ class LiveUser_Auth_Common
             $this->currentLogin = time();
         }
 
-        // In case Login was successful, check if this can be counted
-        // as a _new_ login by definition...
-        if ($this->loggedIn && $this->isNewLogin()) {
+        // In case Login was successful update user data
+        if ($this->loggedIn) {
             $this->_updateUserData();
         }
 
@@ -451,8 +420,7 @@ class LiveUser_Auth_Common
     }
 
     /**
-     * Reads auth_user_id, passwd, is_active flag
-     * lastlogin timestamp from the database
+     * Reads user data from the given data source
      * If only $handle is given, it will read the data
      * from the first user with that handle and return
      * true on success.
@@ -550,12 +518,13 @@ class LiveUser_Auth_Common
     /**
      * properly disconnect from resources
      *
-     * @return  void
+     * @return boolean true on success or false on failure
      *
      * @access  public
      */
     function disconnect()
     {
+        return true
     }
 
 }
