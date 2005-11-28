@@ -406,7 +406,6 @@ class LiveUser
      *  'authContainers' => array(
      *      'name' => array(
      *            'type'            => 'auth container name',
-     *            'loginTimeout'    => 'number of hours that must pass between two logins to be counted as a new login',
      *            'expireTime'      => 'maximum lifetime of a session in seconds',
      *            'idleTime'        => 'maximum amount of time between two request',
      *            'allowDuplicateHandles' => 'if to allow duplicate handles',

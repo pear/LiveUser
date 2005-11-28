@@ -41,7 +41,6 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
         'authContainers'    => array(
             0 => array(
                 'type' => 'XML',
-                'loginTimeout' => 0,
                 'expireTime'   => 3600,
                 'idleTime'     => 1800,
                 'allowDuplicateHandles'  => false,

@@ -25,7 +25,6 @@ if (is_readable('Auth_XML.xml') && is_writable('Auth_XML.xml')) {
         'authContainers' => array(
             0 => array(
                 'type' => 'XML',
-                'loginTimeout' => 0,
                 'expireTime'   => 3600,
                 'idleTime'     => 1800,
                 'allowDuplicateHandles'  => false,

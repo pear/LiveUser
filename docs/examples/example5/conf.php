@@ -31,7 +31,6 @@ $conf =
         'authContainers' => array(
             'DB' => array(
                 'type'          => 'MDB2',
-                'loginTimeout'  => 0,
                 'expireTime'    => 3600,
                 'idleTime'      => 1800,
                 'allowDuplicateHandles' => 0,
