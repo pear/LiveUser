@@ -14,6 +14,9 @@ $version = '0.x.x';
 $notes = <<<EOT
 clearer status and error messages
 fix a bug with the passed Log object being discarded
+extra debug info when the auth container is instantiated
+more helpful error message when the class cannot be loaded
+make the PEAR::Auth wrapper use the passed handle and password
 EOT;
 
 $description = <<<EOT
