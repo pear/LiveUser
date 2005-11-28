@@ -563,6 +563,10 @@ class LiveUser
             if ($auth->init($conf, $containerName) === false) {
                 $auth = false;
             }
+        } else {
+            $this->_stack->push(
+                LIVEUSER_ERROR_CONFIG, 'exception',
+                array(), 'Cannot load class ' . $classname);
         }
         return $auth;
     }
@@ -586,7 +590,12 @@ class LiveUser
             if ($perm->init($conf) === false) {
                 $perm = false;
             }
+        } else {
+            $this->_stack->push(
+                LIVEUSER_ERROR_CONFIG, 'exception',
+                array(), 'Cannot load class ' . $classname);
         }
+
         return $perm;
     }
 

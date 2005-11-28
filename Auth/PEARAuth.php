@@ -133,6 +133,8 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      */
     function readUserData()
     {
+        $this->pearAuth->username = $handle;
+        $this->pearAuth->password = $passwd;
         $this->pearAuth->start();
 
         // If a user was found, read data into class variables and set
