@@ -84,9 +84,9 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     /**
      * Load the storage container
      *
-     * @param  mixed   Name of array containing the configuration.
-     * @param string name of the container that should be used
-     * @return  boolean true on success or false on failure
+     * @param array   Name of array containing the configuration.
+     * @param string  name of the container that should be used
+     * @return boolean true on success or false on failure
      *
      * @access  public
      */
@@ -112,9 +112,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     }
 
     /**
-     * Writes current values for user back to the database.
-     * This method does nothing in the base class and is supposed to
-     * be overridden in subclasses according to the supported backend.
+     * Does nothing
      *
      * @return boolean true on success or false on failure
      *
@@ -126,6 +124,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     }
 
     /**
+     * Reads user data from the given data source
      * Starts and verifies the PEAR::Auth login process
      *
      * @return boolean true upon success or false on failure
@@ -142,11 +141,17 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
             return null;
         }
 
-        $this->propertyValues['handle']       = $this->pearAuth->getUsername();
-        $this->propertyValues['passwd']       = $this->encryptPW($this->pearAuth->password);
-        $this->propertyValues['is_active']    = true;
-        $this->propertyValues['auth_user_id'] = $this->pearAuth->getUsername();
-        $this->propertyValues['lastlogin']    = '';
+        $this->propertyValues['handle'] = $this->pearAuth->getUsername();
+        $this->propertyValues['passwd'] = $this->encryptPW($this->pearAuth->password);
+        if (!isset($this->tables['users']['fields']['is_active'])) {
+            $this->propertyValues['is_active'] = true;
+        }
+        if (!isset($this->tables['users']['fields']['auth_user_id'])) {
+            $this->propertyValues['auth_user_id'] = $this->pearAuth->getUsername();
+        }
+        if (!isset($this->tables['users']['fields']['lastlogin'])) {
+            $this->propertyValues['lastlogin'] = null;
+        }
         return true;
     }
 
