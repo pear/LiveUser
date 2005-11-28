@@ -143,13 +143,6 @@ class LiveUser_Auth_Common
     var $secret;
 
     /**
-     * Defines the array index number of the LoginManager's "backends" property.
-     *
-     * @var    integer
-     */
-    var $backendArrayIndex = 0;
-
-    /**
      * Error stack
      *
      * @var    PEAR_ErrorStack
@@ -433,7 +426,7 @@ class LiveUser_Auth_Common
 
         // In case Login was successful, check if this can be counted
         // as a _new_ login by definition...
-        if ($this->isNewLogin() && $this->loggedIn) {
+        if ($this->loggedIn && $this->isNewLogin()) {
             $this->_updateUserData();
         }
 
