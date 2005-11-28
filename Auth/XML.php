@@ -69,7 +69,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      * XML file in which the auth data is stored.
      *
      * @var    string
-      * @access private
+     * @access private
      */
     var $file = '';
 
@@ -93,9 +93,9 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     /**
      * Load the storage container
      *
-     * @param  mixed   Name of array containing the configuration.
-     * @param string name of the container that should be used
-     * @return  boolean true on success or false on failure
+     * @param array   Name of array containing the configuration.
+     * @param string  name of the container that should be used
+     * @return boolean true on success or false on failure
      *
      * @access  public
      */
@@ -139,8 +139,6 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
 
     /**
      * Writes current values for user back to the database.
-     * This method does nothing in the base class and is supposed to
-     * be overridden in subclasses according to the supported backend.
      *
      * @return boolean true on success or false on failure
      *
@@ -188,25 +186,24 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     }
 
     /**
-     *
-     * Reads auth_user_id, password from the xml file
+     * Reads user data from the given data source
      * If only $handle is given, it will read the data
      * from the first user with that handle and return
      * true on success.
      * If $handle and $passwd are given, it will try to
-     * find the first user with both handle and passwd
+     * find the first user with both handle and password
      * matching and return true on success (this allows
      * multiple users having the same handle but different
      * passwords - yep, some people want this).
+     * if only an auth_user_id is passed it will try to read the data based on the id
      * If no match is found, false is being returned.
      *
-     * @param string   Handle of the current user.
-     * @param mixed    Can be a string with an
-     *                  unencrypted pwd or false.
-     * @param string auth user id
+     * @param  string user handle
+     * @param  boolean user password
+     * @param  string auth user id
      * @return boolean true on success or false on failure
      *
-     * @access private
+     * @access public
      */
     function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {

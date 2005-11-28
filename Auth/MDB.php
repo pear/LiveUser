@@ -64,7 +64,6 @@ MDB::loadFile('Date');
  *   passed to the constructor.
  *   Example: array('dsn'                   => 'mysql://user:pass@host/db_name',
  *                  'connection             => &$conn, # PEAR::MDB connection object
- *                  'loginTimeout'          => 0,
  *                  'allowDuplicateHandles' => 1);
  *
  * @category authentication
@@ -80,7 +79,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     /**
      * dsn that was connected to
      *
-     * @var object
+     * @var    string
      * @access private
      */
     var $dsn = null;
@@ -105,9 +104,9 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     /**
      * Load the storage container
      *
-     * @param  mixed   Name of array containing the configuration.
-     * @param string name of the container that should be used
-     * @return  boolean true on success or false on failure
+     * @param array   Name of array containing the configuration.
+     * @param string  name of the container that should be used
+     * @return boolean true on success or false on failure
      *
      * @access  public
      */
@@ -149,8 +148,6 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
 
     /**
      * Writes current values for user back to the database.
-     * This method does nothing in the base class and is supposed to
-     * be overridden in subclasses according to the supported backend.
      *
      * @return boolean true on success or false on failure
      *
@@ -182,8 +179,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     }
 
     /**
-     * Reads auth_user_id, passwd, is_active flag
-     * lastlogin timestamp from the database
+     * Reads user data from the given data source
      * If only $handle is given, it will read the data
      * from the first user with that handle and return
      * true on success.
@@ -192,14 +188,15 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
      * matching and return true on success (this allows
      * multiple users having the same handle but different
      * passwords - yep, some people want this).
+     * if only an auth_user_id is passed it will try to read the data based on the id
      * If no match is found, false is being returned.
      *
-     * @param  string  user handle
+     * @param  string user handle
      * @param  boolean user password
-     * @param string auth user id
-     * @return boolean true upon success or false on failure
+     * @param  string auth user id
+     * @return boolean true on success or false on failure
      *
-     * @access private
+     * @access public
      */
     function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
