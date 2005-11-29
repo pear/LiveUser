@@ -564,7 +564,7 @@ class LiveUser
                 $auth = false;
             }
         } else {
-            $this->_stack->push(
+            PEAR_ErrorStack::staticPush('LiveUser',
                 LIVEUSER_ERROR_CONFIG, 'exception',
                 array(), 'Cannot load class ' . $classname);
         }
@@ -591,7 +591,7 @@ class LiveUser
                 $perm = false;
             }
         } else {
-            $this->_stack->push(
+            PEAR_ErrorStack::staticPush('LiveUser',
                 LIVEUSER_ERROR_CONFIG, 'exception',
                 array(), 'Cannot load class ' . $classname);
         }
