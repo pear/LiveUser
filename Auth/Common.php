@@ -524,7 +524,7 @@ class LiveUser_Auth_Common
      */
     function disconnect()
     {
-        return true
+        return true;
     }
 
 }
