@@ -117,7 +117,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Returns the perm userid from an auth userid
      * and a container name.
      *
-     * @param int $auth_user_id
+     * @param integer $auth_user_id
      * @param string $containerName
      * @return mixed array or false on failure
      *
@@ -156,7 +156,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @return mixed array of false on failure
      *
      * @access public
@@ -187,7 +187,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     /**
      * Fetch all the rights for every area where the user is an area admin.
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @return mixed array or false on failure
      *
      * @access public
@@ -224,7 +224,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * (all groups that are subgroups of these are also added recursively)
      *
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @return mixed array or false on failure
      *
      * @access private
@@ -259,7 +259,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         }
 
         return $result;
-    } // end func readGroups
+    }
 
     /**
      * Reads the group rights
@@ -271,7 +271,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *                          that rights will be read from
      * @return  mixed   array or false on failure
      *
-     * @access  public
+     * @access public
      */
     function readGroupRights($group_ids)
     {
@@ -296,7 +296,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         }
 
         return $result;
-    } // end func readGroupRights
+    }
 
     /**
      *

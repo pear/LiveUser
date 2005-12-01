@@ -212,7 +212,7 @@ class LiveUser_Auth_Common
      * @param   string name of the container that should be used
      * @return  boolean true on success or false on failure
      *
-     * @access  public
+     * @access public
      */
     function init($conf, $containerName)
     {
@@ -258,7 +258,7 @@ class LiveUser_Auth_Common
      *
      * @return  array
      *
-     * @access  public
+     * @access public
      */
     function freeze()
     {
@@ -281,7 +281,7 @@ class LiveUser_Auth_Common
      * @param   array  $propertyValues
      * @return  boolean
      *
-     * @access  public
+     * @access public
      */
     function unfreeze($propertyValues)
     {
@@ -496,7 +496,7 @@ class LiveUser_Auth_Common
      *
      * @return boolean true on success or false on failure
      *
-     * @access  public
+     * @access public
      */
     function externalValuesMatch()
     {
@@ -520,7 +520,7 @@ class LiveUser_Auth_Common
      *
      * @return boolean true on success or false on failure
      *
-     * @access  public
+     * @access public
      */
     function disconnect()
     {

@@ -59,23 +59,26 @@
 class LiveUser_Perm_Storage
 {
     /**
+     * Table configuration
      *
-     * @access public
      * @var    array
+     * @access public
      */
     var $tables = array();
 
     /**
+     * All fields with their types
      *
-     * @access public
      * @var    array
+     * @access public
      */
     var $fields = array();
 
     /**
+     * All fields with their alias
      *
-     * @access public
      * @var    array
+     * @access public
      */
     var $alias = array();
 
@@ -92,8 +95,7 @@ class LiveUser_Perm_Storage
     }
 
     /**
-     *
-     *
+     * Initialize the storage container
      *
      * @param array Array with the storage configuration
      * @return boolean true on success, false on failure.
@@ -132,11 +134,11 @@ class LiveUser_Perm_Storage
     }
 
     /**
+     * map an auth user to a perm user
      *
-     *
-     * @param int $auth_user_id
+     * @param integer $auth_user_id
      * @param string $containerName
-     * @return mixed array or false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -151,8 +153,8 @@ class LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int $perm_user_id
-     * @return mixed array of false on failure
+     * @param integer perm user id
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -161,10 +163,10 @@ class LiveUser_Perm_Storage
     }
 
     /**
+     * read the areas in which a user is an area admin
      *
-     *
-     * @param int $perm_user_id
-     * @return mixed array or false on failure
+     * @param integer perm user id
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -176,15 +178,15 @@ class LiveUser_Perm_Storage
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @param int $perm_user_id
-     * @return void
+     * @param integer perm user id
+     * @return array requested data or false on failure
      *
      * @see    readRights()
      * @access private
      */
     function readGroups($perm_user_id)
     {
-    } // end func readGroups
+    }
 
     /**
      * Reads the group rights
@@ -192,21 +194,21 @@ class LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @param array $group_ids
-     * @return  mixed   MDB2_Error on failure or nothing
+     * @param integer group ids
+     * @return array requested data or false on failure
      *
-     * @access  public
+     * @access public
      */
     function readGroupRights($group_ids)
     {
-    } // end func readGroupRights
+    }
 
     /**
+     * Read the sub groups of the new groups that are not part of the group ids
      *
-     *
-     * @param array $group_ids
-     * @param array $newGroupIds
-     * @return mixed array or false on failure
+     * @param array group ids
+     * @param array new group ids
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -215,40 +217,41 @@ class LiveUser_Perm_Storage
     }
 
     /**
-     * store all properties in an array
+     * store all properties in the session and return them as an array
      *
-     * @param string name of the session in use.
-     * @param array $propertyValues
-     * @return  array containing the property values
+     * @param string name of the key to use inside the session
+     * @param array property values
+     * @return array containing the property values
      *
-     * @access  public
+     * @access public
      */
     function freeze($sessionName, $propertyValues)
     {
         $_SESSION[$sessionName]['perm'] = $propertyValues;
         return $propertyValues;
-    } // end func freeze
+    }
 
     /**
      * Reinitializes properties
      *
-     * @param   array  $propertyValues
+     * @param string name of the key to use inside the session
      * @return array
      *
-     * @access  public
+     * @access public
      */
     function unfreeze($sessionName)
     {
-        return (isset($_SESSION[$sessionName]['perm']))
-            ? $_SESSION[$sessionName]['perm'] : array();
-    } // end func unfreeze
+        return (array_key_exists('perm', $_SESSION[$sessionName])
+            && is_array($_SESSION[$sessionName]['perm']))
+                ? $_SESSION[$sessionName]['perm'] : array();
+    }
 
     /**
      * properly disconnect from resources
      *
-     * @return void
+     * @return boolean true on success and false on failure
      *
-     * @access  public
+     * @access public
      */
     function disconnect()
     {

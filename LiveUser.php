@@ -1178,7 +1178,7 @@ class LiveUser
      *
      * @return  boolean true on success or false on failure
      *
-     * @access  public
+     * @access public
      */
     function disconnect()
     {
@@ -1642,10 +1642,10 @@ class LiveUser
     /**
      * Return a textual status message for a LiveUser status code.
      *
-     * @param   int     status code
+     * @param   integer     status code
      * @return  string  error message
      *
-     * @access  public
+     * @access public
      */
     function statusMessage($value)
     {

@@ -88,7 +88,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      * @param string  name of the container that should be used
      * @return boolean true on success or false on failure
      *
-     * @access  public
+     * @access public
      */
     function init(&$conf, $containerName)
     {

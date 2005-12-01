@@ -138,7 +138,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      *
      *
-     * @param int $auth_user_id
+     * @param integer $auth_user_id
      * @param string $containerName
      * @return mixed array or false on failure
      *
@@ -179,7 +179,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @return mixed array of false on failure
      *
      * @access public
@@ -212,7 +212,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      *
      * @return void
      *
-     * @access  public
+     * @access public
      */
     function disconnect()
     {

@@ -112,14 +112,14 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             }
         }
         return $rightIds;
-    } // end func _readImpliedRights
+    }
 
     /**
      * Reads all individual rights of current user into
      * an array of this format:
      * RightName -> Value
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @see    readRights()
      * @return void
      *
@@ -150,13 +150,13 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         $this->user_rights = $this->_readImpliedRights($this->user_rights, 'user');
 
         return $this->user_rights;
-    } // end func readUserRights
+    }
 
     /**
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @see    readRights()
      * @return void
      *
@@ -174,7 +174,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             }
         }
         return $this->group_ids;
-    } // end func readGroups
+    }
 
     /**
      *
@@ -212,7 +212,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
         $this->group_rights = $this->_readImpliedRights($group_rights, 'group');
 
         return $this->group_rights;
-    } // end func readGroupRights
+    }
 
     /**
      * Checks if the current user has a certain right in a
@@ -271,12 +271,12 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             }
         }
         return false;
-    } // end func checkLevel
+    }
 
     /**
      *
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @return mixed array or false on failure
      *
      * @access public

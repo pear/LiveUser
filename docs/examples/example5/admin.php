@@ -105,7 +105,7 @@ function getNewsList(&$db, $category)
  * Get a news content.
  *
  * @param  object  &$db     a reference to a db connection object
- * @param  int     $id      news id
+ * @param  integer     $id      news id
  * @param  string  $content the new content
  * @return mixed   content as a string or error
  */
@@ -147,7 +147,7 @@ function getNewsContent(&$db, $news = null)
  * Update a news content
  *
  * @param  object  &$db     a reference to a db connection object
- * @param  int     $id      news id
+ * @param  integer     $id      news id
  * @param  string  $content the new content
  * @return mixed   content as a string or error
  */

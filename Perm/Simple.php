@@ -72,7 +72,7 @@ class LiveUser_Perm_Simple
     var $perm_user_id = '';
 
     /**
-     * One-dimensional array containing current user's rights.
+     * One-dimensional array containing current user's rights (direct and (sub)group).
      * This already includes grouprights and possible overrides by
      * individual right settings.
      *
@@ -85,7 +85,7 @@ class LiveUser_Perm_Simple
 
     /**
      * One-dimensional array containing only the individual
-     * rights for the actual user.
+     * rights directly assigned to the user.
      *
      * Format: "RightId" => "Level"
      *
@@ -95,7 +95,8 @@ class LiveUser_Perm_Simple
     var $user_rights = array();
 
     /**
-     * Defines the user type.
+     * Defines the user type. Depending on the value the user can gain certain
+     * rights automatically
      *
      * @var integer
      * @access public
@@ -129,10 +130,10 @@ class LiveUser_Perm_Simple
     /**
      * Load and initialize the storage container.
      *
-     * @param  mixed   Name of array containing the configuration.
-     * @return  boolean true on success or false on failure
+     * @param array Array with the configuration
+     * @return boolean true on success or false on failure
      *
-     * @access  public
+     * @access public
      */
     function init(&$conf)
     {
@@ -167,11 +168,11 @@ class LiveUser_Perm_Simple
      * Tries to find the user with the given user ID in the permissions
      * container. Will read all permission data and return true on success.
      *
-     * @param   string  user identifier
-     * @param   string  name of the auth container
-     * @return  boolean true on success or false on failure
+     * @param  string user identifier
+     * @param  string name of the auth container
+     * @return boolean true on success or false on failure
      *
-     * @access  public
+     * @access public
      */
     function mapUser($auth_user_id = null, $containerName = null)
     {
@@ -197,7 +198,7 @@ class LiveUser_Perm_Simple
      * two-dimensional associative array, having the
      * area names as the key of the 1st dimension.
      *
-     * @return mixed array or false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -216,8 +217,8 @@ class LiveUser_Perm_Simple
      * Read all the user rights from the storage and puts them in a class
      * member for later retrieval.
      *
-     * @param  int   $perm_user_id the perm user id
-     * @return mixed array or false on failure
+     * @param integer perm user id
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -238,10 +239,11 @@ class LiveUser_Perm_Simple
      * If the user is has an "area admin" type he will automatically be
      * awarded the right.
      *
-     * @param   integer  Id of the right to check for.
-     * @return  integer Level of the right.
+     * @param integer Id of the right to check for.
+     * @return integer level at which the user has the given right or
+     *                 false if the user does not have the right.
      *
-     * @access  public
+     * @access public
      */
     function checkRight($right_id)
     {
@@ -254,13 +256,13 @@ class LiveUser_Perm_Simple
             return $this->rights[$right_id];
         }
         return false;
-    } // end func checkRight
+    }
 
     /**
      * Function returns the inquired value if it exists in the class.
      *
-     * @param  string  Name of the property to be returned.
-     * @return mixed  null, a value or an array.
+     * @param  string  name of the property to be returned.
+     * @return mixed   null, a scalar or an array.
      *
      * @access public
      */
@@ -279,7 +281,7 @@ class LiveUser_Perm_Simple
      * @param string name of the session in use.
      * @return  array containing the property values
      *
-     * @access  public
+     * @access public
      */
     function freeze($sessionName)
     {
@@ -292,15 +294,15 @@ class LiveUser_Perm_Simple
             'group_ids'    => $this->group_ids,
         );
         return $this->_storage->freeze($sessionName, $propertyValues);
-    } // end func freeze
+    }
 
     /**
      * Reinitializes properties from the storage container.
      *
-     * @param   array  $sessionName name of the session in use.
+     * @param string name of the key to use inside the session
      * @param boolean always returns true
      *
-     * @access  public
+     * @access public
      */
     function unfreeze($sessionName)
     {
@@ -311,14 +313,14 @@ class LiveUser_Perm_Simple
             }
         }
         return true;
-    } // end func unfreeze
+    }
 
     /**
      * Properly disconnect from resources.
      *
-     * @return void
+     * @return boolean true on success and false on failure
      *
-     * @access  public
+     * @access public
      */
     function disconnect()
     {

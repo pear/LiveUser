@@ -153,12 +153,12 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         }
 
         return $this->rights;
-    } // end func readRights
+    }
 
     /**
      *
      *
-     * @param int $perm_user_id
+     * @param integer perm user id
      * @return mixed array or false on failure
      *
      * @access public
@@ -211,7 +211,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * @return  boolean. If group_ids isn't populated then false,
                          if the group_id exists in group_ids then true else false.
      *
-     * @access  public
+     * @access public
      */
     function checkGroup($group_id)
     {
@@ -219,6 +219,6 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             return in_array($group_id, $this->group_ids);
         }
         return false;
-    } // end func checkGroup
-} // end class LiveUser_Perm_Container_MDB2_Medium
+    }
+}
 ?>
