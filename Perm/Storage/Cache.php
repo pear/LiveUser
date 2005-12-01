@@ -164,7 +164,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * (all groups that are subgroups of these are also added recursively)
      *
      * @param integer perm user id
-     * @return void
+     * @return array requested data or false on failure
      *
      * @access private
      * @see    readRights()
@@ -257,7 +257,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     /**
      * properly disconnect from resources
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access public
      */

@@ -210,7 +210,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      * properly disconnect from resources
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access public
      */
@@ -218,6 +218,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     {
         $this->tree = null;
         $this->userObj = null;
+        return true;
     }
 }
 ?>

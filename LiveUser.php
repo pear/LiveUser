@@ -882,7 +882,7 @@ class LiveUser
      * Sets the session handler and name and starts the session if headers have
      * not been send yet.
      *
-     * @return void
+     * @return boolean  true on success or false on failure
      *
      * @access private
      */
@@ -918,6 +918,8 @@ class LiveUser
         }
         // If there's no session yet, start it now
         @session_start();
+
+        return true;
     }
 
     /**

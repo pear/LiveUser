@@ -121,7 +121,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      *
      * @param integer perm user id
      * @see    readRights()
-     * @return void
+     * @return array requested data or false on failure
      *
      * @access private
      */
@@ -158,7 +158,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      *
      * @param integer perm user id
      * @see    readRights()
-     * @return void
+     * @return array requested data or false on failure
      *
      * @access private
      */
@@ -202,7 +202,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      * @param   array array with id's for the groups
      *                          that rights will be read from
      * @see    readRights()
-     * @return void
+     * @return array requested data or false on failure
      *
       * @access private
      */

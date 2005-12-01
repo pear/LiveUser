@@ -99,7 +99,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @return void
+     * @return boolean true on success or false on failure
      *
      * @access private
      */
