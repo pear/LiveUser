@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -65,15 +65,15 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
 {
     /**
      * dsn that was connected to
-     * @var object
+     * @var string
      * @access private
      */
     var $dsn = null;
 
     /**
-     * PEAR::MDB2 connection object.
+     * instance of the database backend object.
      *
-     * @var    object
+     * @var object
      * @access private
      */
     var $dbc = null;
@@ -88,9 +88,9 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     var $prefix = 'liveuser_';
 
     /**
-     * Properly disconnect from database
+     * properly disconnect from resources
      *
-     * @return bool true on success or false on failure
+     * @return bool true on success and false on failure
      *
      * @access public
      */

@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -65,18 +65,16 @@ require_once 'LiveUser/Perm/Storage.php';
  */
 class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
 {
-
     /**
      * Storage Container
      *
      * @var object
-     * @access public
+     * @access private
      */
     var $_storage = null;
 
     /**
-     *
-     *
+     * Initialize the storage container
      *
      * @param array Array with the storage configuration
      * @return bool true on success, false on failure.
@@ -100,7 +98,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     }
 
     /**
-     *
+     * map an auth user to a perm user
      *
      * @param int $auth_user_id
      * @param string $containerName
@@ -129,7 +127,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * in the process.
      *
      * @param int perm user id
-     * @return mixed array of false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -146,6 +144,14 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         return $result;
     }
 
+    /**
+     * read the areas in which a user is an area admin
+     *
+     * @param int perm user id
+     * @return array requested data or false on failure
+     *
+     * @access public
+     */
     function readAreaAdminAreas($perm_user_id)
     {
         if (in_cache) {
@@ -166,8 +172,8 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * @param int perm user id
      * @return array requested data or false on failure
      *
-     * @access private
      * @see    readRights()
+     * @access public
      */
     function readGroups($perm_user_id)
     {
@@ -188,8 +194,8 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @param array $group_rights
-     * @return  bool
+     * @param int group ids
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -207,10 +213,10 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     }
 
     /**
+     * Read the sub groups of the new groups that are not part of the group ids
      *
-     *
-     * @param array $group_ids
-     * @param array $newGroupIds
+     * @param array group ids
+     * @param array new group ids
      * @return array requested data or false on failure
      *
      * @access public
@@ -228,6 +234,16 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         return $result;
     }
 
+    /**
+     * Read out the rights from the userrights or grouprights table
+     * that imply other rights along with their level
+     *
+     * @param array right ids
+     * @param string name of the table
+     * @return array requested data or false on failure
+     *
+     * @access public
+     */
     function readImplyingRights($rightIds, $table)
     {
         if (in_cache) {
@@ -241,6 +257,15 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         return $result;
     }
 
+    /**
+    * Read out the implied rights with a given level from the implied_rights table
+    *
+    * @param array current right ids
+    * @param string current level
+     * @return array requested data or false on failure
+    *
+    * @access public
+    */
     function readImpliedRights($currentRights, $currentLevel)
     {
         if (in_cache) {
@@ -257,7 +282,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     /**
      * properly disconnect from resources
      *
-     * @return bool true on success or false on failure
+     * @return bool true on success and false on failure
      *
      * @access public
      */

@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -77,8 +77,7 @@ require_once 'MDB2.php';
 class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
 {
     /**
-     *
-     *
+     * Initialize the storage container
      *
      * @param array Array with the storage configuration
      * @return bool true on success, false on failure.
@@ -122,7 +121,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     *
+     * map an auth user to a perm user
      *
      * @param int $auth_user_id
      * @param string $containerName
@@ -168,7 +167,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      * in the process.
      *
      * @param int perm user id
-     * @return mixed array of false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -200,7 +199,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     *
+     * read the areas in which a user is an area admin
      *
      * @param int perm user id
      * @return array requested data or false on failure
@@ -242,12 +241,11 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-    
      * @param int perm user id
      * @return array requested data or false on failure
      *
-     * @access private
      * @see    readRights()
+     * @access public
      */
     function readGroups($perm_user_id)
     {
@@ -286,9 +284,8 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
      *
      * right => 1
      *
-     * @param   array array with id's for the groups
-     *                          that rights will be read from
-     * @return  mixed   array or false on failure
+     * @param int group ids
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -322,10 +319,10 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
     }
 
     /**
+     * Read the sub groups of the new groups that are not part of the group ids
      *
-     *
-     * @param array $group_ids
-     * @param array $newGroupIds
+     * @param array group ids
+     * @param array new group ids
      * @return array requested data or false on failure
      *
      * @access public
@@ -366,10 +363,11 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
     }
 
     /**
+     * Read out the rights from the userrights or grouprights table
+     * that imply other rights along with their level
      *
-     *
-     * @param array $rightIds
-     * @param string $table
+     * @param array right ids
+     * @param string name of the table
      * @return array requested data or false on failure
      *
      * @access public
@@ -409,11 +407,11 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
     }
 
     /**
+    * Read out the implied rights with a given level from the implied_rights table
     *
-    *
-    * @param array $currentRights
-    * @param string $currentLevel
-    * @return mixed array or false on failure
+    * @param array current right ids
+    * @param string current level
+     * @return array requested data or false on failure
     *
     * @access public
     */

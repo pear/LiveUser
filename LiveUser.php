@@ -758,7 +758,7 @@ class LiveUser
         if (!is_object($log)) {
             require_once 'Log.php';
             $log =& Log::factory('composite');
-            $conf = array('colors' => 
+            $conf = array('colors' =>
                 array(
                     PEAR_LOG_EMERG   => 'red',
                     PEAR_LOG_ALERT   => 'orange',

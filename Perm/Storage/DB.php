@@ -78,8 +78,7 @@ require_once 'DB.php';
 class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
 {
     /**
-     *
-     *
+     * Initialize the storage container
      *
      * @param array Array with the storage configuration
      * @return bool true on success, false on failure.
@@ -114,8 +113,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     * Returns the perm userid from an auth userid
-     * and a container name.
+     * map an auth user to a perm user
      *
      * @param int $auth_user_id
      * @param string $containerName
@@ -157,7 +155,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * in the process.
      *
      * @param int perm user id
-     * @return mixed array of false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -185,7 +183,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     * Fetch all the rights for every area where the user is an area admin.
+     * read the areas in which a user is an area admin
      *
      * @param int perm user id
      * @return array requested data or false on failure
@@ -223,12 +221,11 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     *
      * @param int perm user id
      * @return array requested data or false on failure
      *
-     * @access private
      * @see    readRights()
+     * @access public
      */
     function readGroups($perm_user_id)
     {
@@ -267,9 +264,8 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      * right => 1
      *
-     * @param   array array with id's for the groups
-     *                          that rights will be read from
-     * @return  mixed   array or false on failure
+     * @param int group ids
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -299,10 +295,10 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
+     * Read the sub groups of the new groups that are not part of the group ids
      *
-     *
-     * @param array $group_ids
-     * @param array $newGroupIds
+     * @param array group ids
+     * @param array new group ids
      * @return array requested data or false on failure
      *
      * @access public
@@ -343,10 +339,11 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
+     * Read out the rights from the userrights or grouprights table
+     * that imply other rights along with their level
      *
-     *
-     * @param array $rightIds
-     * @param string $table
+     * @param array right ids
+     * @param string name of the table
      * @return array requested data or false on failure
      *
      * @access public
@@ -382,17 +379,14 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     }
 
     /**
-     * Fetch rights implied by other rights.
-     *
-     * For instance you may have "write" implies "read" so whenever you affect "write"
-     * the user will also have the "read" right.
-     *
-     * @param array $currentRights
-     * @param string $currentLevel
+    * Read out the implied rights with a given level from the implied_rights table
+    *
+    * @param array current right ids
+    * @param string current level
      * @return array requested data or false on failure
-     *
-     * @access public
-     */
+    *
+    * @access public
+    */
     function readImpliedRights($currentRights, $currentLevel)
     {
         $query = '

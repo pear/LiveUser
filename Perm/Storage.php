@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -144,6 +144,9 @@ class LiveUser_Perm_Storage
      */
     function mapUser($auth_user_id, $containerName)
     {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
     }
 
     /**
@@ -160,6 +163,9 @@ class LiveUser_Perm_Storage
      */
     function readUserRights($perm_user_id)
     {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
     }
 
     /**
@@ -172,6 +178,9 @@ class LiveUser_Perm_Storage
      */
     function readAreaAdminAreas($perm_user_id)
     {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
     }
 
     /**
@@ -186,6 +195,9 @@ class LiveUser_Perm_Storage
      */
     function readGroups($perm_user_id)
     {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
     }
 
     /**
@@ -201,6 +213,9 @@ class LiveUser_Perm_Storage
      */
     function readGroupRights($group_ids)
     {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
     }
 
     /**
@@ -214,6 +229,42 @@ class LiveUser_Perm_Storage
      */
     function readSubGroups($group_ids, $newGroupIds)
     {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
+    }
+
+    /**
+     * Read out the rights from the userrights or grouprights table
+     * that imply other rights along with their level
+     *
+     * @param array right ids
+     * @param string name of the table
+     * @return array requested data or false on failure
+     *
+     * @access public
+     */
+    function readImplyingRights($rightIds, $table)
+    {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
+    }
+
+    /**
+    * Read out the implied rights with a given level from the implied_rights table
+    *
+    * @param array current right ids
+    * @param string current level
+     * @return array requested data or false on failure
+    *
+    * @access public
+    */
+    function readImpliedRights($currentRights, $currentLevel)
+    {
+        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            __METHOD__.' is not implemented');
+        return false;
     }
 
     /**

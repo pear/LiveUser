@@ -122,7 +122,7 @@ function getNewsContent(&$db, $news = null)
                 news
             WHERE
                 news_id = $news";
-    
+
         $news = $db->queryRow( $query );
     }
 

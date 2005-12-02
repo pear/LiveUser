@@ -12,7 +12,7 @@
  * approach which should enable it to
  * be versatile enough to meet most needs.
  *
- * PHP version 4 and 5 
+ * PHP version 4 and 5
  *
  * LICENSE: This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,10 +24,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA  02111-1307  USA 
+ * MA  02111-1307  USA
  *
  *
  * @category authentication
@@ -97,8 +97,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     var $userObj = null;
 
     /**
-     *
-     *
+     * Initialize the storage container
      *
      * @param array Array with the storage configuration
      * @return bool true on success, false on failure.
@@ -136,7 +135,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     }
 
     /**
-     *
+     * map an auth user to a perm user
      *
      * @param int $auth_user_id
      * @param string $containerName
@@ -180,7 +179,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      * in the process.
      *
      * @param int perm user id
-     * @return mixed array of false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -210,7 +209,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      * properly disconnect from resources
      *
-     * @return bool true on success or false on failure
+     * @return bool true on success and false on failure
      *
      * @access public
      */
