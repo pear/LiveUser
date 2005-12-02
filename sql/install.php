@@ -42,7 +42,7 @@
 require_once 'LiveUser.php';
 require_once 'MDB2/Schema.php';
 
-/* ATTENTION: uncommented the following lines as needed
+/* ATTENTION: uncomment the following lines as needed
 
 // error handler
 function handleError($err)
@@ -148,8 +148,41 @@ var_dump($result);
 
 /* */
 
+/**
+ * database schema installer class
+ *
+ * This class generates XML based schema files and uses PEAR:MDB2_Schema to
+ * install them inside the users database
+ *
+ * Requirements:
+ * - PEAR::LiveUser
+ * - PEAR::MDB2_Schema
+ * - PEAR::MDB2
+ * - PEAR::MDB2_Driver_* (where * is the name of the backend database)
+ * - a valid LiveUser configuration
+ *
+ * @category authentication
+ * @package LiveUser
+ * @author  Lukas Smith <smith@pooteeweet.org>
+ * @version $Id$
+ * @copyright 2002-2005 Markus Wolff
+ * @license http://www.gnu.org/licenses/lgpl.txt
+ * @version Release: @package_version@
+ * @link http://pear.php.net/LiveUser
+ */
 class LiveUser_Misc_Schema_Install
 {
+    /**
+     * Generates a schema file from the instance
+     *
+     * @param object LiveUser storage instance
+     * @param string name of the file into which the xml schema should be written
+     * @param array key-value pairs with keys being field names and values being the default length
+     * @param array key-value pairs with keys being field names and values being the default values
+     * @return bool|PEAR_Error true on success or a PEAR_Error on error
+     *
+     * @access public
+     */
     function generateSchema($instance, $file, $lengths = array(), $defaults = array())
     {
         if (!is_object($instance)) {
@@ -215,6 +248,14 @@ class LiveUser_Misc_Schema_Install
         return LiveUser_Misc_Schema_Install::writeSchema($definition, $file);
     }
 
+    /**
+     * Takes a given definition array and writes it as xml to a file
+     *
+     * @param array schema definition
+     * @return bool|PEAR_Error true on success or a PEAR_Error on error
+     *
+     * @access public
+     */
     function writeSchema($definition, $file)
     {
         require_once 'MDB2/Schema/Writer.php';
@@ -226,6 +267,21 @@ class LiveUser_Misc_Schema_Install
         return $writer->dumpDatabase($definition, $arguments);
     }
 
+    /**
+     * Install a schema file into the database
+     *
+     * @param object LiveUser storage instance
+     * @param string name of the file into which the xml schema should be written
+     * @param array key-value pairs with keys being variable names and values being the variable values
+     * @param bool determines if the database should be created or not
+     * @param array MDB2_Schema::connect() options
+     * @param bool determines if the database should be created or not
+     * @param bool determines if the old schema file should be unlinked first
+     * @param bool determines if the disable_query option should be set in MDB2
+     * @return bool|PEAR_Error true on success or a PEAR_Error on error
+     *
+     * @access public
+     */
     function installSchema($obj, $file, $variables = array(), $create = true,
         $options = array(), $unlink = false, $disable_query = false)
     {
