@@ -82,7 +82,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      *
      * @param array Array with the storage configuration
-     * @return boolean true on success, false on failure.
+     * @return bool true on success, false on failure.
      *
      * @access public
      */
@@ -117,9 +117,9 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Returns the perm userid from an auth userid
      * and a container name.
      *
-     * @param integer $auth_user_id
+     * @param int $auth_user_id
      * @param string $containerName
-     * @return mixed array or false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -156,7 +156,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param integer perm user id
+     * @param int perm user id
      * @return mixed array of false on failure
      *
      * @access public
@@ -187,8 +187,8 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
     /**
      * Fetch all the rights for every area where the user is an area admin.
      *
-     * @param integer perm user id
-     * @return mixed array or false on failure
+     * @param int perm user id
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -224,8 +224,8 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      * (all groups that are subgroups of these are also added recursively)
      *
      *
-     * @param integer perm user id
-     * @return mixed array or false on failure
+     * @param int perm user id
+     * @return array requested data or false on failure
      *
      * @access private
      * @see    readRights()
@@ -303,7 +303,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      * @param array $group_ids
      * @param array $newGroupIds
-     * @return mixed array or false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -347,7 +347,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      * @param array $rightIds
      * @param string $table
-     * @return mixed array or false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -389,7 +389,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      *
      * @param array $currentRights
      * @param string $currentLevel
-     * @return mixed array or false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */

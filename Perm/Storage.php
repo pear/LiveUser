@@ -98,7 +98,7 @@ class LiveUser_Perm_Storage
      * Initialize the storage container
      *
      * @param array Array with the storage configuration
-     * @return boolean true on success, false on failure.
+     * @return bool true on success, false on failure.
      *
      * @access public
      */
@@ -136,7 +136,7 @@ class LiveUser_Perm_Storage
     /**
      * map an auth user to a perm user
      *
-     * @param integer $auth_user_id
+     * @param int $auth_user_id
      * @param string $containerName
      * @return array requested data or false on failure
      *
@@ -153,7 +153,7 @@ class LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param integer perm user id
+     * @param int perm user id
      * @return array requested data or false on failure
      *
      * @access public
@@ -165,7 +165,7 @@ class LiveUser_Perm_Storage
     /**
      * read the areas in which a user is an area admin
      *
-     * @param integer perm user id
+     * @param int perm user id
      * @return array requested data or false on failure
      *
      * @access public
@@ -178,11 +178,11 @@ class LiveUser_Perm_Storage
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @param integer perm user id
+     * @param int perm user id
      * @return array requested data or false on failure
      *
      * @see    readRights()
-     * @access private
+     * @access public
      */
     function readGroups($perm_user_id)
     {
@@ -194,7 +194,7 @@ class LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @param integer group ids
+     * @param int group ids
      * @return array requested data or false on failure
      *
      * @access public
@@ -249,7 +249,7 @@ class LiveUser_Perm_Storage
     /**
      * properly disconnect from resources
      *
-     * @return boolean true on success and false on failure
+     * @return bool true on success and false on failure
      *
      * @access public
      */

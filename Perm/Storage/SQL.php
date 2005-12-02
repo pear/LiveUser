@@ -90,7 +90,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     /**
      * Properly disconnect from database
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */

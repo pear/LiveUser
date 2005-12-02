@@ -86,7 +86,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      *
      * @param array   Name of array containing the configuration.
      * @param string  name of the container that should be used
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -114,7 +114,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     /**
      * Does nothing
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access private
      */
@@ -127,7 +127,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      * Reads user data from the given data source
      * Starts and verifies the PEAR::Auth login process
      *
-     * @return boolean true upon success or false on failure
+     * @return bool true upon success or false on failure
      *
      * @access private
      */

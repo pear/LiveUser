@@ -99,7 +99,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access private
      */
@@ -156,12 +156,12 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
     }
 
     /**
+     * Read all the groups in which the user is a member
      *
+     * @param int perm user id
+     * @return array requested data or false on failure
      *
-     * @param integer perm user id
-     * @return mixed array or false on failure
-     *
-     * @access public
+     * @access private
      */
     function readGroups($perm_user_id)
     {
@@ -177,12 +177,13 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
     }
 
     /**
+     * Reads all rights of the groups into an
+     * associative array.
      *
+     * @param array group ids
+     * @return array requested data or false on failure
      *
-     * @param array $group_ids
-     * @return mixed array or false on failure
-     *
-     * @access public
+     * @access private
      */
     function readGroupRights($group_ids)
     {
@@ -206,12 +207,9 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * If $this->ondemand and $ondemand is true, the groups will be loaded on
      * the fly.
      *
-     * @param   integer  Id of the group to check for.
-     * @param   boolean  allow ondemand reading of groups
-     * @return  boolean. If group_ids isn't populated then false,
-                         if the group_id exists in group_ids then true else false.
+     * @param int Id of the group to check for.
      *
-     * @access public
+     * @access private
      */
     function checkGroup($group_id)
     {

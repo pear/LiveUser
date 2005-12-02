@@ -95,7 +95,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      *
      * @param array   Name of array containing the configuration.
      * @param string  name of the container that should be used
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -140,7 +140,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     /**
      * Writes current values for user back to the database.
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access private
      */
@@ -199,9 +199,9 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      * If no match is found, false is being returned.
      *
      * @param  string user handle
-     * @param  boolean user password
+     * @param bool user password
      * @param  string auth user id
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -260,7 +260,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     /**
      * Properly disconnect from resources
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */

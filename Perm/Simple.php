@@ -98,7 +98,7 @@ class LiveUser_Perm_Simple
      * Defines the user type. Depending on the value the user can gain certain
      * rights automatically
      *
-     * @var integer
+     * @var int
      * @access public
      */
     var $perm_type = LIVEUSER_ANONYMOUS_TYPE_ID;
@@ -131,7 +131,7 @@ class LiveUser_Perm_Simple
      * Load and initialize the storage container.
      *
      * @param array Array with the configuration
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -170,7 +170,7 @@ class LiveUser_Perm_Simple
      *
      * @param  string user identifier
      * @param  string name of the auth container
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -200,7 +200,7 @@ class LiveUser_Perm_Simple
      *
      * @return array requested data or false on failure
      *
-     * @access public
+     * @access private
      */
     function readRights()
     {
@@ -217,10 +217,10 @@ class LiveUser_Perm_Simple
      * Read all the user rights from the storage and puts them in a class
      * member for later retrieval.
      *
-     * @param integer perm user id
+     * @param int perm user id
      * @return array requested data or false on failure
      *
-     * @access public
+     * @access private
      */
     function readUserRights($perm_user_id)
     {
@@ -239,8 +239,8 @@ class LiveUser_Perm_Simple
      * If the user is has an "area admin" type he will automatically be
      * awarded the right.
      *
-     * @param integer Id of the right to check for.
-     * @return integer level at which the user has the given right or
+     * @param int Id of the right to check for.
+     * @return int level at which the user has the given right or
      *                 false if the user does not have the right.
      *
      * @access public
@@ -300,7 +300,7 @@ class LiveUser_Perm_Simple
      * Reinitializes properties from the storage container.
      *
      * @param string name of the key to use inside the session
-     * @param boolean always returns true
+     * @param bool always returns true
      *
      * @access public
      */
@@ -318,7 +318,7 @@ class LiveUser_Perm_Simple
     /**
      * Properly disconnect from resources.
      *
-     * @return boolean true on success and false on failure
+     * @return bool true on success and false on failure
      *
      * @access public
      */

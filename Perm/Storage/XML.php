@@ -101,7 +101,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      *
      *
      * @param array Array with the storage configuration
-     * @return boolean true on success, false on failure.
+     * @return bool true on success, false on failure.
      *
      * @access public
      */
@@ -138,9 +138,9 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      *
      *
-     * @param integer $auth_user_id
+     * @param int $auth_user_id
      * @param string $containerName
-     * @return mixed array or false on failure
+     * @return array requested data or false on failure
      *
      * @access public
      */
@@ -179,7 +179,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param integer perm user id
+     * @param int perm user id
      * @return mixed array of false on failure
      *
      * @access public
@@ -210,7 +210,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
     /**
      * properly disconnect from resources
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */

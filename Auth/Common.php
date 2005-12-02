@@ -62,7 +62,7 @@ class LiveUser_Auth_Common
     /**
      * Has the current user successfully logged in?
      *
-     * @var    boolean
+     * @var    bool
      * @see    LiveUser_Auth_Common::isActive
      */
     var $loggedIn = null;
@@ -70,7 +70,7 @@ class LiveUser_Auth_Common
     /**
      * Timestamp of current login (last to be written)
      *
-     * @var    integer
+     * @var    int
      */
     var $currentLogin = 0;
 
@@ -79,7 +79,7 @@ class LiveUser_Auth_Common
      *
      * If this variable is set to 0, auth never expires
      *
-     * @var    integer
+     * @var    int
      */
     var $expireTime = 0;
 
@@ -89,21 +89,21 @@ class LiveUser_Auth_Common
      * Idletime gets refreshed each time, init() is called. If this
      * variable is set to 0, idle time is never checked.
      *
-     * @var    integer
+     * @var    int
      */
     var $idleTime = 0;
 
     /**
      * Allow multiple users in the database to have the same login handle.
      *
-     * @var    boolean
+     * @var    bool
      */
     var $allowDuplicateHandles = false;
 
     /**
      * Allow empty passwords to be passed to LiveUser.
      *
-     * @var    boolean
+     * @var    bool
      */
     var $allowEmptyPasswords = false;
 
@@ -210,7 +210,7 @@ class LiveUser_Auth_Common
      *
      * @param   array  array containing the configuration.
      * @param   string name of the container that should be used
-     * @return  boolean true on success or false on failure
+     * @return  bool true on success or false on failure
      *
      * @access public
      */
@@ -279,7 +279,7 @@ class LiveUser_Auth_Common
      * Reinitializes properties
      *
      * @param   array  $propertyValues
-     * @return  boolean
+     * @return  bool
      *
      * @access public
      */
@@ -369,7 +369,7 @@ class LiveUser_Auth_Common
      *
      * @param string   user handle
      * @param string   user password
-     * @return boolean null when user is inactive, true on success or false on failure
+     * @return bool null when user is inactive, true on success or false on failure
      *
      * @access public
      */
@@ -407,7 +407,7 @@ class LiveUser_Auth_Common
      * This method does nothing in the base class and is supposed to
      * be overridden in subclasses according to the supported backend.
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access private
      */
@@ -437,9 +437,9 @@ class LiveUser_Auth_Common
      * subclass overriding this method.
      *
      * @param  string user handle
-     * @param  boolean user password
+     * @param bool user password
      * @param  string auth user id
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -494,7 +494,7 @@ class LiveUser_Auth_Common
     /**
      * Check if the stored external values match the current external values
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -518,7 +518,7 @@ class LiveUser_Auth_Common
     /**
      * properly disconnect from resources
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access public
      */

@@ -1,4 +1,4 @@
-/* $Id: functions.js,v 1.1 2004-11-13 18:14:22 arnaud Exp $ */
+/* $Id: functions.js,v 1.2 2005-12-02 08:23:04 lsmith Exp $ */
 
 
 /**
@@ -8,7 +8,7 @@
  * @param   object   the link
  * @param   object   the sql query to submit
  *
- * @return  boolean  whether to run the query or not
+ * @return  bool  whether to run the query or not
  */
 function confirmLink(theLink, confirmMsg)
 {
@@ -33,7 +33,7 @@ function confirmLink(theLink, confirmMsg)
  * @param   object   the form
  * @param   string   the name of the form field to put the focus on
  *
- * @return  boolean  whether the form field is empty or not
+ * @return  bool  whether the form field is empty or not
  */
 function emptyFormElements(theForm, theFieldName)
 {
@@ -64,10 +64,10 @@ function emptyFormElements(theForm, theFieldName)
  *
  * @param   object   the form
  * @param   string   the name of the form field to check
- * @param   integer  the minimum authorized value
- * @param   integer  the maximum authorized value
+ * @param int  the minimum authorized value
+ * @param int  the maximum authorized value
  *
- * @return  boolean  whether a valid number has been submitted or not
+ * @return  bool  whether a valid number has been submitted or not
  */
 function checkFormElementInRange(theForm, theFieldName, min, max)
 {
@@ -110,7 +110,7 @@ function checkFormElementInRange(theForm, theFieldName, min, max)
  * @param   object   the table row
  * @param   object   the color to use for this row
  *
- * @return  boolean  whether pointer is set or not
+ * @return  bool  whether pointer is set or not
  */
 function setPointer(theRow, thePointerColor)
 {
@@ -140,9 +140,9 @@ function setPointer(theRow, thePointerColor)
  * Checks/unchecks all tables
  *
  * @param   string   the form name
- * @param   boolean  whether to check or to uncheck the element
+ * @param bool  whether to check or to uncheck the element
  *
- * @return  boolean  always true
+ * @return  bool  always true
  */
 function setCheckboxes(the_form, do_check)
 {

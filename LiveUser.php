@@ -55,7 +55,7 @@ require_once 'Event/Dispatcher.php';
 /**#@+
  * Error related constants definition
  *
- * @var integer
+ * @var int
  */
 define('LIVEUSER_ERROR',                        -1);
 define('LIVEUSER_ERROR_NOT_SUPPORTED',          -2);
@@ -75,7 +75,7 @@ define('LIVEUSER_ERROR_NOT_CALLABLE',          -14);
  * Statuses of the current object.
  *
  * @see LiveUser::getStatus
- * @var integer
+ * @var int
  */
 define('LIVEUSER_STATUS_OK',              1);
 define('LIVEUSER_STATUS_IDLED',          -1);
@@ -96,14 +96,14 @@ define('LIVEUSER_STATUS_EMPTY_HANDLE',  -11);
  *
  * Levels are only used in the complex container.
  *
- * @var integer
+ * @var int
  */
 define('LIVEUSER_MAX_LEVEL', 3);
 
 /**#@+
  * Usertypes
  *
- * @var integer
+ * @var int
  */
 /**
  * lowest user type id
@@ -135,7 +135,7 @@ define('LIVEUSER_MASTERADMIN_TYPE_ID', 5);
 /**#@+
  * Section types
  *
- * @var integer
+ * @var int
  */
 define('LIVEUSER_SECTION_APPLICATION',  1);
 define('LIVEUSER_SECTION_AREA',         2);
@@ -266,7 +266,7 @@ class LiveUser
      * The array element 'type' must be present so the LiveUser class can
      * include the correct class definition (example: "DB_Complex").
      *
-     * @var    boolean|array
+     * @var    bool|array
      * @access private
      */
     var $_permContainer = false;
@@ -508,7 +508,7 @@ class LiveUser
     /**
      * Wrapper method to get errors from the Error Stack.
      *
-     * @return array|boolean an array of the errors or false if there are no errors
+     * @return array|bool an array of the errors or false if there are no errors
      *
      * @access public
      */
@@ -524,7 +524,7 @@ class LiveUser
      * Loads a PEAR class.
      *
      * @param  string   classname
-     * @return boolean  true success or false on failure
+     * @return bool  true success or false on failure
      *
      * @access public
      */
@@ -678,7 +678,7 @@ class LiveUser
      * Checks if a file exists in the include path.
      *
      * @param  string  filename
-     * @return boolean true success and false on error
+     * @return bool true success and false on error
      *
      * @access public
      */
@@ -698,7 +698,7 @@ class LiveUser
      *
      * @param  array|file  Conf array or file path to configuration
      * @param  string      Name of array containing the configuration
-     * @return boolean     true on success or false on failure
+     * @return bool     true on success or false on failure
      *
      * @access public
      * @see    LiveUser::factory
@@ -799,7 +799,7 @@ class LiveUser
      *
      * @param  string   data
      * @param  string   secret key
-     * @param  boolean  true if it should be crypted,
+     * @param bool  true if it should be crypted,
      *                  false if it should be decrypted
      * @return string   (de-)crypted data
      *
@@ -844,7 +844,7 @@ class LiveUser
      *
      * @param  string   option name
      * @param  mixed    value for the option
-     * @return boolean  true on success or false on failure
+     * @return bool  true on success or false on failure
      *
      * @access public
      * @see    LiveUser::_options
@@ -882,7 +882,7 @@ class LiveUser
      * Sets the session handler and name and starts the session if headers have
      * not been send yet.
      *
-     * @return boolean  true on success or false on failure
+     * @return bool  true on success or false on failure
      *
      * @access private
      */
@@ -930,9 +930,9 @@ class LiveUser
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
-     * @param  boolean  set to true if user wants to logout
-     * @param  boolean  set if remember me is set, requires cookie otion
-     * @return boolean  true if init process well, false if something went wrong.
+     * @param bool  set to true if user wants to logout
+     * @param bool  set if remember me is set, requires cookie otion
+     * @return bool  true if init process well, false if something went wrong.
      *
      * @access public
      */
@@ -998,8 +998,8 @@ class LiveUser
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
-     * @param  boolean  set if remember me is set, requires cookie otion
-     * @return boolean  true on success or false on failure
+     * @param bool  set if remember me is set, requires cookie otion
+     * @return bool  true on success or false on failure
      *
      * @access public
      */
@@ -1093,7 +1093,7 @@ class LiveUser
      * Gets auth and perm container objects back from session and tries
      * to give them an active database/whatever connection again.
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access private
      */
@@ -1151,7 +1151,7 @@ class LiveUser
     /**
      * Stores all properties in the session.
      *
-     * @return  boolean true on sucess or false on failure
+     * @return  bool true on sucess or false on failure
      *
      * @access  private
      */
@@ -1178,7 +1178,7 @@ class LiveUser
     /**
      * Properly disconnect resources in the active container.
      *
-     * @return  boolean true on success or false on failure
+     * @return  bool true on success or false on failure
      *
      * @access public
      */
@@ -1208,8 +1208,8 @@ class LiveUser
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
-     * @param  boolean  set if remember me is set, requires cookie otion
-     * @return boolean  true if the cookie can be set, false otherwise
+     * @param bool  set if remember me is set, requires cookie otion
+     * @return bool  true if the cookie can be set, false otherwise
      *
      * @access private
      */
@@ -1278,7 +1278,7 @@ class LiveUser
     /**
      * Handles the retrieval of the login data from the rememberMe cookie.
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access private
      */
@@ -1354,7 +1354,7 @@ class LiveUser
     /**
      * Deletes the rememberMe cookie.
      *
-     * @return boolean true on success or false on failure
+     * @return bool true on success or false on failure
      *
      * @access private
      */
@@ -1394,8 +1394,8 @@ class LiveUser
      * This logs the user out and destroys the session object if the
      * configuration option is set.
      *
-     * @param  boolean  set to false if no events should be fired b yhte logout
-     * @return boolean true on success or false on failure
+     * @param bool  set to false if no events should be fired b yhte logout
+     * @return bool true on success or false on failure
      *
      * @access public
      */
@@ -1477,7 +1477,7 @@ class LiveUser
                           ressource for which the right is requested.
      * @param  array|int  Id or array of Ids of the group of the
      *                    ressource for which the right is requested.
-     * @return boolean    true on success or false on failure
+     * @return bool    true on success or false on failure
      *
      * @access public
      */
@@ -1495,7 +1495,7 @@ class LiveUser
      * Wrapper method for the permission object's own checkGroup method.
      *
      * @param  array|int  A group id or an array of groups.
-     * @return boolean    true on success or false on failure
+     * @return bool    true on success or false on failure
      *
      * @access public
      */
@@ -1524,7 +1524,7 @@ class LiveUser
     /**
      * Checks if a user is logged in.
      *
-     * @return boolean true if user is logged in, false if not
+     * @return bool true if user is logged in, false if not
      *
      * @access public
      */
@@ -1546,7 +1546,7 @@ class LiveUser
      * true ==  user account is NOT active
      * false == user account is active
      *
-     * @return boolean true if the user account is *not* active
+     * @return bool true if the user account is *not* active
      *                 false if the user account *is* active
      *
      * @access public
@@ -1584,9 +1584,9 @@ class LiveUser
     /**
      * Updates the properties of the containers from the original source.
      *
-     * @param  boolean if the auth container should be updated
-     * @param  boolean if the perm container should be updated
-     * @return boolean
+     * @param bool if the auth container should be updated
+     * @param bool if the perm container should be updated
+     * @return bool true on success and false on failure
      *
      * @access public
      */
@@ -1619,7 +1619,7 @@ class LiveUser
     /**
      * Get the current status.
      *
-     * @return integer a LIVEUSER_STATUS_* constant
+     * @return int a LIVEUSER_STATUS_* constant
      *
      * @access public
      * @see    LIVEUSER_STATUS_* constants
@@ -1644,7 +1644,7 @@ class LiveUser
     /**
      * Return a textual status message for a LiveUser status code.
      *
-     * @param   integer     status code
+     * @param int     status code
      * @return  string  error message
      *
      * @access public
