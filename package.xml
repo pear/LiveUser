@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.1">
+<package version="1.0" packagerversion="1.4.5">
  <name>LiveUser</name>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
@@ -64,25 +64,33 @@
   </maintainer>
   </maintainers>
  <release>
-  <version>0.16.7</version>
-  <date>2005-10-10</date>
+  <version>0.16.8</version>
+  <date>2005-12-03</date>
   <license>LGPL</license>
   <state>beta</state>
-  <notes>- typo fix getMessage =&gt; getMessage() (bug #5283)
-- added parameter to unlink backup file to force new creation in installSchema()
-- fixed join points in implied_rights table in the perm Globals.php
-- removed unnecessary join in readUserRights() of the database containers
-- removed autoInit (all init() manually instead) *BC BREAK*
-- reworked log/debug handling (there is a new &apos;debug&apos; conf option which can
-  either be a bool or a log instance)
-- made the log property public which made it possible to remove addErrorLog()
-- renamed loadPEARLog() to PEARLogFactory and reworked it to return a Log
-  instance as a static method
-- added an optional signature parameter to singleton() instead of using the
-  handle/password/confName parameters (which no longer exist) *BC BREAK*
-- made login() and logout() public
-- made freeze() private
-- prefixed all private properties/methods with an underscore
+  <notes>- clearer status and error messages
+- fix a bug with the passed Log object being discarded
+- extra debug info when the auth container is instantiated
+- more helpful error message when the class cannot be loaded
+- make the PEAR::Auth wrapper use the passed handle and password
+- fixed phpdoc typo in singleton method (bug #5668)
+- fixed ability to call singleton() with only the conf parameter set, even if
+  singleton was never called before (bug #5669)
+- fixed issue in factoryStorage() that would lead to modifying the config array (bug #5526)
+- added ability to disable executing the sql commands on installSchema()
+- set status after logging out not before
+- tweaked error messages for failed factory method calls
+- fix for calling singleton without a signature string (bug #5905)
+- attempt at checking if it is safe to start the session, add an error to the stack if not and return
+- minor performance tweak in login()
+- reordered code inside login() to make onFailedMapping events more powerful
+- improved handling of INACTIVE status
+- stop using backendArrayIndex infavor of containerName property in the auth instance
+- removed loginTimeout feature (disable lastlogin if you are concerned about
+  the cost of updating the lastlogin time)
+- handle option user data properties in readUserData() in the PEAR::Auth wrapper
+- added a few return true&apos;s for method that returned void so far
+- tons of phpdoc and whitespace fixes and additions
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -191,173 +199,33 @@
  </release>
  <changelog>
    <release>
-    <version>0.16.7</version>
-    <date>2005-10-10</date>
+    <version>0.16.8</version>
+    <date>2005-12-03</date>
     <license>LGPL</license>
     <state>beta</state>
-    <notes>- typo fix getMessage =&gt; getMessage() (bug #5283)
-- added parameter to unlink backup file to force new creation in installSchema()
-- fixed join points in implied_rights table in the perm Globals.php
-- removed unnecessary join in readUserRights() of the database containers
-- removed autoInit (all init() manually instead) *BC BREAK*
-- reworked log/debug handling (there is a new &apos;debug&apos; conf option which can
-  either be a bool or a log instance)
-- made the log property public which made it possible to remove addErrorLog()
-- renamed loadPEARLog() to PEARLogFactory and reworked it to return a Log
-  instance as a static method
-- added an optional signature parameter to singleton() instead of using the
-  handle/password/confName parameters (which no longer exist) *BC BREAK*
-- made login() and logout() public
-- made freeze() private
-- prefixed all private properties/methods with an underscore
-    </notes>
-   </release>
-   <release>
-    <version>0.16.6</version>
-    <date>2005-09-02</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- various fixes to the Session auth container
-- various fixes to the PEARAuth auth container
-- added error handler and more comments to the install.php
-- removed updateLastLogin option
-- delete remember me cookie in all error cases while reading the remember me cookie
-- cosmetic fixes to the examples in demodata.php
-- (re-)added example5 (more or less the same as example4)
-    </notes>
-   </release>
-   <release>
-    <version>0.16.5</version>
-    <date>2005-09-02</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- various fixes to the Session auth container
-- various fixes to the PEARAuth auth container
-- added error handler and more comments to the install.php
-- removed updateLastLogin option
-- delete remember me cookie in all error cases while reading the remember me cookie
-- cosmetic fixes to the examples in demodata.php
-- (re-)added example5 (more or less the same as example4)
-    </notes>
-   </release>
-   <release>
-    <version>0.16.4</version>
-    <date>2005-08-15</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- writeSchema returns error objects and not false on error
-- added error handling around call to parent::init()
-- assign _storage property by ref in the permission container
-- moved area admin code from the medium into the complex container
-- tweaked error handling in login()/readUserData()
-- only assign the perm instance to _perm if mapUser/unfreeze succeeded
-- fixed bug in the auth container common class that made is_active a required
-  and not optional feature as intended
-- fixed bug in MDB/MDB2 perm storage layer that could lead to incorrect
-  datatype being used when the alias feature is used
-    </notes>
-   </release>
-   <release>
-    <version>0.16.3</version>
-    <date>2005-08-09</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- added new custom user field &quot;name&quot; to example1
-- added missing config entries to example1 and example2
-- all user related container properties now use lower case with underscores
-  instead of lower bumby camel to better match the storage layer naming.
-  this allows for a much simplified readUserData() method (BC break!)
-- copy storage config before passing it to the storageFactory() since this
-  method messes with the values which causes the original to be modified due to
-  using pass by reference
-- use getProperty() to read properties of the auth container
-- use static calls for all factory method calls
-- disconnect on logout() (bug #4928)
-- fixed bugs in storageFactory()
-    </notes>
-   </release>
-   <release>
-    <version>0.16.2</version>
-    <date>2005-07-19</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- time() call prevented the rememberMe cookie from being set under IE
-- dont use serialize() for the cookie data due to security concerns
-  Note: this breaks all remember me cookies currently set!
-- fixed parse error in PEARAuth container (bug #4797)
-- cleaned up lastlogin handling (bug #4843)
-- nuke error due to disconnecting on logout()
-- php 4.4 reference assignment fixes
-    </notes>
-   </release>
-   <release>
-    <version>0.16.1</version>
-    <date>2005-07-04</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- fixed typo in cookie lifetime computation (and introduced LIVEUSER_DAY_SECONDS)
-- fixed bug that would lead to dropping all user assigned rigts for area admins
-- cosmetic fixes to error messages (username =&gt; handle)
-    </notes>
-   </release>
-   <release>
-    <version>0.16.0</version>
-    <date>2005-06-21</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- updated MDB2 dependency
-- made readConfig() public
-- use LIVEUSER_STATUS_AUTHINITERROR and LIVEUSER_STATUS_PERMINITERROR
-- removed &apos;ids&apos; from GLOBALS.php array since this is no longer used in the admin
-- added support for table name aliasing
-- added updateProperty() method
-- dont raise an error when login() was not able to authenticate the user
-- storageFactory() is no longer permission specific
-- only return false in init() method if an error occured
-- always overwrite status with auth failed in login() when the current status is UNKNOWN
-- updated a few status message with clearer messages
-- delay storing of the auth container instance in a property until its clear that
-  the perm container will not produce errors
-- kill _auth and _perm property values at the beginning of login()
-- added new event &quot;onFailedMapping&quot; when an auth user cannot be mapped to a perm user
-
-authentication
-- reworked _readUserData() in the auth containers to optionally read by auth
-  user id instead of by handle/passwd (fairly untested)
-- made _readUserData() public (and renamed it to readUserData()
-- made auth fields dynamic (thx dan)
-- updated to use the new auth config layout due to using admin storage
-- tweaked disconnect to only disconnect when a new connection was made
-- updated Globals.php file (removed all optional fields, added users table alias)
-
-permission
-- cleaned up _readImpliedRights()
-- fixed bug in readUserRights() that would lead to overwriting the proper right keys
-- tweaked disconnect to only disconnect when a new connection was made
-
-installer
-- generate auth and perm schema on the fly (removed pre generated ones from cvs)
-- separated schema generation and schema writing in two methods in the installer
-- forgot to pass &apos;create&apos; param to installSchema() in installPermSchema()
-- use MDB2_Schema as an optional dependency for the schema installer
-- improved handling of defaults in the installer
-- improved DB seq support in the installer
-- options can now be passed to the installer
-- severely reworked the install API
-- added more infos into the old file names
-- updated code with the new auth config layout and as a result removed
-  generateAuthSchema() and renamed generatePermSchema() to generateSchema()
-- added table name prefix to all indexes, since some rdbms (notably pgsql)
-  dont like it if the same index name is used (bug #4593)
-
-examples
-- example5 was added again
-- demo data for examples 4 and 5 was converted to MDB2_Schema format
-- a script to install database based examples can be found under
-  docs/examples/demodata.php. Type php demodata.php -h for usage.
-- updated examples to use the new auth config layout due to using admin storage
-- tweaked error handling on init() call
-- use MDB2 in the examples instead of DB
+    <notes>- clearer status and error messages
+- fix a bug with the passed Log object being discarded
+- extra debug info when the auth container is instantiated
+- more helpful error message when the class cannot be loaded
+- make the PEAR::Auth wrapper use the passed handle and password
+- fixed phpdoc typo in singleton method (bug #5668)
+- fixed ability to call singleton() with only the conf parameter set, even if
+  singleton was never called before (bug #5669)
+- fixed issue in factoryStorage() that would lead to modifying the config array (bug #5526)
+- added ability to disable executing the sql commands on installSchema()
+- set status after logging out not before
+- tweaked error messages for failed factory method calls
+- fix for calling singleton without a signature string (bug #5905)
+- attempt at checking if it is safe to start the session, add an error to the stack if not and return
+- minor performance tweak in login()
+- reordered code inside login() to make onFailedMapping events more powerful
+- improved handling of INACTIVE status
+- stop using backendArrayIndex infavor of containerName property in the auth instance
+- removed loginTimeout feature (disable lastlogin if you are concerned about
+  the cost of updating the lastlogin time)
+- handle option user data properties in readUserData() in the PEAR::Auth wrapper
+- added a few return true&apos;s for method that returned void so far
+- tons of phpdoc and whitespace fixes and additions
     </notes>
    </release>
  </changelog>
