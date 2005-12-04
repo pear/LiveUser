@@ -69,6 +69,7 @@ define('LIVEUSER_ERROR_MISSING_CLASS',         -11);
 define('LIVEUSER_ERROR_WRONG_CREDENTIALS',     -12);
 define('LIVEUSER_ERROR_UNKNOWN_EVENT',         -13);
 define('LIVEUSER_ERROR_NOT_CALLABLE',          -14);
+define('LIVEUSER_ERROR_SESSION_STARTED',       -15);
 /**#@-*/
 
 /**#@+
@@ -315,7 +316,8 @@ class LiveUser
         LIVEUSER_ERROR_MISSING_CLASS          => 'Class %class% does not exist in file %file%',
         LIVEUSER_ERROR_WRONG_CREDENTIALS      => 'The handle and/or password you submitted are not known',
         LIVEUSER_ERROR_UNKNOWN_EVENT          => 'The event %event% is not known',
-        LIVEUSER_ERROR_NOT_CALLABLE           => 'Callback %callback% is not callable'
+        LIVEUSER_ERROR_NOT_CALLABLE           => 'Callback %callback% is not callable',
+        LIVEUSER_ERROR_SESSION_STARTED        => 'The session cannot be started because the output already begun (i.e. headers were sent)'
     );
 
     /**
@@ -911,8 +913,7 @@ class LiveUser
         // Check if we can safely start the session
         if (headers_sent()) {
             $this->_stack->push(
-                LIVEUSER_ERROR_CONFIG, 'exception', array(),
-                'The session cannot be started because the output already started'
+                LIVEUSER_ERROR_SESSION_STARTED, 'exception'
             );
             return;
         }
