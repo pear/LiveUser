@@ -1128,7 +1128,7 @@ class LiveUser
                     $perm =& LiveUser::permFactory($this->_permContainer);
                     if ($perm === false) {
                         $this->_stack->push(LIVEUSER_ERROR, 'exception',
-                            array('msg' => 'Could not instanciate perm container of type: '.$conf['type']));
+                            array('msg' => 'Could not instanciate perm container of type: ' . $this->_permContainer));
                         return $perm;
                     }
                     if ($this->_options['cache_perm']) {
