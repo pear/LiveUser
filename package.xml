@@ -58,14 +58,14 @@
   </maintainer>
   <maintainer>
    <user>dufuz</user>
-   <name>Helgi Þormar</name>
+   <name>Helgi &#222;ormar</name>
    <email>dufuz@php.net</email>
    <role>lead</role>
   </maintainer>
   </maintainers>
  <release>
   <version>0.16.8</version>
-  <date>2005-12-03</date>
+  <date>2005-12-04</date>
   <license>LGPL</license>
   <state>beta</state>
   <notes>- clearer status and error messages
@@ -161,6 +161,7 @@
        <file role="doc" name="home.php"/>
        <file role="doc" name="home.tpl"/>
        <file role="doc" name="index.php"/>
+       <file role="doc" name="layout_frontend.css"/>
        <file role="doc" name="liveuser_rights.php"/>
        <file role="doc" name="login_form.tpl"/>
        <file role="doc" name="news.tpl"/>
@@ -200,7 +201,7 @@
  <changelog>
    <release>
     <version>0.16.8</version>
-    <date>2005-12-03</date>
+    <date>2005-12-04</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>- clearer status and error messages
