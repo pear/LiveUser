@@ -35,6 +35,7 @@ $notes = <<<EOT
 - handle option user data properties in readUserData() in the PEAR::Auth wrapper
 - added a few return true's for method that returned void so far
 - tons of phpdoc and whitespace fixes and additions
+- add missing css file in example5
 EOT;
 
 $description = <<<EOT
@@ -130,3 +131,5 @@ if (array_key_exists('make', $_GET) || (isset($_SERVER['argv'][1]) && $_SERVER['
 if (PEAR::isError($result)) {
     echo $result->getMessage();
 }
+
+echo "package.xml generated successfully!\n";
