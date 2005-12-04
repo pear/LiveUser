@@ -59,7 +59,7 @@ require_once 'MDB2/Schema.php';
 $dsn = $file = '';
 $create = false;
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+if (array_key_exists('REQUEST_METHOD', $_SERVER) && $_SERVER['REQUEST_METHOD'] == 'GET') {
     echo '<pre>';
     if (array_key_exists('help', $_GET)) {
         printHelp();
