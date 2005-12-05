@@ -78,7 +78,7 @@ $result = $package->setOptions(array(
     'state'             => 'beta',
     'license'           => 'LGPL',
     'filelistgenerator' => 'cvs',
-    'ignore'            => array('package.php', 'package.xml', 'TODO', 'DefineGenerator'),
+    'ignore'            => array('package.php', 'package.xml', 'TODO', 'DefineGenerator', 'conf_pdo.php', 'PDO.php'),
     'notes'             => $notes,
     'changelogoldtonew' => false,
     'simpleoutput'      => true,
@@ -103,13 +103,14 @@ $result = $package->setOptions(array(
 
 if (PEAR::isError($result)) {
     echo $result->getMessage();
+    exit();
 }
 
 $package->addMaintainer('mw21st',  'lead',      'Markus Wolff',      'mw21st@php.net');
 $package->addMaintainer('arnaud',  'lead',      'Arnaud Limbourg',   'arnaud@php.net');
 $package->addMaintainer('lsmith',  'lead',      'Lukas Kahwe Smith', 'smith@pooteeweet.org');
 $package->addMaintainer('krausbn', 'developer', 'Bjoern Kraus',      'krausbn@php.net');
-$package->addMaintainer('dufuz',   'lead',      'Helgi Thormar',     'dufuz@php.net');
+$package->addMaintainer('dufuz',   'lead',      'Helgi Þormar',     'dufuz@php.net');
 
 $package->addDependency('php',              '4.2.0',      'ge',  'php', false);
 $package->addDependency('PEAR',             '1.3.3',      'ge',  'pkg', false);
@@ -130,6 +131,7 @@ if (array_key_exists('make', $_GET) || (isset($_SERVER['argv'][1]) && $_SERVER['
 
 if (PEAR::isError($result)) {
     echo $result->getMessage();
+    exit();
 }
 
 echo "package.xml generated successfully!\n";
