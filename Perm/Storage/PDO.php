@@ -62,7 +62,7 @@ require_once 'LiveUser/Perm/Storage/SQL.php';
  * - Array of connection options
  *   passed to the constructor.
  *   Example: array('dsn'                   => 'mysql:host:localhost;dbname=db_name',
- *                  'options'               => array('user' => 'root', 'passwd' => 'secret', 'attr' => array())
+ *                  'options'               => array('username' => 'root', 'password' => 'secret', 'attr' => array())
  *                  'allowDuplicateHandles' => 1);
  *
  * @category  authentication
@@ -96,9 +96,13 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
             $options = $login = $password = $extra = null;
             if (array_key_exists('options', $storageConf)) {
                 $options  = $storageConf['options'];
-                $login    = $options['user'];
-                $password = $options['passwd'];
-                if (isset($options['attr'])) {
+                if (array_key_exists('username', $options)) {
+                    $login = $options['username'];
+                }
+                if (array_key_exists('password', $options)) {
+                    $password = $options['password'];
+                }
+                if (array_key_exists('attr', $options)) {
                     $extra = $options['attr'];
                 }
             }

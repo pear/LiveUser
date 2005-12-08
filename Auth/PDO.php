@@ -59,7 +59,7 @@ require_once 'LiveUser/Auth/Common.php';
  * - Array of connection options
  *   passed to the constructor.
  *   Example: array('dsn'                   => 'mysql:host:localhost;dbname=db_name',
- *                  'options'               => array('user' => 'root', 'passwd' => 'secret', 'attr' => array())
+ *                  'options'               => array('username' => 'root', 'password' => 'secret', 'attr' => array())
  *                  'allowDuplicateHandles' => 1);
  *
  * @category  authentication
@@ -118,9 +118,13 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
                 $options = $login = $password = $extra = null;
                 if (isset($conf['storage']['options'])) {
                     $options  = $conf['storage']['options'];
-                    $login    = $options['user'];
-                    $password = $options['passwd'];
-                    if (isset($options['attr'])) {
+                    if (array_key_exists('username', $options)) {
+                        $login = $options['username'];
+                    }
+                    if (array_key_exists('password', $options)) {
+                        $password = $options['password'];
+                    }
+                    if (array_key_exists('attr', $options)) {
                         $extra = $options['attr'];
                     }
                 }
