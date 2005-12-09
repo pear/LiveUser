@@ -310,7 +310,7 @@ class LiveUser_Misc_Schema_Install
         $debug = $manager->db->getOption('debug');
         if ($debug && !PEAR::isError($debug)) {
             echo('Debug messages<br>');
-            echo($manager->db->debugOutput().'<br>');
+            echo($manager->db->getDebugOutput().'<br>');
         }
         $manager->disconnect();
         return $result;
