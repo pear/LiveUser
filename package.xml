@@ -65,7 +65,7 @@
   </maintainers>
  <release>
   <version>0.16.8</version>
-  <date>2005-12-04</date>
+  <date>2005-12-10</date>
   <license>LGPL</license>
   <state>beta</state>
   <notes>- clearer status and error messages
@@ -91,6 +91,7 @@
 - handle option user data properties in readUserData() in the PEAR::Auth wrapper
 - added a few return true&apos;s for method that returned void so far
 - tons of phpdoc and whitespace fixes and additions
+- add missing css file in example5
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -99,7 +100,7 @@
    <dep type="pkg" rel="ge" version="1.7.0" optional="yes">Log</dep>
    <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
    <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
-   <dep type="pkg" rel="ge" version="2.0.0beta4" optional="yes">MDB2</dep>
+   <dep type="pkg" rel="ge" version="2.0.0beta7" optional="yes">MDB2</dep>
    <dep type="pkg" rel="has" optional="yes">MDB2_Schema</dep>
    <dep type="pkg" rel="has" optional="yes">XML_Tree</dep>
    <dep type="pkg" rel="has" optional="yes">Crypt_RC4</dep>
@@ -201,7 +202,7 @@
  <changelog>
    <release>
     <version>0.16.8</version>
-    <date>2005-12-04</date>
+    <date>2005-12-10</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>- clearer status and error messages
@@ -227,6 +228,7 @@
 - handle option user data properties in readUserData() in the PEAR::Auth wrapper
 - added a few return true&apos;s for method that returned void so far
 - tons of phpdoc and whitespace fixes and additions
+- add missing css file in example5
     </notes>
    </release>
  </changelog>
