@@ -165,7 +165,7 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
                  WHERE '  . $this->alias['auth_user_id']
                     .'='  . $this->dbc->quote($this->propertyValues['auth_user_id'], $this->fields['auth_user_id']);
 
-        $result = $this->dbc->query($query);
+        $result = $this->dbc->exec($query);
 
         if (PEAR::isError($result)) {
             $this->_stack->push(
