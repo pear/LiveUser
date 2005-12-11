@@ -1006,7 +1006,7 @@ class LiveUser
      */
     function login($handle = '', $passwd = '', $remember = false)
     {
-        if (empty($handle)) {
+        if (empty($handle) && $remember) {
             $result = $this->_readRememberCookie();
             if (!is_array($result)) {
                 if ($this->_status == LIVEUSER_STATUS_UNKNOWN) {
