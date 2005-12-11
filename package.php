@@ -36,6 +36,7 @@ $notes = <<<EOT
 - added a few return true's for method that returned void so far
 - tons of phpdoc and whitespace fixes and additions
 - add missing css file in example5
+- only read remember me cookie in login() if remember was passed as true (bug #6215)
 EOT;
 
 $description = <<<EOT
@@ -112,13 +113,13 @@ $package->addMaintainer('lsmith',  'lead',      'Lukas Kahwe Smith', 'smith@poot
 $package->addMaintainer('krausbn', 'developer', 'Bjoern Kraus',      'krausbn@php.net');
 $package->addMaintainer('dufuz',   'lead',      'Helgi Þormar',     'dufuz@php.net');
 
-$package->addDependency('php',              '4.2.0',      'ge',  'php', false);
-$package->addDependency('PEAR',             '1.3.3',      'ge',  'pkg', false);
-$package->addDependency('Event_Dispatcher', false,        'has', 'pkg', false);
-$package->addDependency('Log',              '1.7.0',      'ge',  'pkg', true);
-$package->addDependency('DB',               '1.6.0',      'ge',  'pkg', true);
-$package->addDependency('MDB',              '1.1.4',      'ge',  'pkg', true);
-$package->addDependency('MDB2',             '2.0.0beta7', 'ge',  'pkg', true);
+$package->addDependency('php',              '4.2.0',    'ge',  'php', false);
+$package->addDependency('PEAR',             '1.3.3',    'ge',  'pkg', false);
+$package->addDependency('Event_Dispatcher', false,      'has', 'pkg', false);
+$package->addDependency('Log',              '1.7.0',    'ge',  'pkg', true);
+$package->addDependency('DB',               '1.6.0',    'ge',  'pkg', true);
+$package->addDependency('MDB',              '1.1.4',    'ge',  'pkg', true);
+$package->addDependency('MDB2',             '2.0.0RC1', 'ge',  'pkg', true);
 $package->addDependency('MDB2_Schema',      false,        'has', 'pkg', true);
 $package->addDependency('XML_Tree',         false,        'has', 'pkg', true);
 $package->addDependency('Crypt_RC4',        false,        'has', 'pkg', true);
