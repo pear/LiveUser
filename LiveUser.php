@@ -525,20 +525,25 @@ class LiveUser
     /**
      * Loads a PEAR class.
      *
-     * @param  string   classname
+     * @param  string   classname to load
+     * @param  bool     if errors should be supressed from the stacl
      * @return bool  true success or false on failure
      *
      * @access public
      */
-    function loadClass($classname)
+    function loadClass($classname, $supress_error = false)
     {
         if (!class_exists($classname)) {
             $filename = str_replace('_', '/', $classname).'.php';
-            if (!LiveUser::fileExists($filename)) {
-                return false;
-            }
-            include_once($filename);
-            if (!class_exists($classname)) {
+            @include_once($filename);
+            if (!class_exists($classname) && !$supress_error) {
+                if (!LiveUser::fileExists($filename)) {
+                    $msg = 'File for the class does not exist ' . $classname;
+                } else {
+                    $msg = 'Parse error in the file for class' . $classname;
+                }
+                PEAR_ErrorStack::staticPush('LiveUser', LIVEUSER_ERROR_CONFIG,
+                    'exception', array(), $msg);
                 return false;
             }
         }
@@ -565,10 +570,6 @@ class LiveUser
             if ($auth->init($conf, $containerName) === false) {
                 $auth = false;
             }
-        } else {
-            PEAR_ErrorStack::staticPush('LiveUser',
-                LIVEUSER_ERROR_CONFIG, 'exception',
-                array(), 'Cannot load class ' . $classname);
         }
         return $auth;
     }
@@ -592,10 +593,6 @@ class LiveUser
             if ($perm->init($conf) === false) {
                 $perm = false;
             }
-        } else {
-            PEAR_ErrorStack::staticPush('LiveUser',
-                LIVEUSER_ERROR_CONFIG, 'exception',
-                array(), 'Cannot load class ' . $classname);
         }
 
         return $perm;
@@ -617,7 +614,7 @@ class LiveUser
         $key = key($confArray);
         $count = count($confArray);
         $storageName = $classprefix.'Storage_' . $key;
-        if (!LiveUser::loadClass($storageName)) {
+        if (!LiveUser::loadClass($storageName, true)) {
             if ($count <= 1) {
                 $storage = false;
                 return $storage;
