@@ -65,13 +65,21 @@ $obs = new LU_Default_observer();
 
 $LU->dispatcher->addObserver(array(&$obs, 'notify'));
 
-$username = (array_key_exists('handle', $_REQUEST)) ? $_REQUEST['handle'] : NULL;
-$password = (array_key_exists('passwd', $_REQUEST)) ? $_REQUEST['passwd'] : NULL;
-$logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
-if (!$LU->init($username, $password, $logout)) {
+if (!$LU->init()) {
     var_dump($LU->getErrors());
     die();
 }
+
+$username = (array_key_exists('handle', $_REQUEST)) ? $_REQUEST['handle'] : null;
+$password = (array_key_exists('passwd', $_REQUEST)) ? $_REQUEST['passwd'] : null;
+$logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
+
+if ($logout) {
+    $LU->logout(true);
+} elseif($username && (!$LU->isLoggedIn() || $LU->getProperty('handle') != $username)) {
+    $LU->login($username, $password);
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

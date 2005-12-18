@@ -117,14 +117,27 @@ $LUOptions = array(
 
 require_once 'LiveUser.php';
 
-function showLoginForm(&$notification)
+function forceLogin(&$notification)
+{
+    $liveUserObj =& $notification->getNotificationObject();
+
+    $username = (array_key_exists('username', $_REQUEST)) ? $_REQUEST['username'] : null;
+    if($username) {
+        $password = (array_key_exists('password', $_REQUEST)) ? $_REQUEST['password'] : null;
+        $liveUserObj->login($username, $password);
+    }
+    if (!$liveUserObj->isLoggedIn()) {
+        showLoginForm($liveUserObj);
+    }
+}
+
+function showLoginForm(&$liveUserObj)
 {
     $tpl = new HTML_Template_IT();
     $tpl->loadTemplatefile('loginform.tpl.php');
 
     $tpl->setVariable('form_action', $_SERVER['SCRIPT_NAME']);
 
-    $liveUserObj =& $notification->getNotificationObject();
     if (is_object($liveUserObj)) {
         if ($liveUserObj->getStatus()) {
             switch ($liveUserObj->getStatus()) {
@@ -151,14 +164,18 @@ function showLoginForm(&$notification)
 // Create new LiveUser (LiveUser) object.
 // We´ll only use the auth container, permissions are not used.
 $LU =& LiveUser::factory($LUOptions);
-$LU->dispatcher->addObserver('showLoginForm', 'forceLogin');
+$LU->dispatcher->addObserver('forceLogin', 'forceLogin');
 
-$username = (array_key_exists('username', $_REQUEST)) ? $_REQUEST['username'] : null;
-$password = (array_key_exists('password', $_REQUEST)) ? $_REQUEST['password'] : null;
-$logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
-if (!$LU->init($username, $password, $logout)) {
+if (!$LU->init()) {
     var_dump($LU->getErrors());
     die();
+}
+
+$logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
+
+if ($logout) {
+    $LU->logout(true);
+    showLoginForm($LU);
 }
 
 define('AREA_NEWS',          1);
