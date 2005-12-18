@@ -921,20 +921,13 @@ class LiveUser
     }
 
     /**
-     * Tries to retrieve the auth object from session and checks possible
-     * timeouts or logout requests.
-     * If afer this the user is not logged in, the method attempts a login based
-     * on the parameters or cookie data.
+     * Tries to retrieve the auth object from session and checks possible timeouts.
      *
-     * @param  string   handle of the user trying to authenticate
-     * @param  string   password of the user trying to authenticate
-     * @param bool  set to true if user wants to logout
-     * @param bool  set if remember me is set, requires cookie otion
      * @return bool  true if init process well, false if something went wrong.
      *
      * @access public
      */
-    function init($handle = '', $passwd = '', $logout = false, $remember = false)
+    function init()
     {
         if ($this->_options['session']['force_start']) {
             $this->_startSession();
@@ -946,35 +939,24 @@ class LiveUser
         // current timestamp
         $now = time();
 
-        if ($logout) {
-            $this->logout(true);
-        } elseif ($this->isLoggedIn()) {
-            // Check if user authenticated with new credentials
-            if ($handle && $this->getProperty('handle') !== $handle) {
-                $this->logout(false);
-            } elseif ($isReturningUser) {
+        if ($this->isLoggedIn()) {
+            if ($isReturningUser) {
                 // Check if authentication session is expired.
                 if ($this->getProperty('expireTime') > 0
                     && ($this->getProperty('currentLogin') + $this->getProperty('expireTime')) < $now
                 ) {
-                    $this->dispatcher->post($this, 'onExpired');
                     $this->logout(false);
                     $this->_status = LIVEUSER_STATUS_EXPIRED;
+                    $this->dispatcher->post($this, 'onExpired');
                 // Check if maximum idle time is reached.
                 } elseif ($this->getProperty('idleTime') > 0
                     && isset($_SESSION[$this->_options['session']['varname']]['idle'])
                     && ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->getProperty('idleTime')) < $now
                 ) {
-                    $this->dispatcher->post($this, 'onIdled');
                     $this->logout(false);
                     $this->_status = LIVEUSER_STATUS_IDLED;
+                    $this->dispatcher->post($this, 'onIdled');
                 }
-            }
-        }
-
-        if (!$this->isLoggedIn()) {
-            if (!$this->login($handle, $passwd, $remember) && $this->getErrors()) {
-                return false;
             }
         }
 
@@ -1004,7 +986,7 @@ class LiveUser
     function login($handle = '', $passwd = '', $remember = false)
     {
         if (empty($handle) && $remember) {
-            $result = $this->_readRememberCookie();
+            $result = $this->readRememberCookie();
             if (!is_array($result)) {
                 if ($this->_status == LIVEUSER_STATUS_UNKNOWN) {
                     $this->_status = LIVEUSER_STATUS_EMPTY_HANDLE;
@@ -1044,7 +1026,9 @@ class LiveUser
             }
             if ($auth->loggedIn) {
                 $this->_auth =& $auth;
-                $this->_setRememberCookie($handle, $passwd, $remember);
+                if ($remember) {
+                    $this->setRememberCookie($handle, $passwd);
+                }
                 $this->_status = LIVEUSER_STATUS_OK;
                 // Create permission object
                 if (is_array($this->_permContainer)) {
@@ -1074,15 +1058,14 @@ class LiveUser
             return false;
         }
 
+        // user has just logged in
         if (!$this->_options['session']['force_start']) {
             $this->_startSession();
         }
-
-        // user has just logged in
-        $this->dispatcher->post($this, 'onLogin');
         if ($this->_options['login']['regenid']) {
             session_regenerate_id();
         }
+        $this->dispatcher->post($this, 'onLogin');
 
         return true;
     }
@@ -1098,7 +1081,7 @@ class LiveUser
     function _unfreeze()
     {
         if (!$this->_options['session']['force_start']) {
-            if (!isset($_REQUEST[$this->_options['session']['name']])) {
+            if (!array_key_exists($this->_options['session']['name'], $_REQUEST)) {
                 return false;
             }
             $this->_startSession();
@@ -1206,18 +1189,13 @@ class LiveUser
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
-     * @param bool  set if remember me is set, requires cookie otion
      * @return bool  true if the cookie can be set, false otherwise
      *
-     * @access private
+     * @access public
      */
-    function _setRememberCookie($handle, $passwd, $remember)
+    function setRememberCookie($handle, $passwd)
     {
-        if (!$remember) {
-            return true;
-        }
-
-        if (!isset($this->_options['cookie'])) {
+        if (!array_key_exists('cookie', $this->_options)) {
             return false;
         }
 
@@ -1278,15 +1256,13 @@ class LiveUser
      *
      * @return bool true on success or false on failure
      *
-     * @access private
+     * @access public
      */
-    function _readRememberCookie()
+    function readRememberCookie()
     {
-        if (!isset($this->_options['cookie'])) {
-            return false;
-        }
-
-        if (!isset($_COOKIE[$this->_options['cookie']['name']])) {
+        if (!array_key_exists('cookie', $this->_options)
+            || !array_key_exists($this->_options['cookie']['name'], $_COOKIE)
+        ) {
             return false;
         }
 
@@ -1297,7 +1273,7 @@ class LiveUser
         ) {
             // Delete cookie if it's not valid, keeping it messes up the
             // authentication process
-            $this->_deleteRememberCookie();
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
                 'Wrong data in cookie store in LiveUser::readRememberMeCookie()');
             return false;
@@ -1311,7 +1287,7 @@ class LiveUser
 
         $fh = @fopen($dir . '/' . $store_id . '.lu', 'rb');
         if (!$fh) {
-            $this->_deleteRememberCookie();
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot open file for reading');
             return false;
@@ -1320,7 +1296,7 @@ class LiveUser
         $fields = fread($fh, 4096);
         fclose($fh);
         if (!$fields) {
-            $this->_deleteRememberCookie();
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot read file');
             return false;
@@ -1331,7 +1307,7 @@ class LiveUser
         );
 
         if (!is_array($serverData) || count($serverData) != 2) {
-            $this->_deleteRememberCookie();
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'exception', array(),
                 'Incorrect array structure');
             return false;
@@ -1340,7 +1316,7 @@ class LiveUser
         if ($serverData[0] != $passwd_id) {
             // Delete cookie if it's not valid, keeping it messes up the
             // authentication process
-            $this->_deleteRememberCookie();
+            $this->deleteRememberCookie();
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
                 'Passwords hashes do not match in cookie in LiveUser::readRememberMeCookie()');
             return false;
@@ -1354,15 +1330,13 @@ class LiveUser
      *
      * @return bool true on success or false on failure
      *
-     * @access private
+     * @access public
      */
-    function _deleteRememberCookie()
+    function deleteRememberCookie()
     {
-        if (!isset($this->_options['cookie'])) {
-            return false;
-        }
-
-        if (!isset($_COOKIE[$this->_options['cookie']['name']])) {
+        if (!array_key_exists('cookie', $this->_options)
+            || !array_key_exists($this->_options['cookie']['name'], $_COOKIE)
+        ) {
             return false;
         }
 
@@ -1405,7 +1379,7 @@ class LiveUser
             // trigger event 'onLogout' as replacement for logout callback function
             $this->dispatcher->post($this, 'onLogout');
             // If there's a cookie and the session hasn't idled or expired, kill that one too...
-            $this->_deleteRememberCookie();
+            $this->deleteRememberCookie();
         }
 
         // If the session should be destroyed, do so now...
@@ -1415,7 +1389,7 @@ class LiveUser
             if ($this->_options['session']['force_start']) {
                 $this->_startSession();
             }
-        } elseif (isset($_SESSION[$this->_options['session']['varname']])) {
+        } elseif (array_key_exists($this->_options['session']['varname'], $_SESSION)) {
             unset($_SESSION[$this->_options['session']['varname']]);
         }
 
@@ -1671,7 +1645,7 @@ class LiveUser
         }
 
         // return the textual error message corresponding to the code
-        return isset($statusMessages[$value])
+        return array_key_exists($value, $statusMessages)
             ? $statusMessages[$value] : $statusMessages[LIVEUSER_STATUS_UNKNOWN];
     }
 }
