@@ -37,6 +37,12 @@ $notes = <<<EOT
 - tons of phpdoc and whitespace fixes and additions
 - add missing css file in example5
 - only read remember me cookie in login() if remember was passed as true (bug #6215)
+- handle and password are passed to reeadUserData in the PEARAuth container
+- reworked file loading in loadClass() to work around issues in safe_mode with
+  LiveUser::fileExists() (bug #6226)
+- moved all explict handling of logout() and login() out of the init() method *BC BREAK*
+- made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
+- setRememberCookie() no longer accepts a remember parameter
 EOT;
 
 $description = <<<EOT

@@ -58,14 +58,14 @@
   </maintainer>
   <maintainer>
    <user>dufuz</user>
-   <name>Helgi &#222;ormar</name>
+   <name>Helgi Ãormar</name>
    <email>dufuz@php.net</email>
    <role>lead</role>
   </maintainer>
   </maintainers>
  <release>
   <version>0.16.8</version>
-  <date>2005-12-10</date>
+  <date>2005-12-18</date>
   <license>LGPL</license>
   <state>beta</state>
   <notes>- clearer status and error messages
@@ -92,6 +92,13 @@
 - added a few return true&apos;s for method that returned void so far
 - tons of phpdoc and whitespace fixes and additions
 - add missing css file in example5
+- only read remember me cookie in login() if remember was passed as true (bug #6215)
+- handle and password are passed to reeadUserData in the PEARAuth container
+- reworked file loading in loadClass() to work around issues in safe_mode with
+  LiveUser::fileExists() (bug #6226)
+- moved all explict handling of logout() and login() out of the init() method *BC BREAK*
+- made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
+- setRememberCookie() no longer accepts a remember parameter
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -100,7 +107,7 @@
    <dep type="pkg" rel="ge" version="1.7.0" optional="yes">Log</dep>
    <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
    <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
-   <dep type="pkg" rel="ge" version="2.0.0beta7" optional="yes">MDB2</dep>
+   <dep type="pkg" rel="ge" version="2.0.0RC1" optional="yes">MDB2</dep>
    <dep type="pkg" rel="has" optional="yes">MDB2_Schema</dep>
    <dep type="pkg" rel="has" optional="yes">XML_Tree</dep>
    <dep type="pkg" rel="has" optional="yes">Crypt_RC4</dep>
@@ -202,7 +209,7 @@
  <changelog>
    <release>
     <version>0.16.8</version>
-    <date>2005-12-10</date>
+    <date>2005-12-18</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>- clearer status and error messages
@@ -229,6 +236,13 @@
 - added a few return true&apos;s for method that returned void so far
 - tons of phpdoc and whitespace fixes and additions
 - add missing css file in example5
+- only read remember me cookie in login() if remember was passed as true (bug #6215)
+- handle and password are passed to reeadUserData in the PEARAuth container
+- reworked file loading in loadClass() to work around issues in safe_mode with
+  LiveUser::fileExists() (bug #6226)
+- moved all explict handling of logout() and login() out of the init() method *BC BREAK*
+- made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
+- setRememberCookie() no longer accepts a remember parameter
     </notes>
    </release>
  </changelog>
