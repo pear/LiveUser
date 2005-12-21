@@ -99,6 +99,7 @@
 - moved all explict handling of logout() and login() out of the init() method *BC BREAK*
 - made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
 - setRememberCookie() no longer accepts a remember parameter
+- added PDO backend and optional pdo based config for example5
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -122,6 +123,7 @@
      <file role="php" name="DB.php"/>
      <file role="php" name="MDB.php"/>
      <file role="php" name="MDB2.php"/>
+     <file role="php" name="PDO.php"/>
      <file role="php" name="PEARAuth.php"/>
      <file role="php" name="Session.php"/>
      <file role="php" name="XML.php"/>
@@ -165,6 +167,7 @@
        <file role="doc" name="admin.php"/>
        <file role="doc" name="admin.tpl"/>
        <file role="doc" name="conf.php"/>
+       <file role="doc" name="conf_pdo.php"/>
        <file role="doc" name="demodata.xml"/>
        <file role="doc" name="home.php"/>
        <file role="doc" name="home.tpl"/>
@@ -187,6 +190,7 @@
       <file role="php" name="Globals.php"/>
       <file role="php" name="MDB.php"/>
       <file role="php" name="MDB2.php"/>
+      <file role="php" name="PDO.php"/>
       <file role="php" name="SQL.php"/>
       <file role="php" name="XML.php"/>
      </dir> <!-- /Perm/Storage -->
@@ -243,6 +247,7 @@
 - moved all explict handling of logout() and login() out of the init() method *BC BREAK*
 - made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
 - setRememberCookie() no longer accepts a remember parameter
+- added PDO backend and optional pdo based config for example5
     </notes>
    </release>
  </changelog>

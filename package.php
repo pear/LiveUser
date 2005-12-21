@@ -43,6 +43,7 @@ $notes = <<<EOT
 - moved all explict handling of logout() and login() out of the init() method *BC BREAK*
 - made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
 - setRememberCookie() no longer accepts a remember parameter
+- added PDO backend and optional pdo based config for example5
 EOT;
 
 $description = <<<EOT
@@ -85,7 +86,7 @@ $result = $package->setOptions(array(
     'state'             => 'beta',
     'license'           => 'LGPL',
     'filelistgenerator' => 'cvs',
-    'ignore'            => array('package.php', 'package.xml', 'TODO', 'DefineGenerator', 'conf_pdo.php', 'PDO.php'),
+    'ignore'            => array('package.php', 'package.xml', 'TODO', 'DefineGenerator'),
     'notes'             => $notes,
     'changelogoldtonew' => false,
     'simpleoutput'      => true,
