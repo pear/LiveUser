@@ -65,7 +65,7 @@
   </maintainers>
  <release>
   <version>0.16.8</version>
-  <date>2005-12-18</date>
+  <date>2005-12-21</date>
   <license>LGPL</license>
   <state>beta</state>
   <notes>- clearer status and error messages
@@ -209,7 +209,7 @@
  <changelog>
    <release>
     <version>0.16.8</version>
-    <date>2005-12-18</date>
+    <date>2005-12-21</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>- clearer status and error messages
