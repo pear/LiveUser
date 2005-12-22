@@ -143,13 +143,11 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
             return null;
         }
 
+        $this->propertyValues['auth_user_id'] = $this->pearAuth->getUsername();
         $this->propertyValues['handle'] = $this->pearAuth->getUsername();
         $this->propertyValues['passwd'] = $this->encryptPW($this->pearAuth->password);
         if (!isset($this->tables['users']['fields']['is_active'])) {
             $this->propertyValues['is_active'] = true;
-        }
-        if (!isset($this->tables['users']['fields']['auth_user_id'])) {
-            $this->propertyValues['auth_user_id'] = $this->pearAuth->getUsername();
         }
         if (!isset($this->tables['users']['fields']['lastlogin'])) {
             $this->propertyValues['lastlogin'] = null;
