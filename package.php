@@ -9,41 +9,10 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.8';
+$version = '0.16.9';
 
 $notes = <<<EOT
-- clearer status and error messages
-- fix a bug with the passed Log object being discarded
-- extra debug info when the auth container is instantiated
-- more helpful error message when the class cannot be loaded
-- make the PEAR::Auth wrapper use the passed handle and password
-- fixed phpdoc typo in singleton method (bug #5668)
-- fixed ability to call singleton() with only the conf parameter set, even if
-  singleton was never called before (bug #5669)
-- fixed issue in factoryStorage() that would lead to modifying the config array (bug #5526)
-- added ability to disable executing the sql commands on installSchema()
-- set status after logging out not before
-- tweaked error messages for failed factory method calls
-- fix for calling singleton without a signature string (bug #5905)
-- attempt at checking if it is safe to start the session, add an error to the stack if not and return
-- minor performance tweak in login()
-- reordered code inside login() to make onFailedMapping events more powerful
-- improved handling of INACTIVE status
-- stop using backendArrayIndex infavor of containerName property in the auth instance
-- removed loginTimeout feature (disable lastlogin if you are concerned about
-  the cost of updating the lastlogin time)
-- handle option user data properties in readUserData() in the PEAR::Auth wrapper
-- added a few return true's for method that returned void so far
-- tons of phpdoc and whitespace fixes and additions
-- add missing css file in example5
-- only read remember me cookie in login() if remember was passed as true (bug #6215)
-- handle and password are passed to reeadUserData in the PEARAuth container
-- reworked file loading in loadClass() to work around issues in safe_mode with
-  LiveUser::fileExists() (bug #6226)
-- moved all explict handling of logout() and login() out of the init() method *BC BREAK*
-- made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
-- setRememberCookie() no longer accepts a remember parameter
-- added PDO backend and optional pdo based config for example5
+- fixed major bug in PEARAuth container :auth_user_id is not an optional property
 EOT;
 
 $description = <<<EOT
