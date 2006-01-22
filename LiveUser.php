@@ -799,13 +799,13 @@ class LiveUser
      *
      * @param  string   data
      * @param  string   secret key
-     * @param bool  true if it should be crypted,
+     * @param  bool     true if it should be crypted,
      *                  false if it should be decrypted
      * @return string   (de-)crypted data
      *
-     * @access private
+     * @access public
      */
-    function _cryptRC4($data, $secret, $crypt = true)
+    function cryptRC4($data, $secret, $crypt = true)
     {
         if (function_exists('mcrypt_module_open')) {
             $td = mcrypt_module_open('tripledes', '', 'ecb', '');
