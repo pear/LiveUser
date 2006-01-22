@@ -413,6 +413,7 @@ class LiveUser
      *            'allowDuplicateHandles' => 'if to allow duplicate handles',
      *            'allowEmptyPasswords'   => 'if empty passwords are allowed',
      *            'passwordEncryptionMode'=> 'what encryption method to use',
+     *            'secret'                => 'secret to use in password encryption',
      *            'storage' => array(
      *                'connection' => 'db connection object, use this or dsn',
      *                'dsn'        => 'database dsn, use this or connection',
