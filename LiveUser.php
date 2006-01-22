@@ -412,6 +412,7 @@ class LiveUser
      *            'idleTime'        => 'maximum amount of time between two request',
      *            'allowDuplicateHandles' => 'if to allow duplicate handles',
      *            'allowEmptyPasswords'   => 'if empty passwords are allowed',
+     *            'passwordEncryptionMode'=> 'what encryption method to use',
      *            'storage' => array(
      *                'connection' => 'db connection object, use this or dsn',
      *                'dsn'        => 'database dsn, use this or connection',
