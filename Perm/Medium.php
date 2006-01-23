@@ -75,12 +75,19 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * One-dimensional array containing all the groups
      * ids for the actual user.
      *
-     * Format: "RightId" => "Level"
-     *
      * @var array
      * @access public
      */
     var $group_ids = array();
+
+    /**
+     * One-dimensional array containing all the groups
+     * ids for the actual user without subgroups.
+     *
+     * @var array
+     * @access public
+     */
+    var $user_group_ids = array();
 
     /**
      * One-dimensional array containing only the group
@@ -165,14 +172,14 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      */
     function readGroups($perm_user_id)
     {
-        $this->group_ids = array();
+        $this->group_ids = $this->user_group_ids = array();
 
         $result = $this->_storage->readGroups($perm_user_id);
         if ($result === false) {
             return false;
         }
 
-        $this->group_ids = $result;
+        $this->group_ids = $this->user_group_ids = $result;
         return $this->group_ids;
     }
 
