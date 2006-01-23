@@ -131,7 +131,7 @@ class LiveUser_Auth_Common
      *
      * @var    string
      */
-    var $secret;
+    var $secret = '';
 
     /**
      * Error stack
