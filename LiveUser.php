@@ -1220,7 +1220,7 @@ class LiveUser
         }
 
         $passwd_id = md5($passwd);
-        $crypted_data = $this->_cryptRC4(
+        $crypted_data = LiveUser::cryptRC4(
             serialize(array($passwd_id, $passwd)),
             $this->_options['cookie']['secret'],
             true
@@ -1305,7 +1305,7 @@ class LiveUser
         }
 
         $serverData = @unserialize(
-            $this->_cryptRC4($fields, $this->_options['cookie']['secret'], false)
+            LiveUser::cryptRC4($fields, $this->_options['cookie']['secret'], false)
         );
 
         if (!is_array($serverData) || count($serverData) != 2) {
