@@ -202,6 +202,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
         'joins' => array(
             'groups' => 'group_id',
             'perm_users' => 'perm_user_id',
+            'grouprights' => 'group_id',
         ),
     ),
     'grouprights' => array(
@@ -213,6 +214,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
         'joins' => array(
             'rights' => 'right_id',
             'groups' => 'group_id',
+            'groupusers' => 'group_id',
         ),
     ),
     'group_subgroups' => array(
