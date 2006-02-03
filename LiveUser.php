@@ -1587,6 +1587,7 @@ class LiveUser
                 return false;
             }
         }
+        $this->_freeze();
         return true;
     }
 
