@@ -415,7 +415,7 @@ class LiveUser
      *            'passwordEncryptionMode'=> 'what encryption method to use',
      *            'secret'                => 'secret to use in password encryption',
      *            'storage' => array(
-     *                'connection' => 'db connection object, use this or dsn',
+     *                'dbc' => 'db connection object, use this or dsn',
      *                'dsn'        => 'database dsn, use this or connection',
      *           ),
      *           'externalValues' => array(
@@ -428,7 +428,7 @@ class LiveUser
      *      'type'     => 'perm container name',
      *      'storage'  => array(
      *          'storage container name' => array(
-     *              'connection' => 'db connection object, use this or dsn',
+     *              'dbc' => 'db connection object, use this or dsn',
      *              'dsn'        => 'database dsn, use this or connection',
      *              'prefix'    => 'table prefix'
      *              'tables'    => 'array containing additional tables or fields in existing tables',
@@ -1005,7 +1005,7 @@ class LiveUser
         //loop into auth containers
         $containerNames = array_keys($this->_authContainers);
         foreach ($containerNames as $containerName) {
-            if ($passwd === ''
+            if (empty($passwd)
                 && (!array_key_exists('allowEmptyPasswords', $this->_authContainers[$containerName])
                     || !$this->_authContainers[$containerName]['allowEmptyPasswords']
                 )
