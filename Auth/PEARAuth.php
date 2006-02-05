@@ -48,7 +48,7 @@
  * Require parent class definition and PEAR::Auth class.
  */
 require_once 'LiveUser/Auth/Common.php';
-require_once 'Auth/Auth.php';
+require_once 'Auth.php';
 
 /**
  * PEAR_Auth container for Authentication
@@ -82,6 +82,22 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     var $pearAuth = false;
 
     /**
+     * Contains name of the auth container
+     *
+     * @var    string
+     * @access private
+     */
+    var $container = false;
+
+    /**
+     * Contains array options
+     *
+     * @var    array
+     * @access private
+     */
+    var options = false;
+
+    /**
      * Load the storage container
      *
      * @param array   Name of array containing the configuration.
@@ -94,20 +110,23 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        require_once 'Auth.php';
-        if (!is_object($this->pearAuth)) {
-            $this->pearAuth = &new Auth(
-                $conf['pearAuthContainer'],
-                $conf['pearAuthOptions'],
-                '',
-                false
-            );
-            if (PEAR::isError($this->pearAuth)) {
+        if (!is_a($this->pearAuth, 'auth') && $this->container) {
+            $pearAuth = &new Auth($this->container, $this->options, '', false);
+            if (PEAR::isError($pearAuth)) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                    array('container' => 'could not connect: '.$this->pearAuth->getMessage()));
+                    array('container' => 'could not connect: '.$pearAuth->getMessage(),
+                    'debug' => $pearAuth->getUserInfo()));
                 return false;
             }
+            $this->pearAuth =& $pearAuth;
         }
+
+        if (!is_a($this->pearAuth, 'auth')) {
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => 'storage layer configuration missing'));
+            return false;
+        }
+
         return true;
     }
 

@@ -68,7 +68,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
      * @var string
      * @access private
      */
-    var $dsn = null;
+    var $dsn = false;
 
     /**
      * instance of the database backend object.
@@ -76,7 +76,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
      * @var object
      * @access private
      */
-    var $dbc = null;
+    var $dbc = false;
 
     /**
      * Table prefix
@@ -105,7 +105,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
                 );
                 return false;
             }
-            $this->dbc = null;
+            $this->dbc = false;
         }
         return true;
     }

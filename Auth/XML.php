@@ -79,7 +79,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      * @var    XML_Tree
      * @access private
      */
-    var $tree = null;
+    var $tree = false;
 
     /**
      * XML::Tree object of the user logged in.
@@ -103,37 +103,30 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (is_array($conf['storage'])) {
-            if (!is_file($this->file)) {
-                if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
-                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                        array('container' => "Auth initialisation failed. Can't find xml file."));
-                    return false;
-                }
-                $this->file = getenv('DOCUMENT_ROOT') . $this->file;
-            }
-            if ($this->file) {
-                if (class_exists('XML_Tree')) {
-                    $tree =& new XML_Tree($this->file);
-                    $err =& $tree->getTreeFromFile();
-                    if (PEAR::isError($err)) {
-                        $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                            array('container' => 'could not connect: '.$err->getMessage()));
-                        return false;
-                    }
-                    $this->tree = $tree;
-                } else {
-                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                        array('container' => "Auth initialisation failed. Can't find XML_Tree class."));
-                    return false;
-                   ;
-                }
-            } else {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                    array('container' => "Auth initialisation failed. Can't find xml file."));
+        if (!is_file($this->file)) {
+            if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
+                $this->_stack->push(LIVEUSER_ERROR_MISSING_DEPS, 'exception', array(),
+                    "Perm initialisation failed. Can't find xml file.");
                 return false;
             }
+            $this->file = getenv('DOCUMENT_ROOT') . $this->file;
         }
+
+        $tree =& new XML_Tree($this->file);
+        $err =& $tree->getTreeFromFile();
+        if (PEAR::isError($err)) {
+            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+                "Perm initialisation failed. Can't get tree from file");
+            return false;
+        }
+        $this->tree =& $tree;
+
+        if (!is_a($this->tree, 'xml_tree')) {
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => 'storage layer configuration missing'));
+            return false;
+        }
+
         return true;
     }
 
@@ -270,7 +263,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      */
     function disconnect()
     {
-        $this->tree = null;
+        $this->tree = false;
         $this->userObj = null;
         return true;
     }

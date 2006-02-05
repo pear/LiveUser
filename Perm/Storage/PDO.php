@@ -85,16 +85,11 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
      */
     function init(&$storageConf)
     {
-        if (!parent::init($storageConf)) {
-            return false;
-        }
+        parent::init($storageConf);
 
-        if (array_key_exists('connection', $storageConf)) {
-            $this->dbc = $storageConf['connection'];
-        } elseif (array_key_exists('dsn', $storageConf)) {
-            $this->dsn = $storageConf['dsn'];
+        if (!is_a($this->dbc, 'pdo') && $this->dsn) {
             $options = $login = $password = $extra = null;
-            if (array_key_exists('options', $storageConf)) {
+            if (isset($storageConf['options'])) {
                 $options  = $storageConf['options'];
                 if (array_key_exists('username', $options)) {
                     $login = $options['username'];
@@ -107,7 +102,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
                 }
             }
             try {
-                $this->dbc = new PDO($storageConf['dsn'], $login, $password, $extra);
+                $dbc = new PDO($storageConf['dsn'], $login, $password, $extra);
             } catch (PDOException $e) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array(
@@ -117,6 +112,13 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
                 );
                 return false;
             }
+            $this->dbc = $dbc;
+        }
+
+        if (!is_a($this->dbc, 'pdo')) {
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => 'storage layer configuration missing'));
+            return false;
         }
 
         return true;

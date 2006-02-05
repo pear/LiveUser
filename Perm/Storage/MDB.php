@@ -86,36 +86,38 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
      */
     function init($storageConf)
     {
-        if (!parent::init($storageConf)) {
-            return false;
-        }
+        parent::init($storageConf);
 
-        if (array_key_exists('connection', $storageConf)
-            && MDB::isConnection($storageConf['connection'])
-        ) {
-            $this->dbc = &$storageConf['connection'];
-        } elseif (array_key_exists('dsn', $storageConf)) {
-            $this->dsn = $storageConf['dsn'];
+        if (!MDB::isConnection($this->dbc) && $this->dsn) {
             $function = null;
-            if (array_key_exists('function', $storageConf)) {
+            if (isset($storageConf['function'])) {
                 $function = $storageConf['function'];
             }
             $options = null;
-            if (array_key_exists('options', $storageConf)) {
+            if (isset($storageConf['options'])) {
                 $options = $storageConf['options'];
             }
             $options['optimize'] = 'portability';
             if ($function == 'singleton') {
-                $this->dbc =& MDB::singleton($storageConf['dsn'], $options);
+                $dbc =& MDB::singleton($storageConf['dsn'], $options);
             } else {
-                $this->dbc =& MDB::connect($storageConf['dsn'], $options);
+                $dbc =& MDB::connect($storageConf['dsn'], $options);
             }
-            if (PEAR::isError($this->dbc)) {
+            if (PEAR::isError($dbc)) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                    array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                    array('container' => 'could not connect: '.$dbc->getMessage(),
+                    'debug' => $dbc->getUserInfo()));
                 return false;
             }
+            $this->dbc =& $dbc;
         }
+
+        if (!MDB::isConnection($this->dbc)) {
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => 'storage layer configuration missing'));
+            return false;
+        }
+
         return true;
     }
 

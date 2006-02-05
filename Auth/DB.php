@@ -81,7 +81,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      * @var    string
      * @access private
      */
-    var $dsn = null;
+    var $dsn = false;
 
     /**
      * Database connection object.
@@ -89,7 +89,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      * @var    object
      * @access private
      */
-    var $dbc = null;
+    var $dbc = false;
 
     /**
      * Table prefix
@@ -113,27 +113,28 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (is_array($conf['storage'])) {
-            if (isset($conf['storage']['connection'])
-                && DB::isConnection($conf['storage']['connection'])
-            ) {
-                $this->dbc = &$conf['storage']['connection'];
-            } elseif (isset($conf['storage']['dsn'])) {
-                $this->dsn = $conf['storage']['dsn'];
-                $options = null;
-                if (isset($conf['storage']['options'])) {
-                    $options = $conf['storage']['options'];
-                }
-                $options['portability'] = DB_PORTABILITY_ALL;
-                $this->dbc =& DB::connect($conf['storage']['dsn'], $options);
-                if (PEAR::isError($this->dbc)) {
-                    $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                        array('container' => 'could not connect: '.$this->dbc->getMessage(),
-                        'debug' => $this->dbc->getUserInfo()));
-                    return false;
-                }
+        if (!is_a($this->dbc, 'db_common') && $this->dsn) {
+            $options = null;
+            if (isset($conf['storage']['options'])) {
+                $options = $conf['storage']['options'];
             }
+            $options['portability'] = DB_PORTABILITY_ALL;
+            $dbc =& DB::connect($conf['storage']['dsn'], $options);
+            if (PEAR::isError($dbc)) {
+                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                    array('container' => 'could not connect: '.$dbc->getMessage(),
+                    'debug' => $dbc->getUserInfo()));
+                return false;
+            }
+            $this->dbc =& $dbc;
         }
+
+        if (!is_a($this->dbc, 'db_common')) {
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => 'storage layer configuration missing'));
+            return false;
+        }
+
         return true;
     }
 
@@ -258,7 +259,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
                 );
                 return false;
             }
-            $this->dbc = null;
+            $this->dbc = false;
         }
         return true;
     }

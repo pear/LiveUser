@@ -87,28 +87,30 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
      */
     function init(&$storageConf)
     {
-        if (!parent::init($storageConf)) {
-            return false;
-        }
+        parent::init($storageConf);
 
-        if (array_key_exists('connection', $storageConf)
-            && DB::isConnection($storageConf['connection'])
-        ) {
-            $this->dbc = &$storageConf['connection'];
-        } elseif (array_key_exists('dsn', $storageConf)) {
-            $this->dsn = $storageConf['dsn'];
+        if (!is_a($this->dbc, 'db_common') && $this->dsn) {
             $options = null;
-            if (array_key_exists('options', $storageConf)) {
+            if (isset($storageConf['options'])) {
                 $options = $storageConf['options'];
             }
             $options['portability'] = DB_PORTABILITY_ALL;
-            $this->dbc =& DB::connect($storageConf['dsn'], $options);
-            if (PEAR::isError($this->dbc)) {
+            $dbc =& DB::connect($storageConf['dsn'], $options);
+            if (PEAR::isError($dbc)) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
-                    array('container' => 'could not connect: '.$this->dbc->getMessage()));
+                    array('container' => 'could not connect: '.$dbc->getMessage(),
+                    'debug' => $dbc->getUserInfo()));
                 return false;
             }
+            $this->dbc =& $dbc;
         }
+
+        if (!is_a($this->dbc, 'db_common')) {
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => 'storage layer configuration missing'));
+            return false;
+        }
+
         return true;
     }
 

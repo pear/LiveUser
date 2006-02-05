@@ -106,9 +106,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
      */
     function init(&$storageConf)
     {
-        if (!parent::init($storageConf)) {
-            return false;
-        }
+        parent::init($storageConf);
 
         if (!is_file($this->file)) {
             if (!is_file(getenv('DOCUMENT_ROOT') . $this->file)) {
@@ -118,11 +116,7 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
             }
             $this->file = getenv('DOCUMENT_ROOT') . $this->file;
         }
-        if (!class_exists('XML_Tree')) {
-            $this->_stack->push(LIVEUSER_ERROR_MISSING_DEPS, 'exception', array(),
-                "Perm initialisation failed. Can't find XML_Tree class");
-            return false;
-        }
+
         $tree =& new XML_Tree($this->file);
         $err =& $tree->getTreeFromFile();
         if (PEAR::isError($err)) {
@@ -130,7 +124,14 @@ class LiveUser_Perm_Storage_XML extends LiveUser_Perm_Storage
                 "Perm initialisation failed. Can't get tree from file");
             return false;
         }
-        $this->tree = $tree;
+        $this->tree =& $tree;
+
+        if (!is_a($this->tree, 'xml_tree')) {
+            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                array('container' => 'storage layer configuration missing'));
+            return false;
+        }
+
         return true;
     }
 
