@@ -77,6 +77,7 @@ $conf = array(
                     'owner_group_id' => 'owner_group_id',
                 ),
                 'fields' => array(
+#                    'auth_user_id' => 'integer',
                     'lastlogin' => 'timestamp',
                     'is_active' => 'boolean',
                     'owner_user_id' => 'integer',
@@ -102,6 +103,9 @@ $conf = array(
                 'dsn' => $dsn,
                 'prefix' => 'liveuser_',
 #                'force_seq' => false,
+                'fields' => array(
+#                    'auth_user_id' => 'integer',
+                },
             )
         )
     )
@@ -141,7 +145,9 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     'auth_schema.xml',
     $variables,
     true,
-    $options
+    $options,
+    false,
+    false
 );
 var_dump($result);
 
@@ -159,7 +165,9 @@ $result = LiveUser_Misc_Schema_Install::installSchema(
     'perm_schema.xml',
     $variables,
     false,
-    $options
+    $options,
+    false,
+    false
 );
 var_dump($result);
 
@@ -230,7 +238,8 @@ class LiveUser_Misc_Schema_Install
                     $fields[$field_name]['default'] = $default;
                     // Sequences
                     if ($required === 'seq') {
-                        if (isset($instance->force_seq) && !$instance->force_seq) {
+                        if ($fields[$field_name]['type'] == 'integer'
+                            && isset($instance->force_seq) && !$instance->force_seq) {
                             $fields[$field_name]['autoincrement'] = true;
                             $fields[$field_name]['default'] = 0;
                         } else {
@@ -324,7 +333,7 @@ class LiveUser_Misc_Schema_Install
         return $manager;
         }
 
-        if ($unlink) {
+        if ($unlink && file_exists($file_old)) {
             unlink($file_old);
         }
         $result = $manager->updateDatabase($file, $file_old, $variables, $disable_query);
