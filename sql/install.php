@@ -105,7 +105,7 @@ $conf = array(
 #                'force_seq' => false,
                 'fields' => array(
 #                    'auth_user_id' => 'integer',
-                },
+                ),
             )
         )
     )
