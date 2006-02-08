@@ -68,6 +68,7 @@ $conf = array(
             'allowDuplicateHandles' => 0,
             'storage' => array(
                 'dsn' => $dsn,
+#                'force_seq' => false,
                 'alias' => array(
                     'auth_user_id' => 'authUserId',
                     'lastlogin' => 'lastLogin',
@@ -97,8 +98,11 @@ $conf = array(
     'permContainer'  => array(
         'type'  => 'Complex',
         'storage' => array(
-            'MDB2' => array('dsn' => $dsn,
-            'prefix' => 'liveuser_')
+            'MDB2' => array(
+                'dsn' => $dsn,
+                'prefix' => 'liveuser_',
+#                'force_seq' => false,
+            )
         )
     )
 );
@@ -226,19 +230,24 @@ class LiveUser_Misc_Schema_Install
                     $fields[$field_name]['default'] = $default;
                     // Sequences
                     if ($required === 'seq') {
-                        $sequences[$instance->prefix . $instance->alias[$table_name]] = array(
-                            'on' => array(
-                                'table' => $instance->prefix . $instance->alias[$table_name],
-                                'field' => $field_name,
-                            )
-                        );
-
-                        $table_indexes[$table_name.'_'.$field_name] = array(
-                            'fields' => array(
-                                $field_name => true,
-                            ),
-                            'unique' => true
-                        );
+                        if (isset($instance->force_seq) && !$instance->force_seq) {
+                            $fields[$field_name]['autoincrement'] = true;
+                            $fields[$field_name]['default'] = 0;
+                        } else {
+                            $sequences[$instance->prefix . $instance->alias[$table_name]] = array(
+                                'on' => array(
+                                    'table' => $instance->prefix . $instance->alias[$table_name],
+                                    'field' => $field_name,
+                                )
+                            );
+    
+                            $table_indexes[$table_name.'_'.$field_name] = array(
+                                'fields' => array(
+                                    $field_name => true,
+                                ),
+                                'unique' => true
+                            );
+                        }
                     // Generate indexes
                     } elseif (is_string($required)) {
                         $index_name = $table_name.'_'.$required . '_i';

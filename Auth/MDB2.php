@@ -102,6 +102,14 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
     var $prefix = 'liveuser_';
 
     /**
+     * determines of the use of sequences should be forced
+     *
+     * @var bool
+     * @access private
+     */
+    var $force_seq = true;
+
+    /**
      * Load the storage container
      *
      * @param array   Name of array containing the configuration.

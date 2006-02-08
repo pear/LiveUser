@@ -77,6 +77,14 @@ require_once 'MDB2.php';
 class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
 {
     /**
+     * determines of the use of sequences should be forced
+     *
+     * @var bool
+     * @access private
+     */
+    var $force_seq = true;
+
+    /**
      * Initialize the storage container
      *
      * @param array Array with the storage configuration
