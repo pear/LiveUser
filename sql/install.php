@@ -103,11 +103,24 @@ $conf = array(
     )
 );
 
+@unlink('dump.sql');
+function dump_to_file(&$db, $scope, $message, $is_manip)
+{
+    if ($is_manip) {
+        $fp = fopen('dump.sql', 'a');
+        fwrite($fp, $message."\n");
+        fclose($fp);
+    }
+}
+
 // customize MDB2_SCHEMA configuration options as needed
 $options = array(
     'debug' => true,
     'log_line_break' => '<br>',
     'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
+// to dump the SQL to a file uncommented the following line
+// and set the disable_query parameter in the installSchema calls
+#    'debug_handler' => 'dump_to_file',
 );
 
 // create instance of the auth container
