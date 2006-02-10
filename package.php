@@ -13,6 +13,19 @@ $version = '0.16.9';
 
 $notes = <<<EOT
 - fixed major bug in PEARAuth container :auth_user_id is not an optional property
+- added passwordEncryptionMode and secret to phpdoc comment
+- made cryptRC4() method public to match usage in auth common in the client and admin api
+- fixed handling of the secret user defineable property (bug #6551)
+- added support for user_group_ids (bug #6517)
+- allow grouprights and groupusers table to join eachother
+- updateProperty doesn't update the session (bug #6612)
+- renamed "connection" config option to "dbc" *BC BREAK*
+- cleaned up and unified init() in the storage classes
+- added example for dumping SQL to a file to installer
+- add support for force_seq to installer
+- removed allowDuplicateHandles and allowEmptyPasswords options, they are now
+  handled through the table definition in the given Globals.php (overwriteable
+  via the config array) *BC BREAK*
 EOT;
 
 $description = <<<EOT
