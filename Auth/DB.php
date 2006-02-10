@@ -92,6 +92,14 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
     var $dbc = false;
 
     /**
+     * Database connection options.
+     *
+     * @var    object
+     * @access private
+     */
+    var $options = array();
+
+    /**
      * Table prefix
      * Prefix for all db tables the container has.
      *
@@ -113,13 +121,9 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (!is_a($this->dbc, 'db_common') && $this->dsn) {
-            $options = null;
-            if (isset($conf['storage']['options'])) {
-                $options = $conf['storage']['options'];
-            }
-            $options['portability'] = DB_PORTABILITY_ALL;
-            $dbc =& DB::connect($conf['storage']['dsn'], $options);
+        if (!is_a($this->dbc, 'db_common') && !is_null($this->dsn)) {
+            $this->options['portability'] = DB_PORTABILITY_ALL;
+            $dbc =& DB::connect($this->dsn, $this->options);
             if (PEAR::isError($dbc)) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array('container' => 'could not connect: '.$dbc->getMessage(),

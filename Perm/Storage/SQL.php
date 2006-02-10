@@ -79,6 +79,14 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
     var $dbc = false;
 
     /**
+     * Database connection options.
+     *
+     * @var    object
+     * @access private
+     */
+    var $options = array();
+
+    /**
      * Table prefix
      * Prefix for all db tables the container has.
      *

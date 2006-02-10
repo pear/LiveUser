@@ -93,6 +93,22 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
     var $dbc = false;
 
     /**
+     * Database connection options.
+     *
+     * @var    object
+     * @access private
+     */
+    var $options = array();
+
+    /**
+     * Database connection functions
+     *
+     * @var    object
+     * @access private
+     */
+    var $function = 'connect';
+
+    /**
      * Table prefix
      * Prefix for all db tables the container has.
      *
@@ -122,20 +138,12 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (!MDB2::isConnection($this->dbc) && $this->dsn) {
-            $function = null;
-            if (isset($conf['storage']['function'])) {
-                $function = $conf['storage']['function'];
-            }
-            $options = null;
-            if (isset($conf['storage']['options'])) {
-                $options = $conf['storage']['options'];
-            }
-            $options['portability'] = MDB2_PORTABILITY_ALL;
-            if ($function == 'singleton') {
-                $dbc =& MDB2::singleton($conf['storage']['dsn'], $options);
+        if (!MDB2::isConnection($this->dbc) && !is_null($this->dsn)) {
+            $this->options['portability'] = MDB2_PORTABILITY_ALL;
+            if ($this->function == 'singleton') {
+                $dbc =& MDB2::singleton($this->dsn, $this->options);
             } else {
-                $dbc =& MDB2::connect($conf['storage']['dsn'], $options);
+                $dbc =& MDB2::connect($this->dsn, $this->options);
             }
             if (PEAR::isError($dbc)) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',

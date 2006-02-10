@@ -87,22 +87,21 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
     {
         parent::init($storageConf);
 
-        if (!is_a($this->dbc, 'pdo') && $this->dsn) {
-            $options = $login = $password = $extra = null;
-            if (isset($storageConf['options'])) {
-                $options  = $storageConf['options'];
-                if (array_key_exists('username', $options)) {
+        if (!is_a($this->dbc, 'pdo') && !is_null($this->dsn)) {
+            $login = $password = $extra = null;
+            if (!empty($this->options)) {
+                if (array_key_exists('username', $this->options)) {
                     $login = $options['username'];
                 }
-                if (array_key_exists('password', $options)) {
+                if (array_key_exists('password', $this->options)) {
                     $password = $options['password'];
                 }
-                if (array_key_exists('attr', $options)) {
+                if (array_key_exists('attr', $this->options)) {
                     $extra = $options['attr'];
                 }
             }
             try {
-                $dbc = new PDO($storageConf['dsn'], $login, $password, $extra);
+                $dbc = new PDO($this->dsn, $login, $password, $extra);
             } catch (PDOException $e) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array(

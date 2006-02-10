@@ -93,6 +93,21 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     var $dbc = false;
 
     /**
+     * Database connection options.
+     *
+     * @var    object
+     * @access private
+     */
+    var $options = array();
+
+    /**
+     * Database connection functions
+     *
+     * @var    object
+     * @access private
+     */
+    var $function = 'connect';
+    /**
      * Table prefix
      * Prefix for all db tables the container has.
      *
@@ -114,20 +129,12 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (!MDB::isConnection($this->dbc) && $this->dsn) {
-            $function = null;
-            if (isset($conf['storage']['function'])) {
-                $function = $conf['storage']['function'];
-            }
-            $options = null;
-            if (isset($conf['storage']['options'])) {
-                $options = $conf['storage']['options'];
-            }
-            $options['optimize'] = 'portability';
+        if (!MDB::isConnection($this->dbc) && !is_null($this->dsn)) {
+            $this->options['optimize'] = 'portability';
             if ($function == 'singleton') {
-                $dbc =& MDB::singleton($conf['storage']['dsn'], $options);
+                $dbc =& MDB::singleton($this->dsn, $this->options);
             } else {
-                $dbc =& MDB::connect($conf['storage']['dsn'], $options);
+                $dbc =& MDB::connect($this->dsn, $this->options);
             }
             if (PEAR::isError($dbc)) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',

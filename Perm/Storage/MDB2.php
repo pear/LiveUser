@@ -77,6 +77,14 @@ require_once 'MDB2.php';
 class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
 {
     /**
+     * Database connection functions
+     *
+     * @var    object
+     * @access private
+     */
+    var $function = 'connect';
+
+    /**
      * determines of the use of sequences should be forced
      *
      * @var bool
@@ -96,20 +104,12 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
     {
         parent::init($storageConf);
 
-        if (!MDB2::isConnection($this->dbc) && $this->dsn) {
-            $function = null;
-            if (isset($storageConf['function'])) {
-                $function = $storageConf['function'];
-            }
-            $options = null;
-            if (isset($storageConf['options'])) {
-                $options = $storageConf['options'];
-            }
-            $options['portability'] = MDB2_PORTABILITY_ALL;
-            if ($function == 'singleton') {
-                $dbc =& MDB2::singleton($storageConf['dsn'], $options);
+        if (!MDB2::isConnection($this->dbc) && !is_null($this->dsn)) {
+            $this->options['portability'] = MDB2_PORTABILITY_ALL;
+            if ($this->function == 'singleton') {
+                $dbc =& MDB2::singleton($this->dsn, $this->options);
             } else {
-                $dbc =& MDB2::connect($storageConf['dsn'], $options);
+                $dbc =& MDB2::connect($this->dsn, $this->options);
             }
             if (PEAR::isError($dbc)) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',

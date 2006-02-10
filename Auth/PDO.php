@@ -89,6 +89,14 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
     var $dbc = false;
 
     /**
+     * Database connection options.
+     *
+     * @var    object
+     * @access private
+     */
+    var $options = array();
+
+    /**
      * Table prefix
      * Prefix for all db tables the container has.
      *
@@ -110,22 +118,21 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
     {
         parent::init($conf, $containerName);
 
-        if (!is_a($this->dbc, 'pdo') && $this->dsn) {
-            $options = $login = $password = $extra = null;
-            if (isset($conf['storage']['options'])) {
-                $options  = $conf['storage']['options'];
-                if (array_key_exists('username', $options)) {
-                    $login = $options['username'];
+        if (!is_a($this->dbc, 'pdo') && !is_null($this->dsn)) {
+            $login = $password = $extra = null;
+            if (!empty($this->options)) {
+                if (array_key_exists('username', $this->options)) {
+                    $login = $this->options['username'];
                 }
-                if (array_key_exists('password', $options)) {
-                    $password = $options['password'];
+                if (array_key_exists('password', $this->options)) {
+                    $password = $this->options['password'];
                 }
-                if (array_key_exists('attr', $options)) {
-                    $extra = $options['attr'];
+                if (array_key_exists('attr', $this->options)) {
+                    $extra = $this->options['attr'];
                 }
             }
             try {
-                $dbc = new PDO($conf['storage']['dsn'], $login, $password, $extra);
+                $dbc = new PDO($this->dsn, $login, $password, $extra);
             } catch (PDOException $e) {
                 $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array(
