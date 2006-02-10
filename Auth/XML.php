@@ -224,13 +224,13 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
                     break;
                 }
             } elseif (array_key_exists('handle', $result) && $handle === $result['handle']) {
-                if ($this->tables['users']['fields']['passwd']) {
+                if (!is_null($this->tables['users']['fields']['passwd'])) {
                     if (array_key_exists('passwd', $result)
                         && $this->encryptPW($passwd) === $result['passwd']
                     ) {
                         $success = true;
                         break;
-                    } elseif (!$this->allowDuplicateHandles) {
+                    } elseif (is_string($this->tables['users']['fields']['handle'])) {
                         // dont look for any further matching handles
                         break;
                     }

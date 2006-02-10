@@ -94,20 +94,6 @@ class LiveUser_Auth_Common
     var $idleTime = 0;
 
     /**
-     * Allow multiple users in the database to have the same login handle.
-     *
-     * @var    bool
-     */
-    var $allowDuplicateHandles = false;
-
-    /**
-     * Allow empty passwords to be passed to LiveUser.
-     *
-     * @var    bool
-     */
-    var $allowEmptyPasswords = false;
-
-    /**
      * Possible encryption modes.
      *
      * @var    array
@@ -304,6 +290,10 @@ class LiveUser_Auth_Common
      */
     function decryptPW($encryptedPW)
     {
+        if (empty($encryptedPW) && $encryptedPW !== 0) {
+            return '';
+        }
+
         $decryptedPW = 'Encryption type not supported.';
 
         switch (strtoupper($this->passwordEncryptionMode)) {
@@ -338,6 +328,10 @@ class LiveUser_Auth_Common
      */
     function encryptPW($plainPW)
     {
+        if (empty($plainPW) && $plainPW !== 0) {
+            return '';
+        }
+
         $encryptedPW = 'Encryption type not supported.';
 
         switch (strtoupper($this->passwordEncryptionMode)) {

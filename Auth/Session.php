@@ -114,7 +114,7 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
     function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
         if (!$auth_user_id) {
-            if ($this->tables['users']['fields']['passwd']) {
+            if (!is_null($this->tables['users']['fields']['passwd'])) {
                 if (!array_key_exists($this->alias['passwd'], $_SESSION)
                     || $_SESSION[$this->alias['passwd']] !== $passwd
                 ) {

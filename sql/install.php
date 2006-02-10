@@ -65,7 +65,6 @@ $conf = array(
             'type'         => 'MDB2',
             'expireTime'   => 3600,
             'idleTime'     => 1800,
-            'allowDuplicateHandles' => 0,
             'storage' => array(
                 'dsn' => $dsn,
 #                'force_seq' => false,
@@ -263,6 +262,8 @@ class LiveUser_Misc_Schema_Install
                         $table_indexes[$index_name]['fields'][$field_name] = true;
                         $table_indexes[$index_name]['unique'] = true;
                     }
+                } else {
+                    $fields[$field_name]['notnull'] = ($required === false);
                 }
             }
             $tables[$instance->prefix . $instance->alias[$table_name]]['fields'] = $fields;

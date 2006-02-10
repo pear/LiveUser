@@ -61,9 +61,8 @@ require_once 'LiveUser/Perm/Storage/SQL.php';
  * - File "Liveuser.php" (contains the parent class "LiveUser")
  * - Array of connection options
  *   passed to the constructor.
- *   Example: array('dsn'                   => 'mysql:host:localhost;dbname=db_name',
- *                  'options'               => array('username' => 'root', 'password' => 'secret', 'attr' => array())
- *                  'allowDuplicateHandles' => 1);
+ *   Example: array('dsn'     => 'mysql:host:localhost;dbname=db_name',
+ *                  'options' => array('username' => 'root', 'password' => 'secret', 'attr' => array()));
  *
  * @category  authentication
  * @package   LiveUser

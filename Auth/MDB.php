@@ -62,9 +62,8 @@ MDB::loadFile('Date');
  * - File "LiveUser.php" (contains the parent class "LiveUser")
  * - Array of connection options or a PEAR::MDB connection object must be
  *   passed to the constructor.
- *   Example: array('dsn'                   => 'mysql://user:pass@host/db_name',
- *                  'connection             => &$conn, # PEAR::MDB connection object
- *                  'allowDuplicateHandles' => 1);
+ *   Example: array('dsn' => 'mysql://user:pass@host/db_name',
+ *                  'dbc' => &$conn, # PEAR::MDB connection object);
  *
  * @category authentication
  * @package LiveUser
@@ -225,7 +224,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
             $query .= $this->alias['handle'] . '='
                 . $this->dbc->getValue($this->fields['handle'], $handle);
 
-            if ($this->tables['users']['fields']['passwd']) {
+            if (!is_null($this->tables['users']['fields']['passwd'])) {
                 // If $passwd is set, try to find the first user with the given
                 // handle and password.
                 $query .= ' AND   ' . $this->alias['passwd'] . '='

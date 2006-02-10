@@ -61,9 +61,8 @@ require_once 'DB.php';
  * - File "LiveUser.php" (contains the parent class "LiveUser")
  * - Array of connection options or a PEAR::DB connection object must be
  *   passed to the constructor.
- *   Example: array('dsn'                   => 'mysql://user:pass@host/db_name',
- *                  'connection             => &$conn, # PEAR::DB connection object
- *                  'allowDuplicateHandles' => 1);
+ *   Example: array('dsn' => 'mysql://user:pass@host/db_name',
+ *                  'dbc' => &$conn, # PEAR::DB connection object);
  *
  * @category authentication
  * @package LiveUser
@@ -212,7 +211,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
             $query .= $this->alias['handle'] . '='
                 . $this->dbc->quoteSmart($handle);
 
-            if ($this->tables['users']['fields']['passwd']) {
+            if (!is_null($this->tables['users']['fields']['passwd'])) {
                 // If $passwd is set, try to find the first user with the given
                 // handle and password.
                 $query .= ' AND   ' . $this->alias['passwd'] . '='

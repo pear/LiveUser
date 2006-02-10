@@ -410,8 +410,6 @@ class LiveUser
      *            'type'            => 'auth container name',
      *            'expireTime'      => 'maximum lifetime of a session in seconds',
      *            'idleTime'        => 'maximum amount of time between two request',
-     *            'allowDuplicateHandles' => 'if to allow duplicate handles',
-     *            'allowEmptyPasswords'   => 'if empty passwords are allowed',
      *            'passwordEncryptionMode'=> 'what encryption method to use',
      *            'secret'                => 'secret to use in password encryption',
      *            'storage' => array(
@@ -1005,13 +1003,6 @@ class LiveUser
         //loop into auth containers
         $containerNames = array_keys($this->_authContainers);
         foreach ($containerNames as $containerName) {
-            if (empty($passwd)
-                && (!array_key_exists('allowEmptyPasswords', $this->_authContainers[$containerName])
-                    || !$this->_authContainers[$containerName]['allowEmptyPasswords']
-                )
-            ) {
-                continue;
-            }
             $auth =& LiveUser::authFactory($this->_authContainers[$containerName], $containerName);
             if ($auth === false) {
                 $this->_status = LIVEUSER_STATUS_AUTHINITERROR;

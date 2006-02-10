@@ -43,7 +43,6 @@ if ($xml_is_readable != false && $xml_is_writable != false) {
                 'type' => 'XML',
                 'expireTime'   => 3600,
                 'idleTime'     => 1800,
-                'allowDuplicateHandles'  => false,
                 'passwordEncryptionMode' => 'MD5',
                 'storage' => array(
                     'file' => 'Auth_XML.xml',

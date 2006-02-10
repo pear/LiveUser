@@ -33,7 +33,6 @@ $conf =
                 'type'          => 'PDO',
                 'expireTime'    => 3600,
                 'idleTime'      => 1800,
-                'allowDuplicateHandles' => 0,
                 'storage' => array(
                     'dsn' => $dsn,
                     'options' => array(

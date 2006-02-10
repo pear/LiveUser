@@ -27,7 +27,6 @@ if (is_readable('Auth_XML.xml') && is_writable('Auth_XML.xml')) {
                 'type' => 'XML',
                 'expireTime'   => 3600,
                 'idleTime'     => 1800,
-                'allowDuplicateHandles'  => false,
                 'passwordEncryptionMode' => 'MD5',
                 'storage' => array(
                     'file' => 'Auth_XML.xml',
