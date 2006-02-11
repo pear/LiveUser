@@ -26,6 +26,7 @@ $notes = <<<EOT
 - removed allowDuplicateHandles and allowEmptyPasswords options, they are now
   handled through the table definition in the given Globals.php (overwriteable
   via the config array) *BC BREAK*
+- initial untested support for PDO in the installer
 EOT;
 
 $description = <<<EOT
@@ -55,7 +56,7 @@ $description = <<<EOT
   and user data. Just make a new container type and you're ready to go!
 
   Currently available are containers using:
-  PEAR::DB, PEAR::MDB, PEAR::MDB2, PEAR::XML_Tree and PEAR::Auth.
+  PEAR::DB, PEAR::MDB, PEAR::MDB2, PECL::PDO, PEAR::XML_Tree, PEAR::Auth, Session.
 EOT;
 
 $package = new PEAR_PackageFileManager();
