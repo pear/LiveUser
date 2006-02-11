@@ -172,6 +172,11 @@ var_dump($result);
 
 /* */
 
+function parsePDODSN()
+{
+    die('Hardcode the parsed DSN to the PEAR array dsn format (see: http://pear.php.net/manual/en/package.database.db.intro-dsn.php).');
+}
+
 /**
  * database schema installer class
  *
@@ -248,7 +253,7 @@ class LiveUser_Misc_Schema_Install
                                     'field' => $field_name,
                                 )
                             );
-    
+
                             $table_indexes[$table_name.'_'.$field_name] = array(
                                 'fields' => array(
                                     $field_name => true,
@@ -317,10 +322,18 @@ class LiveUser_Misc_Schema_Install
     function installSchema($obj, $file, $variables = array(), $create = true,
         $options = array(), $unlink = false, $disable_query = false)
     {
-        $dsn = $obj->dbc->dsn;
         if (is_a($obj->dbc, 'DB_Common')) {
+            $dsn = $obj->dbc->dsn;
             $options['seqcol_name'] = 'id';
+        if (is_a($obj->dbc, 'PDO')) {
+            $dsn = parsePDODSN($obj->dbc->dsn);
+            $dsn['username'] = array_key_exists('username', $obj->dbc->options)
+                ? $obj->dbc->options['username'] : '';
+            $dsn['password'] = array_key_exists('password', $obj->dbc->options)
+                ? $obj->dbc->options['password'] : '';
+            $options['seqname_format'] = '%s';
         } else {
+            $dsn = $obj->dbc->dsn;
             $dsn['database'] = $obj->dbc->database_name;
         }
 
