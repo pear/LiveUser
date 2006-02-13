@@ -212,21 +212,31 @@ class LiveUser_Misc_Schema_Install
      *
      * @access public
      */
-    function generateSchema($instance, $file, $lengths = array(), $defaults = array())
+    function generateSchema($obj, $file, $lengths = array(), $defaults = array())
     {
-        if (!is_object($instance)) {
+        if (!is_object($obj)) {
             return false;
+        }
+
+        $use_auto_increment = false;
+        if (isset($obj->force_seq) && !$obj->force_seq) {
+            if (MDB2::isConnection($obj->dbc)) {
+                $use_auto_increment = ($obj->dbc->supports('sequences') === true);
+            } elseif (is_a($obj->dbc, 'PDO')) {
+                // todo: need to figure out what to do here
+                $use_auto_increment = true;
+            }
         }
 
         // generate xml schema
         $tables = array();
         $sequences = array();
-        foreach ($instance->tables as $table_name => $table) {
+        foreach ($obj->tables as $table_name => $table) {
             $fields = array();
             $table_indexes = array();
             foreach($table['fields'] as $field_name => $required) {
-                $type = $instance->fields[$field_name];
-                $field_name = $instance->alias[$field_name];
+                $type = $obj->fields[$field_name];
+                $field_name = $obj->alias[$field_name];
                 $fields[$field_name]['name'] = $field_name;
                 $fields[$field_name]['type'] = $type;
                 if ($fields[$field_name]['type'] == 'text') {
@@ -242,14 +252,13 @@ class LiveUser_Misc_Schema_Install
                     $fields[$field_name]['default'] = $default;
                     // Sequences
                     if ($required === 'seq') {
-                        if ($fields[$field_name]['type'] == 'integer'
-                            && isset($instance->force_seq) && !$instance->force_seq) {
+                        if ($fields[$field_name]['type'] == 'integer' && $use_auto_increment) {
                             $fields[$field_name]['autoincrement'] = true;
                             $fields[$field_name]['default'] = 0;
                         } else {
-                            $sequences[$instance->prefix . $instance->alias[$table_name]] = array(
+                            $sequences[$obj->prefix . $obj->alias[$table_name]] = array(
                                 'on' => array(
-                                    'table' => $instance->prefix . $instance->alias[$table_name],
+                                    'table' => $obj->prefix . $obj->alias[$table_name],
                                     'field' => $field_name,
                                 )
                             );
@@ -271,8 +280,8 @@ class LiveUser_Misc_Schema_Install
                     $fields[$field_name]['notnull'] = ($required === false);
                 }
             }
-            $tables[$instance->prefix . $instance->alias[$table_name]]['fields'] = $fields;
-            $tables[$instance->prefix . $instance->alias[$table_name]]['indexes'] = $table_indexes;
+            $tables[$obj->prefix . $obj->alias[$table_name]]['fields'] = $fields;
+            $tables[$obj->prefix . $obj->alias[$table_name]]['indexes'] = $table_indexes;
         }
 
         $definition = array(
@@ -322,19 +331,19 @@ class LiveUser_Misc_Schema_Install
     function installSchema($obj, $file, $variables = array(), $create = true,
         $options = array(), $unlink = false, $disable_query = false)
     {
+        $dsn = array();
         if (is_a($obj->dbc, 'DB_Common')) {
             $dsn = $obj->dbc->dsn;
             $options['seqcol_name'] = 'id';
-        if (is_a($obj->dbc, 'PDO')) {
+        } elseif (is_a($obj->dbc, 'PDO')) {
             $dsn = parsePDODSN($obj->dbc->dsn);
             $dsn['username'] = array_key_exists('username', $obj->dbc->options)
                 ? $obj->dbc->options['username'] : '';
             $dsn['password'] = array_key_exists('password', $obj->dbc->options)
                 ? $obj->dbc->options['password'] : '';
             $options['seqname_format'] = '%s';
-        } else {
-            $dsn = $obj->dbc->dsn;
-            $dsn['database'] = $obj->dbc->database_name;
+        } elseif (MDB2::isConnection($obj->dbc)) {
+            $dsn = $obj->dbc->getDSN();
         }
 
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
