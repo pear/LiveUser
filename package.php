@@ -27,6 +27,7 @@ $notes = <<<EOT
   handled through the table definition in the given Globals.php (overwriteable
   via the config array) *BC BREAK*
 - initial untested support for PDO in the installer
+- untested addition of PDO to the installer
 EOT;
 
 $description = <<<EOT
