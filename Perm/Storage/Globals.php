@@ -72,7 +72,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
         'fields' => array(
             'perm_user_id' => 'id',
             'right_id' => 'id',
-            'right_level' => false,
+            'right_level' => null,
         ),
         'joins' => array(
             'perm_users' => 'perm_user_id',
@@ -84,7 +84,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
             'right_id' => 'seq',
             'area_id' => 'define_name',
             'right_define_name' => 'define_name',
-            'has_implied' => false,
+            'has_implied' => null,
         ),
         'joins' => array(
             'areas' => 'area_id',
@@ -118,7 +118,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
             'section_type' => 'translation',
             'language_id' => 'translation',
             'name' => false,
-            'description' => false,
+            'description' => null,
         ),
         'joins' => array(
             'rights' => array(
@@ -209,7 +209,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
         'fields' => array(
             'group_id' => 'id',
             'right_id' => 'id',
-            'right_level' => false,
+            'right_level' => null,
         ),
         'joins' => array(
             'rights' => 'right_id',
