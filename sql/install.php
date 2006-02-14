@@ -348,7 +348,7 @@ class LiveUser_Misc_Schema_Install
      * @access public
      */
     function installSchema($obj, $file, $variables = array(), $create = true,
-        $options = array(), $unlink = false, $disable_query = false)
+        $options = array(), $overwrite = false, $disable_query = false)
     {
         $dsn = array();
         if (is_a($obj->dbc, 'DB_Common')) {
@@ -367,7 +367,7 @@ class LiveUser_Misc_Schema_Install
 
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
         $variables['create'] = (int)$create;
-        $variables['overwrite'] = (int)$unlink;
+        $variables['overwrite'] = (int)$overwrite;
         $variables['database'] = $dsn['database'];
         unset($dsn['database']);
 
@@ -376,7 +376,7 @@ class LiveUser_Misc_Schema_Install
         return $manager;
         }
 
-        if ($unlink && file_exists($file_old)) {
+        if ($overwrite && file_exists($file_old)) {
             unlink($file_old);
         }
         $result = $manager->updateDatabase($file, $file_old, $variables, $disable_query);
