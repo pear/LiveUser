@@ -188,11 +188,6 @@ var_dump($result);
 
 /* */
 
-function parsePDODSN()
-{
-    die('Hardcode the parsed DSN to the PEAR array dsn format (see: http://pear.php.net/manual/en/package.database.db.intro-dsn.php).');
-}
-
 /**
  * database schema installer class
  *
@@ -217,6 +212,36 @@ function parsePDODSN()
  */
 class LiveUser_Misc_Schema_Install
 {
+
+    /**
+     * Accepts a PDO DSN and returns a PEAR DSN
+     *
+     * The PEAR DSN format is specified here:
+     * http://pear.php.net/manual/en/package.database.db.intro-dsn.php
+     *
+     * @param string PDO DSN
+     * @return array PEAR DSN
+     *
+     * @access public
+     */
+    function parsePDODSN($pdo_dsn)
+    {
+        die('Hardcode the parsed DSN to the PEAR array dsn format.');
+        return array(
+            'phptype'  => false,
+            'dbsyntax' => false,
+    // not needed as its fetched from the options array
+    #        'username' => false,
+    #        'password' => false,
+            'protocol' => false,
+            'hostspec' => false,
+            'port'     => false,
+            'socket'   => false,
+            'database' => false,
+            'mode'     => false,
+        );
+    }
+
     /**
      * Generates a schema file from the instance
      *
@@ -355,7 +380,7 @@ class LiveUser_Misc_Schema_Install
             $dsn = $obj->dbc->dsn;
             $options['seqcol_name'] = 'id';
         } elseif (is_a($obj->dbc, 'PDO')) {
-            $dsn = parsePDODSN($obj->dbc->dsn);
+            $dsn = LiveUser_Misc_Schema_Install::parsePDODSN($obj->dbc->dsn);
             $dsn['username'] = array_key_exists('username', $obj->dbc->options)
                 ? $obj->dbc->options['username'] : '';
             $dsn['password'] = array_key_exists('password', $obj->dbc->options)
