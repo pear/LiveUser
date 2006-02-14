@@ -85,10 +85,10 @@ $conf = array(
                 'tables' => array(
                     'users' => array(
                         'fields' => array(
-                            'lastlogin' => false,
-                            'is_active' => false,
-                            'owner_user_id' => false,
-                            'owner_group_id' => false,
+                            'lastlogin' => null,
+                            'is_active' => null,
+                            'owner_user_id' => null,
+                            'owner_group_id' => null,
                         ),
                     ),
                 ),
@@ -130,10 +130,21 @@ $options = array(
 #    'debug_handler' => 'dump_to_file',
 );
 
+// field name - value pairs of lengths to use in the schema
+$lengths = array('description' => 255);
+
+// field name - value pairs of defaults to use in the schema
+$defaults = array('right_level' => LIVEUSER_MAX_LEVEL);
+
 // create instance of the auth container
 $auth =& LiveUser::authFactory($conf['authContainers'][0], 'foo');
 // generate xml schema file for auth container
-$result = LiveUser_Misc_Schema_Install::generateSchema($auth, 'auth_schema.xml');
+$result = LiveUser_Misc_Schema_Install::generateSchema(
+    $auth,
+    'auth_schema.xml',
+    $lengths,
+    $defaults
+);
 var_dump($result);
 
 // install the auth xml schema .. notice the 4th parameter controls if the
@@ -153,7 +164,12 @@ var_dump($result);
 // create instance of the perm container
 $perm =& LiveUser::storageFactory($conf['permContainer']['storage']);
 // generate xml schema file for perm container
-$result = LiveUser_Misc_Schema_Install::generateSchema($perm, 'perm_schema.xml');
+$result = LiveUser_Misc_Schema_Install::generateSchema(
+    $perm,
+    'perm_schema.xml',
+    $lengths,
+    $defaults
+);
 var_dump($result);
 
 // install the perm xml schema .. notice the 4th parameter controls if the
@@ -221,7 +237,7 @@ class LiveUser_Misc_Schema_Install
         $use_auto_increment = false;
         if (isset($obj->force_seq) && !$obj->force_seq) {
             if (MDB2::isConnection($obj->dbc)) {
-                $use_auto_increment = ($obj->dbc->supports('sequences') === true);
+                $use_auto_increment = ($obj->dbc->supports('auto_increment') === true);
             } elseif (is_a($obj->dbc, 'PDO')) {
                 // todo: need to figure out what to do here
                 $use_auto_increment = true;
@@ -244,12 +260,14 @@ class LiveUser_Misc_Schema_Install
                     $fields[$field_name]['length'] = $length;
                 }
 
+                $default = array_key_exists($field_name, $defaults) ? $defaults[$field_name] : '';
+                if ($required || array_key_exists($field_name, $defaults)) {
+                    $fields[$field_name]['default'] = $default;
+                }
+
                 // check if not null
                 if ($required) {
                     $fields[$field_name]['notnull'] = true;
-                    // todo set proper defaults on a per type basis .. especially for '*_level'
-                    $default = array_key_exists($field_name, $defaults) ? $defaults[$field_name] : '';
-                    $fields[$field_name]['default'] = $default;
                     // Sequences
                     if ($required === 'seq') {
                         if ($fields[$field_name]['type'] == 'integer' && $use_auto_increment) {
@@ -287,6 +305,7 @@ class LiveUser_Misc_Schema_Install
         $definition = array(
             'name' => '<variable>database</variable>',
             'create' => '<variable>create</variable>',
+            'overwrite' => '<variable>overwrite</variable>',
             'tables' => $tables,
             'sequences' => $sequences,
         );
@@ -343,11 +362,12 @@ class LiveUser_Misc_Schema_Install
                 ? $obj->dbc->options['password'] : '';
             $options['seqname_format'] = '%s';
         } elseif (MDB2::isConnection($obj->dbc)) {
-            $dsn = $obj->dbc->getDSN();
+            $dsn = $obj->dbc->getDSN('array');
         }
 
         $file_old = $file.'.'.$dsn['hostspec'].'.'.$dsn['database'].'.old';
         $variables['create'] = (int)$create;
+        $variables['overwrite'] = (int)$unlink;
         $variables['database'] = $dsn['database'];
         unset($dsn['database']);
 
