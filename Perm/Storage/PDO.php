@@ -98,13 +98,13 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
             $login = $password = $extra = null;
             if (!empty($this->options)) {
                 if (array_key_exists('username', $this->options)) {
-                    $login = $options['username'];
+                    $login = $this->options['username'];
                 }
                 if (array_key_exists('password', $this->options)) {
-                    $password = $options['password'];
+                    $password = $this->options['password'];
                 }
                 if (array_key_exists('attr', $this->options)) {
-                    $extra = $options['attr'];
+                    $extra = $this->options['attr'];
                 }
             }
             try {
