@@ -3,9 +3,9 @@ require_once 'MDB2.php';
 require_once 'LiveUser.php';
 // Plase configure the following file according to your environment
 
-$dsn = 'mysql:host=localhost;dbname=ex5';
+$dsn = 'mysql:host=localhost;dbname=liveuser_test_example5';
 
-$dsn_2 = 'mysqli://root:@localhost/ex5';
+$dsn_2 = 'mysqli://root:@localhost/liveuser_test_example5';
 
 $db = MDB2::connect($dsn_2);
 
@@ -36,8 +36,8 @@ $conf =
                 'storage' => array(
                     'dsn' => $dsn,
                     'options' => array(
-                        'user'   => 'root',
-                        'passwd' => ''
+                        'username'   => 'root',
+                        'password' => ''
                     ),
                     'alias' => array(
                         'lastlogin' => 'lastlogin',
@@ -65,8 +65,8 @@ $conf =
                 'dsn'    => $dsn,
                 'prefix' => 'liveuser_',
                 'options' => array(
-                    'user'   => 'root',
-                    'passwd' => ''
+                    'username'   => 'root',
+                    'password' => ''
                 )
              )
         ),
@@ -82,7 +82,17 @@ $passwd = (array_key_exists('passwd', $_REQUEST)) ? $_REQUEST['passwd'] : null;
 $logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
 $remember = (array_key_exists('rememberMe', $_REQUEST)) ? $_REQUEST['rememberMe'] : false;
 
-if (!$usr->init($handle, $passwd, $logout, $remember)) {
+if (!$usr->init()) {
     var_dump($usr->getErrors());
     die();
+}
+
+if ($logout) {
+    $usr->logout(true);
+} elseif(!$usr->isLoggedIn() || ($handle && $usr->getProperty('handle') != $handle)) {
+    if (!$handle) {
+        $usr->login(null, null, true);
+    } else {
+        $usr->login($handle, $passwd, $remember);
+    }
 }
