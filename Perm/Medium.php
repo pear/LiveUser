@@ -128,47 +128,25 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         if ($result === false) {
             return false;
         }
-
-        $tmpRights = $this->group_rights;
-
         // Check if user has individual rights...
         if (is_array($this->user_rights)) {
             // Overwrite values from temporary array with values from userrights
             foreach ($this->user_rights as $right => $level) {
-                if (isset($tmpRights[$right])) {
+                if (array_key_exists($right, $this->group_rights)) {
                     if ($level < 0) {
                         // Revoking rights: A negative value indicates a maximum
                         // possible right level
                         $max_allowed_level = LIVEUSER_MAX_LEVEL + $level;
-                        $tmpRights[$right] = min($tmpRights[$right], $max_allowed_level);
+                        $this->rights[$right] = min($this->group_rights[$right], $max_allowed_level);
                     } elseif ($level > 0) {
-                        $tmpRights[$right] = max($tmpRights[$right], $level);
+                        $this->rights[$right] = max($this->group_rights[$right], $level);
+                    } elseif ($level == 0) {
+                        unset($this->rights[$right]);
                     }
-                } else {
-                    $tmpRights[$right] = $level;
-                }
-            }
-        }
-
-        // Strip values from array if level is not greater than zero
-        if (is_array($tmpRights)) {
-            foreach ($tmpRights as $right => $level) {
-                if ($level < 0) {
-                    $this->rights[$right] = (LIVEUSER_MAX_LEVEL + $level);
-                } elseif ($level > 0) {
-                    $this->rights[$right] = $level;
-                }
-            }
-        }
-
-        // Strip values from array if level is equal to zero
-        // and shift negativ level to positive
-        if (is_array($this->user_rights)) {
-            foreach ($this->user_rights as $right => $level) {
-                if ($level < 0) {
-                    $this->user_rights[$right] = LIVEUSER_MAX_LEVEL + $level;
+                } elseif ($level < 0) {
+                    $this->rights[$right] = LIVEUSER_MAX_LEVEL + $level;
                 } elseif ($level == 0) {
-                    unset($this->user_rights[$right]);
+                    unset($this->rights[$right]);
                 }
             }
         }
