@@ -128,11 +128,14 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         if ($result === false) {
             return false;
         }
+
         // Check if user has individual rights...
         if (is_array($this->user_rights)) {
+            $tmpRights = $this->group_rights;
             // Overwrite values from temporary array with values from userrights
             foreach ($this->user_rights as $right => $level) {
                 if (array_key_exists($right, $this->group_rights)) {
+                    unset($tmpRights[$right]);
                     if ($level < 0) {
                         // Revoking rights: A negative value indicates a maximum
                         // possible right level
@@ -149,6 +152,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
                     unset($this->rights[$right]);
                 }
             }
+            $this->rights+= $tmpRights;
         }
 
         return $this->rights;
