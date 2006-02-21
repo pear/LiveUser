@@ -1259,18 +1259,12 @@ class LiveUser
             return false;
         }
 
-        $cookieData = $_COOKIE[$this->_options['cookie']['name']];
-        if (strlen($cookieData) < 65
-            // kill all old style remember me cookies
-            || (strpos($cookieData, ':') && strpos($cookieData, ':') < 64)
+        if (strlen($_COOKIE[$this->_options['cookie']['name']]) < 65
+            || preg_match('/[^a-z0-9]/i', substr($_COOKIE[$this->_options['cookie']['name']], 0, 64))
         ) {
-            // Delete cookie if it's not valid, keeping it messes up the
-            // authentication process
             $this->deleteRememberCookie();
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
-                'Wrong data in cookie store in LiveUser::readRememberMeCookie()');
-            return false;
         }
+        $cookieData = $_COOKIE[$this->_options['cookie']['name']];
 
         $store_id = substr($cookieData, 0, 32);
         $passwd_id = substr($cookieData, 32, 32);
@@ -1333,12 +1327,12 @@ class LiveUser
             return false;
         }
 
-        $cookieData = $_COOKIE[$this->_options['cookie']['name']];
-        if (strlen($cookieData) < 65) {
+        if (preg_match('/[^a-z0-9]/i', substr($_COOKIE[$this->_options['cookie']['name']], 0, 32))) {
             $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
-                'Wrong data in cookie store in LiveUser::deleteRememberCookie()');
+                'Malformed rememberme cookie identifer in LiveUser::deleteRememberCookie()');
             return false;
         }
+        $cookieData = $_COOKIE[$this->_options['cookie']['name']];
 
         $store_id = substr($cookieData, 0, 32);
         @unlink($this->_options['cookie']['savedir'] . '/'.$store_id.'.lu');
