@@ -137,11 +137,11 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             foreach ($this->user_rights as $right => $level) {
                 if (isset($tmpRights[$right])) {
                     if ($level < 0) {
-                        // Revoking rights: A negative value indicates that the
-                        // right level is lowered or the right is even revoked
-                        // despite the group memberships of this user
-                        $tmpRights[$right] = $tmpRights[$right] + $level;
-                    } else {
+                        // Revoking rights: A negative value indicates a maximum
+                        // possible right level
+                        $max_allowed_level = LIVEUSER_MAX_LEVEL + $level;
+                        $tmpRights[$right] = min($tmpRights[$right], $max_allowed_level);
+                    } elseif ($level > 0) {
                         $tmpRights[$right] = max($tmpRights[$right], $level);
                     }
                 } else {
@@ -153,9 +153,23 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
         // Strip values from array if level is not greater than zero
         if (is_array($tmpRights)) {
             foreach ($tmpRights as $right => $level) {
-               if ($level > 0) {
-                   $this->rights[$right] = $level;
-               }
+                if ($level < 0) {
+                    $this->rights[$right] = (LIVEUSER_MAX_LEVEL + $level);
+                } elseif ($level > 0) {
+                    $this->rights[$right] = $level;
+                }
+            }
+        }
+
+        // Strip values from array if level is equal to zero
+        // and shift negativ level to positive
+        if (is_array($this->user_rights)) {
+            foreach ($this->user_rights as $right => $level) {
+                if ($level < 0) {
+                    $this->user_rights[$right] = LIVEUSER_MAX_LEVEL + $level;
+                } elseif ($level == 0) {
+                    unset($this->user_rights[$right]);
+                }
             }
         }
 
