@@ -187,8 +187,8 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      * If no match is found, false is being returned.
      *
      * @param  string user handle
-     * @param bool user password
-     * @param  string auth user id
+     * @param  string user password
+     * @param  bool if the user data should be read using the auth user id
      * @return bool true on success or false on failure
      *
      * @access public

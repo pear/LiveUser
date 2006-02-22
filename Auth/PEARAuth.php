@@ -146,6 +146,8 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      * Reads user data from the given data source
      * Starts and verifies the PEAR::Auth login process
      *
+     * @param  string user handle
+     * @param  string user password
      * @return bool true upon success or false on failure
      *
      * @access private
@@ -173,6 +175,5 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
         }
         return true;
     }
-
 }
 ?>

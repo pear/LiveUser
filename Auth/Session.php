@@ -105,8 +105,8 @@ class LiveUser_Auth_Session extends LiveUser_Auth_Common
      * Compares $passwd with a string inside the $_SESSION array
      *
      * @param  string user handle
-     * @param bool user password
-     * @param  string auth user id
+     * @param  string user password
+     * @param  bool if the user data should be read using the auth user id
      * @return bool true on success or false on failure
      *
      * @access public
