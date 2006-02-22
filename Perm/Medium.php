@@ -129,9 +129,10 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             return false;
         }
 
+        $tmpRights = $this->group_rights;
+
         // Check if user has individual rights...
         if (is_array($this->user_rights)) {
-            $tmpRights = $this->group_rights;
             // Overwrite values from temporary array with values from userrights
             foreach ($this->user_rights as $right => $level) {
                 if (array_key_exists($right, $this->group_rights)) {
@@ -152,8 +153,9 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
                     unset($this->rights[$right]);
                 }
             }
-            $this->rights+= $tmpRights;
         }
+
+        $this->rights+= $tmpRights;
 
         return $this->rights;
     }
