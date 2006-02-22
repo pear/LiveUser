@@ -129,24 +129,24 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             return false;
         }
 
-        $tmpRights = $this->group_rights;
+        $groupRights = is_array($this->group_rights) ? $this->group_rights : array();
 
         // Check if user has individual rights...
         if (is_array($this->user_rights)) {
             // Overwrite values from temporary array with values from userrights
             foreach ($this->user_rights as $right => $level) {
-                if (array_key_exists($right, $this->group_rights)) {
-                    unset($tmpRights[$right]);
+                if (array_key_exists($right, $groupRights)) {
                     if ($level < 0) {
                         // Revoking rights: A negative value indicates a maximum
                         // possible right level
                         $max_allowed_level = LIVEUSER_MAX_LEVEL + $level;
-                        $this->rights[$right] = min($this->group_rights[$right], $max_allowed_level);
+                        $this->rights[$right] = min($groupRights[$right], $max_allowed_level);
                     } elseif ($level > 0) {
-                        $this->rights[$right] = max($this->group_rights[$right], $level);
+                        $this->rights[$right] = max($groupRights[$right], $level);
                     } elseif ($level == 0) {
                         unset($this->rights[$right]);
                     }
+                    unset($groupRights[$right]);
                 } elseif ($level < 0) {
                     $this->rights[$right] = LIVEUSER_MAX_LEVEL + $level;
                 } elseif ($level == 0) {
@@ -155,7 +155,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             }
         }
 
-        $this->rights+= $tmpRights;
+        $this->rights+= $groupRights;
 
         return $this->rights;
     }
