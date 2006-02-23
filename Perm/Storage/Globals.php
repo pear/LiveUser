@@ -72,7 +72,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
         'fields' => array(
             'perm_user_id' => 'id',
             'right_id' => 'id',
-            'right_level' => null,
+            'right_level' => false,
         ),
         'joins' => array(
             'perm_users' => 'perm_user_id',
@@ -209,7 +209,7 @@ $GLOBALS['_LiveUser']['perm']['tables'] = array(
         'fields' => array(
             'group_id' => 'id',
             'right_id' => 'id',
-            'right_level' => null,
+            'right_level' => false,
         ),
         'joins' => array(
             'rights' => 'right_id',
