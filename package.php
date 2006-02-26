@@ -13,9 +13,9 @@ $version = '0.16.10';
 
 $notes = <<<EOT
 - Do not include Cache.php since its only a concept and not implemented yet
-- fixed seriously issue with right reading when a user only has group and no
+- fixed serious issue with right reading when a user only has group and no
   direct rights assigned
-- right_level may not be null (use default if not explicitly set)
+- right_level may not be null in schema (use default if not explicitly set)
 - phpdoc improvements
 - bumped dependency for MDB2 to first stable release
 - added optional dependency on mcrypt
@@ -61,7 +61,7 @@ $result = $package->setOptions(array(
     'state'             => 'beta',
     'license'           => 'LGPL',
     'filelistgenerator' => 'cvs',
-    'ignore'            => array('package.php', 'package.xml', 'TODO', 'DefineGenerator', 'Cache.php'),
+    'ignore'            => array('package.php', 'package.xml', 'Cache.php'),
     'notes'             => $notes,
     'changelogoldtonew' => false,
     'simpleoutput'      => true,
