@@ -110,7 +110,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
     /**
      * Load the storage container
      *
-     * @param array   Name of array containing the configuration.
+     * @param   array  array containing the configuration.
      * @param string  name of the container that should be used
      * @return bool true on success or false on failure
      *
