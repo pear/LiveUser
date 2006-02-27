@@ -13,8 +13,7 @@ $version = '0.16.10';
 
 $notes = <<<EOT
 - Do not include Cache.php since its only a concept and not implemented yet
-- fixed serious issue with right reading when a user only has group and no
-  direct rights assigned
+- fixed serious issue with right reading in the Medium and Complex container
 - right_level may not be null in schema (use default if not explicitly set)
 - phpdoc improvements
 - bumped dependency for MDB2 to first stable release
