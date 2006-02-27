@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.6">
+<package version="1.0" packagerversion="1.4.7">
  <name>LiveUser</name>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
@@ -65,16 +65,17 @@
   </maintainers>
  <release>
   <version>0.16.10</version>
-  <date>2006-02-26</date>
+  <date>2006-02-27</date>
   <license>LGPL</license>
   <state>beta</state>
   <notes>- Do not include Cache.php since its only a concept and not implemented yet
-- fixed serious issue with right reading when a user only has group and no
-  direct rights assigned
+- fixed serious issue with right reading in the Medium and Complex container
 - right_level may not be null in schema (use default if not explicitly set)
 - phpdoc improvements
 - bumped dependency for MDB2 to first stable release
-- added optional dependency on mcrypt
+- added missing optional dependency on mcrypt
+- made admin user a superadmin in example4
+- bumped copyright to 2006
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -188,16 +189,17 @@
  <changelog>
    <release>
     <version>0.16.10</version>
-    <date>2006-02-26</date>
+    <date>2006-02-27</date>
     <license>LGPL</license>
     <state>beta</state>
     <notes>- Do not include Cache.php since its only a concept and not implemented yet
-- fixed serious issue with right reading when a user only has group and no
-  direct rights assigned
+- fixed serious issue with right reading in the Medium and Complex container
 - right_level may not be null in schema (use default if not explicitly set)
 - phpdoc improvements
 - bumped dependency for MDB2 to first stable release
-- added optional dependency on mcrypt
+- added missing optional dependency on mcrypt
+- made admin user a superadmin in example4
+- bumped copyright to 2006
     </notes>
    </release>
    <release>

@@ -17,7 +17,9 @@ $notes = <<<EOT
 - right_level may not be null in schema (use default if not explicitly set)
 - phpdoc improvements
 - bumped dependency for MDB2 to first stable release
-- added optional dependency on mcrypt
+- added missing optional dependency on mcrypt
+- made admin user a superadmin in example4
+- bumped copyright to 2006
 EOT;
 
 $description = <<<EOT
