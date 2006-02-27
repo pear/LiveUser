@@ -38,7 +38,7 @@
  * @author   Arnaud Limbourg <arnaud@php.net>
  * @author   Pierre-Alain Joye  <pajoye@php.net>
  * @author   Bjoern Kraus <krausbn@php.net>
- * @copyright 2002-2005 Markus Wolff
+ * @copyright 2002-2006 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt
  * @version CVS: $Id$
  * @link http://pear.php.net/LiveUser
@@ -183,7 +183,7 @@ define('LIVEUSER_COOKIE_DELETE_TIME', 946080000);
  * @author   Lukas Smith        <smith@pooteeweet.org>
  * @author   Pierre-Alain Joye  <pajoye@php.net>
  * @author   Arnaud Limbourg    <arnaud@php.net>
- * @copyright 2002-2005 Markus Wolff
+ * @copyright 2002-2006 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt
  * @version Release: @package_version@
  * @link http://pear.php.net/LiveUser

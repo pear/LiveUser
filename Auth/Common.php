@@ -38,7 +38,7 @@
  * @author  Arnaud Limbourg <arnaud@php.net>
  * @author  Pierre-Alain Joye <pajoye@php.net>
  * @author  Bjoern Kraus <krausbn@php.net>
- * @copyright 2002-2005 Markus Wolff
+ * @copyright 2002-2006 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt
  * @version CVS: $Id$
  * @link http://pear.php.net/LiveUser
@@ -52,7 +52,7 @@
  * @category authentication
  * @package LiveUser
  * @author   Markus Wolff <wolff@21st.de>
- * @copyright 2002-2005 Markus Wolff
+ * @copyright 2002-2006 Markus Wolff
  * @license http://www.gnu.org/licenses/lgpl.txt
  * @version Release: @package_version@
  * @link http://pear.php.net/LiveUser
