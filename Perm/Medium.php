@@ -149,6 +149,8 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
                     unset($groupRights[$right]);
                 } elseif ($level < 0) {
                     $this->rights[$right] = LIVEUSER_MAX_LEVEL + $level;
+                } elseif ($level > 0) {
+                    $this->rights[$right] = $level;
                 } elseif ($level == 0) {
                     unset($this->rights[$right]);
                 }
