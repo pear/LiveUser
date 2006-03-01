@@ -95,7 +95,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      * @var    array
      * @access private
      */
-    var options = false;
+    var $options = false;
 
     /**
      * Load the storage container
