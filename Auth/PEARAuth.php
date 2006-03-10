@@ -55,8 +55,8 @@ require_once 'Auth.php';
  *
  * This is a PEAR::Auth backend driver for the LiveUser class.
  * The general options to setup the PEAR::Auth class can be passed to the constructor.
- * To choose the right auth container, you have to add the 'pearAuthContainer' var to
- * the options array.
+ * To choose the right auth container and options, you have to set 'container'
+ * and 'options' respectively in the storage array.
  *
  * Requirements:
  * - File "LiveUser.php" (contains the parent class "LiveUser")
