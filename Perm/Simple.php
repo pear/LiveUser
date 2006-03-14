@@ -109,13 +109,13 @@ class LiveUser_Perm_Simple
      * @var PEAR_ErrorStack
      * @access public
      */
-    var $_stack = null;
+    var $stack = null;
 
     /**
      * Storage Container
      *
      * @var object
-     * @access public
+     * @access private
      */
     var $_storage = null;
 
@@ -124,7 +124,7 @@ class LiveUser_Perm_Simple
      */
     function LiveUser_Perm_Simple()
     {
-        $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
+        $this->stack = &PEAR_ErrorStack::singleton('LiveUser');
     }
 
     /**
@@ -138,7 +138,7 @@ class LiveUser_Perm_Simple
     function init(&$conf)
     {
         if (!array_key_exists('storage', $conf)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception',
+            $this->stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Missing storage configuration array'));
             return false;
         }
@@ -156,7 +156,7 @@ class LiveUser_Perm_Simple
         if ($this->_storage === false) {
             end($conf['storage']);
             $key = key($conf['storage']);
-            $this->_stack->push(LIVEUSER_ERROR, 'exception',
+            $this->stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Could not instanciate perm storage container: '.$key));
             return false;
         }

@@ -287,7 +287,7 @@ class LiveUser
      * @var    PEAR_ErrorStack
      * @access private
      */
-    var $_stack = null;
+    var $stack = null;
 
     /**
      * PEAR::Log object
@@ -342,14 +342,14 @@ class LiveUser
      */
     function LiveUser(&$debug)
     {
-        $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
+        $this->stack = &PEAR_ErrorStack::singleton('LiveUser');
 
         if ($debug) {
             $this->log =& LiveUser::PEARLogFactory($debug);
-            $this->_stack->setLogger($this->log);
+            $this->stack->setLogger($this->log);
         }
 
-        $this->_stack->setErrorMessageTemplate($this->_errorMessages);
+        $this->stack->setErrorMessageTemplate($this->_errorMessages);
 
         $this->dispatcher =& Event_Dispatcher::getInstance();
     }
@@ -516,8 +516,8 @@ class LiveUser
      */
     function getErrors()
     {
-        if (is_object($this->_stack)) {
-            return $this->_stack->getErrors();
+        if (is_object($this->stack)) {
+            return $this->stack->getErrors();
         }
         return false;
     }
@@ -819,7 +819,7 @@ class LiveUser
         } else {
             $rc4 =& LiveUser::cryptRC4Factory($secret);
             if (!$rc4) {
-                $this->_stack->push(
+                $this->stack->push(
                     LIVEUSER_ERROR_CONFIG, 'exception', array(),
                     'RememberMe feature requires either the mcrypt extension or PEAR::Crypt_RC4'
                 );
@@ -853,7 +853,7 @@ class LiveUser
             $this->_options[$option] = $value;
             return true;
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+        $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
             "unknown option $option");
         return false;
     }
@@ -871,7 +871,7 @@ class LiveUser
         if (array_key_exists($option, $this->_options)) {
             return $this->_options[$option];
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+        $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
             "unknown option $option");
         return false;
     }
@@ -908,7 +908,7 @@ class LiveUser
         session_name($this->_options['session']['name']);
         // Check if we can safely start the session
         if (headers_sent()) {
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR_SESSION_STARTED, 'exception'
             );
             return;
@@ -987,7 +987,7 @@ class LiveUser
     {
         if ($remember && $auth_user_id) {
             $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
-            $this->_stack->push(LIVEUSER_ERROR, 'exception',
+            $this->stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Remember me feature is incompatible logging in via the auth_user_id'));
             return false;
         }
@@ -1013,14 +1013,14 @@ class LiveUser
             $auth =& LiveUser::authFactory($this->_authContainers[$containerName], $containerName);
             if ($auth === false) {
                 $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
-                $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                $this->stack->push(LIVEUSER_ERROR, 'exception',
                     array('msg' => 'Could not instanciate auth container: '.$containerName));
                 return false;
             }
             $login = $auth->login($handle, $passwd, $auth_user_id);
             if ($login === false) {
                 $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
-                $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                $this->stack->push(LIVEUSER_ERROR, 'exception',
                     array('msg' => 'Could not execute login method: '.$containerName));
                 return false;
             }
@@ -1035,7 +1035,7 @@ class LiveUser
                     $perm =& LiveUser::permFactory($this->_permContainer);
                     if ($perm === false) {
                         $this->_status = LIVEUSER_STATUS_PERMINITERROR;
-                        $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                        $this->stack->push(LIVEUSER_ERROR, 'exception',
                             array('msg' => 'Could not instanciate perm container of type: '.$conf['type']));
                         return false;
                     }
@@ -1095,7 +1095,7 @@ class LiveUser
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
             $auth =& LiveUser::authFactory($this->_authContainers[$containerName], $containerName);
             if ($auth === false) {
-                $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                $this->stack->push(LIVEUSER_ERROR, 'exception',
                     array('msg' => 'Could not instanciate auth container: '.$containerName));
                 return false;
             }
@@ -1107,7 +1107,7 @@ class LiveUser
                 ) {
                     $perm =& LiveUser::permFactory($this->_permContainer);
                     if ($perm === false) {
-                        $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                        $this->stack->push(LIVEUSER_ERROR, 'exception',
                             array('msg' => 'Could not instanciate perm container of type: ' . $this->_permContainer));
                         return $perm;
                     }
@@ -1151,7 +1151,7 @@ class LiveUser
             }
             return true;
         }
-        $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+        $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
             'No data available to store inside session');
         return false;
     }
@@ -1205,14 +1205,14 @@ class LiveUser
         $file = $dir . '/' . $store_id . '.lu';
 
         if (!is_writable($dir)) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot create file, please check path and permissions');
             return false;
         }
 
         $fh = @fopen($file, 'wb');
         if (!$fh) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot open file for writting');
             return false;
         }
@@ -1227,7 +1227,7 @@ class LiveUser
         $write = fwrite($fh, $crypted_data);
         fclose($fh);
         if (!$write) {
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot save cookie data');
             return false;
         }
@@ -1243,7 +1243,7 @@ class LiveUser
 
         if (!$setcookie) {
             @unlink($file);
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Unable to set cookie');
             return false;
         }
@@ -1282,7 +1282,7 @@ class LiveUser
         $fh = @fopen($dir . '/' . $store_id . '.lu', 'rb');
         if (!$fh) {
             $this->deleteRememberCookie();
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot open file for reading');
             return false;
         }
@@ -1291,7 +1291,7 @@ class LiveUser
         fclose($fh);
         if (!$fields) {
             $this->deleteRememberCookie();
-            $this->_stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR_CONFIG, 'exception', array(),
                 'Cannot read file');
             return false;
         }
@@ -1302,7 +1302,7 @@ class LiveUser
 
         if (!is_array($serverData) || count($serverData) != 2) {
             $this->deleteRememberCookie();
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR_COOKIE, 'exception', array(),
                 'Incorrect array structure');
             return false;
         }
@@ -1311,7 +1311,7 @@ class LiveUser
             // Delete cookie if it's not valid, keeping it messes up the
             // authentication process
             $this->deleteRememberCookie();
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
+            $this->stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
                 'Passwords hashes do not match in cookie in LiveUser::readRememberMeCookie()');
             return false;
         }
@@ -1335,7 +1335,7 @@ class LiveUser
         }
 
         if (preg_match('/[^a-z0-9]/i', substr($_COOKIE[$this->_options['cookie']['name']], 0, 32))) {
-            $this->_stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
+            $this->stack->push(LIVEUSER_ERROR_COOKIE, 'error', array(),
                 'Malformed rememberme cookie identifer in LiveUser::deleteRememberCookie()');
             return false;
         }
@@ -1559,7 +1559,7 @@ class LiveUser
     function updateProperty($auth, $perm = null)
     {
         if (!is_a($this->_auth, 'LiveUser_Auth_Common')) {
-            $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'error', array(),
                 'Cannot update container if no auth container instance is available');
             return false;
         }
@@ -1571,7 +1571,7 @@ class LiveUser
         }
         if ($perm) {
             if (!is_a($this->_perm, 'LiveUser_Perm_Simple')) {
-                $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+                $this->stack->push(LIVEUSER_ERROR, 'error', array(),
                     'Cannot update container if no perm container instance is available');
                 return false;
             }

@@ -110,7 +110,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
             try {
                 $dbc = new PDO($this->dsn, $login, $password, $extra);
             } catch (PDOException $e) {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array(
                         'container' => 'could not connect: ' . $e->getMessage(),
                         'debug'     => $e->getTrace()
@@ -122,7 +122,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
         }
 
         if (!is_a($this->dbc, 'pdo')) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+            $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                 array('container' => 'storage layer configuration missing'));
             return false;
         }
@@ -158,7 +158,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }
@@ -196,7 +196,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }
@@ -237,7 +237,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }
@@ -284,7 +284,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }
@@ -323,7 +323,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }
@@ -373,7 +373,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }
@@ -416,7 +416,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }
@@ -458,7 +458,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         if ($result === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query ' . $error_info[2] . ' - ' . $query);
             return false;
         }

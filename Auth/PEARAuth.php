@@ -113,7 +113,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
         if (!is_a($this->pearAuth, 'auth') && $this->container) {
             $pearAuth = &new Auth($this->container, $this->options, '', false);
             if (PEAR::isError($pearAuth)) {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array('container' => 'could not connect: '.$pearAuth->getMessage(),
                     'debug' => $pearAuth->getUserInfo()));
                 return false;
@@ -122,7 +122,7 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
         }
 
         if (!is_a($this->pearAuth, 'auth')) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+            $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                 array('container' => 'storage layer configuration missing'));
             return false;
         }

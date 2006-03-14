@@ -89,7 +89,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
 
         $this->_storage =& LiveUser::storageFactory($confArray);
         if ($this->_storage === false) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception',
+            $this->stack->push(LIVEUSER_ERROR, 'exception',
                 array('msg' => 'Could not instanciate storage container'));
             return false;
         }

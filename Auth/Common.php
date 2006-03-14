@@ -63,6 +63,7 @@ class LiveUser_Auth_Common
      * Has the current user successfully logged in?
      *
      * @var    bool
+     * @access public
      * @see    LiveUser_Auth_Common::isActive
      */
     var $loggedIn = null;
@@ -71,6 +72,7 @@ class LiveUser_Auth_Common
      * Timestamp of current login (last to be written)
      *
      * @var    int
+     * @access public
      */
     var $currentLogin = 0;
 
@@ -80,6 +82,7 @@ class LiveUser_Auth_Common
      * If this variable is set to 0, auth never expires
      *
      * @var    int
+     * @access public
      */
     var $expireTime = 0;
 
@@ -90,6 +93,7 @@ class LiveUser_Auth_Common
      * variable is set to 0, idle time is never checked.
      *
      * @var    int
+     * @access public
      */
     var $idleTime = 0;
 
@@ -97,6 +101,7 @@ class LiveUser_Auth_Common
      * Possible encryption modes.
      *
      * @var    array
+     * @access public
      */
     var $encryptionModes = array(
         'MD5'   => 'MD5',
@@ -116,6 +121,7 @@ class LiveUser_Auth_Common
      * Defines the secret to use for encryption if needed
      *
      * @var    string
+     * @access public
      */
     var $secret = '';
 
@@ -123,9 +129,9 @@ class LiveUser_Auth_Common
      * Error stack
      *
      * @var    PEAR_ErrorStack
+     * @access public
      */
-    var $_stack = null;
-/**#@-*/
+    var $stack = null;
 
     /**
     * Array of all the user data read from the backend database
@@ -188,7 +194,7 @@ class LiveUser_Auth_Common
      */
     function LiveUser_Auth_Common()
     {
-        $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
+        $this->stack = &PEAR_ErrorStack::singleton('LiveUser');
     }
 
     /**
@@ -346,7 +352,7 @@ class LiveUser_Auth_Common
             break;
         case 'SHA1':
             if (!function_exists('sha1')) {
-                $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception', array(),
+                $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception', array(),
                     'SHA1 function doesn\'t exist. Upgrade your PHP version');
                 return false;
             }
@@ -408,7 +414,7 @@ class LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
+        $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
             array('feature' => '_updateUserData')
         );
         return false;
@@ -440,7 +446,7 @@ class LiveUser_Auth_Common
      */
     function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
-        $this->_stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
+        $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception',
             array('feature' => 'readUserData')
         );
         return false;

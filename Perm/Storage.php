@@ -91,7 +91,7 @@ class LiveUser_Perm_Storage
      */
     function LiveUser_Perm_Storage()
     {
-        $this->_stack = &PEAR_ErrorStack::singleton('LiveUser');
+        $this->stack = &PEAR_ErrorStack::singleton('LiveUser');
     }
 
     /**
@@ -144,7 +144,7 @@ class LiveUser_Perm_Storage
      */
     function mapUser($auth_user_id, $containerName)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }
@@ -163,7 +163,7 @@ class LiveUser_Perm_Storage
      */
     function readUserRights($perm_user_id)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }
@@ -178,7 +178,7 @@ class LiveUser_Perm_Storage
      */
     function readAreaAdminAreas($perm_user_id)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }
@@ -195,7 +195,7 @@ class LiveUser_Perm_Storage
      */
     function readGroups($perm_user_id)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }
@@ -213,7 +213,7 @@ class LiveUser_Perm_Storage
      */
     function readGroupRights($group_ids)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }
@@ -229,7 +229,7 @@ class LiveUser_Perm_Storage
      */
     function readSubGroups($group_ids, $newGroupIds)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }
@@ -246,7 +246,7 @@ class LiveUser_Perm_Storage
      */
     function readImplyingRights($rightIds, $table)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }
@@ -262,7 +262,7 @@ class LiveUser_Perm_Storage
     */
     function readImpliedRights($currentRights, $currentLevel)
     {
-        $this->_stack->push(LIVEUSER_ERROR, 'error', array(),
+        $this->stack->push(LIVEUSER_ERROR, 'error', array(),
             __METHOD__.' is not implemented');
         return false;
     }

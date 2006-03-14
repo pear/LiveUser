@@ -141,7 +141,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             try {
                 $dbc = new PDO($this->dsn, $login, $password, $extra);
             } catch (PDOException $e) {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array(
                         'container' => 'could not connect: ' . $e->getMessage(),
                         'debug'     => $e->getTrace()
@@ -153,7 +153,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
         }
 
         if (!is_a($this->dbc, 'pdo')) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+            $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                 array('container' => 'storage layer configuration missing'));
             return false;
         }
@@ -184,7 +184,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
 
         if ($rows_affected === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array(
                     'reason' => $error_info[2],
@@ -250,7 +250,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
         // return value to true
         if ($res === false) {
             $error_info = $this->dbc->errorInfo();
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array(
                     'reason' => $error_info[2],
@@ -263,7 +263,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
         $row = $res->fetchAll(PDO::FETCH_ASSOC);
 
         if ($row === false) {
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array(
                     'reason' => $this->dbc->errorCode(),

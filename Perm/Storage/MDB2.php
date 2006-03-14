@@ -112,7 +112,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
                 $dbc =& MDB2::connect($this->dsn, $this->options);
             }
             if (PEAR::isError($dbc)) {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array('container' => 'could not connect: '.$dbc->getMessage(),
                     'debug' => $dbc->getUserInfo()));
                 return false;
@@ -121,7 +121,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         }
 
         if (!MDB2::isConnection($this->dbc)) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+            $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                 array('container' => 'storage layer configuration missing'));
             return false;
         }
@@ -160,7 +160,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryRow($query, $types, MDB2_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -199,7 +199,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -238,7 +238,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -279,7 +279,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryCol($query, $this->fields['group_id']);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -319,7 +319,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -363,7 +363,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryCol($query, $this->fields['group_id']);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -407,7 +407,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ORDERED, true, false, true);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -448,7 +448,7 @@ class LiveUser_Perm_Storage_MDB2 extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->queryAll($query, $types, MDB2_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }

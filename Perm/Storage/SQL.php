@@ -107,7 +107,7 @@ class LiveUser_Perm_Storage_SQL extends LiveUser_Perm_Storage
         if ($this->dsn) {
             $result = $this->dbc->disconnect();
             if (PEAR::isError($result)) {
-                $this->_stack->push(
+                $this->stack->push(
                     LIVEUSER_ERROR, 'exception',
                     array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
                 );

@@ -124,7 +124,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
             $this->options['portability'] = DB_PORTABILITY_ALL;
             $dbc =& DB::connect($this->dsn, $this->options);
             if (PEAR::isError($dbc)) {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array('container' => 'could not connect: '.$dbc->getMessage(),
                     'debug' => $dbc->getUserInfo()));
                 return false;
@@ -133,7 +133,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         }
 
         if (!is_a($this->dbc, 'db_common')) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+            $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                 array('container' => 'storage layer configuration missing'));
             return false;
         }
@@ -163,7 +163,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         $result = $this->dbc->query($query);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
@@ -225,7 +225,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         if (PEAR::isError($result)) {
         // If a user was found, read data into class variables and set
         // return value to true
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
@@ -256,7 +256,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         if ($this->dsn) {
             $result = $this->dbc->disconnect();
             if (PEAR::isError($result)) {
-                $this->_stack->push(
+                $this->stack->push(
                     LIVEUSER_ERROR, 'exception',
                     array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
                 );

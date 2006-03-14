@@ -136,7 +136,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
                 $dbc =& MDB::connect($this->dsn, $this->options);
             }
             if (PEAR::isError($dbc)) {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array('container' => 'could not connect: '.$dbc->getMessage(),
                     'debug' => $dbc->getUserInfo()));
                 return false;
@@ -145,7 +145,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         }
 
         if (!MDB::isConnection($this->dbc)) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+            $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                 array('container' => 'storage layer configuration missing'));
             return false;
         }
@@ -175,7 +175,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         $result = $this->dbc->query($query);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
@@ -238,7 +238,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         // If a user was found, read data into class variables and set
         // return value to true
         if (PEAR::isError($result)) {
-            $this->_stack->push(
+            $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
             );
@@ -269,7 +269,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         if ($this->dsn) {
             $result = $this->dbc->disconnect();
             if (PEAR::isError($result)) {
-                $this->_stack->push(
+                $this->stack->push(
                     LIVEUSER_ERROR, 'exception',
                     array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
                 );

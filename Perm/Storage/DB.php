@@ -93,7 +93,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
             $this->options['portability'] = DB_PORTABILITY_ALL;
             $dbc =& DB::connect($this->dsn, $this->options);
             if (PEAR::isError($dbc)) {
-                $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+                $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                     array('container' => 'could not connect: '.$dbc->getMessage(),
                     'debug' => $dbc->getUserInfo()));
                 return false;
@@ -102,7 +102,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         }
 
         if (!is_a($this->dbc, 'db_common')) {
-            $this->_stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
+            $this->stack->push(LIVEUSER_ERROR_INIT_ERROR, 'error',
                 array('container' => 'storage layer configuration missing'));
             return false;
         }
@@ -137,7 +137,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getRow($query, null, DB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -172,7 +172,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -207,7 +207,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -248,7 +248,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getCol($query);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -284,7 +284,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -328,7 +328,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getCol($query);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -368,7 +368,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getAssoc($query, false, null, DB_FETCHMODE_ORDERED, true);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
@@ -404,7 +404,7 @@ class LiveUser_Perm_Storage_DB extends LiveUser_Perm_Storage_SQL
         $result = $this->dbc->getAll($query, null, DB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
-            $this->_stack->push(LIVEUSER_ERROR, 'exception', array(),
+            $this->stack->push(LIVEUSER_ERROR, 'exception', array(),
                 'error in query' . $result->getMessage() . '-' . $result->getUserInfo());
             return false;
         }
