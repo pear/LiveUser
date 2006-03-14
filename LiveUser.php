@@ -977,13 +977,21 @@ class LiveUser
      *
      * @param  string   handle of the user trying to authenticate
      * @param  string   password of the user trying to authenticate
-     * @param bool  set if remember me is set, requires cookie otion
+     * @param  bool  set if remember me is set, requires cookie otion
+     * @param  bool|int if the user data should be read using the auth user id
      * @return bool  true on success or false on failure
      *
      * @access public
      */
-    function login($handle = '', $passwd = '', $remember = false)
+    function login($handle = '', $passwd = '', $remember = false, $auth_user_id = false)
     {
+        if ($remember && $auth_user_id) {
+            $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
+            $this->_stack->push(LIVEUSER_ERROR, 'exception',
+                array('msg' => 'Remember me feature is incompatible logging in via the auth_user_id'));
+            return false;
+        }
+
         if (empty($handle) && $remember) {
             $result = $this->readRememberCookie();
             if (!is_array($result)) {
@@ -1009,7 +1017,7 @@ class LiveUser
                     array('msg' => 'Could not instanciate auth container: '.$containerName));
                 return false;
             }
-            $login = $auth->login($handle, $passwd);
+            $login = $auth->login($handle, $passwd, $auth_user_id);
             if ($login === false) {
                 $this->_status = LIVEUSER_STATUS_AUTHINITERROR;
                 $this->_stack->push(LIVEUSER_ERROR, 'exception',
@@ -1555,7 +1563,7 @@ class LiveUser
                 'Cannot update container if no auth container instance is available');
             return false;
         }
-        if ($auth && !$this->_auth->readUserData('', '', true)) {
+        if ($auth && !$this->_auth->readUserData(null, null, $this->_auth->getProperty('auth_user_id'))) {
             return false;
         }
         if (is_null($perm)) {

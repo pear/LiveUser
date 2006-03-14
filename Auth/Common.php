@@ -361,19 +361,20 @@ class LiveUser_Auth_Common
      * Tries to make a login with the given handle and password.
      * A user can't login if he's not active.
      *
-     * @param string   user handle
-     * @param string   user password
+     * @param  string   user handle
+     * @param  string   user password
+     * @param  bool|int if the user data should be read using the auth user id
      * @return bool null when user is inactive, true on success or false on failure
      *
      * @access public
      */
-    function login($handle, $passwd)
+    function login($handle, $passwd, $auth_user_id = false)
     {
         // Init value: Is user logged in?
         $this->loggedIn = false;
 
         // Read user data from database
-        $result = $this->readUserData($handle, $passwd);
+        $result = $this->readUserData($handle, $passwd, $auth_user_id);
         if (!$result) {
             return $result;
         }
@@ -432,7 +433,7 @@ class LiveUser_Auth_Common
      *
      * @param  string user handle
      * @param  string user password
-     * @param  bool if the user data should be read using the auth user id
+     * @param  bool|int if the user data should be read using the auth user id
      * @return bool true on success or false on failure
      *
      * @access public
