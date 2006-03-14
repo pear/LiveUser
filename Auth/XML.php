@@ -197,7 +197,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      *
      * @param  string user handle
      * @param  string user password
-     * @param  bool if the user data should be read using the auth user id
+     * @param  bool|int if the user data should be read using the auth user id
      * @return bool true on success or false on failure
      *
      * @access public

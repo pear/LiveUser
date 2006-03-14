@@ -188,7 +188,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
      *
      * @param  string user handle
      * @param  string user password
-     * @param  bool if the user data should be read using the auth user id
+     * @param  bool|int if the user data should be read using the auth user id
      * @return bool true on success or false on failure
      *
      * @access public
@@ -206,7 +206,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
                    WHERE  ';
         if ($auth_user_id) {
             $query .= $this->alias['auth_user_id'] . '='
-                . $this->dbc->quoteSmart($this->propertyValues['auth_user_id']);
+                . $this->dbc->quoteSmart($auth_user_id);
         } else {
             $query .= $this->alias['handle'] . '='
                 . $this->dbc->quoteSmart($handle);

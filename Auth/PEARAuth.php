@@ -148,13 +148,14 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
      *
      * @param  string user handle
      * @param  string user password
-     * @return bool true upon success or false on failure
+     * @param  bool|int if the user data should be read using the auth user id
+     * @return bool true on success or false on failure
      *
-     * @access private
+     * @access public
      */
-    function readUserData($handle = '', $passwd = '')
+    function readUserData($handle = '', $passwd = '', $auth_user_id = false)
     {
-        $this->pearAuth->username = $handle;
+        $this->pearAuth->username = ($auth_user_id !== false) ? $auth_user_id : $handle;
         $this->pearAuth->password = $passwd;
         $this->pearAuth->start();
 
