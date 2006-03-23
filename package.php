@@ -9,17 +9,17 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.10';
+$version = '0.16.11';
 
 $notes = <<<EOT
-- Do not include Cache.php since its only a concept and not implemented yet
-- fixed serious issue with right reading in the Medium and Complex container
-- right_level may not be null in schema (use default if not explicitly set)
-- phpdoc improvements
-- bumped dependency for MDB2 to first stable release
-- added missing optional dependency on mcrypt
-- made admin user a superadmin in example4
-- bumped copyright to 2006
+- parse error typo fix in PEARAuth container (bug #6968)
+- minor improvements to the phpdoc comments in PEARAuth container
+- use ugly fopen() hack in fileExists()
+  http://marc.theaimsgroup.com/?l=pear-dev&m=114148949106207&w=2
+- changed API for readuserData(), auth_user_id parameter now contains the
+  auth_user_id to use
+- login() now supports passing in the auth_user_id instead of the handle/password
+- made stack property public
 EOT;
 
 $description = <<<EOT
