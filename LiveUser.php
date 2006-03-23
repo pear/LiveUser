@@ -526,7 +526,7 @@ class LiveUser
      * Loads a PEAR class.
      *
      * @param  string   classname to load
-     * @param  bool     if errors should be supressed from the stacl
+     * @param  bool     if errors should be supressed from the stack
      * @return bool  true success or false on failure
      *
      * @access public
