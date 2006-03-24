@@ -410,7 +410,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
                     implode(', ', array_keys($rightIds)).')
             AND
                 R.' . $this->alias['has_implied'] . '='.
-                    $this->dbc->quoteSmart(true);
+                    $this->dbc->quote(true);
 
         $result = $this->dbc->query($query);
 
