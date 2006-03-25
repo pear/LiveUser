@@ -130,7 +130,7 @@ End sanity checks on arguments
 print "\n";
 
 $options = array(
-    'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
+#    'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
 #   'seqcol_name' = >'id', // uncomment this line if you want to use DB as the backend
 );
 $dsn = MDB2::parseDSN($dsn);
