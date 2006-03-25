@@ -1,5 +1,6 @@
 <?php
 require_once 'conf.php';
+require_once 'createlu.php';
 require_once 'HTML/Template/IT.php';
 
 // Setup template objects
