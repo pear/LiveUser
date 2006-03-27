@@ -260,7 +260,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        $row = $res->fetchAll(PDO::FETCH_ASSOC);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
 
         if ($row === false) {
             $this->stack->push(
@@ -276,7 +276,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
         if (array_key_exists('lastlogin', $row) && !empty($row['lastlogin'])) {
             $row['lastlogin'] = strtotime($row['lastlogin']);
         }
-        $this->propertyValues = $row[0];
+        $this->propertyValues = $row;
 
         return true;
     }
