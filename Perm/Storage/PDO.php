@@ -163,9 +163,9 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        $row = $result->fetchAll(PDO::FETCH_ASSOC);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-        return $row[0];
+        return $row;
     }
 
     /**
@@ -423,7 +423,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         $rows = array();
         while ($row = $result->fetch(PDO::FETCH_NUM)) {
-            $rows[$row[0]] = $row[1];
+            $rows[$row[0]][] = $row[1];
         }
 
         return $rows;
@@ -463,12 +463,9 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
             return false;
         }
 
-        $rows = array();
-        while ($row = $result->fetch(PDO::FETCH_NUM)) {
-            $rows[$row[0]] = $row[1];
-        }
+        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
 
-        return $rows;
+        return (array)$rows;
     }
 
     /**
