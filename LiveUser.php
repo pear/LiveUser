@@ -345,8 +345,11 @@ class LiveUser
         $this->stack = &PEAR_ErrorStack::singleton('LiveUser');
 
         if ($debug) {
-            $this->log =& LiveUser::PEARLogFactory($debug);
-            $this->stack->setLogger($this->log);
+            $log =& LiveUser::PEARLogFactory($debug);
+            if ($log) {
+                $this->log =& $log;
+                $this->stack->setLogger($this->log);
+            }
         }
 
         $this->stack->setErrorMessageTemplate($this->_errorMessages);
@@ -756,6 +759,14 @@ class LiveUser
         if (!is_object($log)) {
             require_once 'Log.php';
             $log =& Log::factory('composite');
+            if (!is_a($log, 'Log_composite')) {
+                $this->stack->push(
+                    LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                    'Could not create Log instance'
+                );
+                $return = false;
+                return $return;
+            }
             $conf = array('colors' =>
                 array(
                     PEAR_LOG_EMERG   => 'red',
@@ -769,6 +780,14 @@ class LiveUser
                 ),
             );
             $winlog =& Log::factory('win', 'LiveUser', 'LiveUser', $conf);
+            if (!is_a($winlog, 'Log_win')) {
+                $this->stack->push(
+                    LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                    'Could not create Log "window" instance'
+                );
+                $return = false;
+                return $return;
+            }
             $log->addChild($winlog);
         }
 
