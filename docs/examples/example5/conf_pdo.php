@@ -1,7 +1,7 @@
 <?php
 require_once 'MDB2.php';
 require_once 'LiveUser.php';
-// Plase configure the following file according to your environment
+// Please configure the following file according to your environment
 
 $dsn = 'mysql:host=localhost;dbname=liveuser_test_example5';
 
