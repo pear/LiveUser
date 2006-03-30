@@ -273,6 +273,10 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
+        if (!is_array($result)) {
+            return null;
+        }
+
         if (array_key_exists('lastlogin', $row) && !empty($row['lastlogin'])) {
             $row['lastlogin'] = strtotime($row['lastlogin']);
         }
