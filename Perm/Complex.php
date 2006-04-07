@@ -101,7 +101,7 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             foreach ($result as $val) {
                 // only store the implied right if the right wasn't stored before
                 // or if the level is higher
-                if (!isset($rightIds[$val['right_id']])
+                if (!array_key_exists($val['right_id'], $rightIds)
                     || $rightIds[$val['right_id']] < $val['right_level']
                 ) {
                     $rightIds[$val['right_id']] = $val['right_level'];

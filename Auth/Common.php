@@ -480,11 +480,11 @@ class LiveUser_Auth_Common
      */
     function setExternalValues()
     {
-        if (isset($this->externalValues['keysToCheck'])
+        if (array_key_exists('keysToCheck', $this->externalValues)
             && is_array($this->externalValues['keysToCheck'])
         ) {
             foreach ($this->externalValues['keysToCheck'] as $keyToCheck) {
-                if (isset($this->externalValues['values'][$keyToCheck])) {
+                if (array_key_exists($keyToCheck, $this->externalValues['values'])) {
                     $this->propertyValues['storedExternalValues'][$keyToCheck] =
                         md5($this->externalValues['values'][$keyToCheck]);
                 }
@@ -501,12 +501,12 @@ class LiveUser_Auth_Common
      */
     function externalValuesMatch()
     {
-        if (isset($this->propertyValues['storedExternalValues'])
+        if (array_key_exists('storedExternalValues', $this->propertyValues)
             && is_array($this->propertyValues['storedExternalValues'])
         ) {
             foreach ($this->propertyValues['storedExternalValues'] as $keyToCheck => $storedValue) {
                 // return false if any one of the stored values does not match the current value
-                if (!isset($this->externalValues['values'][$keyToCheck])
+                if (!array_key_exists($keyToCheck, $this->externalValues['values'])
                     || md5($this->externalValues['values'][$keyToCheck]) != $storedValue
                 ) {
                     return false;

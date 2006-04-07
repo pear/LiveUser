@@ -170,7 +170,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
      */
     function _updateUserData()
     {
-        if (!isset($this->tables['users']['fields']['lastlogin'])) {
+        if (!array_key_exists('lastlogin', $this->tables['users']['fields'])) {
             return true;
         }
 

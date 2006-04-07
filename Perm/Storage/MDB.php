@@ -262,7 +262,7 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 GU.' . $this->alias['perm_user_id'] . ' = '.
                     $this->dbc->getValue($this->fields['perm_user_id'], $perm_user_id);
 
-        if (isset($this->tables['groups']['fields']['is_active'])) {
+        if (array_key_exists('is_active', $this->tables['groups']['fields'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
                     $this->dbc->getValue($this->fields['is_active'], true);
@@ -346,7 +346,7 @@ class LiveUser_Perm_Storage_MDB extends LiveUser_Perm_Storage_SQL
                 SG.' . $this->alias['subgroup_id'] . ' NOT IN ('.
                     implode(', ', $group_ids).')';
 
-        if (isset($this->tables['groups']['fields']['is_active'])) {
+        if (array_key_exists('is_active', $this->tables['groups']['fields'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
                     $this->dbc->getValue($this->fields['is_active'], true);

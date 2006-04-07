@@ -968,7 +968,7 @@ class LiveUser
                     $this->dispatcher->post($this, 'onExpired');
                 // Check if maximum idle time is reached.
                 } elseif ($this->getProperty('idleTime') > 0
-                    && isset($_SESSION[$this->_options['session']['varname']]['idle'])
+                    && array_key_exists('idle', $_SESSION[$this->_options['session']['varname']])
                     && ($_SESSION[$this->_options['session']['varname']]['idle'] + $this->getProperty('idleTime')) < $now
                 ) {
                     $this->logout(false);
@@ -1106,9 +1106,9 @@ class LiveUser
             $this->_startSession();
         }
 
-        if (isset($_SESSION[$this->_options['session']['varname']]['auth'])
+        if (array_key_exists('auth', $_SESSION[$this->_options['session']['varname']])
             && is_array($_SESSION[$this->_options['session']['varname']]['auth'])
-            && isset($_SESSION[$this->_options['session']['varname']]['auth_name'])
+            && array_key_exists('auth_name', $_SESSION[$this->_options['session']['varname']])
             && strlen($_SESSION[$this->_options['session']['varname']]['auth_name']) > 0
         ) {
             $containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
@@ -1121,7 +1121,7 @@ class LiveUser
             if ($auth->unfreeze($_SESSION[$this->_options['session']['varname']]['auth'])) {
                 $auth->containerName = $_SESSION[$this->_options['session']['varname']]['auth_name'];
                 $this->_auth = &$auth;
-                if (isset($_SESSION[$this->_options['session']['varname']]['perm'])
+                if (array_key_exists('perm', $_SESSION[$this->_options['session']['varname']])
                     && $_SESSION[$this->_options['session']['varname']]['perm']
                 ) {
                     $perm =& LiveUser::permFactory($this->_permContainer);

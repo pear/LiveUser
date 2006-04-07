@@ -251,7 +251,7 @@ class LiveUser_Perm_Simple
         if (!$right_id || $this->perm_type > LIVEUSER_AREAADMIN_TYPE_ID) {
             return LIVEUSER_MAX_LEVEL;
         // If he does, look for the right in question.
-        } elseif (is_array($this->rights) && isset($this->rights[$right_id])) {
+        } elseif (is_array($this->rights) && array_key_exists($right_id, $this->rights)) {
             // We know the user has the right so the right level will be returned.
             return $this->rights[$right_id];
         }

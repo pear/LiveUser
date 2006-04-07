@@ -274,7 +274,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
                 GU.' . $this->alias['perm_user_id'] . ' = '.
                     $this->dbc->quote($perm_user_id);
 
-        if (isset($this->tables['groups']['fields']['is_active'])) {
+        if (array_key_exists('is_active', $this->tables['groups']['fields'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
                     $this->dbc->quote(true);
@@ -363,7 +363,7 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
                 SG.' . $this->alias['subgroup_id'] . ' NOT IN ('.
                     implode(', ', $group_ids).')';
 
-        if (isset($this->tables['groups']['fields']['is_active'])) {
+        if (array_key_exists('is_active', $this->tables['groups']['fields'])) {
             $query .= ' AND
                 G.' . $this->alias['is_active'] . '=' .
                     $this->dbc->quote(true);

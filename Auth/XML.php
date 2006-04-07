@@ -139,6 +139,10 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
      */
     function _updateUserData()
     {
+        if (!array_key_exists('lastlogin', $this->tables['users']['fields'])) {
+            return true;
+        }
+
         $index = 0;
         foreach ($this->userObj->children as $value) {
             if ($value->name == $this->alias['lastlogin']) {
@@ -211,7 +215,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
             $result = array();
             $names = array_flip($this->alias);
             foreach ($user->children as $value) {
-                if (isset($names[$value->name])) {
+                if (array_key_exists($value->name, $names)) {
                     $result[$names[$value->name]] = $value->content;
                 }
             }
