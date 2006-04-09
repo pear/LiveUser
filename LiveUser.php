@@ -536,10 +536,10 @@ class LiveUser
      */
     function loadClass($classname, $supress_error = false)
     {
-        if (!class_exists($classname)) {
+        if (!LiveUser::classExists($classname)) {
             $filename = str_replace('_', '/', $classname).'.php';
             @include_once($filename);
-            if (!class_exists($classname) && !$supress_error) {
+            if (!LiveUser::classExists($classname) && !$supress_error) {
                 if (!LiveUser::fileExists($filename)) {
                     $msg = 'File for the class does not exist ' . $classname;
                 } else {
@@ -684,14 +684,30 @@ class LiveUser
      *
      * @access public
      */
-    function fileExists($file)
+    function fileExists($filename)
     {
-        $fp = @fopen($file, 'r', true);
+        $fp = @fopen($filename, 'r', true);
         if (is_resource($fp)) {
             @fclose($fp);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks if a class exists without triggering __autoload
+     *
+     * @param  string  classname
+     * @return bool true success and false on error
+     *
+     * @access public
+     */
+    function classExists($classname)
+    {
+        if (version_compare(phpversion(), "5.0", ">=") {
+            return class_exists($classname, false);
+        }
+        return class_exists($classname);
     }
 
     /**
