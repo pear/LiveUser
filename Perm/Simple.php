@@ -81,7 +81,7 @@ class LiveUser_Perm_Simple
      * @var mixed
      * @access public
      */
-    var $rights = false;
+    var $right_ids = false;
 
     /**
      * One-dimensional array containing only the individual
@@ -92,7 +92,7 @@ class LiveUser_Perm_Simple
      * @var array
      * @access public
      */
-    var $user_rights = array();
+    var $user_right_ids = array();
 
     /**
      * Defines the user type. Depending on the value the user can gain certain
@@ -204,13 +204,13 @@ class LiveUser_Perm_Simple
      */
     function readRights()
     {
-        $this->rights = array();
+        $this->right_ids = array();
         $result = $this->readUserRights($this->perm_user_id);
         if ($result === false) {
             return false;
         }
-        $this->rights = $result;
-        return $this->rights;
+        $this->right_ids = $result;
+        return $this->right_ids;
     }
 
     /**
@@ -224,13 +224,13 @@ class LiveUser_Perm_Simple
      */
     function readUserRights($perm_user_id)
     {
-        $this->user_rights = array();
+        $this->user_right_ids = array();
         $result = $this->_storage->readUserRights($perm_user_id);
         if ($result === false) {
             return false;
         }
-        $this->user_rights = $result;
-        return $this->user_rights;
+        $this->user_right_ids = $result;
+        return $this->user_right_ids;
     }
 
     /**
@@ -251,9 +251,9 @@ class LiveUser_Perm_Simple
         if (!$right_id || $this->perm_type > LIVEUSER_AREAADMIN_TYPE_ID) {
             return LIVEUSER_MAX_LEVEL;
         // If he does, look for the right in question.
-        } elseif (is_array($this->rights) && array_key_exists($right_id, $this->rights)) {
+        } elseif (is_array($this->right_ids) && array_key_exists($right_id, $this->right_ids)) {
             // We know the user has the right so the right level will be returned.
-            return $this->rights[$right_id];
+            return $this->right_ids[$right_id];
         }
         return false;
     }
@@ -287,11 +287,11 @@ class LiveUser_Perm_Simple
     {
         $propertyValues = array(
             'perm_user_id' => $this->perm_user_id,
-            'rights'       => $this->rights,
-            'user_rights'  => $this->user_rights,
-            'group_rights' => $this->group_rights,
-            'perm_type'    => $this->perm_type,
-            'group_ids'    => $this->group_ids,
+            'right_ids' => $this->right_ids,
+            'user_right_ids' => $this->user_right_ids,
+            'group_right_ids' => $this->group_right_ids,
+            'perm_type' => $this->perm_type,
+            'group_ids' => $this->group_ids,
         );
         return $this->_storage->freeze($sessionName, $propertyValues);
     }

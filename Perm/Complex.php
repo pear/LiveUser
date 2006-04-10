@@ -139,17 +139,17 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
             }
 
             if (is_array($this->area_admin_areas)) {
-                if (is_array($this->user_rights)) {
-                    $this->user_rights = $this->area_admin_areas + $this->user_rights;
+                if (is_array($this->user_right_ids)) {
+                    $this->user_right_ids = $this->area_admin_areas + $this->user_right_ids;
                 } else {
-                    $this->user_rights = $this->area_admin_areas;
+                    $this->user_right_ids = $this->area_admin_areas;
                 }
             }
         }
 
-        $this->user_rights = $this->_readImpliedRights($this->user_rights, 'user');
+        $this->user_right_ids = $this->_readImpliedRights($this->user_right_ids, 'user');
 
-        return $this->user_rights;
+        return $this->user_right_ids;
     }
 
     /**
@@ -207,10 +207,10 @@ class LiveUser_Perm_Complex extends LiveUser_Perm_Medium
      */
     function readGroupRights($group_ids)
     {
-        $group_rights = parent::readGroupRights($group_ids);
-        $this->group_rights = $this->_readImpliedRights($group_rights, 'group');
+        $group_right_ids = parent::readGroupRights($group_ids);
+        $this->group_right_ids = $this->_readImpliedRights($group_right_ids, 'group');
 
-        return $this->group_rights;
+        return $this->group_right_ids;
     }
 
     /**

@@ -98,7 +98,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      * @var array
      * @access public
      */
-    var $group_rights = array();
+    var $group_right_ids = array();
 
     /**
      * Reads all rights of current user into an
@@ -112,7 +112,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      */
     function readRights()
     {
-        $this->rights = array();
+        $this->right_ids = array();
 
         $result = $this->readUserRights($this->perm_user_id);
         if ($result === false) {
@@ -129,37 +129,37 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             return false;
         }
 
-        $groupRights = is_array($this->group_rights) ? $this->group_rights : array();
+        $groupRights = is_array($this->group_right_ids) ? $this->group_right_ids : array();
 
         // Check if user has individual rights...
-        if (is_array($this->user_rights)) {
+        if (is_array($this->user_right_ids)) {
             // Overwrite values from temporary array with values from userrights
-            foreach ($this->user_rights as $right => $level) {
+            foreach ($this->user_right_ids as $right => $level) {
                 if (array_key_exists($right, $groupRights)) {
                     if ($level < 0) {
                         // Revoking rights: A negative value indicates a maximum
                         // possible right level
                         $max_allowed_level = LIVEUSER_MAX_LEVEL + $level;
-                        $this->rights[$right] = min($groupRights[$right], $max_allowed_level);
+                        $this->right_ids[$right] = min($groupRights[$right], $max_allowed_level);
                     } elseif ($level > 0) {
-                        $this->rights[$right] = max($groupRights[$right], $level);
+                        $this->right_ids[$right] = max($groupRights[$right], $level);
                     } elseif ($level == 0) {
-                        unset($this->rights[$right]);
+                        unset($this->right_ids[$right]);
                     }
                     unset($groupRights[$right]);
                 } elseif ($level < 0) {
-                    $this->rights[$right] = LIVEUSER_MAX_LEVEL + $level;
+                    $this->right_ids[$right] = LIVEUSER_MAX_LEVEL + $level;
                 } elseif ($level > 0) {
-                    $this->rights[$right] = $level;
+                    $this->right_ids[$right] = $level;
                 } elseif ($level == 0) {
-                    unset($this->rights[$right]);
+                    unset($this->right_ids[$right]);
                 }
             }
         }
 
-        $this->rights+= $groupRights;
+        $this->right_ids+= $groupRights;
 
-        return $this->rights;
+        return $this->right_ids;
     }
 
     /**
@@ -194,7 +194,7 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
      */
     function readGroupRights($group_ids)
     {
-        $this->group_rights = array();
+        $this->group_right_ids = array();
 
         if (!is_array($group_ids) || !count($group_ids)) {
             return null;
@@ -205,8 +205,8 @@ class LiveUser_Perm_Medium extends LiveUser_Perm_Simple
             return false;
         }
 
-        $this->group_rights = $result;
-        return $this->group_rights;
+        $this->group_right_ids = $result;
+        return $this->group_right_ids;
     }
 
     /**
