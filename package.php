@@ -22,6 +22,10 @@ $notes = <<<EOT
 - made stack property public
 - typo fix in PDO container readImplyingRights() method (bug #7195)
 - expanded error handling in Log instance creation
+- handle if no proper credentials where passed to readUserData() (bug #7262)
+- replace isset() with array_key_exists() where applicable
+- disable __autoload() in class_exists() calls (bug #7304)
+- brought property names in line s/rights/right_ids *BC break*
 EOT;
 
 $description = <<<EOT
