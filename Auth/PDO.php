@@ -246,8 +246,6 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
         // Query database
         $res = $this->dbc->query($query);
 
-        // If a user was found, read data into class variables and set
-        // return value to true
         if ($res === false) {
             $error_info = $this->dbc->errorInfo();
             $this->stack->push(
@@ -277,6 +275,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return null;
         }
 
+        // User was found, read data into class variables and set return value to true
         if (array_key_exists('lastlogin', $row) && !empty($row['lastlogin'])) {
             $row['lastlogin'] = strtotime($row['lastlogin']);
         }

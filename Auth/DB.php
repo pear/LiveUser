@@ -223,8 +223,6 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
         $result = $this->dbc->getRow($query, null, DB_FETCHMODE_ASSOC);
 
         if (PEAR::isError($result)) {
-        // If a user was found, read data into class variables and set
-        // return value to true
             $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array('reason' => $result->getMessage() . '-' . $result->getUserInfo())
@@ -236,6 +234,7 @@ class LiveUser_Auth_DB extends LiveUser_Auth_Common
             return null;
         }
 
+        // User was found, read data into class variables and set return value to true
         if (array_key_exists('lastlogin', $result) && !empty($result['lastlogin'])) {
             $result['lastlogin'] = strtotime($result['lastlogin']);
         }

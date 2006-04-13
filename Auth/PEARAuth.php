@@ -159,12 +159,11 @@ class LiveUser_Auth_PEARAuth extends LiveUser_Auth_Common
         $this->pearAuth->password = $passwd;
         $this->pearAuth->start();
 
-        // If a user was found, read data into class variables and set
-        // return value to true
         if (!$this->pearAuth->getAuth()) {
             return null;
         }
 
+        // User was found, read data into class variables and set return value to true
         $this->propertyValues['auth_user_id'] = $this->pearAuth->getUsername();
         $this->propertyValues['handle'] = $this->pearAuth->getUsername();
         $this->propertyValues['passwd'] = $this->encryptPW($this->pearAuth->password);

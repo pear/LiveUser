@@ -235,8 +235,6 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
         // Query database
         $result = $this->dbc->queryRow($query, $types, MDB_FETCHMODE_ASSOC);
 
-        // If a user was found, read data into class variables and set
-        // return value to true
         if (PEAR::isError($result)) {
             $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
@@ -249,6 +247,7 @@ class LiveUser_Auth_MDB extends LiveUser_Auth_Common
             return null;
         }
 
+        // User was found, read data into class variables and set return value to true
         if (array_key_exists('lastlogin', $result) && !empty($result['lastlogin'])) {
             $result['lastlogin'] = MDB_Date::mdbstamp2Unix($result['lastlogin']);
         }
