@@ -1122,7 +1122,8 @@ class LiveUser
             $this->_startSession();
         }
 
-        if (array_key_exists('auth', $_SESSION[$this->_options['session']['varname']])
+        if (isset($_SESSION[$this->_options['session']['varname']])
+            && array_key_exists('auth', $_SESSION[$this->_options['session']['varname']])
             && is_array($_SESSION[$this->_options['session']['varname']]['auth'])
             && array_key_exists('auth_name', $_SESSION[$this->_options['session']['varname']])
             && strlen($_SESSION[$this->_options['session']['varname']]['auth_name']) > 0
