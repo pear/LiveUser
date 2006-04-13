@@ -124,7 +124,6 @@ function dump_to_file(&$db, $scope, $message, $is_manip)
 $options = array(
     'debug' => true,
     'log_line_break' => '<br>',
-    'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
 // to dump the SQL to a file uncommented the following line
 // and set the disable_query parameter in the installSchema calls
 #    'debug_handler' => 'dump_to_file',
