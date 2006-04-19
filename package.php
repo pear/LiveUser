@@ -26,6 +26,8 @@ $notes = <<<EOT
 - replace isset() with array_key_exists() where applicable
 - disable __autoload() in class_exists() calls (bug #7304)
 - brought property names in line s/rights/right_ids *BC break*
+- MDB2_Schema 0.5 and MDB2 2.0.1 handles nulls in schema files properly so
+  there is no need to disable MDB2_PORTABILITY_EMPTY_TO_NULL in the installer
 EOT;
 
 $description = <<<EOT
