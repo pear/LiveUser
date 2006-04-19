@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.7">
+<package version="1.0" packagerversion="1.4.9">
  <name>LiveUser</name>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
@@ -64,18 +64,26 @@
   </maintainer>
   </maintainers>
  <release>
-  <version>0.16.10</version>
-  <date>2006-02-27</date>
+  <version>0.16.11</version>
+  <date>2006-04-19</date>
   <license>LGPL</license>
   <state>beta</state>
-  <notes>- Do not include Cache.php since its only a concept and not implemented yet
-- fixed serious issue with right reading in the Medium and Complex container
-- right_level may not be null in schema (use default if not explicitly set)
-- phpdoc improvements
-- bumped dependency for MDB2 to first stable release
-- added missing optional dependency on mcrypt
-- made admin user a superadmin in example4
-- bumped copyright to 2006
+  <notes>- parse error typo fix in PEARAuth container (bug #6968)
+- minor improvements to the phpdoc comments in PEARAuth container
+- use ugly fopen() hack in fileExists()
+  http://marc.theaimsgroup.com/?l=pear-dev&amp;m=114148949106207&amp;w=2
+- changed API for readuserData(), auth_user_id parameter now contains the
+  auth_user_id to use
+- login() now supports passing in an auth_user_id instead of the handle/password
+- made stack property public
+- typo fix in PDO container readImplyingRights() method (bug #7195)
+- expanded error handling in Log instance creation
+- handle if no proper credentials where passed to readUserData() (bug #7262)
+- replace isset() with array_key_exists() where applicable
+- disable __autoload() in class_exists() calls (bug #7304)
+- brought property names in line s/rights/right_ids *BC break*
+- MDB2_Schema 0.5 and MDB2 2.0.1 handles nulls in schema files properly so
+  there is no need to disable MDB2_PORTABILITY_EMPTY_TO_NULL in the installer
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -145,6 +153,7 @@
        <file role="doc" name="admin.tpl"/>
        <file role="doc" name="conf.php"/>
        <file role="doc" name="conf_pdo.php"/>
+       <file role="doc" name="createlu.php"/>
        <file role="doc" name="demodata.xml"/>
        <file role="doc" name="home.php"/>
        <file role="doc" name="home.tpl"/>
@@ -187,6 +196,29 @@
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>0.16.11</version>
+    <date>2006-04-19</date>
+    <license>LGPL</license>
+    <state>beta</state>
+    <notes>- parse error typo fix in PEARAuth container (bug #6968)
+- minor improvements to the phpdoc comments in PEARAuth container
+- use ugly fopen() hack in fileExists()
+  http://marc.theaimsgroup.com/?l=pear-dev&amp;m=114148949106207&amp;w=2
+- changed API for readuserData(), auth_user_id parameter now contains the
+  auth_user_id to use
+- login() now supports passing in an auth_user_id instead of the handle/password
+- made stack property public
+- typo fix in PDO container readImplyingRights() method (bug #7195)
+- expanded error handling in Log instance creation
+- handle if no proper credentials where passed to readUserData() (bug #7262)
+- replace isset() with array_key_exists() where applicable
+- disable __autoload() in class_exists() calls (bug #7304)
+- brought property names in line s/rights/right_ids *BC break*
+- MDB2_Schema 0.5 and MDB2 2.0.1 handles nulls in schema files properly so
+  there is no need to disable MDB2_PORTABILITY_EMPTY_TO_NULL in the installer
+    </notes>
+   </release>
    <release>
     <version>0.16.10</version>
     <date>2006-02-27</date>
