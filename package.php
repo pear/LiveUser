@@ -9,25 +9,9 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.11';
+$version = 'XXX';
 
 $notes = <<<EOT
-- parse error typo fix in PEARAuth container (bug #6968)
-- minor improvements to the phpdoc comments in PEARAuth container
-- use ugly fopen() hack in fileExists()
-  http://marc.theaimsgroup.com/?l=pear-dev&m=114148949106207&w=2
-- changed API for readuserData(), auth_user_id parameter now contains the
-  auth_user_id to use
-- login() now supports passing in an auth_user_id instead of the handle/password
-- made stack property public
-- typo fix in PDO container readImplyingRights() method (bug #7195)
-- expanded error handling in Log instance creation
-- handle if no proper credentials where passed to readUserData() (bug #7262)
-- replace isset() with array_key_exists() where applicable
-- disable __autoload() in class_exists() calls (bug #7304)
-- brought property names in line s/rights/right_ids *BC break*
-- MDB2_Schema 0.5 and MDB2 2.0.1 handles nulls in schema files properly so
-  there is no need to disable MDB2_PORTABILITY_EMPTY_TO_NULL in the installer
 EOT;
 
 $description = <<<EOT
