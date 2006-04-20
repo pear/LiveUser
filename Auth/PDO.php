@@ -271,7 +271,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        if (!is_array($result)) {
+        if (!is_array($row)) {
             return null;
         }
 
