@@ -12,6 +12,7 @@ require_once 'Console/Getopt.php';
 $version = 'XXX';
 
 $notes = <<<EOT
+ - when authenticating a user try to use the hash extension if it is present for the password encryption
 EOT;
 
 $description = <<<EOT

@@ -341,23 +341,32 @@ class LiveUser_Auth_Common
         $encryptedPW = 'Encryption type not supported.';
 
         switch (strtoupper($this->passwordEncryptionMode)) {
-        case 'PLAIN':
-            $encryptedPW = $plainPW;
-            break;
-        case 'MD5':
-            $encryptedPW = md5($plainPW);
-            break;
-        case 'RC4':
-            $encryptedPW = LiveUser::cryptRC4($plainPW, $this->secret, true);
-            break;
-        case 'SHA1':
-            if (!function_exists('sha1')) {
-                $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception', array(),
-                    'SHA1 function doesn\'t exist. Upgrade your PHP version');
-                return false;
-            }
-            $encryptedPW = sha1($plainPW);
-            break;
+            case 'PLAIN':
+                $encryptedPW = $plainPW;
+                break;
+            case 'MD5':
+                $encryptedPW = md5($plainPW);
+                break;
+            case 'RC4':
+                $encryptedPW = LiveUser::cryptRC4($plainPW, $this->secret, true);
+                break;
+            case 'SHA1':
+                if (!function_exists('sha1')) {
+                    $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception', array(),
+                        'SHA1 function doesn\'t exist. Upgrade your PHP version');
+                    return false;
+                }
+                $encryptedPW = sha1($plainPW);
+                break;
+            default:
+                // The hash extension is enabled by default as PHP 5.1.2
+                // so we try to use it
+                if (extension_loaded('hash')) {
+                    $enc_method = strtolower($this->passwordEncryptionMode);
+                    if (in_array($enc_method, hash_algos())) {
+                        $encryptedPW = hash($enc_method, $plainPW);
+                    }
+                }
         }
 
         return $encryptedPW;
