@@ -258,7 +258,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        $row = $res->fetch(PDO::FETCH_ASSOC);
+        $row = $res->fetchAll(PDO::FETCH_ASSOC);
 
         if ($row === false) {
             $this->stack->push(
@@ -271,7 +271,8 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        if (!is_array($row)) {
+        // we either did not any result or an error was not caught
+        if (!is_array($row) || count($row) == 0) {
             return null;
         }
 
