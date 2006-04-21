@@ -314,7 +314,8 @@ class LiveUser_Auth_Common
             $decryptedPW = LiveUser::cryptRC4($decryptedPW, $this->secret, false);
             break;
         case 'SHA1':
-            // SHA1 can't be decoded, so return the string unmodified
+        default:
+            // the password can't be decoded, so return the string unmodified
             $decryptedPW = $encryptedPW;
             break;
         }
