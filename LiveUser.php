@@ -1071,7 +1071,7 @@ class LiveUser
                     if ($perm === false) {
                         $this->_status = LIVEUSER_STATUS_PERMINITERROR;
                         $this->stack->push(LIVEUSER_ERROR, 'exception',
-                            array('msg' => 'Could not instanciate perm container of type: '.$conf['type']));
+                            array('msg' => 'Could not instanciate perm container of type: ' . $this->_permContainer['type']));
                         return false;
                     }
                     if (!$perm->mapUser($auth->getProperty('auth_user_id'), $containerName)) {
