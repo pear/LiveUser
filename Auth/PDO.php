@@ -280,7 +280,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
         if (array_key_exists('lastlogin', $row) && !empty($row['lastlogin'])) {
             $row['lastlogin'] = strtotime($row['lastlogin']);
         }
-        $this->propertyValues = $row;
+        $this->propertyValues = $row[0];
 
         return true;
     }
