@@ -309,7 +309,7 @@ class LiveUser_Misc_Schema_Install
                                 'fields' => array(
                                     $field_name => true,
                                 ),
-                                'unique' => true
+                                'primary' => true
                             );
                         }
                     // Generate indexes
