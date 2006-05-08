@@ -258,9 +258,9 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        $row = $res->fetch();
+        $result = $res->fetch();
 
-        if ($row === false) {
+        if ($result === false) {
             $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array(
@@ -271,16 +271,15 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        // we either did not any result or an error was not caught
-        if (!is_array($row) || count($row) == 0) {
+        if (!is_array($result)) {
             return null;
         }
 
         // User was found, read data into class variables and set return value to true
-        if (array_key_exists('lastlogin', $row) && !empty($row['lastlogin'])) {
-            $row['lastlogin'] = strtotime($row['lastlogin']);
+        if (array_key_exists('lastlogin', $result) && !empty($result['lastlogin'])) {
+            $result['lastlogin'] = strtotime($result['lastlogin']);
         }
-        $this->propertyValues = $row[0];
+        $this->propertyValues = $result;
 
         return true;
     }
