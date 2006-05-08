@@ -258,7 +258,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        $row = $res->fetchAll(PDO::FETCH_ASSOC);
+        $row = $res->fetch();
 
         if ($row === false) {
             $this->stack->push(
