@@ -294,7 +294,7 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
     function disconnect()
     {
         if ($this->dsn) {
-            $this->dbc = false;
+            $this->dbc = null;
         }
         return true;
     }
