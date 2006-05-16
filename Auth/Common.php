@@ -367,13 +367,17 @@ class LiveUser_Auth_Common
                     if (in_array($enc_method, hash_algos())) {
                         $encryptedPW = hash($enc_method, $plainPW);
                     } else {
-                        $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),
-                            'Could not find the requested encryption function : ' . $this->passwordEncryptionMode);
+                        $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'error', 
+                        array('feature' =>
+                            'Could not find the requested encryption function : ' . $this->passwordEncryptionMode)
+                        );
                         return false;
                     }
                 } else {
-                    $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),
-                        'Could not find the requested encryption function : ' . $this->passwordEncryptionMode);
+                    $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'error', 
+                    array('feature' =>
+                        'Could not find the requested encryption function : ' . $this->passwordEncryptionMode)
+                    );
                     return false;
                 }
         }
