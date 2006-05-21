@@ -1647,17 +1647,23 @@ class LiveUser
     /**
      * Return a textual status message for a LiveUser status code.
      *
-     * @param int     status code
+     * @param   int|array   integer status code,
+                                null to get the current status code-message map,
+                                or an array with a new status code-message map
      * @return  string  error message
      *
      * @access public
      */
-    function statusMessage($value)
+    function statusMessage($value = null)
     {
         // make the variable static so that it only has to do the defining on the first call
         static $statusMessages;
 
-        // define the varies error messages
+        if (is_array($value)) {
+            $statusMessages = $value;
+            return true;
+        }
+
         if (!isset($statusMessages)) {
             $statusMessages = array(
                 LIVEUSER_STATUS_OK              => 'Authentication OK',
@@ -1673,6 +1679,10 @@ class LiveUser
                 LIVEUSER_STATUS_UNFROZEN        => 'Object fetched from the session, the user was already logged in',
                 LIVEUSER_STATUS_EMPTY_HANDLE    => 'No handle was passed to LiveUser directly or indirectly',
             );
+        }
+
+        if (is_null($value)) {
+            return $statusMessages;
         }
 
         // return the textual error message corresponding to the code
