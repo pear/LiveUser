@@ -77,8 +77,8 @@ if (array_key_exists('REQUEST_METHOD', $_SERVER) && $_SERVER['REQUEST_METHOD'] =
     require_once 'Console/Getopt.php';
     $argv = Console_Getopt::readPHPArgv();
 
-    $shortoptions = "h?d:f:";
-    $longoptions = array('file=', 'dsn=');
+    $shortoptions = "h?d:f:c:";
+    $longoptions = array('file=', 'dsn=', 'create=');
 
     $con = new Console_Getopt;
     $args = $con->readPHPArgv();
