@@ -12,7 +12,8 @@ require_once 'Console/Getopt.php';
 $version = 'XXX';
 
 $notes = <<<EOT
- - when authenticating a user try to use the hash extension if it is present for the password encryption
+- use the hash extension if it is present for the password encryption
+- refactored decryptPW() and encryptPW() into static methods in the LiveUser class
 EOT;
 
 $description = <<<EOT
@@ -100,6 +101,7 @@ $package->addDependency('MDB2_Schema',      false,   'has', 'pkg', true);
 $package->addDependency('XML_Tree',         false,   'has', 'pkg', true);
 $package->addDependency('Crypt_RC4',        false,   'has', 'pkg', true);
 $package->addDependency('mcrypt',           false,   'has', 'ext', true);
+$package->addDependency('hash',             false,   'has', 'ext', true);
 
 if (array_key_exists('make', $_GET) || (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'make')) {
     $result = $package->writePackageFile();
