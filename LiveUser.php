@@ -811,6 +811,76 @@ class LiveUser
     }
 
     /**
+     * Decrypts a password so that it can be compared with the user input.
+     * Uses the algorithm defined in the passwordEncryptionMode parameter.
+     *
+     * @param  string the encrypted password
+     * @param  string the encryption mode
+     * @return string The decrypted password
+     */
+    function decryptPW($encryptedPW, $passwordEncryptionMode)
+    {
+        if (empty($encryptedPW) && $encryptedPW !== 0) {
+            return '';
+        }
+
+        $passwordEncryptionMode = strtolower($passwordEncryptionMode);
+
+        if ($passwordEncryptionMode === 'plain') {
+            return $plainPW;
+        }
+
+        if ($passwordEncryptionMode === 'rc4') {
+            return LiveUser::cryptRC4($decryptedPW, $this->secret, false);
+        }
+
+        return $decryptedPW;
+    }
+
+    /**
+     * Encrypts a password for storage in a backend container.
+     * Uses the algorithm defined in the passwordEncryptionMode parameter.
+     *
+     * @param string  password to encrypt
+     * @param  string the encryption mode
+     * @return string The encrypted password
+     */
+    function encryptPW($plainPW, $passwordEncryptionMode)
+    {
+        if (empty($plainPW) && $plainPW !== 0) {
+            return '';
+        }
+
+        $passwordEncryptionMode = strtolower($passwordEncryptionMode);
+
+        if ($passwordEncryptionMode === 'plain') {
+            return $plainPW;
+        }
+
+        if ($passwordEncryptionMode === 'rc4') {
+            return LiveUser::cryptRC4($plainPW, $this->secret, true);
+        }
+
+        if (extension_loaded('hash')) {
+            if (in_array($enc_method, hash_algos())) {
+                $encryptedPW = hash($passwordEncryptionMode, $plainPW);
+            } else {
+                PEAR_ErrorStack::staticPush('LiveUser', LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),
+                    'Could not find the requested encryption function : ' . $passwordEncryptionMode);
+                return false;
+            }
+        }
+
+        if ($passwordEncryptionMode === 'sha1' && function_exists('sha1')) {
+            return sha1($plainPW);
+        }
+
+        PEAR_ErrorStack::staticPush('LiveUser', LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),
+            'Could not find the requested encryption function : ' . $this->passwordEncryptionMode);
+        return false;
+    }
+
+    /**
      * Creates an instance of the PEAR::Crypt_Rc4 class.
      *
      * @param  string token to use to encrypt data

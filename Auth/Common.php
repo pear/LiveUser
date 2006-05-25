@@ -285,9 +285,8 @@ class LiveUser_Auth_Common
     }
 
     /**
-     * Decrypts a password so that it can be compared with the user
-     * input. Uses the algorithm defined in the passwordEncryptionMode
-     * property.
+     * Decrypts a password so that it can be compared with the user input.
+     * Uses the algorithm defined in the passwordEncryptionMode property.
      *
      * @param  string the encrypted password
      * @return string the decrypted password
@@ -296,37 +295,12 @@ class LiveUser_Auth_Common
      */
     function decryptPW($encryptedPW)
     {
-        if (empty($encryptedPW) && $encryptedPW !== 0) {
-            return '';
-        }
-
-        $decryptedPW = 'Encryption type not supported.';
-
-        switch (strtoupper($this->passwordEncryptionMode)) {
-        case 'PLAIN':
-            $decryptedPW = $encryptedPW;
-            break;
-        case 'MD5':
-            // MD5 can't be decoded, so return the string unmodified
-            $decryptedPW = $encryptedPW;
-            break;
-        case 'RC4':
-            $decryptedPW = LiveUser::cryptRC4($decryptedPW, $this->secret, false);
-            break;
-        case 'SHA1':
-        default:
-            // the password can't be decoded, so return the string unmodified
-            $decryptedPW = $encryptedPW;
-            break;
-        }
-
-        return $decryptedPW;
+        return LiveUser::decryptPW($encryptedPW, $this->passwordEncryptionMode);
     }
 
     /**
      * Encrypts a password for storage in a backend container.
-     * Uses the algorithm defined in the passwordEncryptionMode
-     * property.
+     * Uses the algorithm defined in the passwordEncryptionMode property.
      *
      * @param string  encryption type
      * @return string the encrypted password
@@ -335,54 +309,7 @@ class LiveUser_Auth_Common
      */
     function encryptPW($plainPW)
     {
-        if (empty($plainPW) && $plainPW !== 0) {
-            return '';
-        }
-
-        $encryptedPW = 'Encryption type not supported.';
-
-        switch (strtoupper($this->passwordEncryptionMode)) {
-            case 'PLAIN':
-                $encryptedPW = $plainPW;
-                break;
-            case 'MD5':
-                $encryptedPW = md5($plainPW);
-                break;
-            case 'RC4':
-                $encryptedPW = LiveUser::cryptRC4($plainPW, $this->secret, true);
-                break;
-            case 'SHA1':
-                if (!function_exists('sha1')) {
-                    $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'exception', array(),
-                        'SHA1 function doesn\'t exist. Upgrade your PHP version');
-                    return false;
-                }
-                $encryptedPW = sha1($plainPW);
-                break;
-            default:
-                // The hash extension is enabled by default as PHP 5.1.2
-                // so we try to use it
-                if (extension_loaded('hash')) {
-                    $enc_method = strtolower($this->passwordEncryptionMode);
-                    if (in_array($enc_method, hash_algos())) {
-                        $encryptedPW = hash($enc_method, $plainPW);
-                    } else {
-                        $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'error', 
-                        array('feature' =>
-                            'Could not find the requested encryption function : ' . $this->passwordEncryptionMode)
-                        );
-                        return false;
-                    }
-                } else {
-                    $this->stack->push(LIVEUSER_ERROR_NOT_SUPPORTED, 'error', 
-                    array('feature' =>
-                        'Could not find the requested encryption function : ' . $this->passwordEncryptionMode)
-                    );
-                    return false;
-                }
-        }
-
-        return $encryptedPW;
+        return LiveUser::encryptPW($plainPW, $this->passwordEncryptionMode);
     }
 
     /**
