@@ -843,9 +843,10 @@ class LiveUser
      *
      * @param string  password to encrypt
      * @param  string the encryption mode
+     * @param  string token to use to encrypt data
      * @return string The encrypted password
      */
-    function encryptPW($plainPW, $passwordEncryptionMode)
+    function encryptPW($plainPW, $passwordEncryptionMode, $secret)
     {
         if (empty($plainPW) && $plainPW !== 0) {
             return '';
@@ -853,30 +854,28 @@ class LiveUser
 
         $passwordEncryptionMode = strtolower($passwordEncryptionMode);
 
-        if ($passwordEncryptionMode === 'plain') {
+        if ($passwordEncryptionMode == 'plain') {
             return $plainPW;
         }
 
-        if ($passwordEncryptionMode === 'rc4') {
-            return LiveUser::cryptRC4($plainPW, $this->secret, true);
+        if ($passwordEncryptionMode == 'md5') {
+            return md5($plainPW);
         }
 
-        if (extension_loaded('hash')) {
-            if (in_array($enc_method, hash_algos())) {
-                $encryptedPW = hash($passwordEncryptionMode, $plainPW);
-            } else {
-                PEAR_ErrorStack::staticPush('LiveUser', LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),
-                    'Could not find the requested encryption function : ' . $passwordEncryptionMode);
-                return false;
-            }
+        if (extension_loaded('hash') && in_array($passwordEncryptionMode, hash_algos())) {
+            return hash($passwordEncryptionMode, $plainPW);
         }
 
-        if ($passwordEncryptionMode === 'sha1' && function_exists('sha1')) {
+        if ($passwordEncryptionMode == 'rc4') {
+            return LiveUser::cryptRC4($plainPW, $secret, true);
+        }
+
+        if (function_exists('sha1') && $passwordEncryptionMode == 'sha1') {
             return sha1($plainPW);
         }
 
         PEAR_ErrorStack::staticPush('LiveUser', LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),
-            'Could not find the requested encryption function : ' . $this->passwordEncryptionMode);
+            'Could not find the requested encryption function : ' . $passwordEncryptionMode);
         return false;
     }
 
