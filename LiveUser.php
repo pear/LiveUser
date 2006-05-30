@@ -827,14 +827,16 @@ class LiveUser
         $passwordEncryptionMode = strtolower($passwordEncryptionMode);
 
         if ($passwordEncryptionMode === 'plain') {
-            return $plainPW;
+            return $encryptedPW;
         }
 
         if ($passwordEncryptionMode === 'rc4') {
             return LiveUser::cryptRC4($decryptedPW, $this->secret, false);
         }
 
-        return $decryptedPW;
+        PEAR_ErrorStack::staticPush('LiveUser', LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),
+            'Could not find the requested decryption function : ' . $passwordEncryptionMode);
+        return false;
     }
 
     /**
