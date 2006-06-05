@@ -258,9 +258,9 @@ class LiveUser_Auth_PDO extends LiveUser_Auth_Common
             return false;
         }
 
-        $result = $res->fetch();
+        $result = $res->fetch(PDO::FETCH_ASSOC);
 
-        if ($result === false) {
+        if ($result === false && $this->dbc->errorCode() != '00000') {
             $this->stack->push(
                 LIVEUSER_ERROR, 'exception',
                 array(

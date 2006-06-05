@@ -165,6 +165,10 @@ class LiveUser_Perm_Storage_PDO extends LiveUser_Perm_Storage_SQL
 
         $row = $result->fetch(PDO::FETCH_ASSOC);
 
+        if ($row === false && $this->dbc->errorCode() === '00000') {
+            $row = null;
+        }
+
         return $row;
     }
 
