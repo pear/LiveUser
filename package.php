@@ -14,6 +14,8 @@ $version = 'XXX';
 $notes = <<<EOT
 - use the hash extension if it is present for the password encryption
 - refactored decryptPW() and encryptPW() into static methods in the LiveUser class
+- force null instead of false for PDO fetch() calls that return empty sets
+- fixed logging in example1
 EOT;
 
 $description = <<<EOT
@@ -104,6 +106,7 @@ $package->addDependency('mcrypt',           false,   'has', 'ext', true);
 $package->addDependency('hash',             false,   'has', 'ext', true);
 
 if (array_key_exists('make', $_GET) || (isset($_SERVER['argv'][1]) && $_SERVER['argv'][1] == 'make')) {
+    echo "package.xml generated\n";
     $result = $package->writePackageFile();
 } else {
     $result = $package->debugPackageFile();
@@ -113,5 +116,3 @@ if (PEAR::isError($result)) {
     echo $result->getMessage();
     exit();
 }
-
-echo "package.xml generated successfully!\n";
