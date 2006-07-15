@@ -15,7 +15,7 @@ $notes = <<<EOT
 - use the hash extension if it is present for the password encryption
 - refactored decryptPW() and encryptPW() into static methods in the LiveUser class
 - force null instead of false for PDO fetch() calls that return empty sets
-- fixed logging in example1
+- fixed logging into example1
 EOT;
 
 $description = <<<EOT
