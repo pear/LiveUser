@@ -12,6 +12,17 @@ require_once 'Console/Getopt.php';
 $version = 'XXX';
 
 $notes = <<<EOT
+- wrong use of pdo fetch method, when no result could be fetched it returns
+  false with no error. Swith to using fetchAll and check for an empty array
+- we cannot decrypt most of the encryption method used by the hash extension so
+  we default to returning the unmodified string
+- the wrong variable was used to report the type of permission container when an
+  error occured
+- push an error on the stack when the encryption method cannot be found
+- make sequence columns primary key
+- properly disconnect the pdo object
+- make it possible to set the status message mapping
+- register options for create (Bug #7704)
 - use the hash extension if it is present for the password encryption
 - refactored decryptPW() and encryptPW() into static methods in the LiveUser class
 - force null instead of false for PDO fetch() calls that return empty sets
