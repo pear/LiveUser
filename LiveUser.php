@@ -772,40 +772,42 @@ class LiveUser
      */
     function &PEARLogFactory(&$log)
     {
-        if (!is_object($log)) {
-            require_once 'Log.php';
-            $log =& Log::factory('composite');
-            if (!is_a($log, 'Log_composite')) {
-                $this->stack->push(
-                    LIVEUSER_ERROR_CONFIG, 'exception', array(),
-                    'Could not create Log instance'
-                );
-                $return = false;
-                return $return;
-            }
-            $conf = array('colors' =>
-                array(
-                    PEAR_LOG_EMERG   => 'red',
-                    PEAR_LOG_ALERT   => 'orange',
-                    PEAR_LOG_CRIT    => 'yellowgreen',
-                    PEAR_LOG_ERR     => 'green',
-                    PEAR_LOG_WARNING => 'blue',
-                    PEAR_LOG_NOTICE  => 'indigo',
-                    PEAR_LOG_INFO    => 'violet',
-                    PEAR_LOG_DEBUG   => 'black',
-                ),
-            );
-            $winlog =& Log::factory('win', 'LiveUser', 'LiveUser', $conf);
-            if (!is_a($winlog, 'Log_win')) {
-                $this->stack->push(
-                    LIVEUSER_ERROR_CONFIG, 'exception', array(),
-                    'Could not create Log "window" instance'
-                );
-                $return = false;
-                return $return;
-            }
-            $log->addChild($winlog);
+        if (empty($log) || is_object($log)) {
+            return $log;
         }
+
+        require_once 'Log.php';
+        $log =& Log::factory('composite');
+        if (!is_a($log, 'Log_composite')) {
+            $this->stack->push(
+                LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Could not create Log instance'
+            );
+            $return = false;
+            return $return;
+        }
+        $conf = array(
+            'colors' => array(
+                PEAR_LOG_EMERG   => 'red',
+                PEAR_LOG_ALERT   => 'orange',
+                PEAR_LOG_CRIT    => 'yellowgreen',
+                PEAR_LOG_ERR     => 'green',
+                PEAR_LOG_WARNING => 'blue',
+                PEAR_LOG_NOTICE  => 'indigo',
+                PEAR_LOG_INFO    => 'violet',
+                PEAR_LOG_DEBUG   => 'black',
+            ),
+        );
+        $winlog =& Log::factory('win', 'LiveUser', 'LiveUser', $conf);
+        if (!is_a($winlog, 'Log_win')) {
+            $this->stack->push(
+                LIVEUSER_ERROR_CONFIG, 'exception', array(),
+                'Could not create Log "window" instance'
+            );
+            $return = false;
+            return $return;
+        }
+        $log->addChild($winlog);
 
         return $log;
     }
