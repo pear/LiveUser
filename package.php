@@ -27,6 +27,7 @@ $notes = <<<EOT
 - refactored decryptPW() and encryptPW() into static methods in the LiveUser class
 - force null instead of false for PDO fetch() calls that return empty sets
 - fixed logging into example1
+- debug => false in conf doesn't work (Bug #7564; thx to Matthias)
 EOT;
 
 $description = <<<EOT
