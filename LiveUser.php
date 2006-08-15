@@ -417,7 +417,8 @@ class LiveUser
      *            'secret'                => 'secret to use in password encryption',
      *            'storage' => array(
      *                'dbc' => 'db connection object, use this or dsn',
-     *                'dsn'        => 'database dsn, use this or connection',
+     *                'dsn' => 'database dsn, use this or connection',
+     *                'handles' => 'array of handle fields to find a user on login; works with DB, MDB, MDB2 and PDO containers',
      *           ),
      *           'externalValues' => array(
      *                  'values'      => 'reference to an array',
@@ -715,7 +716,7 @@ class LiveUser
      *
      * @param  array|file  Conf array or file path to configuration
      * @param  string      Name of array containing the configuration
-     * @return bool     true on success or false on failure
+     * @return bool        true on success or false on failure
      *
      * @access public
      * @see    LiveUser::factory
@@ -725,15 +726,15 @@ class LiveUser
         // probably a futile attempt at working out reference issues in arrays
         $options = $conf;
 
-        if (array_key_exists('debug', $conf) && !is_object($conf['debug'])) {
+        if (array_key_exists('debug', $conf) && is_object($conf['debug'])) {
             $options['debug'] = true;
         }
         if (array_key_exists('authContainers', $conf)) {
-            $this->_authContainers = $conf['authContainers'];
+            $this->_authContainers =& $conf['authContainers'];
             unset($options['authContainers']);
         }
         if (array_key_exists('permContainer', $conf)) {
-            $this->_permContainer = $conf['permContainer'];
+            $this->_permContainer =& $conf['permContainer'];
             unset($options['permContainer']);
         }
 
@@ -820,7 +821,7 @@ class LiveUser
      * @param  string the encryption mode
      * @return string The decrypted password
      */
-    function decryptPW($encryptedPW, $passwordEncryptionMode)
+    function decryptPW($encryptedPW, $passwordEncryptionMode, $secret)
     {
         if (empty($encryptedPW) && $encryptedPW !== 0) {
             return '';
@@ -833,7 +834,7 @@ class LiveUser
         }
 
         if ($passwordEncryptionMode === 'rc4') {
-            return LiveUser::cryptRC4($decryptedPW, $this->secret, false);
+            return LiveUser::cryptRC4($decryptedPW, $secret, false);
         }
 
         PEAR_ErrorStack::staticPush('LiveUser', LIVEUSER_ERROR_NOT_SUPPORTED, 'error', array(),

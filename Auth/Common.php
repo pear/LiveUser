@@ -161,6 +161,14 @@ class LiveUser_Auth_Common
     var $externalValues = array();
 
     /**
+     * A list of handle fields that are used to find a user.
+     *
+     * @var    array
+     * @access public
+     */
+    var $handles = array('handle');
+
+    /**
      * Table configuration
      *
      * @var    array

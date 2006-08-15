@@ -230,8 +230,19 @@ class LiveUser_Auth_MDB2 extends LiveUser_Auth_Common
             $query .= $this->alias['auth_user_id'] . '='
                 . $this->dbc->quote($auth_user_id, $this->fields['auth_user_id']);
         } else {
-            $query .= $this->alias['handle'] . '='
-                . $this->dbc->quote($handle, $this->fields['handle']);
+            if (!is_array($this->handles) || empty($this->handles)) {
+                $this->stack->push(
+                    LIVEUSER_ERROR_CONFIG, 'exception',
+                    array('reason' => 'No handle set in storage config.')
+                );
+                return false;
+            }
+            $handles = array();
+            foreach ($this->handles as $field) {
+                $handles[] = $this->alias[$field] . '=' .
+                    $this->dbc->quote($handle, $this->fields[$field]);
+            }
+            $query .= '(' . implode(' OR ', $handles) . ')';
 
             if (!is_null($this->tables['users']['fields']['passwd'])) {
                 // If $passwd is set, try to find the first user with the given
