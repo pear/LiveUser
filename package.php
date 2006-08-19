@@ -28,11 +28,11 @@ $notes = <<<EOT
 - force null instead of false for PDO fetch() calls that return empty sets
 - fixed logging into example1
 - debug => false in conf doesn't work (Bug #7564; thx to Matthias)
-- Request #7781: added support for user defined handle fields
-  in DB, MDB, MDB2 and PDO containers:
-  you can set a list of fields in your auth container storage config:
-  example: 'handles' => array('handle', 'auth_user_id', 'email')
-  these fields are now used to find the right user on login, default is 'handle'
+- added support for user defined handle fields
+  in DB, MDB, MDB2 and PDO containers you can set a list of fields in your auth
+  container storage config, default is 'handle', example:
+  'handles' => array('handle', 'auth_user_id', 'email')
+  these fields are now used to find the right user on login (Request #7781)
 - fixed LiveUser::decryptPW(): added missing third parameter 'secret'
 EOT;
 
