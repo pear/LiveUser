@@ -34,6 +34,7 @@ $notes = <<<EOT
   'handles' => array('handle', 'auth_user_id', 'email')
   these fields are now used to find the right user on login (Request #7781)
 - fixed LiveUser::decryptPW(): added missing third parameter 'secret'
+- check if safe_mode is enabled in fileExists() to determine what algo to use (Bug #8296)
 EOT;
 
 $description = <<<EOT
