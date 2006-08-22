@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.9">
+<package version="1.0" packagerversion="1.4.11">
  <name>LiveUser</name>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
@@ -58,32 +58,45 @@
   </maintainer>
   <maintainer>
    <user>dufuz</user>
-   <name>Helgi Ãormar</name>
+   <name>Helgi &amp;#222;ormar</name>
    <email>dufuz@php.net</email>
    <role>lead</role>
   </maintainer>
+  <maintainer>
+   <user>mahono</user>
+   <name>Matthias Nothhaft</name>
+   <email>mahono@php.net</email>
+   <role>developer</role>
+  </maintainer>
   </maintainers>
  <release>
-  <version>0.16.11</version>
-  <date>2006-04-19</date>
+  <version>1.16.12</version>
+  <date>2006-08-22</date>
   <license>LGPL</license>
   <state>beta</state>
-  <notes>- parse error typo fix in PEARAuth container (bug #6968)
-- minor improvements to the phpdoc comments in PEARAuth container
-- use ugly fopen() hack in fileExists()
-  http://marc.theaimsgroup.com/?l=pear-dev&amp;m=114148949106207&amp;w=2
-- changed API for readuserData(), auth_user_id parameter now contains the
-  auth_user_id to use
-- login() now supports passing in an auth_user_id instead of the handle/password
-- made stack property public
-- typo fix in PDO container readImplyingRights() method (bug #7195)
-- expanded error handling in Log instance creation
-- handle if no proper credentials where passed to readUserData() (bug #7262)
-- replace isset() with array_key_exists() where applicable
-- disable __autoload() in class_exists() calls (bug #7304)
-- brought property names in line s/rights/right_ids *BC break*
-- MDB2_Schema 0.5 and MDB2 2.0.1 handles nulls in schema files properly so
-  there is no need to disable MDB2_PORTABILITY_EMPTY_TO_NULL in the installer
+  <notes>- wrong use of pdo fetch method, when no result could be fetched it returns
+  false with no error. Swith to using fetchAll and check for an empty array
+- we cannot decrypt most of the encryption method used by the hash extension so
+  we default to returning the unmodified string
+- the wrong variable was used to report the type of permission container when an
+  error occured
+- push an error on the stack when the encryption method cannot be found
+- make sequence columns primary key
+- properly disconnect the pdo object
+- make it possible to set the status message mapping
+- register options for create (Bug #7704)
+- use the hash extension if it is present for the password encryption
+- refactored decryptPW() and encryptPW() into static methods in the LiveUser class
+- force null instead of false for PDO fetch() calls that return empty sets
+- fixed logging into example1
+- debug =&gt; false in conf doesn&apos;t work (Bug #7564; thx to Matthias)
+- added support for user defined handle fields
+  in DB, MDB, MDB2 and PDO containers you can set a list of fields in your auth
+  container storage config, default is &apos;handle&apos;, example:
+  &apos;handles&apos; =&gt; array(&apos;handle&apos;, &apos;auth_user_id&apos;, &apos;email&apos;)
+  these fields are now used to find the right user on login (Request #7781)
+- fixed LiveUser::decryptPW(): added missing third parameter &apos;secret&apos;
+- check if safe_mode is enabled in fileExists() to determine what algo to use (Bug #8296)
   </notes>
   <deps>
    <dep type="php" rel="ge" version="4.2.0" optional="no"/>
@@ -97,6 +110,7 @@
    <dep type="pkg" rel="has" optional="yes">XML_Tree</dep>
    <dep type="pkg" rel="has" optional="yes">Crypt_RC4</dep>
    <dep type="ext" rel="has" optional="yes">mcrypt</dep>
+   <dep type="ext" rel="has" optional="yes">hash</dep>
   </deps>
   <filelist>
    <dir name="/" baseinstalldir="/LiveUser">
@@ -196,6 +210,36 @@
   </filelist>
  </release>
  <changelog>
+   <release>
+    <version>1.16.12</version>
+    <date>2006-08-22</date>
+    <license>LGPL</license>
+    <state>beta</state>
+    <notes>- wrong use of pdo fetch method, when no result could be fetched it returns
+  false with no error. Swith to using fetchAll and check for an empty array
+- we cannot decrypt most of the encryption method used by the hash extension so
+  we default to returning the unmodified string
+- the wrong variable was used to report the type of permission container when an
+  error occured
+- push an error on the stack when the encryption method cannot be found
+- make sequence columns primary key
+- properly disconnect the pdo object
+- make it possible to set the status message mapping
+- register options for create (Bug #7704)
+- use the hash extension if it is present for the password encryption
+- refactored decryptPW() and encryptPW() into static methods in the LiveUser class
+- force null instead of false for PDO fetch() calls that return empty sets
+- fixed logging into example1
+- debug =&gt; false in conf doesn&apos;t work (Bug #7564; thx to Matthias)
+- added support for user defined handle fields
+  in DB, MDB, MDB2 and PDO containers you can set a list of fields in your auth
+  container storage config, default is &apos;handle&apos;, example:
+  &apos;handles&apos; =&gt; array(&apos;handle&apos;, &apos;auth_user_id&apos;, &apos;email&apos;)
+  these fields are now used to find the right user on login (Request #7781)
+- fixed LiveUser::decryptPW(): added missing third parameter &apos;secret&apos;
+- check if safe_mode is enabled in fileExists() to determine what algo to use (Bug #8296)
+    </notes>
+   </release>
    <release>
     <version>0.16.11</version>
     <date>2006-04-19</date>

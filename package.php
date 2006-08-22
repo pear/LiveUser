@@ -9,7 +9,7 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = 'XXX';
+$version = '1.16.12';
 
 $notes = <<<EOT
 - wrong use of pdo fetch method, when no result could be fetched it returns
@@ -109,7 +109,7 @@ $package->addMaintainer('mw21st',  'lead',      'Markus Wolff',      'mw21st@php
 $package->addMaintainer('arnaud',  'lead',      'Arnaud Limbourg',   'arnaud@php.net');
 $package->addMaintainer('lsmith',  'lead',      'Lukas Kahwe Smith', 'smith@pooteeweet.org');
 $package->addMaintainer('krausbn', 'developer', 'Bjoern Kraus',      'krausbn@php.net');
-$package->addMaintainer('dufuz',   'lead',      'Helgi Ãžormar',     'dufuz@php.net');
+$package->addMaintainer('dufuz',   'lead',      'Helgi Þormar',      'dufuz@php.net');
 $package->addMaintainer('mahono',  'developer', 'Matthias Nothhaft', 'mahono@php.net');
 
 $package->addDependency('php',              '4.2.0', 'ge',  'php', false);
