@@ -9,7 +9,7 @@
 require_once 'PEAR/PackageFileManager.php';
 require_once 'Console/Getopt.php';
 
-$version = '1.16.12';
+$version = '0.16.12';
 
 $notes = <<<EOT
 - wrong use of pdo fetch method, when no result could be fetched it returns
