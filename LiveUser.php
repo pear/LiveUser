@@ -731,24 +731,16 @@ class LiveUser
      * @access public
      * @see    LiveUser::factory
      */
-    function readConfig(&$conf)
+    function readConfig($conf)
     {
-        // probably a futile attempt at working out reference issues in arrays
-        $options = $conf;
-
-        if (array_key_exists('debug', $conf) && is_object($conf['debug'])) {
-            $options['debug'] = true;
-        }
         if (array_key_exists('authContainers', $conf)) {
             $this->_authContainers =& $conf['authContainers'];
-            unset($options['authContainers']);
         }
         if (array_key_exists('permContainer', $conf)) {
             $this->_permContainer =& $conf['permContainer'];
-            unset($options['permContainer']);
         }
 
-        $this->_options = LiveUser::arrayMergeClobber($this->_options, $options);
+        $this->_options = LiveUser::arrayMergeClobber($this->_options, $conf);
         if (array_key_exists('cookie', $this->_options) && $this->_options['cookie']) {
             $cookie_default = array(
                 'name'     => 'ludata',
