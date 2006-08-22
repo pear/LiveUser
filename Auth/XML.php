@@ -154,7 +154,7 @@ class LiveUser_Auth_XML extends LiveUser_Auth_Common
 
         $success = false;
         do {
-          if (is_writable($this->file)) {
+          if (!is_writable($this->file)) {
               $errorMsg = 'Auth freeze failure. Cannot write to the xml file';
               break;
           }
