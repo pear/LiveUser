@@ -418,7 +418,9 @@ class LiveUser
      *            'storage' => array(
      *                'dbc' => 'db connection object, use this or dsn',
      *                'dsn' => 'database dsn, use this or connection',
-     *                'handles' => 'array of handle fields to find a user on login; works with DB, MDB, MDB2 and PDO containers',
+     *                'handles' => 'array of handle fields to find a user on login, a user 
+     *                  can login with his username, email or any field you set here;
+     *                  works with DB, MDB, MDB2 and PDO containers',
      *           ),
      *           'externalValues' => array(
      *                  'values'      => 'reference to an array',
