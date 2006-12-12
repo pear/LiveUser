@@ -556,7 +556,7 @@
 
     <field>
      <name>has_implied</name>
-     <value>N</value>
+     <value>0</value>
    </field>
 
    </insert>
@@ -580,7 +580,7 @@
 
     <field>
      <name>has_implied</name>
-     <value>N</value>
+     <value>0</value>
    </field>
 
    </insert>
