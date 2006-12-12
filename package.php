@@ -12,29 +12,8 @@ require_once 'Console/Getopt.php';
 $version = '0.16.12';
 
 $notes = <<<EOT
-- wrong use of pdo fetch method, when no result could be fetched it returns
-  false with no error. Swith to using fetchAll and check for an empty array
-- we cannot decrypt most of the encryption method used by the hash extension so
-  we default to returning the unmodified string
-- the wrong variable was used to report the type of permission container when an
-  error occured
-- push an error on the stack when the encryption method cannot be found
-- make sequence columns primary key
-- properly disconnect the pdo object
-- make it possible to set the status message mapping
-- register options for create (Bug #7704)
-- use the hash extension if it is present for the password encryption
-- refactored decryptPW() and encryptPW() into static methods in the LiveUser class
-- force null instead of false for PDO fetch() calls that return empty sets
-- fixed logging into example1
-- debug => false in conf doesn't work (Bug #7564; thx to Matthias)
-- added support for user defined handle fields
-  in DB, MDB, MDB2 and PDO containers you can set a list of fields in your auth
-  container storage config, default is 'handle', example:
-  'handles' => array('handle', 'auth_user_id', 'email')
-  these fields are now used to find the right user on login (Request #7781)
-- fixed LiveUser::decryptPW(): added missing third parameter 'secret'
-- check if safe_mode is enabled in fileExists() to determine what algo to use (Bug #8296)
+- #9581 Add support for session.cookie_httponly
+- #9575 [Opn->Csd]: Example trips over MySQL boolean/int
 EOT;
 
 $description = <<<EOT
