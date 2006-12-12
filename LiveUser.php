@@ -761,6 +761,18 @@ class LiveUser
                 $this->_options['cookie'] = $cookie_default;
             }
         }
+            
+        if (array_key_exists('session_cookie_params', $this->_options) && $this->_options['session_cookie_param']) {
+            $session_cookie_params_default = array(
+                'httponly' => false,
+            );
+            if (is_array($this->_options['session_cookie_params'])) {
+                $this->_options['session_cookie_params'] =
+                    LiveUser::arrayMergeClobber($session_cookie_params_default, $this->_options['cookie']);
+            } else {
+                $this->_options['session_cookie_params'] = $session_cookie_params_default;
+            }
+        }
 
         return true;
     }
