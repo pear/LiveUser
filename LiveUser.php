@@ -388,6 +388,7 @@ class LiveUser
      *      'path'     => 'Cookie path',
      *      'domain'   => 'Cookie domain',
      *      'secure'   => 'Cookie send only over secure connections',
+     *      'httponly' => 'HHTP only cookie, PHP 5.2.0+ only',
      *  ),
      * 'cache_perm' => if the permission data should be cached inside the session
      *  'login' => array(
@@ -407,6 +408,7 @@ class LiveUser
      *      'secret'   => 'Secret key used for cookie value encryption',
      *      'savedir'  => '/absolute/path/to/writeable/directory' // No trailing slash (/) !
      *      'secure'   => 'Cookie send only over secure connections',
+     *      'httponly' => 'HHTP only cookie, PHP 5.2.0+ only',
      *  ),
      *  'authContainers' => array(
      *      'name' => array(
@@ -750,6 +752,7 @@ class LiveUser
                 'path'     => '/',
                 'domain'   => '',
                 'secret'   => 'secret',
+                'httponly' => false,
             );
             if (is_array($this->_options['cookie'])) {
                 $this->_options['cookie'] =
@@ -1015,7 +1018,8 @@ class LiveUser
                 (LIVEUSER_DAY_SECONDS * $this->_options['session_cookie_params']['lifetime'])),
                 $this->_options['session_cookie_params']['path'],
                 $this->_options['session_cookie_params']['domain'],
-                $this->_options['session_cookie_params']['secure']);
+                $this->_options['session_cookie_params']['secure'],
+                $this->_options['session_cookie_params']['httponly']);
         }
         // Set the name of the current session
         session_name($this->_options['session']['name']);
@@ -1352,7 +1356,8 @@ class LiveUser
             (time() + (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime'])),
             $this->_options['cookie']['path'],
             $this->_options['cookie']['domain'],
-            $this->_options['cookie']['secure']
+            $this->_options['cookie']['secure'],
+            $this->_options['cookie']['httponly']
         );
 
         if (!$setcookie) {
