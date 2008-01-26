@@ -420,7 +420,7 @@ class LiveUser
      *            'storage' => array(
      *                'dbc' => 'db connection object, use this or dsn',
      *                'dsn' => 'database dsn, use this or connection',
-     *                'handles' => 'array of handle fields to find a user on login, a user 
+     *                'handles' => 'array of handle fields to find a user on login, a user
      *                  can login with his username, email or any field you set here;
      *                  works with DB, MDB, MDB2 and PDO containers',
      *           ),
@@ -761,8 +761,8 @@ class LiveUser
                 $this->_options['cookie'] = $cookie_default;
             }
         }
-            
-        if (array_key_exists('session_cookie_params', $this->_options) && $this->_options['session_cookie_param']) {
+
+        if (array_key_exists('session_cookie_params', $this->_options) && $this->_options['session_cookie_params']) {
             $session_cookie_params_default = array(
                 'httponly' => false,
             );
