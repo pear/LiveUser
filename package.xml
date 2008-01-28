@@ -74,7 +74,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <date>2008-01-28</date>
  <time>08:08:25</time>
  <version>
-  <release>0.16.13</release>
+  <release>0</release>
   <api>0.16.12</api>
  </version>
  <stability>
@@ -83,9 +83,6 @@ http://pear.php.net/dtd/package-2.0.xsd">
  </stability>
  <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
  <notes>
-  - #9418: Initialization for example 5 wrong
-  - #9575: Example trips over MySQL boolean/int
-  - #9581: Add support for session.cookie_httponly
  </notes>
  <contents>
   <dir name="/">
