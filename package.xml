@@ -74,7 +74,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <date>2008-01-28</date>
  <time>08:08:25</time>
  <version>
-  <release>0</release>
+  <release>0.17</release>
   <api>0.16.12</api>
  </version>
  <stability>
