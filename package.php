@@ -6,14 +6,15 @@
  *
  * $Id$
  */
-require_once 'PEAR/PackageFileManager.php';
+require_once 'PEAR/PackageFileManager2.php';
 require_once 'Console/Getopt.php';
 
-$version = '0.16.12';
+$packagefile = 'package.xml';
+
+$version = '';
+$apiVersion = '';
 
 $notes = <<<EOT
-- #9581 Add support for session.cookie_httponly
-- #9575 [Opn->Csd]: Example trips over MySQL boolean/int
 EOT;
 
 $description = <<<EOT
@@ -46,9 +47,7 @@ $description = <<<EOT
   PEAR::DB, PEAR::MDB, PEAR::MDB2, PECL::PDO, PEAR::XML_Tree, PEAR::Auth, Session.
 EOT;
 
-$package = new PEAR_PackageFileManager();
-
-$result = $package->setOptions(array(
+$options = array('filelistgenerator' => 'cvs',
     'package'           => 'LiveUser',
     'summary'           => 'User authentication and permission management framework',
     'description'       => $description,
@@ -58,6 +57,8 @@ $result = $package->setOptions(array(
     'filelistgenerator' => 'cvs',
     'ignore'            => array('package.php', 'package.xml', 'Cache.php'),
     'notes'             => $notes,
+    'clearcontents'     => false,
+    'changelogoldtonew' => false,
     'changelogoldtonew' => false,
     'simpleoutput'      => true,
     'baseinstalldir'    => '/LiveUser',
@@ -77,6 +78,20 @@ $result = $package->setOptions(array(
     'dir_roles'         => array('sql'               => 'data',
                                  'docs'              => 'doc',
                                  'scripts'           => 'script')
+);
+
+
+$p2 = &PEAR_PackageFileManager2::importOptions($packagefile, $options);
+$p2->setPackageType('php');
+$p2->addRelease();
+$p2->generateContents();
+$p2->setReleaseVersion($version);
+$p2->setAPIVersion($apiVersion);
+$p2->setReleaseStability('beta');
+$p2->setAPIStability('beta');
+$p2->setNotes($notes);
+
+$result = $package->setOptions(array(
 ));
 
 if (PEAR::isError($result)) {

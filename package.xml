@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<package version="1.0" packagerversion="1.4.11">
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.7.0RC2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
  <name>LiveUser</name>
+ <channel>pear.php.net</channel>
  <summary>User authentication and permission management framework</summary>
  <description>LiveUser is a set of classes for dealing with user authentication
   and permission management. Basically, there are three main elements that
@@ -30,192 +33,236 @@
 
   Currently available are containers using:
   PEAR::DB, PEAR::MDB, PEAR::MDB2, PECL::PDO, PEAR::XML_Tree, PEAR::Auth, Session.
+ 
  </description>
- <maintainers>
-  <maintainer>
-   <user>mw21st</user>
-   <name>Markus Wolff</name>
-   <email>mw21st@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>arnaud</user>
-   <name>Arnaud Limbourg</name>
-   <email>arnaud@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>lsmith</user>
-   <name>Lukas Kahwe Smith</name>
-   <email>smith@pooteeweet.org</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>krausbn</user>
-   <name>Bjoern Kraus</name>
-   <email>krausbn@php.net</email>
-   <role>developer</role>
-  </maintainer>
-  <maintainer>
-   <user>dufuz</user>
-   <name>Helgi &amp;#222;ormar</name>
-   <email>dufuz@php.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>mahono</user>
-   <name>Matthias Nothhaft</name>
-   <email>mahono@php.net</email>
-   <role>developer</role>
-  </maintainer>
-  </maintainers>
- <release>
-  <version>0.16.12</version>
-  <date>2006-08-22</date>
-  <license>LGPL</license>
-  <state>beta</state>
-  <notes>- wrong use of pdo fetch method, when no result could be fetched it returns
-  false with no error. Swith to using fetchAll and check for an empty array
-- we cannot decrypt most of the encryption method used by the hash extension so
-  we default to returning the unmodified string
-- the wrong variable was used to report the type of permission container when an
-  error occured
-- push an error on the stack when the encryption method cannot be found
-- make sequence columns primary key
-- properly disconnect the pdo object
-- make it possible to set the status message mapping
-- register options for create (Bug #7704)
-- use the hash extension if it is present for the password encryption
-- refactored decryptPW() and encryptPW() into static methods in the LiveUser class
-- force null instead of false for PDO fetch() calls that return empty sets
-- fixed logging into example1
-- debug =&gt; false in conf doesn&apos;t work (Bug #7564; thx to Matthias)
-- added support for user defined handle fields
-  in DB, MDB, MDB2 and PDO containers you can set a list of fields in your auth
-  container storage config, default is &apos;handle&apos;, example:
-  &apos;handles&apos; =&gt; array(&apos;handle&apos;, &apos;auth_user_id&apos;, &apos;email&apos;)
-  these fields are now used to find the right user on login (Request #7781)
-- fixed LiveUser::decryptPW(): added missing third parameter &apos;secret&apos;
-- check if safe_mode is enabled in fileExists() to determine what algo to use (Bug #8296)
-  </notes>
-  <deps>
-   <dep type="php" rel="ge" version="4.2.0" optional="no"/>
-   <dep type="pkg" rel="ge" version="1.3.3" optional="no">PEAR</dep>
-   <dep type="pkg" rel="has" optional="no">Event_Dispatcher</dep>
-   <dep type="pkg" rel="ge" version="1.7.0" optional="yes">Log</dep>
-   <dep type="pkg" rel="ge" version="1.6.0" optional="yes">DB</dep>
-   <dep type="pkg" rel="ge" version="1.1.4" optional="yes">MDB</dep>
-   <dep type="pkg" rel="ge" version="2.0.0" optional="yes">MDB2</dep>
-   <dep type="pkg" rel="has" optional="yes">MDB2_Schema</dep>
-   <dep type="pkg" rel="has" optional="yes">XML_Tree</dep>
-   <dep type="pkg" rel="has" optional="yes">Crypt_RC4</dep>
-   <dep type="ext" rel="has" optional="yes">mcrypt</dep>
-   <dep type="ext" rel="has" optional="yes">hash</dep>
-  </deps>
+ <lead>
+  <name>Markus Wolff</name>
+  <user>mw21st</user>
+  <email>mw21st@php.net</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Arnaud Limbourg</name>
+  <user>arnaud</user>
+  <email>arnaud@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Lukas Kahwe Smith</name>
+  <user>lsmith</user>
+  <email>smith@pooteeweet.org</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Helgi &amp;#222;ormar</name>
+  <user>dufuz</user>
+  <email>dufuz@php.net</email>
+  <active>yes</active>
+ </lead>
+ <developer>
+  <name>Bjoern Kraus</name>
+  <user>krausbn</user>
+  <email>krausbn@php.net</email>
+  <active>no</active>
+ </developer>
+ <developer>
+  <name>Matthias Nothhaft</name>
+  <user>mahono</user>
+  <email>mahono@php.net</email>
+  <active>yes</active>
+ </developer>
+ <date>2008-01-28</date>
+ <time>08:08:25</time>
+ <version>
+  <release>0.16.13</release>
+  <api>0.16.12</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
+ <notes>
+  - #9418: Initialization for example 5 wrong
+  - #9575: Example trips over MySQL boolean/int
+  - #9581: Add support for session.cookie_httponly
+ </notes>
+ <contents>
+  <dir name="/">
+   <dir name="Auth">
+    <dir name="Storage">
+     <file baseinstalldir="/LiveUser" name="Globals.php" role="php" />
+    </dir> <!-- /Auth/Storage -->
+    <file baseinstalldir="/LiveUser" name="Common.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="DB.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="MDB.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="MDB2.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="PDO.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="PEARAuth.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="Session.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="XML.php" role="php" />
+   </dir> <!-- /Auth -->
+   <dir name="docs">
+    <dir name="examples">
+     <dir name="example1">
+      <file baseinstalldir="/LiveUser" name="Auth_XML.xml" role="doc" />
+      <file baseinstalldir="/LiveUser" name="conf.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="example.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="index.html" role="doc" />
+      <file baseinstalldir="/LiveUser" name="README" role="doc" />
+     </dir> <!-- /docs/examples/example1 -->
+     <dir name="example2">
+      <file baseinstalldir="/LiveUser" name="Auth_XML.xml" role="doc" />
+      <file baseinstalldir="/LiveUser" name="conf.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="example.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="index.html" role="doc" />
+      <file baseinstalldir="/LiveUser" name="Perm_XML.xml" role="doc" />
+      <file baseinstalldir="/LiveUser" name="README" role="doc" />
+     </dir> <!-- /docs/examples/example2 -->
+     <dir name="example4">
+      <file baseinstalldir="/LiveUser" name="Auth_XML.xml" role="doc" />
+      <file baseinstalldir="/LiveUser" name="conf.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="demodata.xml" role="doc" />
+      <file baseinstalldir="/LiveUser" name="error-page.tpl.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="finish.inc.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="functions.js" role="doc" />
+      <file baseinstalldir="/LiveUser" name="index.html" role="doc" />
+      <file baseinstalldir="/LiveUser" name="loginform.tpl.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_change.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_change.tpl.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_new.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_new.tpl.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_notallowed.tpl.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_view.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_view.tpl.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="style.css" role="doc" />
+     </dir> <!-- /docs/examples/example4 -->
+     <dir name="example5">
+      <file baseinstalldir="/LiveUser" name="admin.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="admin.tpl" role="doc" />
+      <file baseinstalldir="/LiveUser" name="conf.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="conf_pdo.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="createlu.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="demodata.xml" role="doc" />
+      <file baseinstalldir="/LiveUser" name="home.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="home.tpl" role="doc" />
+      <file baseinstalldir="/LiveUser" name="index.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="layout_frontend.css" role="doc" />
+      <file baseinstalldir="/LiveUser" name="liveuser_rights.php" role="doc" />
+      <file baseinstalldir="/LiveUser" name="login_form.tpl" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news.tpl" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_edit.tpl" role="doc" />
+      <file baseinstalldir="/LiveUser" name="news_list.tpl" role="doc" />
+     </dir> <!-- /docs/examples/example5 -->
+     <file baseinstalldir="/LiveUser" name="demodata.php" role="doc" />
+     <file baseinstalldir="/LiveUser" name="README" role="doc" />
+    </dir> <!-- /docs/examples -->
+   </dir> <!-- /docs -->
+   <dir name="Perm">
+    <dir name="Storage">
+     <file baseinstalldir="/LiveUser" name="DB.php" role="php" />
+     <file baseinstalldir="/LiveUser" name="Globals.php" role="php" />
+     <file baseinstalldir="/LiveUser" name="MDB.php" role="php" />
+     <file baseinstalldir="/LiveUser" name="MDB2.php" role="php" />
+     <file baseinstalldir="/LiveUser" name="PDO.php" role="php" />
+     <file baseinstalldir="/LiveUser" name="SQL.php" role="php" />
+     <file baseinstalldir="/LiveUser" name="XML.php" role="php" />
+    </dir> <!-- /Perm/Storage -->
+    <file baseinstalldir="/LiveUser" name="Complex.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="Medium.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="Simple.php" role="php" />
+    <file baseinstalldir="/LiveUser" name="Storage.php" role="php" />
+   </dir> <!-- /Perm -->
+   <dir name="sql">
+    <file baseinstalldir="/LiveUser" name="Auth_XML.xml" role="data" />
+    <file baseinstalldir="/LiveUser" name="install.php" role="data" />
+    <file baseinstalldir="/LiveUser" name="Perm_XML.xml" role="data" />
+    <file baseinstalldir="/LiveUser" name="README" role="data" />
+   </dir> <!-- /sql -->
+   <file baseinstalldir="/LiveUser" name="lgpl.txt" role="doc" />
+   <file baseinstalldir="/" name="LiveUser.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.3.3</min>
+   </package>
+   <package>
+    <name>Event_Dispatcher</name>
+    <channel>pear.php.net</channel>
+   </package>
+  </required>
+  <optional>
+   <package>
+    <name>Log</name>
+    <channel>pear.php.net</channel>
+    <min>1.7.0</min>
+   </package>
+   <package>
+    <name>DB</name>
+    <channel>pear.php.net</channel>
+    <min>1.6.0</min>
+   </package>
+   <package>
+    <name>MDB</name>
+    <channel>pear.php.net</channel>
+    <min>1.1.4</min>
+   </package>
+   <package>
+    <name>MDB2</name>
+    <channel>pear.php.net</channel>
+    <min>2.0.0</min>
+   </package>
+   <package>
+    <name>MDB2_Schema</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>XML_Tree</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>Crypt_RC4</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <extension>
+    <name>mcrypt</name>
+   </extension>
+   <extension>
+    <name>hash</name>
+   </extension>
+  </optional>
+ </dependencies>
+ <phprelease>
   <filelist>
-   <dir name="/" baseinstalldir="/LiveUser">
-    <dir name="Auth">
-     <dir name="Storage">
-      <file role="php" name="Globals.php"/>
-     </dir> <!-- /Auth/Storage -->
-     <file role="php" name="Common.php"/>
-     <file role="php" name="DB.php"/>
-     <file role="php" name="MDB.php"/>
-     <file role="php" name="MDB2.php"/>
-     <file role="php" name="PDO.php"/>
-     <file role="php" name="PEARAuth.php"/>
-     <file role="php" name="Session.php"/>
-     <file role="php" name="XML.php"/>
-    </dir> <!-- /Auth -->
-    <dir name="docs">
-     <dir name="examples">
-      <dir name="example1">
-       <file role="doc" name="Auth_XML.xml"/>
-       <file role="doc" name="conf.php"/>
-       <file role="doc" name="example.php"/>
-       <file role="doc" name="index.html"/>
-       <file role="doc" name="README"/>
-      </dir> <!-- /docs/examples/example1 -->
-      <dir name="example2">
-       <file role="doc" name="Auth_XML.xml"/>
-       <file role="doc" name="conf.php"/>
-       <file role="doc" name="example.php"/>
-       <file role="doc" name="index.html"/>
-       <file role="doc" name="Perm_XML.xml"/>
-       <file role="doc" name="README"/>
-      </dir> <!-- /docs/examples/example2 -->
-      <dir name="example4">
-       <file role="doc" name="Auth_XML.xml"/>
-       <file role="doc" name="conf.php"/>
-       <file role="doc" name="demodata.xml"/>
-       <file role="doc" name="error-page.tpl.php"/>
-       <file role="doc" name="finish.inc.php"/>
-       <file role="doc" name="functions.js"/>
-       <file role="doc" name="index.html"/>
-       <file role="doc" name="loginform.tpl.php"/>
-       <file role="doc" name="news_change.php"/>
-       <file role="doc" name="news_change.tpl.php"/>
-       <file role="doc" name="news_new.php"/>
-       <file role="doc" name="news_new.tpl.php"/>
-       <file role="doc" name="news_notallowed.tpl.php"/>
-       <file role="doc" name="news_view.php"/>
-       <file role="doc" name="news_view.tpl.php"/>
-       <file role="doc" name="style.css"/>
-      </dir> <!-- /docs/examples/example4 -->
-      <dir name="example5">
-       <file role="doc" name="admin.php"/>
-       <file role="doc" name="admin.tpl"/>
-       <file role="doc" name="conf.php"/>
-       <file role="doc" name="conf_pdo.php"/>
-       <file role="doc" name="createlu.php"/>
-       <file role="doc" name="demodata.xml"/>
-       <file role="doc" name="home.php"/>
-       <file role="doc" name="home.tpl"/>
-       <file role="doc" name="index.php"/>
-       <file role="doc" name="layout_frontend.css"/>
-       <file role="doc" name="liveuser_rights.php"/>
-       <file role="doc" name="login_form.tpl"/>
-       <file role="doc" name="news.tpl"/>
-       <file role="doc" name="news_edit.tpl"/>
-       <file role="doc" name="news_list.tpl"/>
-      </dir> <!-- /docs/examples/example5 -->
-      <file role="doc" name="demodata.php"/>
-      <file role="doc" name="README"/>
-     </dir> <!-- /docs/examples -->
-    </dir> <!-- /docs -->
-    <dir name="Perm">
-     <dir name="Storage">
-      <file role="php" name="DB.php"/>
-      <file role="php" name="Globals.php"/>
-      <file role="php" name="MDB.php"/>
-      <file role="php" name="MDB2.php"/>
-      <file role="php" name="PDO.php"/>
-      <file role="php" name="SQL.php"/>
-      <file role="php" name="XML.php"/>
-     </dir> <!-- /Perm/Storage -->
-     <file role="php" name="Complex.php"/>
-     <file role="php" name="Medium.php"/>
-     <file role="php" name="Simple.php"/>
-     <file role="php" name="Storage.php"/>
-    </dir> <!-- /Perm -->
-    <dir name="sql">
-     <file role="data" install-as="misc/Auth_XML.xml" name="Auth_XML.xml"/>
-     <file role="data" install-as="misc/schema/install.php" name="install.php"/>
-     <file role="data" install-as="misc/Perm_XML.xml" name="Perm_XML.xml"/>
-     <file role="data" install-as="misc/schema/README" name="README"/>
-    </dir> <!-- /sql -->
-    <file role="doc" name="lgpl.txt"/>
-    <file role="php" baseinstalldir="/" name="LiveUser.php"/>
-   </dir> <!-- / -->
+   <install as="misc/Auth_XML.xml" name="sql/Auth_XML.xml" />
+   <install as="misc/schema/install.php" name="sql/install.php" />
+   <install as="misc/Perm_XML.xml" name="sql/Perm_XML.xml" />
+   <install as="misc/schema/README" name="sql/README" />
   </filelist>
- </release>
+ </phprelease>
  <changelog>
-   <release>
-    <version>1.16.12</version>
-    <date>2006-08-22</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- wrong use of pdo fetch method, when no result could be fetched it returns
+  <release>
+   <version>
+    <release>1.16.12</release>
+    <api>1.16.12</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-08-22</date>
+   <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
+   <notes>- wrong use of pdo fetch method, when no result could be fetched it returns
   false with no error. Swith to using fetchAll and check for an empty array
 - we cannot decrypt most of the encryption method used by the hash extension so
   we default to returning the unmodified string
@@ -238,14 +285,21 @@
   these fields are now used to find the right user on login (Request #7781)
 - fixed LiveUser::decryptPW(): added missing third parameter &apos;secret&apos;
 - check if safe_mode is enabled in fileExists() to determine what algo to use (Bug #8296)
-    </notes>
-   </release>
-   <release>
-    <version>0.16.12</version>
-    <date>2006-08-22</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- wrong use of pdo fetch method, when no result could be fetched it returns
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.16.12</release>
+    <api>0.16.12</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-08-22</date>
+   <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
+   <notes>- wrong use of pdo fetch method, when no result could be fetched it returns
   false with no error. Swith to using fetchAll and check for an empty array
 - we cannot decrypt most of the encryption method used by the hash extension so
   we default to returning the unmodified string
@@ -268,14 +322,21 @@
   these fields are now used to find the right user on login (Request #7781)
 - fixed LiveUser::decryptPW(): added missing third parameter &apos;secret&apos;
 - check if safe_mode is enabled in fileExists() to determine what algo to use (Bug #8296)
-    </notes>
-   </release>
-   <release>
-    <version>0.16.11</version>
-    <date>2006-04-19</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- parse error typo fix in PEARAuth container (bug #6968)
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.16.11</release>
+    <api>0.16.11</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-04-19</date>
+   <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
+   <notes>- parse error typo fix in PEARAuth container (bug #6968)
 - minor improvements to the phpdoc comments in PEARAuth container
 - use ugly fopen() hack in fileExists()
   http://marc.theaimsgroup.com/?l=pear-dev&amp;m=114148949106207&amp;w=2
@@ -291,14 +352,21 @@
 - brought property names in line s/rights/right_ids *BC break*
 - MDB2_Schema 0.5 and MDB2 2.0.1 handles nulls in schema files properly so
   there is no need to disable MDB2_PORTABILITY_EMPTY_TO_NULL in the installer
-    </notes>
-   </release>
-   <release>
-    <version>0.16.10</version>
-    <date>2006-02-27</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- Do not include Cache.php since its only a concept and not implemented yet
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.16.10</release>
+    <api>0.16.10</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-02-27</date>
+   <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
+   <notes>- Do not include Cache.php since its only a concept and not implemented yet
 - fixed serious issue with right reading in the Medium and Complex container
 - right_level may not be null in schema (use default if not explicitly set)
 - phpdoc improvements
@@ -306,14 +374,21 @@
 - added missing optional dependency on mcrypt
 - made admin user a superadmin in example4
 - bumped copyright to 2006
-    </notes>
-   </release>
-   <release>
-    <version>0.16.9</version>
-    <date>2006-02-21</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>This releases fixes a minor security issue that is limited to the optional
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.16.9</release>
+    <api>0.16.9</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2006-02-21</date>
+   <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
+   <notes>This releases fixes a minor security issue that is limited to the optional
 remember me feature. This issue was report to us by GulfTech Security Research.
 
 The issue would allow an attacker to determine the existance of files inside the
@@ -391,14 +466,21 @@ array
   2 =&gt; 1 // 3 - 2 means a maximum possible level of 1
   4 =&gt; 2 // only group has the right at level 2
   5 =&gt; 2 // only user has the right at level 3 - 1 = 2
-    </notes>
-   </release>
-   <release>
-    <version>0.16.8</version>
-    <date>2005-12-21</date>
-    <license>LGPL</license>
-    <state>beta</state>
-    <notes>- clearer status and error messages
+    
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.16.8</release>
+    <api>0.16.8</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-12-21</date>
+   <license uri="http://www.gnu.org/copyleft/lesser.html">LGPL</license>
+   <notes>- clearer status and error messages
 - fix a bug with the passed Log object being discarded
 - extra debug info when the auth container is instantiated
 - more helpful error message when the class cannot be loaded
@@ -430,7 +512,8 @@ array
 - made setRememberCookie(), readRememberCookie() and deleteRememberCookie public
 - setRememberCookie() no longer accepts a remember parameter
 - added PDO backend and optional pdo based config for example5
-    </notes>
-   </release>
+    
+   </notes>
+  </release>
  </changelog>
 </package>
