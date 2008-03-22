@@ -1362,15 +1362,27 @@ class LiveUser
             return false;
         }
 
-        $setcookie = setcookie(
-            $this->_options['cookie']['name'],
-            $store_id . $passwd_id . $handle,
-            (time() + (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime'])),
-            $this->_options['cookie']['path'],
-            $this->_options['cookie']['domain'],
-            $this->_options['cookie']['secure'],
-            $this->_options['cookie']['httponly']
-        );
+        // PHP complains if you are on a lower version than PHP 5.2
+        if (version_compare(PHP_VERSION, '5.2.0', '>=')) {
+            $setcookie = setcookie(
+                $this->_options['cookie']['name'],
+                $store_id . $passwd_id . $handle,
+                (time() + (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime'])),
+                $this->_options['cookie']['path'],
+                $this->_options['cookie']['domain'],
+                $this->_options['cookie']['secure'],
+                $this->_options['cookie']['httponly']
+            );
+        } else {
+            $setcookie = setcookie(
+                $this->_options['cookie']['name'],
+                $store_id . $passwd_id . $handle,
+                (time() + (LIVEUSER_DAY_SECONDS * $this->_options['cookie']['lifetime'])),
+                $this->_options['cookie']['path'],
+                $this->_options['cookie']['domain'],
+                $this->_options['cookie']['secure']
+            );
+        }
 
         if (!$setcookie) {
             @unlink($file);
