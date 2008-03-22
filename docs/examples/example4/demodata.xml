@@ -1647,7 +1647,6 @@
    <field>
     <name>news</name>
     <type>clob</type>
-    <length></length>
    </field>
 
    <field>
