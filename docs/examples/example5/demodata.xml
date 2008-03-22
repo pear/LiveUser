@@ -928,7 +928,6 @@
    <field>
     <name>news_content</name>
     <type>clob</type>
-    <length></length>
    </field>
 
    <field>
@@ -952,34 +951,66 @@
 
  <sequence>
   <name>liveuser_applications</name>
+  <on>
+   <table>liveuser_applications</table>
+   <field>application_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_areas</name>
+  <on>
+   <table>liveuser_areas</table>
+   <field>area_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_groups</name>
+  <on>
+   <table>liveuser_groups</table>
+   <field>group_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_perm_users</name>
+  <on>
+   <table>liveuser_perm_users</table>
+   <field>perm_user_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_rights</name>
+  <on>
+   <table>liveuser_rights</table>
+   <field>right_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_translations</name>
+  <on>
+   <table>liveuser_translations</table>
+   <field>translation_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>liveuser_users</name>
+  <on>
+   <table>liveuser_users</table>
+   <field>auth_user_id</field>
+  </on>
  </sequence>
 
  <sequence>
   <name>news</name>
+  <on>
+   <table>news</table>
+   <field>news_id</field>
+  </on>
  </sequence>
 
 </database>
