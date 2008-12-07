@@ -29,19 +29,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA  02111-1307  USA
  *
- *
- * @category authentication
- * @package LiveUser
- * @author  Markus Wolff <wolff@21st.de>
- * @author  Helgi Þormar Þorbjörnsson <dufuz@php.net>
- * @author  Lukas Smith <smith@pooteeweet.org>
- * @author  Arnaud Limbourg <arnaud@php.net>
- * @author  Pierre-Alain Joye <pajoye@php.net>
- * @author  Bjoern Kraus <krausbn@php.net>
+ * @category  Authentication
+ * @package   LiveUser
+ * @author    Markus Wolff <wolff@21st.de>
+ * @author    Helgi Þormar Þorbjörnsson <dufuz@php.net>
+ * @author    Lukas Smith <smith@pooteeweet.org>
+ * @author    Arnaud Limbourg <arnaud@php.net>
+ * @author    Pierre-Alain Joye <pajoye@php.net>
+ * @author    Bjoern Kraus <krausbn@php.net>
  * @copyright 2002-2006 Markus Wolff
- * @license http://www.gnu.org/licenses/lgpl.txt
- * @version CVS: $Id$
- * @link http://pear.php.net/LiveUser
+ * @license   http://www.gnu.org/licenses/lgpl.txt LGPL
+ * @version   CVS: $Id$
+ * @link      http://pear.php.net/LiveUser
  */
 
 /**
@@ -54,14 +53,14 @@ require_once 'LiveUser/Perm/Storage.php';
  *
  * This is a Cache backend driver for the LiveUser class.
  *
- * @category authentication
- * @package LiveUser
- * @author  Lukas Smith <smith@pooteeweet.org>
- * @author  Bjoern Kraus <krausbn@php.net>
+ * @category  Authentication
+ * @package   LiveUser
+ * @author    Lukas Smith <smith@pooteeweet.org>
+ * @author    Bjoern Kraus <krausbn@php.net>
  * @copyright 2002-2006 Markus Wolff
- * @license http://www.gnu.org/licenses/lgpl.txt
- * @version Release: @package_version@
- * @link http://pear.php.net/LiveUser
+ * @license   http://www.gnu.org/licenses/lgpl.txt LGPL
+ * @version   Release: @package_version@
+ * @link      http://pear.php.net/LiveUser
  */
 class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
 {
@@ -76,7 +75,9 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     /**
      * Initialize the storage container
      *
-     * @param array Array with the storage configuration
+     * @param array &$storageConf Array with the storage configuration
+     * @param array &$confArray   
+     *
      * @return bool true on success, false on failure.
      *
      * @access public
@@ -90,7 +91,7 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
         $this->_storage =& LiveUser::storageFactory($confArray);
         if ($this->_storage === false) {
             $this->stack->push(LIVEUSER_ERROR, 'exception',
-                array('msg' => 'Could not instanciate storage container'));
+                              array('msg' => 'Could not instantiate storage container'));
             return false;
         }
 
@@ -100,22 +101,20 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
     /**
      * map an auth user to a perm user
      *
-     * @param int $auth_user_id
+     * @param int    $auth_user_id
      * @param string $containerName
+     *
      * @return array requested data or false on failure
      *
      * @access public
      */
     function mapUser($auth_user_id, $containerName)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->mapUser($auth_user_id, $containerName);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
@@ -126,42 +125,36 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * Group rights and invididual rights are being merged
      * in the process.
      *
-     * @param int perm user id
-     * @return array requested data or false on failure
+     * @param int $perm_user_id perm user id
      *
+     * @return array requested data or false on failure
      * @access public
      */
     function readUserRights($perm_user_id)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->readUserRights($perm_user_id);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
     /**
      * read the areas in which a user is an area admin
      *
-     * @param int perm user id
-     * @return array requested data or false on failure
+     * @param int $perm_user_id perm user id
      *
+     * @return array requested data or false on failure
      * @access public
      */
     function readAreaAdminAreas($perm_user_id)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->readAreaAdminAreas($perm_user_id);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
@@ -169,22 +162,19 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * Reads all the group ids in that the user is also a member of
      * (all groups that are subgroups of these are also added recursively)
      *
-     * @param int perm user id
-     * @return array requested data or false on failure
+     * @param int $perm_user_id
      *
+     * @return array requested data or false on failure
      * @see    readRights()
      * @access public
      */
     function readGroups($perm_user_id)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->readGroups($perm_user_id);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
@@ -194,43 +184,38 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      *
      * right => 1
      *
-     * @param int group ids
-     * @return array requested data or false on failure
+     * @param int $group_ids
      *
+     * @return array requested data or false on failure
      * @access public
      */
     function readGroupRights($group_ids)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->readGroupRights($group_ids);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
     /**
      * Read the sub groups of the new groups that are not part of the group ids
      *
-     * @param array group ids
-     * @param array new group ids
+     * @param array $group_ids   group ids
+     * @param array $newGroupIds new group ids
+     *
      * @return array requested data or false on failure
      *
      * @access public
      */
     function readSubGroups($group_ids, $newGroupIds)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->readSubGroups($group_ids, $newGroupIds);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
@@ -238,44 +223,39 @@ class LiveUser_Perm_Storage_Cache extends LiveUser_Perm_Storage
      * Read out the rights from the userrights or grouprights table
      * that imply other rights along with their level
      *
-     * @param array right ids
-     * @param string name of the table
+     * @param array  $rightIds right ids
+     * @param string $table    name of the table
+     *
      * @return array requested data or false on failure
      *
      * @access public
      */
     function readImplyingRights($rightIds, $table)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->readImplyingRights($rightIds, $table);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
     /**
-    * Read out the implied rights with a given level from the implied_rights table
-    *
-    * @param array current right ids
-    * @param string current level
+     * Read out the implied rights with a given level from the implied_rights table
+     *
+     * @param array  $currentRights current right ids
+     * @param string $currentLevel  current level
+     *
      * @return array requested data or false on failure
-    *
-    * @access public
-    */
+     * @access public
+     */
     function readImpliedRights($currentRights, $currentLevel)
     {
-        if (in_cache) {
-            return cache;
-        }
         $result = $this->_storage->readImpliedRights($currentRights, $currentLevel);
         if ($result === false) {
             return false;
         }
-        write_into_cache
+        //write_into_cache
         return $result;
     }
 
