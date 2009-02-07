@@ -6,7 +6,7 @@ require_once 'HTML/Template/IT.php';
 // Setup template objects
 
 if (!$usr->isLoggedIn()) {
-    $tpl =& new HTML_Template_IT('./');
+    $tpl = new HTML_Template_IT('./');
     $tpl->loadTemplatefile('login_form.tpl', true, false);
     $login = $tpl->get();
 } else {
@@ -47,7 +47,7 @@ function getNews(&$db, $newsCategory)
     if (PEAR::isError($news)) {
         die($news->getMessage() . ' ' . $news->getUserinfo());
     } else {
-        $tpl =& new HTML_Template_IT('./');
+        $tpl = new HTML_Template_IT('./');
 
         $tpl->loadTemplatefile('news.tpl', true, true);
 

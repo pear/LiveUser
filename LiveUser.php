@@ -345,16 +345,16 @@ class LiveUser
         $this->stack = &PEAR_ErrorStack::singleton('LiveUser');
 
         if ($debug) {
-            $log =& LiveUser::PEARLogFactory($debug);
+            $log = LiveUser::PEARLogFactory($debug);
             if ($log) {
-                $this->log =& $log;
+                $this->log = $log;
                 $this->stack->setLogger($this->log);
             }
         }
 
         $this->stack->setErrorMessageTemplate($this->_errorMessages);
 
-        $this->dispatcher =& Event_Dispatcher::getInstance();
+        $this->dispatcher = Event_Dispatcher::getInstance();
     }
 
     /**
@@ -464,16 +464,16 @@ class LiveUser
     {
         $debug = false;
         if (array_key_exists('debug', $conf)) {
-            $debug =& $conf['debug'];
+            $debug = $conf['debug'];
         }
 
-        $obj = &new LiveUser($debug);
+        $obj = new LiveUser($debug);
 
         if (is_array($conf)) {
             $obj->readConfig($conf);
         }
 
-        return $obj;
+        return &$obj;
     }
 
     /**
@@ -509,7 +509,7 @@ class LiveUser
         }
 
         if (!array_key_exists($signature, $instances)) {
-            $instances[$signature] =& LiveUser::factory($conf);
+            $instances[$signature] = LiveUser::factory($conf);
         }
 
         return $instances[$signature];
@@ -574,12 +574,12 @@ class LiveUser
         $auth = false;
         $classname = $classprefix.'Auth_' . $conf['type'];
         if (LiveUser::loadClass($classname)) {
-            $auth = &new $classname();
+            $auth = new $classname();
             if ($auth->init($conf, $containerName) === false) {
                 $auth = false;
             }
         }
-        return $auth;
+        return &$auth;
     }
 
     /**
@@ -597,13 +597,13 @@ class LiveUser
         $perm = false;
         $classname = $classprefix.'Perm_' . $conf['type'];
         if (LiveUser::loadClass($classname)) {
-            $perm = &new $classname();
+            $perm = new $classname();
             if ($perm->init($conf) === false) {
                 $perm = false;
             }
         }
 
-        return $perm;
+        return &$perm;
     }
 
     /**
@@ -633,24 +633,24 @@ class LiveUser
                 array_pop($keys);
                 $newConfArray = array();
                 foreach ($keys as $key) {
-                    $newConfArray[$key] =& $confArray[$key];
+                    $newConfArray[$key] = $confArray[$key];
                 }
-                $storage =& LiveUser::storageFactory($newConfArray, $classprefix);
+                $storage = LiveUser::storageFactory($newConfArray, $classprefix);
                 return $storage;
             }
         }
-        $storageConf =& $confArray[$key];
+        $storageConf = $confArray[$key];
         $newConfArray = array();
         foreach ($confArray as $keyNew => $foo) {
             if ($key !== $keyNew) {
-                $newConfArray[$keyNew] =& $confArray[$keyNew];
+                $newConfArray[$keyNew] = $confArray[$keyNew];
             }
         }
-        $storage = &new $storageName();
+        $storage = new $storageName();
         if ($storage->init($storageConf, $newConfArray) === false) {
             $storage = false;
         }
-        return $storage;
+        return &$storage;
     }
 
     /**
@@ -738,10 +738,10 @@ class LiveUser
     function readConfig($conf)
     {
         if (array_key_exists('authContainers', $conf)) {
-            $this->_authContainers =& $conf['authContainers'];
+            $this->_authContainers = $conf['authContainers'];
         }
         if (array_key_exists('permContainer', $conf)) {
-            $this->_permContainer =& $conf['permContainer'];
+            $this->_permContainer = $conf['permContainer'];
         }
 
         $this->_options = LiveUser::arrayMergeClobber($this->_options, $conf);
@@ -797,7 +797,7 @@ class LiveUser
         }
 
         require_once 'Log.php';
-        $log =& Log::factory('composite');
+        $log = Log::factory('composite');
         if (!is_a($log, 'Log_composite')) {
             $this->stack->push(
                 LIVEUSER_ERROR_CONFIG, 'exception', array(),
@@ -818,7 +818,7 @@ class LiveUser
                 PEAR_LOG_DEBUG   => 'black',
             ),
         );
-        $winlog =& Log::factory('win', 'LiveUser', 'LiveUser', $conf);
+        $winlog = Log::factory('win', 'LiveUser', 'LiveUser', $conf);
         if (!is_a($winlog, 'Log_win')) {
             $this->stack->push(
                 LIVEUSER_ERROR_CONFIG, 'exception', array(),
@@ -915,7 +915,7 @@ class LiveUser
     {
         $rc4 = false;
         if (LiveUser::loadClass('Crypt_Rc4')) {
-            $rc4 =& new Crypt_Rc4($secret);
+            $rc4 = new Crypt_Rc4($secret);
         }
         return $rc4;
     }
@@ -945,7 +945,7 @@ class LiveUser
             mcrypt_generic_deinit($td);
             mcrypt_module_close($td);
         } else {
-            $rc4 =& LiveUser::cryptRC4Factory($secret);
+            $rc4 = LiveUser::cryptRC4Factory($secret);
             if (!$rc4) {
                 $this->stack->push(
                     LIVEUSER_ERROR_CONFIG, 'exception', array(),
