@@ -473,7 +473,7 @@ class LiveUser
             $obj->readConfig($conf);
         }
 
-        return &$obj;
+        return $obj;
     }
 
     /**
@@ -579,7 +579,7 @@ class LiveUser
                 $auth = false;
             }
         }
-        return &$auth;
+        return $auth;
     }
 
     /**
@@ -603,7 +603,7 @@ class LiveUser
             }
         }
 
-        return &$perm;
+        return $perm;
     }
 
     /**
@@ -650,7 +650,7 @@ class LiveUser
         if ($storage->init($storageConf, $newConfArray) === false) {
             $storage = false;
         }
-        return &$storage;
+        return $storage;
     }
 
     /**
