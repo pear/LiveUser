@@ -132,6 +132,7 @@ print "\n";
 $options = array(
 #    'portability' => (MDB2_PORTABILITY_ALL ^ MDB2_PORTABILITY_EMPTY_TO_NULL),
 #   'seqcol_name' = >'id', // uncomment this line if you want to use DB as the backend
+'use_transactions' => false,
 );
 $dsn = MDB2::parseDSN($dsn);
 $database = $dsn['database'];
