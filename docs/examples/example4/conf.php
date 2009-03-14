@@ -6,7 +6,7 @@ define('EMAIL_WEBMASTER', 'krausbn@php.net');
 //$path_to_liveuser_dir = 'path/to/pear/'.PATH_SEPARATOR;
 //ini_set('include_path', $path_to_liveuser_dir . ini_get('include_path'));
 
-error_reporting(E_ALL);
+error_reporting(1803);
 
 require_once 'PEAR.php';
 include_once 'HTML/Template/IT.php';
@@ -35,7 +35,7 @@ PEAR::setErrorHandling(PEAR_ERROR_CALLBACK, 'pear_error_handler');
 
 // Data Source Name (DSN)
 //$dsn = '{dbtype}://{user}:{passwd}@{dbhost}/{dbname}';
-$dsn = 'mysql://root:@localhost/liveuser_test_example4';
+$dsn = 'mysqli://root:@localhost/liveuser_test_example4';
 
 $db =& MDB2::connect($dsn, true);
 $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -57,6 +57,7 @@ $LUOptions = array(
             'idleTime'     => 1800,
             'storage' => array(
                 'dsn' => $dsn,
+                'prefix' => 'liveuser_',
                 'alias' => array(
                     'auth_user_id' => 'authUserId',
                     'lastlogin' => 'lastLogin',
@@ -166,7 +167,7 @@ $LU->dispatcher->addObserver('forceLogin', 'forceLogin');
 
 if (!$LU->init()) {
     var_dump($LU->getErrors());
-    die();
+    exit;
 }
 
 $logout = (array_key_exists('logout', $_REQUEST)) ? $_REQUEST['logout'] : false;
