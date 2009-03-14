@@ -35,6 +35,7 @@ $conf =
                 'idleTime'      => 1800,
                 'storage' => array(
                     'dsn' => $dsn,
+                    'prefix' => 'liveuser_',
                     'options' => array(
                         'username'   => 'root',
                         'password' => ''
