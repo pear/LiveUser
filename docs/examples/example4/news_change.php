@@ -44,7 +44,7 @@
 
           if (!empty($news)) {
 
-              if (!ereg('^[1-9][0-9]?$', $valid_to)) {
+              if (!preg_match('/^[1-9][0-9]?$/', $valid_to)) {
                   $errorMsg = '<p><span style="color: red;">Only numbers between 1 and 99 are allowed here.</span></p>';
               } else {
               // Form seems to be correct. Write data into the db.

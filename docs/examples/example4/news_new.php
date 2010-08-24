@@ -22,7 +22,7 @@ $group    = array_key_exists('group_id', $_POST) ? (int)$_POST['group_id'] : '';
 // If $news is not empty, we have something to work.
 if (!empty($news)) {
 
-    if (!ereg('^[1-9][0-9]?$', $valid_to)) {
+    if (!preg_match('/^[1-9][0-9]?$/', $valid_to)) {
         $tpl->setVariable('script_msg', '<p style="color: red;">Only numbers between 1 and 99 are allowed here.</p>');
     } elseif (!$LU->checkRightLevel(RIGHT_NEWS_NEW, $LU->getProperty('perm_user_id'), $group)) {
         $tpl->setVariable('script_msg', '<p style="color: red;">You don\'t have the right to post news for this group.</p>');
