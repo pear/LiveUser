@@ -1,0 +1,56 @@
+{
+    "authors": [
+        {
+            "email": "mw21st@php.net",
+            "name": "Markus Wolff",
+            "role": "Lead"
+        },
+        {
+            "email": "arnaud@php.net",
+            "name": "Arnaud Limbourg",
+            "role": "Lead"
+        },
+        {
+            "email": "smith@pooteeweet.org",
+            "name": "Lukas Kahwe Smith",
+            "role": "Lead"
+        },
+        {
+            "email": "dufuz@php.net",
+            "name": "Helgi &#222;ormar",
+            "role": "Lead"
+        },
+        {
+            "email": "krausbn@php.net",
+            "name": "Bjoern Kraus",
+            "role": "Developer"
+        },
+        {
+            "email": "mahono@php.net",
+            "name": "Matthias Nothhaft",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "LiveUser": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/LiveUser",
+    "include-path": [
+        "./"
+    ],
+    "license": "LGPL",
+    "name": "pear/liveuser",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=LiveUser",
+        "source": "https://github.com/pear/LiveUser"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
